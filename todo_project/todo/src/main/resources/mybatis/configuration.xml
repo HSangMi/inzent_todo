@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mybatis 설정파일 -->
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 매핑시킬 매퍼를 type alias 등록하고 , 매퍼등록! -->
+<configuration>
+  <mappers>
+		<mapper resource="mybatis/mappers/user.xml"/><!-- 현재경로 기준! -->
+	</mappers>  
+</configuration>
