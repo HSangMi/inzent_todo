@@ -1,60 +1,47 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-content>
-      <HelloWorld/>
-    </v-content>
-  </v-app>
+<v-app>
+  <app-bar />
+  <side-bar />
+  <v-content>
+    <router-view></router-view>
+  </v-content>
+</v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+// import request from 'request'
+// import {mapState} from 'vuex'
 
 export default {
-  name: 'App',
-
+  name:'App',
   components: {
-    HelloWorld,
+    SideBar: () => import('@/components/core/SideBar.vue'),
+    AppBar: () => import('@/components/core/AppBar.vue'),
+  },
+   computed: {
+	},
+}
+/* 
+  components: {
   },
 
   data: () => ({
     //
   }),
-};
+  mounted(){
+    console.log('test1')
+    request('http://localhost:8080/api/hello', function(error, response, body){
+      window.console.log('error:', error);
+      window.console.log('statusCode:', response && response.statusCode);
+      window.console.log('body:', body);
+    });
+  }
+}
+ */
 </script>
+<style scoped>
+ * {
+  background :#E8F5FF
+ }
+
+</style>
