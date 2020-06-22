@@ -169,6 +169,7 @@
         'user profile',
         'logout',
       ],
+      search : ''
     }),
 
     computed: {

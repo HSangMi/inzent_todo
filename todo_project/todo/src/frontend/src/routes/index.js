@@ -14,7 +14,9 @@ const router = new Router({
     base: process.env.BASE_URL,
     routes: [
         { path: '/', component : () => {import('@/views/BoardMain.vue')}, beforeEnter: requireAuth},
-        { path: '/login', component : () => import('@/views/LoginPage.vue')}
+        { path: '/projects', component : () => import('@/views/BoardMain.vue')},
+        { path: '/schedule', component : () => import('@/views/LoginPage.vue')},
+        { path: '/login', component : () => import('@/views/LoginPage.vue')},
     ]
 })
 
