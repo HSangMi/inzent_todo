@@ -8,4 +8,13 @@
       select * from test;
    ]]>
    </select>
+
+   <select id="selectByIdPwd" parameterType="uservo" resultType="uservo">
+		<![CDATA[
+			select *
+			from tb_user
+			where id=#{id} and password=#{password}
+		]]>
+	</select>
+   
 </mapper>

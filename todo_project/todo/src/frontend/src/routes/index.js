@@ -1,25 +1,27 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import store from '../store'
+import Vue from 'vue';
+import Router from 'vue-router';
+import store from '../store';
 
-Vue.use(Router)
+Vue.use(Router);
 
-const requireAuth = (to,from,next) => {
-    const loginPath = `/login?rPath=${encodeURIComponent(to.path)}`
-    console.log(loginPath);
-    store.getters.isAuth ? next() : next(loginPath)
-}
+const requireAuth = (from, to, next) => {
+	const loginPath = `/login?returnPath=${from.path}`;
+	store.getters.isAuth ? next() : next(loginPath);
+};
 const router = new Router({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes: [
-        { path: '/', component : () => {import('@/views/BoardMain.vue')}, beforeEnter: requireAuth},
-        { path: '/projects', component : () => import('@/views/BoardMain.vue')},
-        { path: '/schedule', component : () => import('@/views/LoginPage.vue')},
-        { path: '/login', component : () => import('@/views/LoginPage.vue')},
-    ]
-})
+	mode: 'history',
+	base: process.env.BASE_URL,
+	routes: [
+		{ path: '/', component: () => import('@/views/BoardMain.vue'), beforeEnter: requireAuth },
+		{ path: '/dashboard', component: () => import('@/views/BoardMain.vue'), beforeEnter: requireAuth },
+		{ path: '/projects', component: () => import('@/views/BoardMain.vue'), beforeEnter: requireAuth },
+		{ path: '/schedule', component: () => import('@/views/BoardMain.vue'), beforeEnter: requireAuth },
+		{ path: '/search', component: () => import('@/views/BoardMain.vue'), beforeEnter: requireAuth },
+		{ path: '/archive', component: () => import('@/views/BoardMain.vue'), beforeEnter: requireAuth },
+		{ path: '/login', component: () => import('@/views/LoginPage.vue') }
+	]
+});
 
 //router.beforeEach(requireAuth);
 
-export default router // 모듈로 export
+export default router; // 모듈로 export
