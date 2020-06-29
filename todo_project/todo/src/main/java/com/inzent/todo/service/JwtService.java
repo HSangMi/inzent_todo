@@ -13,6 +13,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.vo.UserVo;
 
 @Service
@@ -23,7 +24,7 @@ public class JwtService {
 	private static final String DATA_KEY = "user";
 
 	// 토큰 발급
-	public String createLoginToken(UserVo user) {
+	public String createLoginToken(UserDto user) {
 
 		long curTime = System.currentTimeMillis();
 		return Jwts.builder().setHeaderParam("typ", "JWT").setExpiration(new Date(curTime + (1000 * 60 * 60 * 24)))

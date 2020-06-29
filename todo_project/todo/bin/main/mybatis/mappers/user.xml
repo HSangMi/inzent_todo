@@ -9,7 +9,15 @@
    ]]>
    </select>
 
-   <select id="selectByIdPwd" parameterType="uservo" resultType="uservo">
+   <select id="selectUserIdPwd" parameterType="uservo" resultType="userdto">
+		<![CDATA[
+			select id, user_type
+			from tb_user
+			where id=#{id} and password=#{password}
+		]]>
+	</select>
+
+	<select id="selectLoginUser" parameterType="uservo" resultType="uservo">
 		<![CDATA[
 			select *
 			from tb_user

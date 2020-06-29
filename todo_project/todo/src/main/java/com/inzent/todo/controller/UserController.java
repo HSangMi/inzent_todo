@@ -3,6 +3,7 @@ package com.inzent.todo.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.repository.UserDao;
 import com.inzent.todo.service.JwtService;
 import com.inzent.todo.service.UserService;
@@ -45,14 +46,20 @@ public class UserController {
         String token = null;
 
         // 들어온 로그인 정보(ID, PWD)로 DB에서 조회
-        UserVo loginUser = userService.getUser(user);
 
-        Map<String, String> map = new HashMap<String, String>();
+        UserDto userToken = userService.getUserToken(user);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        System.out.println(userToken);
 
         // 존재/유효한 user가 있다면 token 생성
-        if (loginUser != null) {
-            token = jwtService.createLoginToken(loginUser);
+        if (userToken != null) {
+            token = jwtService.createLoginToken(userToken);
+            UserVo loginUser = userService.getLoginUser(user);
+            loginUser.setPassword(null);
             map.put("accessToken", token);
+            map.put("loginUser", loginUser);
         }
 
         return token != null ? new ResponseEntity<Object>(map, HttpStatus.OK)
