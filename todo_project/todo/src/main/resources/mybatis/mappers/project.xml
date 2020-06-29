@@ -6,9 +6,9 @@
 	<insert id="insertProject" parameterType="projectvo">
 		<![CDATA[
 			insert into tb_project
-			( id, title, description, use_public, start_date, due_date, img_no, manager )
+			( id, title, description, use_public, start_date, end_date, img_no, manager )
 			values
-			( #{id}, #{title}, #{description}, #{usePublic}, #{startDate}, #{dueDate}, #{imgNo}, #{manager})
+			( #{id}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{imgNo}, #{manager})
 		]]>
 	</insert>
        <select id="selectProjectList" resultType="projectvo">

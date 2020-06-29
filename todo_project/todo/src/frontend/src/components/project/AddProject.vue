@@ -1,7 +1,12 @@
 <template>
   <v-dialog v-model="openModal" max-width="640" persistent>
     <v-card>
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
+      <v-form
+        ref="form"
+        v-model="valid"
+        @submit.prevent="onSubmit"
+        lazy-validation
+      >
         <v-card-title class="headline grey lighten-2" primary-title>
           CREATE PROJECT
           <v-spacer></v-spacer>
@@ -10,7 +15,12 @@
           <!-- <v-container> -->
           <v-row>
             <v-col cols="12">
-              <v-text-field label="PROJECT TITLE*" v-model="title" :rules="titleRules" required></v-text-field>
+              <v-text-field
+                label="PROJECT TITLE*"
+                v-model="title"
+                :rules="titleRules"
+                required
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -21,7 +31,12 @@
             </v-col>
             <v-col cols="12">
               PRIVATE*
-              <v-radio-group v-model="usePublic" required row :rules="privateRules">
+              <v-radio-group
+                v-model="usePublic"
+                required
+                row
+                :rules="privateRules"
+              >
                 <br />
                 <v-radio label="Public" value="true"></v-radio>
                 <v-spacer></v-spacer>
@@ -49,13 +64,17 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="startDate" no-title @input="startDatePicker = false"></v-date-picker>
+                <v-date-picker
+                  v-model="startDate"
+                  no-title
+                  @input="startDatePicker = false"
+                ></v-date-picker>
               </v-menu>
             </v-col>
             <v-col cols="12" sm="6">
               <br />
               <v-menu
-                v-model="dueDatePicker"
+                v-model="endDatePicker"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -64,15 +83,19 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="dueDate"
-                    label="Due date"
+                    v-model="endDate"
+                    label="End date"
                     prepend-icon="mdi-calendar"
                     readonly
                     v-bind="attrs"
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="dueDate" no-title @input="dueDatePicker = false"></v-date-picker>
+                <v-date-picker
+                  v-model="endDate"
+                  no-title
+                  @input="endDatePicker = false"
+                ></v-date-picker>
               </v-menu>
             </v-col>
             <v-col cols="12" sm="6">
@@ -160,15 +183,21 @@
                 </template>
                 <template v-slot:item="data">
                   <template v-if="typeof data.item !== 'object'">
-                    <v-list-item-content v-text="data.item"></v-list-item-content>
+                    <v-list-item-content
+                      v-text="data.item"
+                    ></v-list-item-content>
                   </template>
                   <template v-else>
                     <v-list-item-avatar>
                       <img :src="data.item.avatar" />
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                      <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
+                      <v-list-item-title
+                        v-html="data.item.name"
+                      ></v-list-item-title>
+                      <v-list-item-subtitle
+                        v-html="data.item.group"
+                      ></v-list-item-subtitle>
                     </v-list-item-content>
                   </template>
                 </template>
@@ -199,69 +228,69 @@ export default {
     description: "",
     usePublic: undefined,
     startDate: "", //new Date().toISOString().substr(0, 10),
-    dueDate: "",
+    endDate: "",
     startDatePicker: false,
-    dueDatePicker: false,
+    endDatePicker: false,
     coverColor: "1976d2",
     coverImg: undefined,
     imgRules: [
-      value =>
+      (value) =>
         !value ||
         value.size < 2000000 ||
-        "Avatar size should be less than 2 MB!"
+        "Avatar size should be less than 2 MB!",
     ],
     titleRules: [
-      v => !!v || "title is required",
-      v => (v && v.length <= 100) || "title must be less than 100 characters"
+      (v) => !!v || "title is required",
+      (v) => (v && v.length <= 100) || "title must be less than 100 characters",
     ],
-    privateRules: [v => !!v || "private is required"],
+    privateRules: [(v) => !!v || "private is required"],
     valid: true,
     people: [
       { header: "Group 1" },
       {
         name: "Sandra Adams",
         group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
       },
       {
         name: "Ali Connors",
         group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
       },
       {
         name: "Trevor Hansen",
         group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
       },
       {
         name: "Tucker Smith",
         group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
       },
       { divider: true },
       { header: "Group 2" },
       {
         name: "Britta Holt",
         group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
       },
       {
         name: "Jane Smith ",
         group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
       },
       {
         name: "John Smith",
         group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
       },
       {
         name: "Sandra Williams",
         group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
-      }
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+      },
     ],
-    members: []
+    members: [],
   }),
   methods: {
     ...mapActions(["ADD_PROJECT"]),
@@ -274,13 +303,13 @@ export default {
         formData.append("description", this.description);
         formData.append("usePublic", this.usePublic);
         formData.append("startDate", this.startDate);
-        formData.append("dueDate", this.dueDate);
+        formData.append("endDate", this.endDate);
         if (this.coverImg !== undefined)
           formData.append("coverImg", this.coverImg);
         formData.append("coverColor", this.coverColor);
         formData.append("members", this.members);
 
-        this.ADD_PROJECT(formData).then(data => {
+        this.ADD_PROJECT(formData).then((data) => {
           console.log("-----");
           console.log(data);
           this.$router.push(`/projects/${data.id}`);
@@ -304,13 +333,13 @@ export default {
     },
     validate() {
       return this.$refs.form.validate();
-    }
+    },
   },
   computed: {
     isCoverImg() {
       return this.coverImg === undefined ? false : true;
-    }
-  }
+    },
+  },
 };
 </script>
 

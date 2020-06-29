@@ -16,7 +16,7 @@ public class ProjectVo {
     private boolean usePublic;
     private String description;
     private String startDate;
-    private String dueDate;
+    private String endDate;
     private Date regDate;
     private String imgNo;
     private int manager;

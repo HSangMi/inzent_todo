@@ -40,7 +40,7 @@ public class ProjectService {
         projectVo.setDescription(projectDto.getDescription());
         projectVo.setUsePublic(projectDto.getUsePublic());
         projectVo.setStartDate(projectDto.getStartDate());
-        projectVo.setDueDate(projectDto.getDueDate());
+        projectVo.setEndDate(projectDto.getEndDate());
         // 프로젝트 테이블에 insert
         // projectVo에 Dto내용 뽑아서 담기!
 

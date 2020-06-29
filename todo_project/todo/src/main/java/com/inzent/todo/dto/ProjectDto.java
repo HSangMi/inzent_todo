@@ -19,7 +19,7 @@ public class ProjectDto {
     private String description;
     private boolean usePublic;
     private String startDate;
-    private String dueDate;
+    private String endDate;
     private String coverColor;
     private MultipartFile coverImg;
     private List<String> members;

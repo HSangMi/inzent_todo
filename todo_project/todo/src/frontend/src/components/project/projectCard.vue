@@ -14,12 +14,20 @@
             </v-btn>
           </v-card-actions>
 
-          <v-card-title>{{project.title}}</v-card-title>
+          <v-card-title>{{ project.title }}</v-card-title>
         </v-img>
-        <v-progress-linear color="deep-purple accent-4" height="8" value="30"></v-progress-linear>
+        <v-progress-linear
+          color="deep-purple accent-4"
+          height="8"
+          value="30"
+        ></v-progress-linear>
 
-        <v-card-subtitle class="pb-0">{{project.startDate}}~{{ project.dueDate}}</v-card-subtitle>
-        <v-card-text class="text--primary">manager : {{project.manager}}</v-card-text>
+        <v-card-subtitle class="pb-0"
+          >{{ project.startDate }}~{{ project.endDate }}</v-card-subtitle
+        >
+        <v-card-text class="text--primary"
+          >manager : {{ project.manager }}</v-card-text
+        >
       </router-link>
     </v-card>
   </v-col>
@@ -33,7 +41,7 @@ export default {
   },
   mounted() {
     console.log(this.project);
-  }
+  },
 };
 </script>
 

@@ -29,12 +29,7 @@
 
     <v-list expand>
       <v-list-item-group v-model="activeMenu" color="defualt">
-        <v-list-item
-          v-for="(menu, i) in menus"
-          :key="`menu-${i+1}`"
-          :to="menu.to"
-          @click="onShowSubMenu(i+1)"
-        >
+        <v-list-item v-for="(menu, i) in menus" :key="`menu-${i + 1}`" :to="menu.to">
           <v-list-item-icon>
             <v-icon v-text="menu.icon"></v-icon>
           </v-list-item-icon>
@@ -115,17 +110,21 @@ export default {
   }),
   computed: {
     ...mapState({
-      isShowSubMenu: "isShowSubMenu"
+      // isShowSubMenu: "isShowSubMenu"
     })
   },
   methods: {
     ...mapMutations(["SET_IS_SHOW_SUB_MENU"]),
-    onShowSubMenu(key) {
+    // onShowSubMenu(key) {
+    //   // console.log(key)
+    //   this.SET_IS_SHOW_SUB_MENU({
+    //     isShowSubMenu: this.isShowSubMenu,
+    //     activeMenu: key
+    //   });
+    // },
+    setActiveMenu(key) {
       // console.log(key)
-      this.SET_IS_SHOW_SUB_MENU({
-        isShowSubMenu: this.isShowSubMenu,
-        activeMenu: key
-      });
+      this.SET_ACTIVE_MENU(this.menus[key].text);
     },
     logout() {
       this.$store.commit("LOGOUT");
