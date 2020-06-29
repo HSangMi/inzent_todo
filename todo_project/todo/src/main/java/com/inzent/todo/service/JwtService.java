@@ -26,7 +26,7 @@ public class JwtService {
 	public String createLoginToken(UserVo user) {
 
 		long curTime = System.currentTimeMillis();
-		return Jwts.builder().setHeaderParam("typ", "JWT").setExpiration(new Date(curTime + 3600))
+		return Jwts.builder().setHeaderParam("typ", "JWT").setExpiration(new Date(curTime + (1000 * 60 * 60 * 24)))
 				.setIssuedAt(new Date(curTime)).claim(DATA_KEY, user)
 				.signWith(SignatureAlgorithm.HS256, this.generateKey()).compact();
 	}
