@@ -3,7 +3,7 @@ const mutations = {
   LOGIN(state, { accessToken }) {
     if (!accessToken) return; //토큰정보가 없으면, 리턴
     state.accessToken = accessToken; // state에 토큰값 세팅
-    localStorage.setItem("accessToken", JSON.stringify(accessToken)); // 로컬스토리지에 token값 저장
+    localStorage.setItem("accessToken", accessToken); // 로컬스토리지에 token값 저장
     setAuthInHeader(accessToken); // api의 requestHeader에 추가!
   },
   LOGOUT(state) {
