@@ -29,9 +29,6 @@ const mutations = {
   SET_HEADER_TITLE(state, string) {
     state.headerTitle = string;
   },
-  SET_ACTIVE_MENU(state, activeMenu) {
-    state.activeMenu = activeMenu;
-  },
   SET_PROJECTS(state, projects) {
     console.log("mutations.SET_PROJECTS : 완료");
     state.projects = projects;
