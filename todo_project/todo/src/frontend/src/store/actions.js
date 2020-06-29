@@ -1,4 +1,5 @@
 import * as api from "../api";
+import * as sohyun from "../api/sohyun"
 import * as util from "../utils/auth";
 // import state from './state'
 const actions = {
@@ -20,6 +21,41 @@ const actions = {
       console.log(data);
       commit("SET_PROJECTS", data);
     });
+  },
+   //////////////////////// DASHBOARD ////////////////////////
+  FETCH_TODAY_DASHBOARD({ commit }) {
+    //오늘 리스트
+    return sohyun.dashboard
+      .getTodayList()
+      .then((result) => {
+        // api에 전달
+        commit("SET_TODAY_LIST", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_WEEK_DASHBOARD({ commit }) {
+    // 주간 리스트
+    return sohyun.dashboard
+      .getWeekList()
+      .then((result) => {
+        commit("SET_WEEK_LIST", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_INTEREST_DASHBOARD({ commit }) {
+    // 관심 리스트
+    return sohyun.dashboard
+      .getInterestList()
+      .then((result) => {
+        commit("SET_INTEREST_LIST", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 export default actions;

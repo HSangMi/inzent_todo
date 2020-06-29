@@ -33,6 +33,17 @@ const mutations = {
     console.log("mutations.SET_PROJECTS : 완료");
     state.projects = projects;
   },
+  //////////////////////// DASHBOARD ////////////////////////
+  SET_TODAY_LIST(state, todayList) {
+    console.log(todayList)
+    state.todayList = todayList;
+  },
+  SET_WEEK_LIST(state, weekList) {
+    state.weekList = weekList;
+  },
+  SET_INTEREST_LIST(state, interestList) {
+    state.interestList = interestList;
+  },
 };
 
 export default mutations;

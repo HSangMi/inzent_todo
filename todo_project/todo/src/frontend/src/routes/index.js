@@ -33,7 +33,7 @@ const router = new Router({
     },
     {
       path: "/schedule",
-      component: () => import("@/views/BoardMain.vue"),
+      component: () => import("@/views/Schedule.vue"),
       beforeEnter: requireAuth,
     },
     {

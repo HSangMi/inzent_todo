@@ -6,5 +6,9 @@ const state = {
   projects: [],
   project: {},
   headerTitle: "",
+  /////////
+  todayList: [],
+  weekList: [],
+  interestList: []
 };
 export default state;
