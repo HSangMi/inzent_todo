@@ -1,11 +1,11 @@
 <template>
-<v-app>
-  <app-bar />
-  <side-bar />
-  <v-content>
-    <router-view></router-view>
-  </v-content>
-</v-app>
+  <v-app>
+    <app-bar />
+    <side-bar />
+    <v-main>
+      <router-view></router-view>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -13,14 +13,13 @@
 // import {mapState} from 'vuex'
 
 export default {
-  name:'App',
+  name: "App",
   components: {
-    SideBar: () => import('@/components/core/SideBar.vue'),
-    AppBar: () => import('@/components/core/AppBar.vue'),
+    SideBar: () => import("@/components/core/SideBar.vue"),
+    AppBar: () => import("@/components/core/AppBar.vue"),
   },
-   computed: {
-	},
-}
+  computed: {},
+};
 /* 
   components: {
   },
@@ -40,8 +39,7 @@ export default {
  */
 </script>
 <style scoped>
- * {
-  background :#E8F5FF
- }
-
+* {
+  background: #e8f5ff;
+}
 </style>

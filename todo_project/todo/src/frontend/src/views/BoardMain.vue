@@ -13,6 +13,7 @@
 // import {mapState} from 'vuex'
 
 export default {
+   name:'BoardMain',
   // components: {
   //   SideBar: () => import('@/components/core/SideBar.vue'),
   //   SideBarSub: () => import('@/components/core/SideBarSub.vue'),
