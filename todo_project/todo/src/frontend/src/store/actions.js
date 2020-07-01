@@ -1,5 +1,5 @@
 import * as api from "../api";
-import * as sohyun from "../api/sohyun"
+import * as sohyun from "../api/sohyun";
 import * as util from "../utils/auth";
 // import state from './state'
 const actions = {
@@ -22,7 +22,7 @@ const actions = {
       commit("SET_PROJECTS", data);
     });
   },
-   //////////////////////// DASHBOARD ////////////////////////
+  //////////////////////// DASHBOARD ////////////////////////
   FETCH_TODAY_DASHBOARD({ commit }) {
     //오늘 리스트
     return sohyun.dashboard
@@ -46,16 +46,16 @@ const actions = {
         console.log(err);
       });
   },
-  FETCH_INTEREST_DASHBOARD({ commit }) {
+  FETCH_STARRED_DASHBOARD({ commit }) {
     // 관심 리스트
     return sohyun.dashboard
       .getInterestList()
       .then((result) => {
-        commit("SET_INTEREST_LIST", result);
+        commit("SET_STARRED_LIST", result);
       })
       .catch((err) => {
         console.log(err);
       });
-  },
+  }
 };
 export default actions;

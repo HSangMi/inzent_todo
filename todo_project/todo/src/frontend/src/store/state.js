@@ -9,6 +9,6 @@ const state = {
   /////////
   todayList: [],
   weekList: [],
-  interestList: []
+  starredList: [],
 };
 export default state;
