@@ -10,14 +10,16 @@
    </settings>
 	<typeAliases>
 		<typeAlias alias="uservo" type="com.inzent.todo.vo.UserVo"/>
-			<typeAlias alias="imagevo" type="com.inzent.todo.vo.ImageVo"/>
+		<typeAlias alias="imagevo" type="com.inzent.todo.vo.ImageVo"/>
 		<typeAlias alias="membervo" type="com.inzent.todo.vo.MemberVo"/>
 		<typeAlias alias="projectvo" type="com.inzent.todo.vo.ProjectVo"/>
+		<typeAlias alias="dashboarddto" type="com.inzent.todo.dto.DashBoardDto"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml"/><!-- 현재경로 기준! -->
 		<mapper resource="mybatis/mappers/file.xml"/><!-- 현재경로 기준! -->
 		<mapper resource="mybatis/mappers/member.xml"/><!-- 현재경로 기준! -->
 		<mapper resource="mybatis/mappers/project.xml"/><!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/dashboard.xml"/><!-- 현재경로 기준! -->
 	</mappers>  
 </configuration>

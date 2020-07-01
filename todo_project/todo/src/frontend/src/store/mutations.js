@@ -35,14 +35,16 @@ const mutations = {
   },
   //////////////////////// DASHBOARD ////////////////////////
   SET_TODAY_LIST(state, todayList) {
-    console.log(todayList)
+    console.log(todayList);
     state.todayList = todayList;
   },
   SET_WEEK_LIST(state, weekList) {
+    // console.log(weekList);
+
     state.weekList = weekList;
   },
-  SET_INTEREST_LIST(state, interestList) {
-    state.interestList = interestList;
+  SET_STARRED_LIST(state, starredList) {
+    state.starredList = starredList;
   },
 };
 

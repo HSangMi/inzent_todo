@@ -1,16 +1,16 @@
 <template>
   <v-card>
-    <v-card-title>WEEK TASKS</v-card-title>
+    <v-card-title>STARRED TASKS</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="8">
         <v-simple-table height="300px">
           <template v-slot:default>
-            <tbody v-if="weekList.empty">
+            <tbody v-if="starredList.empty">
               오늘 업무 없음
             </tbody>
             <tbody v-else>
-              <tr v-for="list in weekList" :key="list.name">
+              <tr v-for="list in starredList" :key="list.name">
                 <td>
                   <router-link :to="`/projects/${list.prjId}`"
                     >{{ list.prjTitle }}>{{ list.ptitle }}
@@ -53,7 +53,7 @@
       </v-col>
       <v-col cols="12" md="4">
         <div style="margin:0 auto">
-          <canvas id="weekChart" width="300" height="300"></canvas>
+          <canvas id="starredChart" width="300" height="300"></canvas>
         </div>
       </v-col>
     </v-row>
@@ -72,9 +72,9 @@ export default {
     };
   },
   created() {
-    this.FETCH_WEEK_DASHBOARD().then(() => {
-      for (var i = 0; i < this.weekList.length; i++) {
-        switch (this.weekList[i].state) {
+    this.FETCH_STARRED_DASHBOARD().then(() => {
+      for (var i = 0; i < this.starredList.length; i++) {
+        switch (this.starredList[i].state) {
           case "h":
             this.chartStateCnt.h++;
             break;
@@ -121,7 +121,7 @@ export default {
         options: {
           title: {
             display: true,
-            text: "WEEK TASKS",
+            text: "STARRED TASKS",
             position: "top",
           },
           legend: {
@@ -140,16 +140,16 @@ export default {
           ],
         },
       };
-      chartjs.createChart("weekChart", chartObj);
+      chartjs.createChart("starredChart", chartObj);
     }); // store -> actions
   },
   computed: {
     ...mapState({
-      weekList: "weekList",
+      starredList: "starredList",
     }),
   },
   methods: {
-    ...mapActions(["FETCH_WEEK_DASHBOARD"]),
+    ...mapActions(["FETCH_STARRED_DASHBOARD"]),
   },
 };
 </script>

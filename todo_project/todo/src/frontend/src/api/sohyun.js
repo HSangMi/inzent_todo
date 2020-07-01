@@ -9,24 +9,24 @@ import router from "../routes"; // 상대경로 -> router/index.js
 const DOMAIN = "http://localhost:8080/api"; //서버 요청 도메인
 const UNAUTHORIZED = 401; //401에러에 대한 상수
 const onUnauthorized = () => {
-    // 401에러를 처리할 수 있는 함수
-    router.push("/login");
+  // 401에러를 처리할 수 있는 함수
+  router.push("/login");
 };
 
 const request = (method, url, data) => {
-    return axios({
-        method,
-        url: DOMAIN + url,
-        data,
-    })
-        .then((result) => result.data) // 성공일때, result의 body data를 전달
-        .catch((result) => {
-            const { status } = result.response;
-            //401에러
-            if (status === UNAUTHORIZED) return onUnauthorized();
-            // 정의 되지 않은 에러
-            throw Error(result);
-        });
+  return axios({
+    method,
+    url: DOMAIN + url,
+    data,
+  })
+    .then((result) => result.data) // 성공일때, result의 body data를 전달
+    .catch((result) => {
+      const { status } = result.response;
+      //401에러
+      if (status === UNAUTHORIZED) return onUnauthorized();
+      // 정의 되지 않은 에러
+      throw Error(result);
+    });
 };
 ////////////////////////DASHBOARD/////////////////////////////////////
 export const dashboard = {
@@ -37,6 +37,6 @@ export const dashboard = {
         return request("get", "/dashboard/week");
     },
     getInterestList() {
-        return request("get", "/dashboard/interest");
+        return request("get", "/dashboard/starred");
     }
 };
