@@ -6,12 +6,18 @@
       <v-col cols="12" md="8">
         <v-simple-table height="300px" class="mx-10">
           <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-center">[프로젝트]&nbsp;/업무</th>
+                <th class="text-center">업무명</th>
+                <th class="text-center">업무 담당자</th>
+                <th class="text-center">진행 상태</th>
+                <th class="text-center">기간</th>
+                <th class="text-center">공개여부</th>
+              </tr>
+            </thead>
             <tbody v-if="todayList.length == 0">
-              <div class="text-h5 text-center my-15">
-                <v-sheet color="grey lighten-3" height="150px">
-                  <p class="py-15">NO TASKS</p>
-                </v-sheet>
-              </div>
+              <td colspan="6" class="text-center">NO TASKS</td>
             </tbody>
             <tbody v-else>
               <tr v-for="list in todayList" :key="list.name">
@@ -38,9 +44,11 @@
                   <v-chip class="ma-2" small color="green" text-color="white">완료</v-chip>
                 </td>
                 <td>{{ list.startDate }} ~ {{ list.endDate }}</td>
-                <td v-show="list.usePublic"></td>
+                <td v-show="list.usePublic">
+                  <v-icon>mdi-sort-variant</v-icon>
+                </td>
                 <td v-show="!list.usePublic">
-                  <v-icon>mdi-lock</v-icon>
+                  <v-icon>mdi-sort-variant-lock</v-icon>
                 </td>
               </tr>
             </tbody>
@@ -54,7 +62,12 @@
             <p class="py-15">NO CHART</p>
           </v-sheet>
         </div>-->
-        <div style="width:50%;margin:0 auto">
+        <p class="text-center my-3">TODAY TASKS</p>
+        <v-divider class="my-3"></v-divider>
+        <div v-if="todayList.length == 0">
+          <p class="text-center">NO TASKS</p>
+        </div>
+        <div class="mx-15" v-else>
           <canvas id="todayChart" width="300" height="300"></canvas>
         </div>
       </v-col>
@@ -93,8 +106,8 @@ export default {
             this.chartStateCnt.e++;
             break;
         }
-      }
-      console.log(this.chartStateCnt);
+      } // end for
+
       const chartObj = {
         type: "doughnut",
         data: {
@@ -121,11 +134,6 @@ export default {
           labels: ["보류", "진행", "완료", "대기", "긴급"]
         },
         options: {
-          title: {
-            display: true,
-            text: "TODAY TASKS",
-            position: "top"
-          },
           legend: {
             position: "right",
             verticalAlign: "right"

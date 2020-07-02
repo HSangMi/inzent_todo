@@ -41,6 +41,7 @@ public class BoardMainController {
 
         System.out.println("BoradMain Controller : get WeekList");
         List<DashBoardDto> list = boardMainService.getWeekList(userId);
+
         return list;
     }
 
