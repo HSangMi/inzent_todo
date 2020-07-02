@@ -1,58 +1,55 @@
 <template>
-  <v-card>
+  <v-card width="90%" class="mx-auto">
     <v-card-title>WEEK TASKS</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="8">
-        <v-simple-table height="300px">
+        <v-simple-table height="300px" class="mx-10">
           <template v-slot:default>
-            <tbody v-if="weekList.empty">
-              오늘 업무 없음
+            <tbody v-if="weekList.length == 0">
+              <div class="text-h5 text-center my-15">
+                <v-sheet color="grey lighten-3" height="150px">
+                  <p class="py-15">NO TASKS</p>
+                </v-sheet>
+              </div>
             </tbody>
             <tbody v-else>
               <tr v-for="list in weekList" :key="list.name">
                 <td>
-                  <router-link :to="`/projects/${list.prjId}`"
-                    >{{ list.prjTitle }}>{{ list.ptitle }}
-                  </router-link>
+                  <router-link
+                    :to="`/projects/${list.prjId}`"
+                  >[{{ list.prjTitle }}]&nbsp;/{{ list.ptitle }}</router-link>
                 </td>
-                <td>{{ list.ctitle }}</td>
+                <td class="text-h4">{{ list.ctitle }}</td>
                 <td>{{ list.managerName }}</td>
                 <td v-if="list.state == 'p'">
-                  <v-chip class="ma-2" small color="blue" text-color="white">
-                    진행
-                  </v-chip>
+                  <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>
                 </td>
                 <td v-if="list.state == 'w'">
-                  <v-chip class="ma-2" small color="yellow">
-                    대기
-                  </v-chip>
+                  <v-chip class="ma-2" small color="yellow">대기</v-chip>
                 </td>
                 <td v-if="list.state == 'h'">
-                  <v-chip class="ma-2" small>
-                    보류
-                  </v-chip>
+                  <v-chip class="ma-2" small>보류</v-chip>
                 </td>
                 <td v-if="list.state == 'e'">
-                  <v-chip class="ma-2" small color="red" text-color="white">
-                    긴급
-                  </v-chip>
+                  <v-chip class="ma-2" small color="red" text-color="white">긴급</v-chip>
                 </td>
                 <td v-if="list.state == 'c'">
-                  <v-chip class="ma-2" small color="green" text-color="white">
-                    완료
-                  </v-chip>
+                  <v-chip class="ma-2" small color="green" text-color="white">완료</v-chip>
                 </td>
                 <td>{{ list.startDate }} ~ {{ list.endDate }}</td>
                 <td v-show="list.usePublic"></td>
-                <td v-show="!list.usePublic"><v-icon>mdi-lock</v-icon></td>
+                <td v-show="!list.usePublic">
+                  <v-icon>mdi-lock</v-icon>
+                </td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
       </v-col>
-      <v-col cols="12" md="4">
-        <div style="margin:0 auto">
+      <v-divider class="mx-4" vertical></v-divider>
+      <v-col cols="12" md="3">
+        <div style="width:50%;margin:0 auto">
           <canvas id="weekChart" width="300" height="300"></canvas>
         </div>
       </v-col>
@@ -68,7 +65,7 @@ import { chartjs } from "../../utils/todoChart.js";
 export default {
   data() {
     return {
-      chartStateCnt: { h: 0, p: 0, c: 0, w: 0, e: 0 },
+      chartStateCnt: { h: 0, p: 0, c: 0, w: 0, e: 0 }
     };
   },
   created() {
@@ -103,54 +100,54 @@ export default {
                 this.chartStateCnt.p,
                 this.chartStateCnt.c,
                 this.chartStateCnt.w,
-                this.chartStateCnt.e,
+                this.chartStateCnt.e
               ],
               backgroundColor: [
                 "#BFC9CA",
                 "#5DADE2",
                 "#82E0AA",
                 "#F7DC6F",
-                "#F1948A",
+                "#F1948A"
               ],
-              borderAlign: "left",
-            },
+              borderAlign: "left"
+            }
           ],
           // These labels appear in the legend and in the tooltips when hovering different arcs
-          labels: ["보류", "진행", "완료", "대기", "긴급"],
+          labels: ["보류", "진행", "완료", "대기", "긴급"]
         },
         options: {
           title: {
             display: true,
             text: "WEEK TASKS",
-            position: "top",
+            position: "top"
           },
           legend: {
             position: "right",
-            verticalAlign: "right",
+            verticalAlign: "right"
           },
-          responsive: false,
+          responsive: false
         },
         scales: {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true,
-              },
-            },
-          ],
-        },
+                beginAtZero: true
+              }
+            }
+          ]
+        }
       };
       chartjs.createChart("weekChart", chartObj);
     }); // store -> actions
   },
   computed: {
     ...mapState({
-      weekList: "weekList",
-    }),
+      weekList: "weekList"
+    })
   },
   methods: {
-    ...mapActions(["FETCH_WEEK_DASHBOARD"]),
-  },
+    ...mapActions(["FETCH_WEEK_DASHBOARD"])
+  }
 };
 </script>
 

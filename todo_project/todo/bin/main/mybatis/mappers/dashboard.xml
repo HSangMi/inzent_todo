@@ -34,7 +34,7 @@
         )
         AS b
         ON a.cId = b.cId
-        order by a.reg_date desc;
+        order by a.state='e' desc;
     ]]>
     </select>
     <select id="getWeekList" parameterType="String" resultType="dashboarddto">
@@ -68,7 +68,7 @@
         )
         AS b
         ON a.cId = b.cId
-        order by a.reg_date desc;
+        order by a.state='e' desc;
     ]]>
     </select>
 
@@ -82,20 +82,8 @@
     where tts.task_super_id in (
 			select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
 			select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}))))
+    order by tts2.state='e' desc;
     ]]>
     </select>
 
-    <select id="getTodayChart" parameterType="String" resultType="String">
-    <![CDATA[
-    select tts.state
-    from tb_task_sub tts, tb_task_super ttsp, tb_project tp
-    where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
-    and (current_date between tts.start_date::date and tts.end_date::date)
-    and (tts.task_id in (
-					select task_id 
-					from tb_task_manager 
-					where member_no in (select member_no from tb_member  where user_id=#{userId})
-					))
-    ]]>
-    </select>
 </mapper>

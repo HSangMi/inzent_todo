@@ -34,7 +34,7 @@
         )
         AS b
         ON a.cId = b.cId
-        order by a.reg_date desc;
+        order by a.state='e' desc;
     ]]>
     </select>
     <select id="getWeekList" parameterType="String" resultType="dashboarddto">
@@ -68,7 +68,7 @@
         )
         AS b
         ON a.cId = b.cId
-        order by a.reg_date desc;
+        order by a.state='e' desc;
     ]]>
     </select>
 
@@ -82,6 +82,7 @@
     where tts.task_super_id in (
 			select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
 			select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}))))
+    order by tts2.state='e' desc;
     ]]>
     </select>
 
