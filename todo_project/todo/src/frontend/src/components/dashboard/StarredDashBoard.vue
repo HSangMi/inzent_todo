@@ -1,6 +1,6 @@
 <template>
   <v-card width="90%" class="mx-auto">
-    <v-card-title>STARRED TASKS</v-card-title>
+    <v-card-title class="text-h5">STARRED TASKS</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="8">
@@ -21,33 +21,33 @@
             </tbody>
             <tbody v-else>
               <tr v-for="list in starredList" :key="list.name">
-                <td>
+                <td class="text-center">
                   <router-link
                     :to="`/projects/${list.prjId}`"
                   >[{{ list.prjTitle }}]&nbsp;/{{ list.ptitle }}</router-link>
                 </td>
-                <td class="text-h4">{{ list.ctitle }}</td>
-                <td>{{ list.managerName }}</td>
-                <td v-if="list.state == 'p'">
+                <td class="text-h4 text-center">{{ list.ctitle }}</td>
+                <td class="text-center">{{ list.managerName }}</td>
+                <td v-if="list.state == 'p'" class="text-center">
                   <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>
                 </td>
-                <td v-if="list.state == 'w'">
+                <td v-if="list.state == 'w'" class="text-center">
                   <v-chip class="ma-2" small color="yellow">대기</v-chip>
                 </td>
-                <td v-if="list.state == 'h'">
+                <td v-if="list.state == 'h'" class="text-center">
                   <v-chip class="ma-2" small>보류</v-chip>
                 </td>
-                <td v-if="list.state == 'e'">
+                <td v-if="list.state == 'e'" class="text-center">
                   <v-chip class="ma-2" small color="red" text-color="white">긴급</v-chip>
                 </td>
-                <td v-if="list.state == 'c'">
+                <td v-if="list.state == 'c'" class="text-center">
                   <v-chip class="ma-2" small color="green" text-color="white">완료</v-chip>
                 </td>
-                <td>{{ list.startDate }} ~ {{ list.endDate }}</td>
-                <td v-show="list.usePublic">
+                <td class="text-center">{{ list.startDate }} ~ {{ list.endDate }}</td>
+                <td v-show="list.usePublic" class="text-center">
                   <v-icon>mdi-sort-variant</v-icon>
                 </td>
-                <td v-show="!list.usePublic">
+                <td v-show="!list.usePublic" class="text-center">
                   <v-icon>mdi-sort-variant-lock</v-icon>
                 </td>
               </tr>
