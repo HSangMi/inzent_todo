@@ -6,9 +6,11 @@ const state = {
   projects: [],
   project: {},
   headerTitle: "",
-  /////////
+  ///////// DASHBOARD /////////
   todayList: [],
   weekList: [],
   starredList: [],
+  ///////// SCHEDULE /////////
+  calendarList:[]
 };
 export default state;

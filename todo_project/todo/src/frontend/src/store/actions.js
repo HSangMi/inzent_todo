@@ -56,6 +56,17 @@ const actions = {
       .catch((err) => {
         console.log(err);
       });
-  }
+  },
+  //////////////////////// SCHEDULE (CALENDAR) ////////////////////////
+  FETCH_CALENDAR_LIST({ commit }) {
+    return sohyun.schedule
+      .getCalendarList()
+      .then((result) => {
+        commit("SET_CALENDAR_LIST", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 export default actions;

@@ -14,7 +14,9 @@
 </template>
 
 <script>
+// import { mapState, mapActions } from "vuex";
 import GanttElastic from "gantt-elastic";
+
 export default {
   components: {
     ganttElastic: GanttElastic
@@ -158,7 +160,7 @@ export default {
           },
           {
             id: 3,
-            label: "DATE",
+            label: "DUEDATE",
             value: "2020-06-23",
             width: 78
           },

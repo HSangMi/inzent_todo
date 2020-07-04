@@ -14,6 +14,7 @@
 		<typeAlias alias="membervo" type="com.inzent.todo.vo.MemberVo"/>
 		<typeAlias alias="projectvo" type="com.inzent.todo.vo.ProjectVo"/>
 		<typeAlias alias="dashboarddto" type="com.inzent.todo.dto.DashBoardDto"/>
+		<typeAlias alias="scheduledto" type="com.inzent.todo.dto.ScheduleDto"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml"/><!-- 현재경로 기준! -->
@@ -21,5 +22,6 @@
 		<mapper resource="mybatis/mappers/member.xml"/><!-- 현재경로 기준! -->
 		<mapper resource="mybatis/mappers/project.xml"/><!-- 현재경로 기준! -->
 		<mapper resource="mybatis/mappers/dashboard.xml"/><!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/calendar.xml"/><!-- 현재경로 기준! -->
 	</mappers>  
 </configuration>

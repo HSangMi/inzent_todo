@@ -28,7 +28,7 @@ const request = (method, url, data) => {
       throw Error(result);
     });
 };
-////////////////////////DASHBOARD/////////////////////////////////////
+///////////////////////////////////// DASHBOARD /////////////////////////////////////
 export const dashboard = {
     getTodayList() {
         return request("get", "/dashboard/today");
@@ -39,4 +39,10 @@ export const dashboard = {
     getInterestList() {
         return request("get", "/dashboard/starred");
     }
+};
+///////////////////////////////////// SCHEDULE /////////////////////////////////////
+export const schedule = {
+  getCalendarList(){
+    return request("get", "/schedule/calendar");
+  }
 };

@@ -38,12 +38,17 @@ const mutations = {
     state.todayList = todayList;
   },
   SET_WEEK_LIST(state, weekList) {
-
+    
     state.weekList = weekList;
   },
   SET_STARRED_LIST(state, starredList) {
     state.starredList = starredList;
   },
+  //////////////////////// SCHEDULE ////////////////////////
+  SET_CALENDAR_LIST(state, calendarList){
+    console.log(calendarList);
+    state.calendarList = calendarList;
+  }
 };
 
 export default mutations;
