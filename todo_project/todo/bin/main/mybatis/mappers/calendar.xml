@@ -36,4 +36,11 @@
         order by a.reg_date desc
     ]]>
     </select>
+    <select id="getSuperTasks" parameterType="cpvo" resultType="cstdto">
+    <![CDATA[
+        select task_id pId, title pTitle
+        from tb_task_super tts
+        where project_id=#{cpvo.prjId} and member_no in (select member_no from tb_member  where user_id=#{cpvo.userId})
+    ]]>
+    </select>
 </mapper>

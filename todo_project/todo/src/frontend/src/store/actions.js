@@ -68,5 +68,15 @@ const actions = {
         console.log(err);
       });
   },
+  FETCH_CALENDAR_SUPER_TASKS({ commit }, chkProject) {
+    return sohyun.schedule
+      .getChkProject(chkProject)
+      .then((result) => {
+        commit("SET_FETCH_CHKPROJECT", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 export default actions;

@@ -30,19 +30,23 @@ const request = (method, url, data) => {
 };
 ///////////////////////////////////// DASHBOARD /////////////////////////////////////
 export const dashboard = {
-    getTodayList() {
-        return request("get", "/dashboard/today");
-    },
-    getWeekList() {
-        return request("get", "/dashboard/week");
-    },
-    getInterestList() {
-        return request("get", "/dashboard/starred");
-    }
+  getTodayList() {
+    return request("get", "/dashboard/today");
+  },
+  getWeekList() {
+    return request("get", "/dashboard/week");
+  },
+  getInterestList() {
+    return request("get", "/dashboard/starred");
+  },
 };
 ///////////////////////////////////// SCHEDULE /////////////////////////////////////
 export const schedule = {
-  getCalendarList(){
+  getCalendarList() {
     return request("get", "/schedule/calendar");
-  }
+  },
+  getChkProject(chkProject) {
+    console.log(chkProject);
+    return request("post", "/schedule/chkproject", chkProject);
+  },
 };

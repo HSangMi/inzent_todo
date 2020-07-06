@@ -32,7 +32,7 @@
                   dark
                   small
                   color="blue"
-                  @click.prevent="dialog = true"
+                  @click.prevent="SET_IS_ADD_CALENDAR(true)"
                 >
                   <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
@@ -96,43 +96,7 @@
               </v-dialog>
               <!-- 상세모달 창 끝 -->
               <!-- 일정추가 모달 시작 -->
-              <!-- <add-calendar :openDialog="isOpenCalendar" /> -->
-              <v-dialog v-model="dialog" max-width="700px">
-                <v-stepper v-model="e1">
-                  <v-divider></v-divider>
-                  <v-stepper-header>
-                    <v-stepper-step :complete="e1 > 1" step="1">SELECT PROJECT</v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step :complete="e1 > 2" step="2">ADD TASK</v-stepper-step>
-                  </v-stepper-header>
-
-                  <v-stepper-items>
-                    <v-stepper-content step="1">
-                      <v-card class="mb-12" height="200px">
-                        <v-card-title class="text-h5">1. SELCT PROJECT</v-card-title>
-                        <v-select :items="selectProjects" label="PROJECT" outlined></v-select>
-                        <v-select :items="selectTasks" label="TASKS" outlined></v-select>
-                      </v-card>
-                      <!-- <v-icon absolute right large @click="e1 = 2">mdi-chevron-right</v-icon> -->
-                      <v-btn text @click="dialog=false">CANCEL</v-btn>
-                      <v-btn absolute right class="ma-2" color="primary" fab x-small dark  @click="e1 = 2"><v-icon>mdi-chevron-right</v-icon></v-btn>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="2">
-                      <v-card class="mb-12" height="200px">
-                        <v-card-title class="text-h5">2. ADD TASK</v-card-title>
-                      </v-card>
-
-                      <!-- <v-btn class="ma-2" tile outlined color="primary" @click="e1 = 1">PREV</v-btn> -->
-                      <v-btn color="primary">ADD</v-btn>
-                      <v-btn text @click="dialog=false">CANCEL</v-btn>
-                      <v-btn absolute right class="ma-2" color="primary" fab x-small dark  @click="e1 = 1"><v-icon>mdi-chevron-left</v-icon></v-btn>
-                    </v-stepper-content>
-                  </v-stepper-items>
-                </v-stepper>
-              </v-dialog>
+              <add-calendar />
               <!-- 일정추가 모달 끝 -->
             </v-sheet>
           </v-col>
@@ -143,21 +107,21 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-// import AddCalendar from "./AddCalendar.vue";
+import { mapState, mapMutations, mapActions } from "vuex";
+import AddCalendar from "./AddCalendar.vue";
 
 export default {
-  // components: {
-  //   AddCalendar
-  // },
+  components: {
+    AddCalendar
+  },
   data: () => ({
     selected: [2],
     //////////// 업무 등록 ////////////
-    e1: 1,
+    // e1: 1,
     // isOpenCalendar: false,
-    selectProjects: [], // 업무추가에서 선택할 프로젝트 아이템
-    selectTasks: [], // 업무추가에서 선택할 업무대 아이템
-    dialog: false,
+    // selectProjects: [], // 업무추가에서 선택할 프로젝트 아이템
+    // selectTasks: [], // 업무추가에서 선택할 업무대 아이템
+    // dialog: false,
     //////////////////
     focus: "",
     type: "month",
@@ -229,10 +193,6 @@ export default {
       const events = [];
 
       for (var i = 0; i < this.calendarList.length; i++) {
-        ////////////////////////
-        this.selectProjects.push(this.calendarList[i].prjTitle);
-        this.selectTasks.push(this.calendarList[i].ptitle);
-
         const taskName =
           "[" +
           this.calendarList[i].ptitle +
@@ -257,12 +217,14 @@ export default {
     // 사용할 mapstate 불러옴
     ...mapState({
       calendarList: "calendarList"
-    })
+    }),
+    ...mapState(["isAddCalendar"])
   },
   mounted() {
     this.$refs.calendar.checkChange();
   },
   methods: {
+    ...mapMutations(["SET_IS_ADD_CALENDAR"]),
     ...mapActions(["FETCH_CALENDAR_LIST"]), // 사용할 mapactions 등록
 
     getEventColor(event) {
