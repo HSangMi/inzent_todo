@@ -45,6 +45,12 @@ const mutations = {
     state.starredList = starredList;
   },
   //////////////////////// SCHEDULE ////////////////////////
+  // SET_IS_ADD_CALENDAR(state, toggle) {
+  //   console.log(toggle);
+  //   console.log(state);
+  //   state.isAddCalendar = toggle // toggle : 불린형
+  //   console.log(state.isAddCalendar);
+  // },
   SET_CALENDAR_LIST(state, calendarList){
     console.log(calendarList);
     state.calendarList = calendarList;

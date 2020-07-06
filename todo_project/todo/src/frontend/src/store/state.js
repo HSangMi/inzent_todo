@@ -11,6 +11,7 @@ const state = {
   weekList: [],
   starredList: [],
   ///////// SCHEDULE /////////
-  calendarList:[]
+  // isAddCalendar : false,
+  calendarList:[],
 };
 export default state;
