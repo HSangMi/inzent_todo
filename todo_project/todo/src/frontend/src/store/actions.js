@@ -59,6 +59,7 @@ const actions = {
   },
   //////////////////////// SCHEDULE (CALENDAR) ////////////////////////
   FETCH_CALENDAR_LIST({ commit }) {
+    // 캘린더 조회
     return sohyun.schedule
       .getCalendarList()
       .then((result) => {
@@ -69,11 +70,30 @@ const actions = {
       });
   },
   FETCH_CALENDAR_SUPER_TASKS({ commit }, chkProject) {
+    // 선택한 프로젝트의 업무 대 조회
     return sohyun.schedule
       .getChkProject(chkProject)
       .then((result) => {
         commit("SET_FETCH_CHKPROJECT", result);
       })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  ADD_CALENDAR_SUPER_TASKS(__, addSuper) {
+    // 업무 대 추가
+    return sohyun.schedule
+      .addSuperTask(addSuper)
+      .then((result) => result)
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  ADD_CALENDAR_SUB_TASKS(__, addSub) {
+    // 업무 소 추가
+    return sohyun.schedule
+      .addSubTask(addSub)
+      .then((result) => result)
       .catch((err) => {
         console.log(err);
       });

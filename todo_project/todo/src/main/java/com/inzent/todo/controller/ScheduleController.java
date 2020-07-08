@@ -30,7 +30,7 @@ public class ScheduleController {
     public List<ScheduleDto> getCalendatList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-
+        
         List<ScheduleDto> list = scheduleService.getCalendatList(userId);
         return list;
     }
@@ -38,14 +38,19 @@ public class ScheduleController {
     // 일정 등록 - 선택된 프로젝트에 관련된 업무대 출력
     @Auth
     @PostMapping("/chkproject")
-    public List<ChkSuperTasksDto> getSuperTasks(@RequestBody ChkProjectDto chkProjectDto, HttpServletRequest req) {
-        System.out.println("asdad" + chkProjectDto.getChkProject());
-        ChkProjectDto dto = (ChkProjectDto) req.getAttribute("user");
-        System.out.println(dto.toString());
+    public List<ChkSuperTasksDto> getSuperTasks(@RequestBody ChkProjectDto chkprjdto, HttpServletRequest req) {
+        System.out.println("id나왔다!!!!!!!" + chkprjdto.getChkProject());
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
 
-        // List<ChkSuperTasksDto> list = scheduleService.getSuperTasks(vo);
+        chkprjdto.setId(userId);
+
+        System.out.println(chkprjdto.toString());
+
+        List<ChkSuperTasksDto> list = scheduleService.getSuperTasks(chkprjdto);
         System.out.println("여기까지 도착?!");
-        return null;
+        System.out.println(list);
+        return list;
     }
 
 }

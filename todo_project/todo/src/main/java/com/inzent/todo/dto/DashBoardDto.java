@@ -19,6 +19,7 @@ public class DashBoardDto {
     private String prjTitle;
     private String prjId;
     private String cId;
+    private int managerCount;
     private String managerName;
 
 }

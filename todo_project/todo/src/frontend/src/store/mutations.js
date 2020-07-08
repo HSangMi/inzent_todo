@@ -53,7 +53,7 @@ const mutations = {
   },
   SET_FETCH_CHKPROJECT(state, data){
     state.getSuperTasks = data;
-  }
+  },
 };
 
 export default mutations;

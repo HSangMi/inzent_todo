@@ -3,23 +3,49 @@
 	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="calendar">
-    <select id="getCalendarList" parameterType="String" resultType="scheduledto">
+    <select id="getCalendarInfo" parameterType="String" resultType="scheduledto">
     <![CDATA[
-        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_name
-        FROM 
+    SELECT  
+        a.prjId, 
+        a.pId, 
+	   	a.cId, 
+	    a.prjTitle, 
+	    a.pTitle, 
+	    a.cTitle, 
+	    a.pStartDate, 
+	    a.pEndDate, 
+	    a.pState, 
+	    a.pUsePublic, 
+	    a.cStartDate, 
+	    a.cEndDate, 
+	    a.cState, 
+	    a.cUsePublic,
+	    b.manager_name
+    FROM 
         (
-        select tp.id prjId, tts.task_id cId, tp.title prjTitle, ttsp.title pTitle, tts.title cTitle, tts.start_date, tts.end_date, tts.reg_date, tts.state, tts.use_public
-        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
-        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
-        and (tts.task_id in (
-                            select task_id 
-                            from tb_task_manager 
-                            where member_no in (select member_no from tb_member  where user_id=#{userId})
-                            ))
-        )
-        AS a INNER join
-        (
-        select ttm.task_id cId , array_agg(tu."name") as manager_name
+        SELECT 
+            tp.id prjId, 
+            tts.task_id pId, 
+            tts2.task_id cId, 
+            tp.title prjTitle, 
+            tts.title pTitle, 
+            tts2.title cTitle, 
+            tts.start_date pStartDate, 
+            tts.end_date pEndDate, 
+            tts.state pState, 
+            tts.use_public pUsePublic, 
+            tts2.start_date cStartDate, 
+            tts2.end_date cEndDate, 
+            tts2.state cState, 
+            tts2.use_public cUsePublic
+        FROM tb_project tp, tb_task_super tts , tb_task_sub tts2 
+        WHERE (tp.id=tts.project_id)
+        AND (tts.task_id=tts2.task_super_id)
+        AND tp.id in (select project_id from tb_member  where user_id=#{userId})
+    )
+    AS a left outer join
+    (
+        select ttm.task_id id,  array_to_string(array_agg(tu."name"),',') as manager_name
         from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
         where ttm.task_id in (
         select ttm.task_id 
@@ -31,16 +57,31 @@
         and tm.user_id = tu.id
         group by ttm.task_id
         )
-        AS b
-        ON a.cId = b.cId
-        order by a.reg_date desc
+    AS b
+    ON (a.cId = b.id or a.pId = b.id);
     ]]>
     </select>
-    <select id="getSuperTasks" parameterType="cpvo" resultType="cstdto">
+    <select id="getSuperTasks" parameterType="chkprjdto" resultType="chkstdto">
     <![CDATA[
         select task_id pId, title pTitle
         from tb_task_super tts
-        where project_id=#{cpvo.prjId} and member_no in (select member_no from tb_member  where user_id=#{cpvo.userId})
+        where project_id = (select project_id from tb_member  where user_id=#{id} and project_id=#{chkProject});
     ]]>
     </select>
+    <!-- <select id="getManagers" parameterType="String" resultType="hashmap">
+    <![CDATA[
+        select ttm.task_id, tm.user_id 
+        from tb_task_manager ttm, tb_member tm 
+        where (ttm.member_no = tm.member_no) 
+        and (ttm.task_id in (select tts.task_id 
+                            from tb_project tp ,tb_task_super tts 
+                            where (tp.id=tts.project_id) 
+                            and tp.id in (select project_id from tb_member  where user_id='peach'))
+        or ttm.task_id in (select tts2.task_id 
+                            from tb_project tp ,tb_task_super tts, tb_task_sub tts2 
+                            where (tp.id=tts.project_id)
+                            and (tts2.task_super_id = tts.task_id )
+                            and tp.id in (select project_id from tb_member  where user_id='peach')));
+     ]]>
+    </select> -->
 </mapper>

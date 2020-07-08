@@ -1,19 +1,19 @@
 <template>
-  <v-card width="90%" class="mx-auto">
-    <v-card-title  class="text-h5">TODAY TASKS</v-card-title>
+  <v-card width="95%" class="mx-auto">
+    <v-card-title class="text-h5">TODAY TASKS</v-card-title>
     <v-divider></v-divider>
     <v-row>
-      <v-col cols="12" md="8">
+      <v-col cols="12" md="9">
         <v-simple-table height="300px" class="mx-10">
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center">[프로젝트]&nbsp;/업무</th>
-                <th class="text-center">업무명</th>
-                <th class="text-center">업무 담당자</th>
-                <th class="text-center">진행 상태</th>
-                <th class="text-center">기간</th>
-                <th class="text-center">공개여부</th>
+                <th class="text-center" width="150">프로젝트</th>
+                <th class="text-center" width="300">업무명</th>
+                <th class="text-center" width="120">담당자 수</th>
+                <th class="text-center" width="120">진행 상태</th>
+                <th class="text-center" width="200">기간</th>
+                <th class="text-center" width="80">공개 여부</th>
               </tr>
             </thead>
             <tbody v-if="todayList.length == 0">
@@ -21,13 +21,29 @@
             </tbody>
             <tbody v-else>
               <tr v-for="list in todayList" :key="list.name">
-                <td class="text-center"> 
-                  <router-link
-                    :to="`/projects/${list.prjId}`"
-                  >[{{ list.prjTitle }}]&nbsp;/{{ list.ptitle }}</router-link>
+                <td class="text-center">
+                  <router-link :to="`/projects/${list.prjId}`">{{ list.prjTitle }}</router-link>
                 </td>
-                <td class="text-h4 text-center">{{ list.ctitle }}</td>
-                <td class="text-center">{{ list.managerName }}</td>
+                <td class="text-center">[{{ list.ptitle }}]&nbsp;{{ list.ctitle }}</td>
+                <v-tooltip bottom color="#5a5a5a">
+                  <template v-slot:activator="{ on, attrs }">
+                    <!-- 담당자가 1명일때 -->
+                    <td class="text-center" style="font-size:12px" v-if="list.managerCount == 1">
+                      <v-icon v-bind="attrs" v-on="on">mdi-account</v-icon>
+                      &nbsp;({{ list.managerCount }}명)
+                    </td>
+                    <!-- 담당자가 2명이상일때 -->
+                    <td class="text-center" style="font-size:12px" v-if="list.managerCount > 1">
+                      <v-icon v-bind="attrs" v-on="on">mdi-account-supervisor</v-icon>
+                      &nbsp;({{ list.managerCount }}명)
+                    </td>
+                  </template>
+                  <span font-color="white">{{list.managerName}}</span>
+                </v-tooltip>
+                <!-- 담당자가 없을 때 -->
+                <td class="text-center" v-if="list.managerCount == 0">
+                  <v-icon v-bind="attrs" v-on="on">mdi-account-remove</v-icon>
+                </td>
                 <td v-if="list.state == 'p'" class="text-center">
                   <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>
                 </td>
@@ -45,10 +61,10 @@
                 </td>
                 <td class="text-center">{{ list.startDate }} ~ {{ list.endDate }}</td>
                 <td v-show="list.usePublic" class="text-center">
-                  <v-icon>mdi-sort-variant</v-icon>
+                  <v-icon small>mdi-lock-open-variant-outline</v-icon>
                 </td>
                 <td v-show="!list.usePublic" class="text-center">
-                  <v-icon>mdi-sort-variant-lock</v-icon>
+                  <v-icon small>mdi-lock-outline</v-icon>
                 </td>
               </tr>
             </tbody>
@@ -56,18 +72,13 @@
         </v-simple-table>
       </v-col>
       <v-divider class="mx-4" vertical></v-divider>
-      <v-col cols="12" md="3">
-        <!-- <div class="text-h5 text-center my-15 px-5" v-if="todayList.length == 0">
-          <v-sheet color="grey lighten-3" height="150px" width="90%">
-            <p class="py-15">NO CHART</p>
-          </v-sheet>
-        </div>-->
-        <p class="text-center my-3">TODAY TASKS</p>
+      <v-col cols="12" md="2">
+        <p class="text-center mx-3 my-3">TODAY TASKS</p>
         <v-divider class="my-3"></v-divider>
         <div v-if="todayList.length == 0">
           <p class="text-center">NO TASKS</p>
         </div>
-        <div class="mx-15" v-else>
+        <div class="mx-5" v-else>
           <canvas id="todayChart" width="300" height="300"></canvas>
         </div>
       </v-col>
@@ -76,7 +87,6 @@
 </template>
 
 <script>
-// import TodayChart from "./TodayChart.vue";
 import { mapState, mapActions } from "vuex";
 import { chartjs } from "../../utils/todoChart.js";
 
@@ -89,6 +99,7 @@ export default {
   created() {
     this.FETCH_TODAY_DASHBOARD().then(() => {
       for (var i = 0; i < this.todayList.length; i++) {
+        console.log(this.todayList);
         switch (this.todayList[i].state) {
           case "h":
             this.chartStateCnt.h++;

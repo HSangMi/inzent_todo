@@ -49,4 +49,12 @@ export const schedule = {
     console.log(chkProject);
     return request("post", "/schedule/chkproject", chkProject);
   },
+  addSuperTask(addSuper) {
+    console.log('업무대 : ',addSuper);
+    return request("post", "/schedule/addSuper", addSuper);
+  },
+  addSubTask(addSub) {
+    console.log('업무소 : ',addSub);
+    return request("post", "/schedule/addSub", addSub);
+  },
 };

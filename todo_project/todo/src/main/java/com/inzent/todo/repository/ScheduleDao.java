@@ -1,6 +1,7 @@
 package com.inzent.todo.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
@@ -17,12 +18,19 @@ public class ScheduleDao {
     private SqlSession sqlsession;
 
     public List<ScheduleDto> getCalendatList(String userId) {
-
-        return sqlsession.selectList("calendar.getCalendarList", userId);
+        List<ScheduleDto> prjInfo = sqlsession.selectList("calendar.getCalendarInfo", userId);
+        System.out.println(prjInfo);
+        return prjInfo;
     }
 
-    public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto cpdto) {
+    // public List<Map<String,String>> getCalendarManagers(String userId){
+    //     List<Map<String,String>> list = sqlsession.selectList("calendar.getManagers", userId);
+    //     System.out.println(list);
+    //     return list;
+    // }
 
-        return sqlsession.selectList("calendar.getSuperTasks", cpdto);
+    public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto chkprjdto) {
+
+        return sqlsession.selectList("calendar.getSuperTasks", chkprjdto);
     }
 }

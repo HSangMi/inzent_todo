@@ -3,6 +3,10 @@ package com.inzent.todo.service;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inzent.todo.dto.UserDto;
+import com.inzent.todo.vo.UserVo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,9 +16,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.inzent.todo.vo.UserVo;
-
 @Service
 public class JwtService {
 
@@ -23,7 +24,7 @@ public class JwtService {
 	private static final String DATA_KEY = "user";
 
 	// 토큰 발급
-	public String createLoginToken(UserVo user) {
+	public String createLoginToken(UserDto user) {
 
 		long curTime = System.currentTimeMillis();
 		return Jwts.builder().setHeaderParam("typ", "JWT").setExpiration(new Date(curTime + (1000 * 60 * 60 * 24)))

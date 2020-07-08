@@ -5,41 +5,41 @@
 <mapper namespace="dashboard">
     <select id="getTodayList" parameterType="String" resultType="dashboarddto">
     <![CDATA[
-        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_name
+   SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name
         FROM 
         (
-        select tp.id prjId, tts.task_id cId, tp.title prjTitle, ttsp.title pTitle, tts.title cTitle, tts.start_date, tts.end_date, tts.reg_date, tts.state, tts.use_public
-        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
-        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
-        and (current_date between tts.start_date::date and tts.end_date::date)
-        and (tts.task_id in (
-                            select task_id 
-                            from tb_task_manager 
-                            where member_no in (select member_no from tb_member  where user_id=#{userId})
-                            ))
+            select tp.id prjId, tts.task_id cId, tp.title prjTitle, ttsp.title pTitle, tts.title cTitle, tts.start_date, tts.end_date, tts.reg_date, tts.state, tts.use_public
+            from tb_task_sub tts, tb_task_super ttsp, tb_project tp
+            where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
+            and (current_date between tts.start_date::date and tts.end_date::date)
+            and (tts.task_id in (
+                select tts.task_id from tb_task_sub tts 
+                where tts.task_super_id in (
+                        select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                        select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
         )
-        AS a INNER join
+        AS a left outer join
         (
-        select ttm.task_id cId , array_agg(tu."name") as manager_name
-        from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
-        where ttm.task_id in (
-        select ttm.task_id 
-        from tb_task_manager ttm
-        where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
-        )
-        and ttm.task_id = tts2.task_id 
-        and ttm.member_no = tm.member_no
-        and tm.user_id = tu.id
-        group by ttm.task_id
+            select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name
+            from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
+            where ttm.task_id in (
+            select ttm.task_id 
+            from tb_task_manager ttm
+            where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
+            )
+            and ttm.task_id = tts2.task_id 
+            and ttm.member_no = tm.member_no
+            and tm.user_id = tu.id
+            group by ttm.task_id
         )
         AS b
         ON a.cId = b.cId
-        order by a.state='e' desc, a.reg_date desc;
+        order by a.state='e' desc
     ]]>
     </select>
     <select id="getWeekList" parameterType="String" resultType="dashboarddto">
     <![CDATA[
-        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_name managerName
+        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name
         FROM 
         (
         select tp.id prjId, tts.task_id cId, tp.title prjTitle, ttsp.title pTitle, tts.title cTitle, tts.start_date, tts.end_date, tts.reg_date, tts.state, tts.use_public
@@ -47,14 +47,14 @@
         where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
         and (((date_trunc('week',current_date)::date) between tts.start_date::date and tts.end_date::date) or ((date_trunc('week',current_date)::date+6) between tts.start_date::date and tts.end_date::date))
         and (tts.task_id in (
-                            select task_id 
-                            from tb_task_manager 
-                            where member_no in (select member_no from tb_member  where user_id=#{userId})
-                            ))
+            select tts.task_id from tb_task_sub tts 
+            where tts.task_super_id in (
+                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
         )
-        AS a INNER join
+        AS a left outer join
         (
-        select ttm.task_id cId , array_agg(tu."name") as manager_name
+        select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name
         from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
         where ttm.task_id in (
         select ttm.task_id 
@@ -68,21 +68,41 @@
         )
         AS b
         ON a.cId = b.cId
-        order by a.state='e' desc, a.reg_date desc;
+        order by a.state='e' desc
     ]]>
     </select>
 
     <select id="getStarredList" parameterType="String" resultType="dashboarddto">
     <![CDATA[
-    select tp2.id prjId, tst.task_id cId, tp2.title prjTitle, tts3.title pTitle, tts2.title cTitle, tts2.start_date , tts2.end_date , tts2.state , tts2.use_public , tts2.reg_date 
-    from tb_starred_task tst, tb_task_sub tts2 , tb_task_super tts3 , tb_project tp2 
-    where (tst.task_id = tts2.task_id ) and ( tts2.task_super_id = tts3.task_id ) and (tts3.project_id = tp2.id )
-    and tst.task_id in (
-    select tts.task_id from tb_task_sub tts 
-    where tts.task_super_id in (
-			select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
-			select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}))))
-    order by tts2.state='e' desc, tts2.reg_date desc;
+        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name
+        FROM 
+        (
+        select tp2.id prjId, tst.task_id cId, tp2.title prjTitle, tts3.title pTitle, tts2.title cTitle, tts2.start_date , tts2.end_date , tts2.state , tts2.use_public , tts2.reg_date 
+            from tb_starred_task tst, tb_task_sub tts2 , tb_task_super tts3 , tb_project tp2 
+            where (tst.task_id = tts2.task_id ) and ( tts2.task_super_id = tts3.task_id ) and (tts3.project_id = tp2.id )
+            and tst.task_id in (
+            select tts.task_id from tb_task_sub tts 
+            where tts.task_super_id in (
+                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}))))
+        )
+        AS a left outer JOIN
+        (
+        select ttm.task_id cId , count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name 
+        from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
+        where ttm.task_id in (
+        select ttm.task_id 
+        from tb_task_manager ttm
+        where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
+        )
+        and ttm.task_id = tts2.task_id 
+        and ttm.member_no = tm.member_no
+        and tm.user_id = tu.id
+        group by ttm.task_id
+        )
+        AS b
+        ON a.cId = b.cId
+        order by a.state='e' desc
     ]]>
     </select>
 

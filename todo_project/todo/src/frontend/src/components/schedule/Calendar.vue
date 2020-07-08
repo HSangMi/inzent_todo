@@ -24,7 +24,7 @@
                 <!-- 몇월인지 타이틀 -->
                 <v-toolbar-title v-if="$refs.calendar">{{ $refs.calendar.title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <!-- 일정추가버튼 -->
+                <!-- 업무추가버튼 -->
                 <v-btn
                   class="mx-3"
                   outlined
@@ -189,29 +189,7 @@ export default {
   }),
   created() {
     // store -> actions
-    this.FETCH_CALENDAR_LIST().then(() => {
-      const events = [];
-
-      for (var i = 0; i < this.calendarList.length; i++) {
-        const taskName =
-          "[" +
-          this.calendarList[i].ptitle +
-          "] " +
-          this.calendarList[i].ctitle;
-        const startDate = new Date(this.calendarList[i].startDate);
-        const endDate = new Date(this.calendarList[i].endDate);
-        // console.log('aaaa',this.$refs.calendar.getDate())
-        events.push({
-          name: taskName, // 타이틀
-          start: startDate, // 시작일
-          end: endDate, // 마감일
-          color: this.colors[this.colorState(this.calendarList[i].state)] // 색상
-        });
-      } // end for
-      console.log(this.selectProjects);
-
-      this.events = events;
-    });
+    this.fetchCalendarInfo();
   },
   computed: {
     // 사용할 mapstate 불러옴
@@ -261,21 +239,35 @@ export default {
       // nativeEvent.stopPropagation();
     },
     updateRange() {
-      const events = [];
+      this.fetchCalendarInfo();
+    },
+    fetchCalendarInfo() {
+      this.FETCH_CALENDAR_LIST().then(() => {
+        const events = [];
+        console.log(this.calendarList);
+        for (var i = 0; i < this.calendarList.length; i++) {
+          const taskName = this.calendarList[i].ctitle +' ('+ this.calendarList[i].ptitle+')';
+          const cStartDate = new Date(this.calendarList[i].cstartDate);
+          const cEndDate = new Date(this.calendarList[i].cendDate);
+          // const pStartDate = new Date(this.calendarList[i].pstartDate);
+          // const pEndDate = new Date(this.calendarList[i].pendDate);
+          events.push({
+            name: taskName, // 타이틀
+            start: cStartDate, // 시작일
+            end: cEndDate, // 마감일
+            color: this.colors[this.colorState(this.calendarList[i].cstate)] // 색상
+          });
+          // events.push({
+          //   name: this.calendarList[i].ptitle, // 타이틀
+          //   start: pStartDate, // 시작일
+          //   end: pEndDate, // 마감일
+          //   color: this.colors[this.colorState(this.calendarList[i].pstate)] // 색상
+          // });
+        } // end for
+        console.log(this.selectProjects);
 
-      for (let i = 0; i < this.calendarList.length; i++) {
-        const startDate = new Date(this.calendarList[i].startDate);
-        const endDate = new Date(this.calendarList[i].endDate);
-
-        events.push({
-          name: this.calendarList[i].ctitle,
-          start: startDate,
-          end: endDate,
-          color: this.colors[this.colorState(this.calendarList[i].state)]
-        });
-      }
-
-      this.events = events;
+        this.events = events;
+      });
     },
     colorState(state) {
       // 상태에 따른 색상

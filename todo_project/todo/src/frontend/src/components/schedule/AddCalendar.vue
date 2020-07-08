@@ -24,15 +24,24 @@
           ></v-select>
           <v-divider></v-divider>
           <v-card-title class="text-h5">2. SELECT TASK</v-card-title>
-          <!-- 업무 대,소 인지 선택 -->
+          <!-- 업무 선택 -->
           <v-radio-group class="mb-6 mx-5" v-model="radios" :mandatory="false">
-            <v-radio label="SELECT SUPER TASK" value="super"></v-radio>
-            <v-select class="mb-5 mx-5" :items="selectSuperTasks.pTitle" label="SUPER TASK"></v-select>
-            <v-radio class="mb-2" label="ADD SUPER TASK" value="sub"></v-radio>
-            <!-- 소 선택시, 선택한 프로젝트의 업무 대 선택 -->
+            <!-- 업무 대 추가할 것인지 -->
+            <v-radio class="mb-6" label="ADD SUPER TASK" value="addTask"></v-radio>
+            <!-- 업무 대 선택 할것인지 -->
+            <v-radio class="mb-2" label="SELECT SUPER TASK" value="selectTask"></v-radio>
+            <v-select
+              class="mb-5 mx-5"
+              v-model="chkSuperTask"
+              v-if="radios == 'selectTask'"
+              :items="selectSuperTasks"
+              item-text="ptitle"
+              item-value="pid"
+              label="SUPER TASK"
+            ></v-select>
           </v-radio-group>
           <v-card-actions>
-            <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 2">
+            <v-btn class="ma-2" color="primary" outlined small fab @click="isChkPrj()">
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -41,6 +50,7 @@
         </v-stepper-content>
 
         <v-stepper-content step="2">
+          <!-- 업무 추가 -->
           <v-card class="mb-12" height="200px">
             <v-card-title class="text-h5">3. ADD TASK</v-card-title>
           </v-card>
@@ -49,7 +59,7 @@
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="primary">ADD</v-btn>
+            <v-btn color="primary" @click="addCalendarTask()">ADD</v-btn>
             <v-btn text @click="SET_IS_ADD_CALENDAR(false)">CANCEL</v-btn>
           </v-card-actions>
           <!-- <v-btn class="ma-2" tile outlined color="primary" @click="e1 = 1">PREV</v-btn> -->
@@ -64,13 +74,11 @@ import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
   data: () => ({
-    //////////////
     e1: 1,
-    radios: "super",
+    radios: "addTask",
     chkProject: "",
+    chkSuperTask: "",
     selectProjects: [],
-    // projectsTitles: [], // 업무추가에서 선택할 프로젝트 아이템
-    // projectsId:[],
     selectSuperTasks: []
   }),
   created() {
@@ -89,15 +97,49 @@ export default {
     ...mapMutations(["SET_IS_ADD_CALENDAR"]),
     ...mapActions(["FETCH_CALENDAR_LIST"]),
     ...mapActions(["FETCH_CALENDAR_SUPER_TASKS"]),
+    ...mapActions(["ADD_CALENDAR_SUPER_TASKS"]),
+    ...mapActions(["ADD_CALENDAR_SUB_TASKS"]),
 
+    // 선택한 프로젝트에 따라 업무 대 조회
     fetchChkProject() {
       const projectData = {
         chkProject: this.chkProject
       };
       this.FETCH_CALENDAR_SUPER_TASKS(projectData).then(() => {
         this.selectSuperTasks = this.getSuperTasks;
-        console.log(this.selectSuperTasks);
       });
+    },
+    // 업무 추가
+    addCalendarTask() {
+      if (this.radios == "addTask") {
+        const addSupper = {
+          chkProject: this.chkProject
+        };
+        // 업무 대 추가
+        this.ADD_CALENDAR_SUPER_TASKS(addSupper).then(() => {
+          console.log("super 추가");
+        });
+      } else {
+        const addSub = {
+          chkProject: this.chkProject,
+          chkSuperTask: this.chkSuperTask
+        };
+        // 업무 소 추가
+        this.ADD_CALENDAR_SUB_TASKS(addSub).then(() => {
+          console.log("sub 추가");
+        });
+      }
+    },
+    isChkPrj() {
+      console.log(this.chkProject);
+      if (this.chkProject == "") {
+        alert("프로젝트를 선택해주세요!");
+        // <v-alert v-if="chkProject == null" dense outlined type="error">
+        //   Project
+        // </v-alert>;
+      } else {
+        this.e1 = 2;
+      }
     }
   }
 };

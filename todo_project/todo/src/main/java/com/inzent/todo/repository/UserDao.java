@@ -2,6 +2,7 @@ package com.inzent.todo.repository;
 
 import java.util.List;
 
+import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.vo.UserVo;
 
 import org.apache.ibatis.session.SqlSession;
@@ -23,7 +24,11 @@ public class UserDao {
         }
     }
 
-    public UserVo selectUserOne(UserVo user) {
-        return sqlSession.selectOne("user.selectByIdPwd", user);
+    public UserDto selectUserIdPwd(UserVo user) {
+        return sqlSession.selectOne("user.selectUserIdPwd", user);
+    }
+
+    public UserVo selectLoginUser(UserVo user) {
+        return sqlSession.selectOne("user.selectLoginUser", user);
     }
 }
