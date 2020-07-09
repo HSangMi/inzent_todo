@@ -1,5 +1,9 @@
 package com.inzent.todo.service;
 
+import java.util.List;
+
+import com.inzent.todo.dto.DeptDto;
+import com.inzent.todo.dto.PwdDto;
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.repository.UserDao;
 import com.inzent.todo.vo.UserVo;
@@ -14,7 +18,7 @@ public class UserService {
     private UserDao userDao;
 
     // 토큰 발행을 위한 user
-    public UserDto getUserToken(UserVo user) {
+    public UserDto getUserToken(UserDto user) {
         UserDto userToken = userDao.selectUserIdPwd(user);
 
         System.out.println(userToken);
@@ -22,12 +26,28 @@ public class UserService {
         return userToken;
     }
 
-    public UserVo getLoginUser(UserVo user) {
-        UserVo loginUser = userDao.selectLoginUser(user);
-
-        System.out.println(loginUser);
-
-        return loginUser;
+    public UserDto getLoginUser(UserDto user) {
+        return userDao.selectLoginUser(user);
     }
 
+    public UserVo getById(String id) {
+        return userDao.selectById(id);
+    }
+
+    public boolean pwdCheck(PwdDto pwdDto) {
+        String password = userDao.selectId(pwdDto);
+
+        if (password.equals(pwdDto.getPassword()))
+            return true;
+        else
+            return false;
+    }
+
+    public List<DeptDto> getDeptList() {
+        return userDao.selectDeptList();
+    }
+
+    public List<UserDto> getUserList(String[] deptList) {
+        return userDao.selectUserList(deptList);
+    }
 }

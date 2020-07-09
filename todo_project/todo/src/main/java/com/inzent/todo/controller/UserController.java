@@ -1,10 +1,16 @@
 package com.inzent.todo.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.inzent.todo.dto.DeptDto;
+import com.inzent.todo.dto.PwdDto;
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.repository.UserDao;
+import com.inzent.todo.security.Auth;
 import com.inzent.todo.service.JwtService;
 import com.inzent.todo.service.UserService;
 import com.inzent.todo.vo.UserVo;
@@ -41,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserVo user) {
+    public ResponseEntity<?> login(@RequestBody UserDto user) {
 
         String token = null;
 
@@ -56,7 +62,7 @@ public class UserController {
         // 존재/유효한 user가 있다면 token 생성
         if (userToken != null) {
             token = jwtService.createLoginToken(userToken);
-            UserVo loginUser = userService.getLoginUser(user);
+            UserDto loginUser = userService.getLoginUser(user);
             loginUser.setPassword(null);
             map.put("accessToken", token);
             map.put("loginUser", loginUser);
@@ -64,6 +70,31 @@ public class UserController {
 
         return token != null ? new ResponseEntity<Object>(map, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Auth
+    @PostMapping("/loginByToken")
+    public UserVo login(HttpServletRequest req, @RequestBody String accessToken) {
+        System.out.println("토큰이 이미 발급된 유저로그인");
+        UserVo user = (UserVo) req.getAttribute("user");
+        user = userService.getById(user.getId());
+        user.setPassword(null);
+        return user;
+    }
+
+    @PostMapping("/pwdCheck")
+    public boolean pwdCheck(@RequestBody PwdDto pwdDto) {
+        return userService.pwdCheck(pwdDto);
+    }
+
+    @GetMapping("/deptList")
+    public List<DeptDto> getDeptList() {
+        return userService.getDeptList();
+    }
+
+    @PostMapping("/userList")
+    public List<UserDto> getUserList(@RequestBody String[] deptList) {
+        return userService.getUserList(deptList);
     }
 
 }

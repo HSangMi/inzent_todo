@@ -13,6 +13,7 @@
 		<typeAlias alias="imagevo" type="com.inzent.todo.vo.ImageVo"/>
 		<typeAlias alias="membervo" type="com.inzent.todo.vo.MemberVo"/>
 		<typeAlias alias="projectvo" type="com.inzent.todo.vo.ProjectVo"/>
+		<typeAlias alias="deptdto" type="com.inzent.todo.dto.DeptDto"/>
 		<typeAlias alias="userdto" type="com.inzent.todo.dto.UserDto"/>
 	</typeAliases>
 	<mappers>

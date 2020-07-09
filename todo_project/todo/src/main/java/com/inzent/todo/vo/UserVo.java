@@ -21,4 +21,6 @@ public class UserVo {
 	private String email;
 	private String userType;
 	private String rank;
+	private String imgCode;
+	private String deptCode;
 }
