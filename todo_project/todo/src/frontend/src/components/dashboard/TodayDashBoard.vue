@@ -42,7 +42,7 @@
                 </v-tooltip>
                 <!-- 담당자가 없을 때 -->
                 <td class="text-center" v-if="list.managerCount == 0">
-                  <v-icon v-bind="attrs" v-on="on">mdi-account-remove</v-icon>
+                  <v-icon>mdi-account-remove</v-icon>
                 </td>
                 <td v-if="list.state == 'p'" class="text-center">
                   <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>

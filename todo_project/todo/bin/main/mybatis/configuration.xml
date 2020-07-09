@@ -18,6 +18,7 @@
 		<typeAlias alias="scheduledto" type="com.inzent.todo.dto.ScheduleDto"/>
 		<typeAlias alias="chkprjdto" type="com.inzent.todo.dto.ChkProjectDto"/>
 		<typeAlias alias="chkstdto" type="com.inzent.todo.dto.ChkSuperTasksDto"/>
+		<typeAlias alias="chkstdto" type="com.inzent.todo.dto.ClickDateDto"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml"/><!-- 현재경로 기준! -->

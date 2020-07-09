@@ -98,5 +98,17 @@ const actions = {
         console.log(err);
       });
   },
+  FETCH_CALENDAR_CLICKDATE({ commit }, clickDate) {
+    console.log("여기까지 들어오나요~~~~");
+    // 해당날짜의 업무 조회
+    return sohyun.schedule
+      .getClickDateList(clickDate)
+      .then((result) => {
+        commit("SET_FETCH_CLICKDATE", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 export default actions;

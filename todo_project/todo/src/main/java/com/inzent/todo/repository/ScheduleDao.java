@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
+import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.ScheduleDto;
 
 import org.apache.ibatis.session.SqlSession;
@@ -19,18 +20,22 @@ public class ScheduleDao {
 
     public List<ScheduleDto> getCalendatList(String userId) {
         List<ScheduleDto> prjInfo = sqlsession.selectList("calendar.getCalendarInfo", userId);
-        System.out.println(prjInfo);
         return prjInfo;
     }
 
     // public List<Map<String,String>> getCalendarManagers(String userId){
-    //     List<Map<String,String>> list = sqlsession.selectList("calendar.getManagers", userId);
-    //     System.out.println(list);
-    //     return list;
+    // List<Map<String,String>> list = sqlsession.selectList("calendar.getManagers",
+    // userId);
+    // System.out.println(list);
+    // return list;
     // }
 
     public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto chkprjdto) {
 
         return sqlsession.selectList("calendar.getSuperTasks", chkprjdto);
+    }
+
+    public List<ScheduleDto> getClickDateList(ClickDateDto cddto) {
+        return sqlsession.selectList("calendar.getClickDateList", cddto);
     }
 }

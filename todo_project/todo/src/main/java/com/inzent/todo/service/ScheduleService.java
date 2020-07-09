@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
+import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.ScheduleDto;
 import com.inzent.todo.repository.ScheduleDao;
 
@@ -26,5 +27,10 @@ public class ScheduleService {
     public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto chkprjdto){
 
         return scheduledao.getSuperTasks(chkprjdto);
+    }
+
+    // 해당 날짜의 업무 조회
+    public List<ScheduleDto> getClickDateList(ClickDateDto cddto){
+        return scheduledao.getClickDateList(cddto);
     }
 }

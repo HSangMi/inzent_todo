@@ -11,8 +11,11 @@ const state = {
   weekList: [],
   starredList: [],
   ///////// SCHEDULE /////////
-  isAddCalendar : false,
-  calendarList:[],
-  getSuperTasks:[]
+  isAddCalendar: false,
+  isDetailCalendar: false,
+  clickDate: "",
+  getClickDateList: [],
+  calendarList: [],
+  getSuperTasks: [],
 };
 export default state;

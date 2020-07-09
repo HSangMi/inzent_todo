@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
+import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.ScheduleDto;
 import com.inzent.todo.security.Auth;
 import com.inzent.todo.service.ScheduleService;
@@ -30,7 +31,7 @@ public class ScheduleController {
     public List<ScheduleDto> getCalendatList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-        
+
         List<ScheduleDto> list = scheduleService.getCalendatList(userId);
         return list;
     }
@@ -39,17 +40,27 @@ public class ScheduleController {
     @Auth
     @PostMapping("/chkproject")
     public List<ChkSuperTasksDto> getSuperTasks(@RequestBody ChkProjectDto chkprjdto, HttpServletRequest req) {
-        System.out.println("id나왔다!!!!!!!" + chkprjdto.getChkProject());
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
         chkprjdto.setId(userId);
 
-        System.out.println(chkprjdto.toString());
-
         List<ChkSuperTasksDto> list = scheduleService.getSuperTasks(chkprjdto);
-        System.out.println("여기까지 도착?!");
-        System.out.println(list);
+        return list;
+    }
+
+    @Auth
+    @PostMapping("/clickdate")
+    public List<ScheduleDto> getClickDateList(@RequestBody ClickDateDto cddto, HttpServletRequest req) {
+        System.out.println("으으응?");
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        cddto.setId(userId);
+
+        System.out.println("들어왓느냐~~~~~~~~" + cddto.toString());
+
+        List<ScheduleDto> list = scheduleService.getClickDateList(cddto);
         return list;
     }
 

@@ -53,47 +53,7 @@
               ></v-calendar>
               <!-- 달력 끝 -->
               <!-- 상세모달 창 시작 -->
-              <v-dialog
-                persistent
-                max-width="600px"
-                v-model="selectedOpen"
-                :close-on-content-click="false"
-                :activator="selectedElement"
-                offset-x
-              >
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">DETAILS TASKS</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container>
-                      <v-divider></v-divider>
-                      <v-list-item
-                        three-line
-                        v-for="item in this.calendarList"
-                        :key="item.ctitle"
-                        @click="true"
-                      >
-                        <v-list-item-avatar>
-                          <v-icon color="pink">event</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title v-text="item.ptitle"></v-list-item-title>
-                          <v-list-item-subtitle v-text="item.ctitle"></v-list-item-subtitle>
-                          <v-list-item-subtitle v-text="item.managerName"></v-list-item-subtitle>
-                        </v-list-item-content>
-                        <v-icon v-show="item.usePublic">mdi-sort-variant</v-icon>
-                        <v-icon v-show="!item.usePublic">mdi-sort-variant-lock</v-icon>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="selectedOpen = false">Close</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+              <detail-calendar />
               <!-- 상세모달 창 끝 -->
               <!-- 일정추가 모달 시작 -->
               <add-calendar />
@@ -109,10 +69,12 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import AddCalendar from "./AddCalendar.vue";
+import DetailCalendar from "./DetailCalendar.vue";
 
 export default {
   components: {
-    AddCalendar
+    AddCalendar,
+    DetailCalendar
   },
   data: () => ({
     selected: [2],
@@ -194,16 +156,20 @@ export default {
   computed: {
     // 사용할 mapstate 불러옴
     ...mapState({
-      calendarList: "calendarList"
-    }),
-    ...mapState(["isAddCalendar"])
+      calendarList: "calendarList",
+      getClickDateList: "getClickDateList"
+    })
+    // ...mapState(["clickDate"])
   },
   mounted() {
     this.$refs.calendar.checkChange();
   },
   methods: {
     ...mapMutations(["SET_IS_ADD_CALENDAR"]),
-    ...mapActions(["FETCH_CALENDAR_LIST"]), // 사용할 mapactions 등록
+    ...mapMutations(["SET_IS_DETAIL_CALENDAR"]),
+    ...mapMutations(["IS_CLICK_DATE"]),
+    ...mapActions(["FETCH_CALENDAR_LIST", "FETCH_CALENDAR_CLICKDATE"]),
+    // 사용할 mapactions 등록
 
     getEventColor(event) {
       return event.color;
@@ -222,21 +188,16 @@ export default {
     },
     showEvent({ date }) {
       // 모달창 이벤트
-      const open = () => {
-        this.focus = date; // 들어온 해당 날짜
-        console.log(this.focus);
-
-        setTimeout(() => (this.selectedOpen = true), 10);
+      this.focus = date; // 들어온 해당 날짜
+      console.log("날짜날짜", this.focus);
+      const clickDate = {
+        clickDate: this.focus
       };
-
-      if (this.selectedOpen) {
-        this.selectedOpen = false;
-        setTimeout(open, 10);
-      } else {
-        open();
-      }
-
-      // nativeEvent.stopPropagation();
+      this.FETCH_CALENDAR_CLICKDATE(clickDate).then(() => {
+        this.SET_IS_DETAIL_CALENDAR(true);
+        console.log("result완료~~~~~~~~~~");
+      });
+      // this.IS_CLICK_DATE(this.focus);
     },
     updateRange() {
       this.fetchCalendarInfo();
@@ -246,7 +207,11 @@ export default {
         const events = [];
         console.log(this.calendarList);
         for (var i = 0; i < this.calendarList.length; i++) {
-          const taskName = this.calendarList[i].ctitle +' ('+ this.calendarList[i].ptitle+')';
+          const taskName =
+            this.calendarList[i].ctitle +
+            " (" +
+            this.calendarList[i].ptitle +
+            ")";
           const cStartDate = new Date(this.calendarList[i].cstartDate);
           const cEndDate = new Date(this.calendarList[i].cendDate);
           // const pStartDate = new Date(this.calendarList[i].pstartDate);

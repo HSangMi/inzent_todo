@@ -45,16 +45,20 @@ export const schedule = {
   getCalendarList() {
     return request("get", "/schedule/calendar");
   },
+  getClickDateList(clickDate) {
+    console.log("으으으으음", clickDate);
+    return request("post", "/schedule/clickdate", clickDate);
+  },
   getChkProject(chkProject) {
     console.log(chkProject);
     return request("post", "/schedule/chkproject", chkProject);
   },
   addSuperTask(addSuper) {
-    console.log('업무대 : ',addSuper);
+    console.log("업무대 : ", addSuper);
     return request("post", "/schedule/addSuper", addSuper);
   },
   addSubTask(addSub) {
-    console.log('업무소 : ',addSub);
+    console.log("업무소 : ", addSub);
     return request("post", "/schedule/addSub", addSub);
   },
 };

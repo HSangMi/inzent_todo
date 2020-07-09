@@ -38,7 +38,6 @@ const mutations = {
     state.todayList = todayList;
   },
   SET_WEEK_LIST(state, weekList) {
-    
     state.weekList = weekList;
   },
   SET_STARRED_LIST(state, starredList) {
@@ -46,12 +45,21 @@ const mutations = {
   },
   //////////////////////// SCHEDULE ////////////////////////
   SET_IS_ADD_CALENDAR(state, toggle) {
-    state.isAddCalendar = toggle // toggle : 불린형
+    state.isAddCalendar = toggle; // toggle : 불린형
   },
-  SET_CALENDAR_LIST(state, calendarList){
+  SET_IS_DETAIL_CALENDAR(state, toggle) {
+    state.isDetailCalendar = toggle;
+  },
+  IS_CLICK_DATE(state, focus) {
+    state.clickDate = focus;
+  },
+  SET_FETCH_CLICKDATE(state, clickDate){
+    state.getClickDateList = clickDate
+  },
+  SET_CALENDAR_LIST(state, calendarList) {
     state.calendarList = calendarList;
   },
-  SET_FETCH_CHKPROJECT(state, data){
+  SET_FETCH_CHKPROJECT(state, data) {
     state.getSuperTasks = data;
   },
 };
