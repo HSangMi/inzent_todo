@@ -3,72 +3,123 @@ import * as sohyun from "../api/sohyun";
 // import * as util from "../utils/auth";
 // import state from './state'
 const actions = {
-	LOGIN({ commit }, { id, password }) {
-		// context객체중 commit만 받아옴, payload : 이메일, 비번
-		return api.auth.login(id, password).then((data) => {
-			const accessToken = data.accessToken;
-			const loginUser = data.loginUser;
-			if (loginUser.gender == 'f') {
-				loginUser.gender = '여성';
-			} else if (loginUser.gender == 'm') {
-				loginUser.gender = '남성';
-			} else {
-				loginUser.gender = null;
-			}
+  LOGIN({ commit }, { id, password }) {
+    // context객체중 commit만 받아옴, payload : 이메일, 비번
+    return api.auth.login(id, password).then((data) => {
+      const accessToken = data.accessToken;
+      const loginUser = data.loginUser;
+      if (loginUser.gender == "f") {
+        loginUser.gender = "여성";
+      } else if (loginUser.gender == "m") {
+        loginUser.gender = "남성";
+      } else {
+        loginUser.gender = null;
+      }
 
-			console.log(accessToken);
-			console.log(loginUser);
-			commit('LOGIN', { accessToken });
-			commit('SET_USER_INFO', loginUser);
-		});
-	},
-	LOGIN_BY_TOKEN({ commit }, { accessToken }) {
-		// context객체중 commit만 받아옴, payload : 이메일, 비번
-		return api.auth.loginByToken(accessToken).then((data) => {
-			// const accessToken = data.accessToken;
-			console.log('------토큰으로 로그인-----');
-			console.log(data);
-			const loginUser = data.user;
-			if (loginUser.gender == 'f') {
-				loginUser.gender = '여성';
-			} else if (loginUser.gender == 'm') {
-				loginUser.gender = '남성';
-			} else {
-				loginUser.gender = null;
-			}
-			console.log(loginUser);
-			commit('LOGIN', { accessToken });
-			commit('SET_USER_INFO', loginUser);
-		});
-	},
-	PWD_CHECK(_, { id, password }) {
-		return api.user.pwdCheck(id, password);
-	},
-	FATCH_DEPTLIST({ commit }) {
-		return api.user.fatch_dept().then((data) => {
-			console.log('action: FATCH_DEPTLIST 완료');
-			console.log(data);
-			commit('SET_DEPTLIST', data);
-		});
-	},
-	FATCH_USERLIST({ commit }, deptList) {
-		return api.user.fatch_user(deptList).then((data) => {
-			console.log('action: FATCH_USERLIST 완료');
-			console.log(data);
-			commit('SET_USERLIST', data);
-		});
-	},
-	ADD_PROJECT(_, newProject) {
-		// console.log("actions.ADD_PROJECT : ");
-		return api.project.addProject(newProject).then((data) => data);
-	},
-	FETCH_PROJECTS({ commit }) {
-		return api.project.fetch().then((data) => {
-			console.log('actions: FETCH_PROJECTS 완료');
-			console.log(data);
-			commit('SET_PROJECTS', data);
-		});
-	},
+      console.log(accessToken);
+      console.log(loginUser);
+      commit("LOGIN", { accessToken });
+      commit("SET_USER_INFO", loginUser);
+    });
+  },
+  LOGIN_BY_TOKEN({ commit }, { accessToken }) {
+    // context객체중 commit만 받아옴, payload : 이메일, 비번
+    return api.auth.loginByToken(accessToken).then((data) => {
+      // const accessToken = data.accessToken;
+      console.log("------토큰으로 로그인-----");
+      console.log(data);
+      const loginUser = data;
+      console.log(loginUser);
+      if (data.gender == "f") {
+        loginUser.gender = "여성";
+      } else if (data.gender == "m") {
+        loginUser.gender = "남성";
+      } else {
+        loginUser.gender = null;
+      }
+      console.log(loginUser);
+      commit("LOGIN", { accessToken });
+      commit("SET_USER_INFO", loginUser);
+    });
+  },
+  PWD_CHECK(_, { id, password }) {
+    return api.user.pwdCheck(id, password);
+  },
+  FATCH_DEPTLIST({ commit }) {
+    return api.user.fatch_dept().then((data) => {
+      console.log("action: FATCH_DEPTLIST 완료");
+      console.log(data);
+      commit("SET_DEPTLIST", data);
+    });
+  },
+  FATCH_USERLIST({ commit }, deptList) {
+    return api.user.fatch_user(deptList).then((data) => {
+      console.log("action: FATCH_USERLIST 완료");
+      console.log(data);
+      commit("SET_USERLIST", data);
+    });
+  },
+  ////////////////////////////// PROJECT////////////////////////////////
+  ADD_PROJECT(_, newProject) {
+    // console.log("actions.ADD_PROJECT : ");
+    return api.project.addProject(newProject).then((data) => data);
+  },
+  FETCH_PROJECTS({ commit }) {
+    return api.project.fetch().then((data) => {
+      console.log("actions: FETCH_PROJECTS 완료");
+      console.log(data);
+      commit("SET_PROJECTS", data);
+    });
+  },
+  FETCH_PROJECT({ commit }, pid) {
+    return api.project.fetch(pid).then((data) => {
+      console.log("actions: FETCH_PROJECT 완료");
+      data.project["memberNo"] = data.memberNo;
+      console.dir(data);
+
+      commit("SET_PROJECT", data.project);
+      commit("SET_TASK_LIST", data.taskBoardList);
+      commit("SET_LABEL_LIST", data.labelList);
+      commit("SET_MEMBER_LIST", data.memberList);
+    });
+  },
+  ADD_SUPER_TASK({ state, dispatch }, superTask) {
+    console.log("actions.ADD_SUPER_TASK : ");
+    return api.project
+      .addSuperTask(superTask)
+      .then(() => dispatch("FETCH_PROJECT", state.project.id));
+  },
+  ADD_SUB_TASK({ state, dispatch }, subTask) {
+    console.log("actions.ADD_SUB_TASK : ");
+    return api.project
+      .addSubTask(subTask)
+      .then(() => dispatch("FETCH_PROJECT", state.project.id));
+  },
+  ADD_NEW_LABEL(_, newLabel) {
+    console.log(newLabel);
+    return api.project.addNewLabel(newLabel).then(() => {});
+  },
+  FETCH_LABEL({ commit }, pid) {
+    return api.project.fetchLabel(pid).then((data) => {
+      console.dir(data);
+      commit("SET_LABEL_LIST", data);
+    });
+  },
+  FETCH_TASK({ commit }, taskId) {
+    return api.project.fetchTask(taskId).then((data) => {
+      console.dir(data);
+      commit("SET_TASK_INFO", data);
+    });
+  },
+  REORDER_TASK({ commit }, targetTask) {
+    console.log("reorderTask!!!");
+    console.log(targetTask);
+    return api.project.reorderTask(targetTask).then((data) => {
+      // console.log("리오더 끝!");
+      // console.log(data);
+      commit("SET_TASK_LIST", data);
+    });
+  },
   //////////////////////// DASHBOARD ////////////////////////
   FETCH_TODAY_DASHBOARD({ commit }) {
     //오늘 리스트

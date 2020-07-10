@@ -1,8 +1,16 @@
 package com.inzent.todo.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.inzent.todo.dto.MemberDto;
+import com.inzent.todo.dto.ProjectDto;
+import com.inzent.todo.dto.TaskDto;
+import com.inzent.todo.vo.FileVo;
+import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.ProjectVo;
+import com.inzent.todo.vo.SuperTaskVo;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +31,69 @@ public class ProjectDao {
 
     }
 
+    public int insertSuperTask(TaskDto taskDto) {
+        System.out.println("ProjectDao - insertTaskSuper");
+        return sqlSession.insert("project.insertTaskSuper", taskDto);
+    }
+
+    public int insertSubTask(TaskDto taskDto) {
+        System.out.println("ProjectDao - insertTaskSub");
+        return sqlSession.insert("project.insertTaskSub", taskDto);
+    }
+
     public List<ProjectVo> selectProjectList() {
 
         return sqlSession.selectList("project.selectProjectList");
+    }
+
+    public ProjectVo selectProject(String pid) {
+        return sqlSession.selectOne("project.selectProject", pid);
+    }
+
+    public int selectMemberNo(String pid, String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("pid", pid);
+        map.put("userId", userId);
+        return sqlSession.selectOne("project.selectMemberNo", map);
+    }
+
+    public List<SuperTaskVo> selectTaskList(String pid, int memNo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("pid", pid);
+        map.put("memNo", memNo);
+        return sqlSession.selectList("project.selectTaskSuperList", map);
+    }
+
+    public List<TaskDto> selectTaskSubList(String taskSuperId, int memNo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("taskSuperId", taskSuperId);
+        // map.put("userId", userId);
+        map.put("memNo", memNo);
+        return sqlSession.selectList("project.selectTaskSubList", map);
+    }
+
+    public int insertNewLabel(LabelVo label) {
+        return sqlSession.insert("project.insertNewLabel", label);
+    }
+
+    public List<LabelVo> getLabelList(String pid) {
+        return sqlSession.selectList("project.getLabelList", pid);
+    }
+
+    public List<MemberDto> getMemberList(String pid) {
+        return sqlSession.selectList("project.getMemberList", pid);
+    }
+
+    public TaskDto getTask(String taskId) {
+        return sqlSession.selectOne("project.getTask", taskId);
+    }
+
+    public List<FileVo> getFiles(String taskId) {
+        return sqlSession.selectList("project.getFiles", taskId);
+    }
+
+    public Object updateSortNo(TaskDto targetTask) {
+        return sqlSession.update("project.updateSortNo", targetTask);
     }
 
 }

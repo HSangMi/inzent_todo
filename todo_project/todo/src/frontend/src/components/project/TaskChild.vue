@@ -1,58 +1,174 @@
 <template>
-  <v-card class="rounded-lg mx-auto my-3 card-task-child" width="360" flat>
-    <v-card-title>
-      Task title..
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-star-outline</v-icon>
-      </v-btn>
-    </v-card-title>
-    <v-card-subtitle class="pb-0">2020-03-18 ~ 2020-09-23</v-card-subtitle>
-    <v-card-text>
-      <v-row class="mx-0">
-        <v-col cols="auto" class="pa-0">
-          <v-chip-group
-            v-model="selection"
-            active-class="deep-purple accent-4 white--text"
-            column
-          >
-            <v-chip small>front</v-chip>
-            <v-chip small>design</v-chip>
-          </v-chip-group>
-        </v-col>
-      </v-row>
-      <v-row class="mx-0">
-        <p class="my-auto">
-          <v-icon size="20">mdi-paperclip</v-icon>-3
-          <v-icon size="20">mdi-comment-text-outline</v-icon>-2
-        </p>
-        <v-spacer></v-spacer>
-        <v-avatar color="indigo" size="36">
-          <v-icon dark>mdi-account-circle</v-icon>
-        </v-avatar>
-      </v-row>
-    </v-card-text>
-  </v-card>
+  <div>
+    <li class="sub-task-item">
+      <router-link :to="`/projects/${board.id}/task/${item.taskId}`">
+        <v-card class="rounded-lg mx-auto my-0" width="300" flat draggable="false">
+          <v-card-title>
+            <v-icon v-if="!item.usePublic">mdi-lock</v-icon>
+            {{ item.title }}
+            <v-spacer></v-spacer>
+            <v-btn icon @click="onStar">
+              <v-icon>{{ active ? "mdi-star" : "mdi-star-outline" }}</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-subtitle class="pa-0 px-2 pt-2" v-if="item.startDate||item.endDate">
+            <v-chip label small color="#cacaca">
+              <v-icon left>mdi-clock-outline</v-icon>
+              {{item.startDate}} - {{ item.endDate}}
+            </v-chip>
+          </v-card-subtitle>
+          <v-card-text class="px-2 pb-2">
+            <v-row class="mx-0 mt-2">
+              <v-col cols="auto" class="pa-0" v-if="item.labels">
+                <v-chip
+                  v-for="label in setLabel(item.labels)"
+                  :key="label.lableNo"
+                  filter
+                  small
+                  dark
+                  class="mr-1"
+                  :color="label.labelColor"
+                >{{label.labelName}}</v-chip>
+                <!-- <v-chip-group
+                v-model="selection"
+                active-class="deep-purple accent-4 white--text"
+                column
+              >
+                <v-chip small>front</v-chip>
+                <v-chip small>design</v-chip>
+                </v-chip-group>-->
+              </v-col>
+            </v-row>
+            <v-row class="mx-0 mt-2">
+              <p class="my-auto">
+                <v-icon size="20">mdi-paperclip</v-icon>
+                {{ item.fileCnt }}
+                <v-icon size="20">mdi-comment-text-outline</v-icon>
+                {{ item.commentCnt }}
+              </p>
+              <v-spacer></v-spacer>
+              <v-tooltip v-for="manager in getManger(item.manager)" :key="manager.memberNo" bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-avatar size="36" class="user-avatars">
+                    <img src="https://cdn.vuetifyjs.com/images/john.jpg" v-bind="attrs" v-on="on" />
+                  </v-avatar>
+                </template>
+                <span>{{manager.name}}</span>
+              </v-tooltip>
+              <!-- <v-avatar
+              color="indigo"
+              size="36"
+              v-for="manager in getManger(item.manager)"
+              :key="manager.memberNo"
+            >
+              <v-icon dark>mdi-account-circle</v-icon>
+              </v-avatar>-->
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </router-link>
+    </li>
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+  name: "Taskitem",
+  props: ["item", "list", "board"],
   data() {
     return {
       selection: 1,
+      active: false
     };
   },
+  computed: {
+    ...mapState({
+      labelList: "labelList",
+      memberList: "memberList"
+    })
+  },
+  created() {},
+  methods: {
+    getLabelNo(labelString) {
+      if (labelString !== null) {
+        var labelsNo = labelString.split(":");
+        const labels = [];
+        labelsNo = labelsNo.slice(0, labelsNo.length - 1);
+        for (var no in labelsNo) {
+          var lb = this.labelList.find(item => {
+            return item.labelNo == labelsNo[no];
+          });
+          labels.push(lb);
+        }
+        return labels;
+      }
+    },
+    getManger(managerString) {
+      if (managerString !== null) {
+        console.log("매니저있음!", managerString);
+        var managerNos = JSON.parse(managerString);
+        console.log("managerNos :", managerNos);
+        const managers = [];
+        for (var no in managerNos) {
+          var mb = this.memberList.find(item => {
+            return item.memberNo == managerNos[no];
+          });
+          managers.push(mb);
+        }
+        console.log(managers);
+        console.log("***********");
+        return managers;
+      }
+    },
+    onStar() {
+      this.active = !this.active;
+    },
+    setLabel(labelString) {
+      const labelArr = JSON.parse(labelString); // labelArr Json String으로 변환할것 -> DB에 저장하는값
+      var label = []; // 라벨로 보여줄 객체뽑아올곳
+      for (var i in labelArr) {
+        var lb = this.labelList.find(item => {
+          return item.labelNo == labelArr[i];
+        });
+        label.push(lb);
+        //this.taskLabel[i] = this.labelList[labelArr[i]];
+        //this.labels += this.taskLabel[i].labelNo + ":";
+      }
+      return label;
+    }
+  }
 };
 </script>
 
 <style>
-.card-task-child {
+/* .card-task-child {
   border: solid 0px #132343 !important;
   border-left-width: 15px !important;
   border-left-color: #eb7f7f !important;
+}*/
+.sub-task-item {
+  background: #fff;
+  padding: 3px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 0px 0px 4px 0px rgba(134, 134, 162, 0.21);
+  -moz-box-shadow: 0px 0px 4px 0px rgba(134, 134, 162, 0.21);
+  box-shadow: 0px 0px 4px 0px rgba(134, 134, 162, 0.21);
 }
-.card-task-child .v-card__title {
-  font-size: 1.3em;
-  padding: 10px;
+
+.sub-task-item .v-card__title {
+  font-size: 1em;
+  padding: 0px 0px 0px 10px;
+}
+.user-avatars {
+  margin-left: -15px;
+}
+li a {
+  text-decoration: none;
+}
+
+.router-link-exact-active {
+  text-decoration: none;
 }
 </style>

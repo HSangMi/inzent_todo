@@ -75,10 +75,9 @@ public class UserController {
 
     @Auth
     @PostMapping("/loginByToken")
-    public UserVo login(HttpServletRequest req, @RequestBody String accessToken) {
+    public UserDto login(HttpServletRequest req, @RequestBody String accessToken) {
         System.out.println("토큰이 이미 발급된 유저로그인");
-        UserVo user = (UserVo) req.getAttribute("user");
-        user = userService.getById(user.getId());
+        UserDto user = userService.getById(((UserVo) req.getAttribute("user")).getId());
         user.setPassword(null);
         return user;
     }

@@ -20,11 +20,12 @@
    ]]>
    </select>
    
-   <select id="selectById" parameterType="String" resultType="uservo">
+   <select id="selectById" parameterType="String" resultType="userdto">
    <![CDATA[
-      select *
-      from tb_user
+      select tu.*, td.dept_name
+      from tb_user tu, tb_department td 
       where id=#{id}
+      and td.dept_code = tu.dept_code
    ]]>
    </select>
 

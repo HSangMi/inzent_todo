@@ -31,7 +31,7 @@ public class UserDao {
         return sqlSession.selectOne("user.selectUserIdPwd", user);
     }
 
-    public UserVo selectById(String id) {
+    public UserDto selectById(String id) {
         return sqlSession.selectOne("user.selectById", id);
     }
 

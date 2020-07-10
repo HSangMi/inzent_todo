@@ -1,5 +1,6 @@
 package com.inzent.todo.repository;
 
+import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.ImageVo;
 
 import org.apache.ibatis.session.SqlSession;
@@ -16,6 +17,11 @@ public class FileDao {
         System.out.println("FileDao.insertImg");
         sqlSession.insert("file.insertImg", imageVo);
         return imageVo.getImgNo();
+    }
+
+    public int insertFile(FileVo file) {
+        System.out.println("FileDao.insertFile......");
+        return sqlSession.insert("file.insertFile", file);
     }
 
     public String selectImg() {

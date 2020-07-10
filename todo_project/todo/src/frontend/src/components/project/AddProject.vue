@@ -304,8 +304,11 @@ export default {
         formData.append("usePublic", this.usePublic);
         formData.append("startDate", this.startDate);
         formData.append("endDate", this.endDate);
-        if (this.coverImg !== undefined)
+        if (this.coverImg !== undefined) {
+          console.log("test------------");
+          console.log(this.coverImg);
           formData.append("coverImg", this.coverImg);
+        }
         formData.append("coverColor", this.coverColor);
         formData.append("members", this.members);
 

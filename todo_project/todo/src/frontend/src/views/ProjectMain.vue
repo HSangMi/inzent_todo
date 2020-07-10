@@ -9,7 +9,7 @@
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" xs="6" sm="4" md="3" lg="2">
-        <v-card class="mx-auto" width="250" height="100%" @click.prevent="isOpenProject = true">
+        <v-card class="mx-auto" height="100%" @click.prevent="isOpenProject = true">
           <v-card-text class="text--primary text-center">
             <h3>새 프로젝트</h3>
             <v-icon large blue>mdi-plus</v-icon>

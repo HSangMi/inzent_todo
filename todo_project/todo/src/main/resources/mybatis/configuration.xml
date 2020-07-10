@@ -13,6 +13,11 @@
 		<typeAlias alias="imagevo" type="com.inzent.todo.vo.ImageVo"/>
 		<typeAlias alias="membervo" type="com.inzent.todo.vo.MemberVo"/>
 		<typeAlias alias="projectvo" type="com.inzent.todo.vo.ProjectVo"/>
+		<typeAlias alias="filevo" type="com.inzent.todo.vo.FileVo"/>
+		<typeAlias alias="labelvo" type="com.inzent.todo.vo.LabelVo"/>
+		<typeAlias alias="supertaskvo" type="com.inzent.todo.vo.SuperTaskVo"/>
+		<typeAlias alias="taskdto" type="com.inzent.todo.dto.TaskDto"/>
+		<typeAlias alias="memberdto" type="com.inzent.todo.dto.MemberDto"/>
 		<typeAlias alias="deptdto" type="com.inzent.todo.dto.DeptDto"/>
 		<typeAlias alias="userdto" type="com.inzent.todo.dto.UserDto"/>
 		<typeAlias alias="dashboarddto" type="com.inzent.todo.dto.DashBoardDto"/>
@@ -20,6 +25,7 @@
 		<typeAlias alias="chkprjdto" type="com.inzent.todo.dto.ChkProjectDto"/>
 		<typeAlias alias="chkstdto" type="com.inzent.todo.dto.ChkSuperTasksDto"/>
 		<typeAlias alias="cddto" type="com.inzent.todo.dto.ClickDateDto"/>
+
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml"/><!-- 현재경로 기준! -->
