@@ -245,15 +245,15 @@ export default {
     colorState(state) {
       // 상태에 따른 색상
       switch (state) {
-        case "h":
+        case "H":
           return 0;
-        case "p":
+        case "P":
           return 1;
-        case "c":
+        case "C":
           return 2;
-        case "w":
+        case "W":
           return 3;
-        case "e":
+        case "E":
           return 4;
       }
     },

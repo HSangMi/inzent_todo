@@ -22,44 +22,66 @@
             <tbody v-else>
               <tr v-for="list in weekList" :key="list.name">
                 <td class="text-center">
-                  <router-link :to="`/projects/${list.prjId}`">{{ list.prjTitle }}</router-link>
+                  <router-link :to="`/projects/${list.prjId}`">{{
+                    list.prjTitle
+                  }}</router-link>
                 </td>
-                <td class="text-center">[{{ list.ptitle }}]&nbsp;{{ list.ctitle }}</td>
+                <td class="text-center">
+                  [{{ list.ptitle }}]&nbsp;{{ list.ctitle }}
+                </td>
                 <v-tooltip bottom color="#5a5a5a">
                   <template v-slot:activator="{ on, attrs }">
                     <!-- 담당자가 1명일때 -->
-                    <td class="text-center" style="font-size:12px" v-if="list.managerCount == 1">
+                    <td
+                      class="text-center"
+                      style="font-size:12px"
+                      v-if="list.managerCount == 1"
+                    >
                       <v-icon v-bind="attrs" v-on="on">mdi-account</v-icon>
                       &nbsp;({{ list.managerCount }}명)
                     </td>
                     <!-- 담당자가 2명이상일때 -->
-                    <td class="text-center" style="font-size:12px" v-if="list.managerCount > 1">
-                      <v-icon v-bind="attrs" v-on="on">mdi-account-supervisor</v-icon>
+                    <td
+                      class="text-center"
+                      style="font-size:12px"
+                      v-if="list.managerCount > 1"
+                    >
+                      <v-icon v-bind="attrs" v-on="on"
+                        >mdi-account-supervisor</v-icon
+                      >
                       &nbsp;({{ list.managerCount }}명)
                     </td>
                   </template>
-                  <span font-color="white">{{list.managerName}}</span>
+                  <span font-color="white">{{ list.managerName }}</span>
                 </v-tooltip>
                 <!-- 담당자가 없을 때 -->
                 <td class="text-center" v-if="list.managerCount == 0">
                   <v-icon>mdi-account-remove</v-icon>
                 </td>
-                <td v-if="list.state == 'p'" class="text-center">
-                  <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>
+                <td v-if="list.state == 'P'" class="text-center">
+                  <v-chip class="ma-2" small color="blue" text-color="white"
+                    >진행</v-chip
+                  >
                 </td>
-                <td v-if="list.state == 'w'" class="text-center">
+                <td v-if="list.state == 'W'" class="text-center">
                   <v-chip class="ma-2" small color="yellow">대기</v-chip>
                 </td>
-                <td v-if="list.state == 'h'" class="text-center">
+                <td v-if="list.state == 'H'" class="text-center">
                   <v-chip class="ma-2" small>보류</v-chip>
                 </td>
-                <td v-if="list.state == 'e'" class="text-center">
-                  <v-chip class="ma-2" small color="red" text-color="white">긴급</v-chip>
+                <td v-if="list.state == 'E'" class="text-center">
+                  <v-chip class="ma-2" small color="red" text-color="white"
+                    >긴급</v-chip
+                  >
                 </td>
-                <td v-if="list.state == 'c'" class="text-center">
-                  <v-chip class="ma-2" small color="green" text-color="white">완료</v-chip>
+                <td v-if="list.state == 'C'" class="text-center">
+                  <v-chip class="ma-2" small color="green" text-color="white"
+                    >완료</v-chip
+                  >
                 </td>
-                <td class="text-center">{{ list.startDate }} ~ {{ list.endDate }}</td>
+                <td class="text-center">
+                  {{ list.startDate }} ~ {{ list.endDate }}
+                </td>
                 <td v-show="list.usePublic" class="text-center">
                   <v-icon small>mdi-lock-open-variant-outline</v-icon>
                 </td>
@@ -93,7 +115,7 @@ import { chartjs } from "../../utils/todoChart.js";
 export default {
   data() {
     return {
-      chartStateCnt: { h: 0, p: 0, c: 0, w: 0, e: 0 }
+      chartStateCnt: { H: 0, P: 0, C: 0, W: 0, E: 0 },
     };
   },
   created() {
@@ -110,20 +132,20 @@ export default {
         // } //end if
 
         switch (this.weekList[i].state) {
-          case "h":
-            this.chartStateCnt.h++;
+          case "H":
+            this.chartStateCnt.H++;
             break;
-          case "p":
-            this.chartStateCnt.p++;
+          case "P":
+            this.chartStateCnt.P++;
             break;
-          case "c":
-            this.chartStateCnt.c++;
+          case "C":
+            this.chartStateCnt.C++;
             break;
-          case "w":
-            this.chartStateCnt.w++;
+          case "W":
+            this.chartStateCnt.W++;
             break;
-          case "e":
-            this.chartStateCnt.e++;
+          case "E":
+            this.chartStateCnt.E++;
             break;
         } // end switch
 
@@ -140,24 +162,24 @@ export default {
           datasets: [
             {
               data: [
-                this.chartStateCnt.h,
-                this.chartStateCnt.p,
-                this.chartStateCnt.c,
-                this.chartStateCnt.w,
-                this.chartStateCnt.e
+                this.chartStateCnt.H,
+                this.chartStateCnt.P,
+                this.chartStateCnt.C,
+                this.chartStateCnt.W,
+                this.chartStateCnt.E,
               ],
               backgroundColor: [
                 "#BFC9CA",
                 "#5DADE2",
                 "#82E0AA",
                 "#F7DC6F",
-                "#F1948A"
+                "#F1948A",
               ],
-              borderAlign: "left"
-            }
+              borderAlign: "left",
+            },
           ],
           // These labels appear in the legend and in the tooltips when hovering different arcs
-          labels: ["보류", "진행", "완료", "대기", "긴급"]
+          labels: ["보류", "진행", "완료", "대기", "긴급"],
         },
         options: {
           /*           title: {
@@ -167,31 +189,31 @@ export default {
           }, */
           legend: {
             position: "right",
-            verticalAlign: "right"
+            verticalAlign: "right",
           },
-          responsive: false
+          responsive: false,
         },
         scales: {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true
-              }
-            }
-          ]
-        }
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
       };
       chartjs.createChart("weekChart", chartObj);
     }); // store -> actions
   },
   computed: {
     ...mapState({
-      weekList: "weekList"
-    })
+      weekList: "weekList",
+    }),
   },
   methods: {
-    ...mapActions(["FETCH_WEEK_DASHBOARD"])
-  }
+    ...mapActions(["FETCH_WEEK_DASHBOARD"]),
+  },
 };
 </script>
 

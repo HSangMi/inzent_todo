@@ -44,19 +44,19 @@
                 <td class="text-center" v-if="list.managerCount == 0">
                   <v-icon>mdi-account-remove</v-icon>
                 </td>
-                <td v-if="list.state == 'p'" class="text-center">
+                <td v-if="list.state == 'P'" class="text-center">
                   <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>
                 </td>
-                <td v-if="list.state == 'w'" class="text-center">
+                <td v-if="list.state == 'W'" class="text-center">
                   <v-chip class="ma-2" small color="yellow">대기</v-chip>
                 </td>
-                <td v-if="list.state == 'h'" class="text-center">
+                <td v-if="list.state == 'H'" class="text-center">
                   <v-chip class="ma-2" small>보류</v-chip>
                 </td>
-                <td v-if="list.state == 'e'" class="text-center">
+                <td v-if="list.state == 'E'" class="text-center">
                   <v-chip class="ma-2" small color="red" text-color="white">긴급</v-chip>
                 </td>
-                <td v-if="list.state == 'c'" class="text-center">
+                <td v-if="list.state == 'C'" class="text-center">
                   <v-chip class="ma-2" small color="green" text-color="white">완료</v-chip>
                 </td>
                 <td class="text-center">{{ list.startDate }} ~ {{ list.endDate }}</td>
@@ -93,7 +93,7 @@ import { chartjs } from "../../utils/todoChart.js";
 export default {
   data() {
     return {
-      chartStateCnt: { h: 0, p: 0, c: 0, w: 0, e: 0 }
+      chartStateCnt: { H: 0, P: 0, C: 0, W: 0, E: 0 }
     };
   },
   created() {
@@ -101,20 +101,20 @@ export default {
       for (var i = 0; i < this.todayList.length; i++) {
         console.log(this.todayList);
         switch (this.todayList[i].state) {
-          case "h":
-            this.chartStateCnt.h++;
+          case "H":
+            this.chartStateCnt.H++;
             break;
-          case "p":
-            this.chartStateCnt.p++;
+          case "P":
+            this.chartStateCnt.P++;
             break;
-          case "c":
-            this.chartStateCnt.c++;
+          case "C":
+            this.chartStateCnt.C++;
             break;
-          case "w":
-            this.chartStateCnt.w++;
+          case "W":
+            this.chartStateCnt.W++;
             break;
-          case "e":
-            this.chartStateCnt.e++;
+          case "E":
+            this.chartStateCnt.E++;
             break;
         }
       } // end for
@@ -125,11 +125,11 @@ export default {
           datasets: [
             {
               data: [
-                this.chartStateCnt.h,
-                this.chartStateCnt.p,
-                this.chartStateCnt.c,
-                this.chartStateCnt.w,
-                this.chartStateCnt.e
+                this.chartStateCnt.H,
+                this.chartStateCnt.P,
+                this.chartStateCnt.C,
+                this.chartStateCnt.W,
+                this.chartStateCnt.E
               ],
               backgroundColor: [
                 "#BFC9CA",
