@@ -3,7 +3,9 @@
     <v-stepper v-model="e1">
       <v-divider></v-divider>
       <v-stepper-header>
-        <v-stepper-step :complete="e1 > 1" step="1">SELECT PROJECT/TASK</v-stepper-step>
+        <v-stepper-step :complete="e1 > 1" step="1"
+          >SELECT PROJECT/TASK</v-stepper-step
+        >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 2" step="2">ADD TASK</v-stepper-step>
       </v-stepper-header>
@@ -22,14 +24,32 @@
             label="PROJECT"
             outlined
           ></v-select>
+          <v-alert
+            v-model="alert"
+            dense
+            outlined
+            type="error"
+            width="300"
+            class="ma-5"
+          >
+            <span font-size="10px">NO SELECT PROJECT</span>
+          </v-alert>
           <v-divider></v-divider>
           <v-card-title class="text-h5">2. SELECT TASK</v-card-title>
           <!-- 업무 선택 -->
           <v-radio-group class="mb-6 mx-5" v-model="radios" :mandatory="false">
             <!-- 업무 대 추가할 것인지 -->
-            <v-radio class="mb-6" label="ADD SUPER TASK" value="addTask"></v-radio>
+            <v-radio
+              class="mb-6"
+              label="ADD SUPER TASK"
+              value="addTask"
+            ></v-radio>
             <!-- 업무 대 선택 할것인지 -->
-            <v-radio class="mb-2" label="SELECT SUPER TASK" value="selectTask"></v-radio>
+            <v-radio
+              class="mb-2"
+              label="SELECT SUPER TASK"
+              value="selectTask"
+            ></v-radio>
             <v-select
               class="mb-5 mx-5"
               v-model="chkSuperTask"
@@ -41,7 +61,14 @@
             ></v-select>
           </v-radio-group>
           <v-card-actions>
-            <v-btn class="ma-2" color="primary" outlined small fab @click="isChkPrj()">
+            <v-btn
+              class="ma-2"
+              color="primary"
+              outlined
+              small
+              fab
+              @click="isChkPrj()"
+            >
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -55,7 +82,14 @@
             <v-card-title class="text-h5">3. ADD TASK</v-card-title>
           </v-card>
           <v-card-actions>
-            <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 1">
+            <v-btn
+              class="ma-2"
+              color="primary"
+              outlined
+              small
+              fab
+              @click="e1 = 1"
+            >
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -79,7 +113,8 @@ export default {
     chkProject: "",
     chkSuperTask: "",
     selectProjects: [],
-    selectSuperTasks: []
+    selectSuperTasks: [],
+    alert: false,
   }),
   created() {
     this.FETCH_CALENDAR_LIST().then(() => {
@@ -88,10 +123,10 @@ export default {
   },
   computed: {
     ...mapState({
-      calendarList: "calendarList"
+      calendarList: "calendarList",
     }),
     ...mapState({ getSuperTasks: "getSuperTasks" }),
-    ...mapState(["isAddCalendar"])
+    ...mapState(["isAddCalendar"]),
   },
   methods: {
     ...mapMutations(["SET_IS_ADD_CALENDAR"]),
@@ -103,7 +138,7 @@ export default {
     // 선택한 프로젝트에 따라 업무 대 조회
     fetchChkProject() {
       const projectData = {
-        chkProject: this.chkProject
+        chkProject: this.chkProject,
       };
       this.FETCH_CALENDAR_SUPER_TASKS(projectData).then(() => {
         this.selectSuperTasks = this.getSuperTasks;
@@ -113,7 +148,7 @@ export default {
     addCalendarTask() {
       if (this.radios == "addTask") {
         const addSupper = {
-          chkProject: this.chkProject
+          chkProject: this.chkProject,
         };
         // 업무 대 추가
         this.ADD_CALENDAR_SUPER_TASKS(addSupper).then(() => {
@@ -122,7 +157,7 @@ export default {
       } else {
         const addSub = {
           chkProject: this.chkProject,
-          chkSuperTask: this.chkSuperTask
+          chkSuperTask: this.chkSuperTask,
         };
         // 업무 소 추가
         this.ADD_CALENDAR_SUB_TASKS(addSub).then(() => {
@@ -133,17 +168,13 @@ export default {
     isChkPrj() {
       console.log(this.chkProject);
       if (this.chkProject == "") {
-        alert("프로젝트를 선택해주세요!");
-        // <v-alert v-if="chkProject == null" dense outlined type="error">
-        //   Project
-        // </v-alert>;
+        this.alert = true;
       } else {
         this.e1 = 2;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

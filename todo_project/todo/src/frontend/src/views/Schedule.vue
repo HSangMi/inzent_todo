@@ -12,8 +12,6 @@
         <v-tab-item>
           <v-card flat>
             <v-divider></v-divider>
-            <v-card-title>CALENDAR</v-card-title>
-            <v-divider></v-divider>
             <br />
             <calendar></calendar>
           </v-card>
@@ -21,10 +19,8 @@
         <v-tab-item>
           <v-card flat>
             <v-divider></v-divider>
-            <v-card-title>GANTT CHART</v-card-title>
-            <v-divider></v-divider>
             <br />
-           <gantt-chart></gantt-chart>
+            <gantt-chart></gantt-chart>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
@@ -39,15 +35,14 @@ import GanttChart from "../components/schedule/GanttChart.vue";
 export default {
   components: {
     Calendar,
-    GanttChart
+    GanttChart,
   },
   data() {
     return {
-      tabs: null
+      tabs: null,
     };
-  }
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>
