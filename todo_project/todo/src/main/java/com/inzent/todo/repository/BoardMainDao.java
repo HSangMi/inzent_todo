@@ -1,6 +1,5 @@
 package com.inzent.todo.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.inzent.todo.dto.DashBoardDto;

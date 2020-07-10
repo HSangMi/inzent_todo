@@ -1,12 +1,9 @@
 package com.inzent.todo.service;
 
-<<<<<<< HEAD
 import java.util.List;
 
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
-=======
->>>>>>> baesohyun
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.repository.UserDao;
 import com.inzent.todo.vo.UserVo;
@@ -21,20 +18,15 @@ public class UserService {
     private UserDao userDao;
 
     // 토큰 발행을 위한 user
-<<<<<<< HEAD
-    public UserDto getUserToken(UserDto user) {
-=======
-    public UserDto getUserToken(UserVo user) {
->>>>>>> baesohyun
-        UserDto userToken = userDao.selectUserIdPwd(user);
+    public UserVo getUserToken(UserVo user) {
+        UserVo userToken = userDao.selectUserIdPwd(user);
 
         System.out.println(userToken);
 
         return userToken;
     }
 
-<<<<<<< HEAD
-    public UserDto getLoginUser(UserDto user) {
+    public UserDto getLoginUser(UserVo user) {
         return userDao.selectLoginUser(user);
     }
 
@@ -44,12 +36,6 @@ public class UserService {
 
     public boolean pwdCheck(PwdDto pwdDto) {
         String password = userDao.selectId(pwdDto);
-=======
-    public UserVo getLoginUser(UserVo user) {
-        UserVo loginUser = userDao.selectLoginUser(user);
-
-        System.out.println(loginUser);
->>>>>>> baesohyun
 
         if (password.equals(pwdDto.getPassword()))
             return true;

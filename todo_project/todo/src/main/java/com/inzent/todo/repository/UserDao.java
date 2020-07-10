@@ -3,11 +3,8 @@ package com.inzent.todo.repository;
 import java.util.HashMap;
 import java.util.List;
 
-<<<<<<< HEAD
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
-=======
->>>>>>> baesohyun
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.vo.UserVo;
 
@@ -30,8 +27,7 @@ public class UserDao {
         }
     }
 
-<<<<<<< HEAD
-    public UserDto selectUserIdPwd(UserDto user) {
+    public UserVo selectUserIdPwd(UserVo user) {
         return sqlSession.selectOne("user.selectUserIdPwd", user);
     }
 
@@ -39,7 +35,7 @@ public class UserDao {
         return sqlSession.selectOne("user.selectById", id);
     }
 
-    public UserDto selectLoginUser(UserDto user) {
+    public UserDto selectLoginUser(UserVo user) {
         return sqlSession.selectOne("user.selectLoginUser", user);
     }
 
@@ -55,13 +51,5 @@ public class UserDao {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("deptList", deptList);
         return sqlSession.selectList("user.selectUserList", map);
-=======
-    public UserDto selectUserIdPwd(UserVo user) {
-        return sqlSession.selectOne("user.selectUserIdPwd", user);
-    }
-
-    public UserVo selectLoginUser(UserVo user) {
-        return sqlSession.selectOne("user.selectLoginUser", user);
->>>>>>> baesohyun
     }
 }

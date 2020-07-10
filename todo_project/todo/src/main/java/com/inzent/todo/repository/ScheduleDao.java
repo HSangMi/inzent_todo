@@ -1,7 +1,6 @@
 package com.inzent.todo.repository;
 
 import java.util.List;
-import java.util.Map;
 
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
