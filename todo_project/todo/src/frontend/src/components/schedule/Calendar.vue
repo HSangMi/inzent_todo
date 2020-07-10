@@ -205,7 +205,7 @@ export default {
     fetchCalendarInfo() {
       this.FETCH_CALENDAR_LIST().then(() => {
         const events = [];
-        console.log(this.calendarList);
+        console.log("???????", this.calendarList);
         for (var i = 0; i < this.calendarList.length; i++) {
           const taskName =
             this.calendarList[i].ctitle +
@@ -214,20 +214,20 @@ export default {
             ")";
           const cStartDate = new Date(this.calendarList[i].cstartDate);
           const cEndDate = new Date(this.calendarList[i].cendDate);
-          // const pStartDate = new Date(this.calendarList[i].pstartDate);
-          // const pEndDate = new Date(this.calendarList[i].pendDate);
+          const pStartDate = new Date(this.calendarList[i].pstartDate);
+          const pEndDate = new Date(this.calendarList[i].pendDate);
           events.push({
             name: taskName, // 타이틀
             start: cStartDate, // 시작일
             end: cEndDate, // 마감일
             color: this.colors[this.colorState(this.calendarList[i].cstate)] // 색상
           });
-          // events.push({
-          //   name: this.calendarList[i].ptitle, // 타이틀
-          //   start: pStartDate, // 시작일
-          //   end: pEndDate, // 마감일
-          //   color: this.colors[this.colorState(this.calendarList[i].pstate)] // 색상
-          // });
+          events.push({
+            name: this.calendarList[i].ptitle + "<v-icon>mdi-plus</v-icon>", // 타이틀
+            start: pStartDate, // 시작일
+            end: pEndDate, // 마감일
+            color: this.colors[this.colorState(this.calendarList[i].pstate)] // 색상
+          });
         } // end for
         console.log(this.selectProjects);
 

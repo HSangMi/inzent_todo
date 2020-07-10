@@ -14,19 +14,29 @@
         <v-container>
           <v-divider></v-divider>
           <template v-if="clickDateList">
-            <v-list-item three-line v-for="item in clickDateList" :key="item.ctitle" @click="true">
-              <v-list-item-avatar>
-                <v-icon color="pink">event</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.ptitle"></v-list-item-title>
-                <v-list-item-subtitle v-text="item.ctitle"></v-list-item-subtitle>
-                <v-list-item-subtitle v-text="item.managerName"></v-list-item-subtitle>
-              </v-list-item-content>
-              <v-icon v-show="item.usePublic">mdi-sort-variant</v-icon>
-              <v-icon v-show="!item.usePublic">mdi-sort-variant-lock</v-icon>
-            </v-list-item>
-            <v-divider></v-divider>
+            <v-list
+              subheader
+              three-line
+              v-for="item in clickDateList"
+              :key="item.ctitle"
+              @click="true"
+            >
+              <v-subheader v-text="item.ptitle"></v-subheader>
+              <v-list-item>
+                <v-list-item-avatar></v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.ctitle"></v-list-item-title>
+                  <v-list-item-subtitle v-text="item.managerName"></v-list-item-subtitle>
+                  <!-- <template v-slot:item.avatar="{ item }">
+                    <v-avatar size="32px">
+                      <img :src="'data:image;base64,'+item.img" />
+                    </v-avatar>
+                  </template> -->
+                </v-list-item-content>
+                <v-icon v-show="item.usePublic">mdi-sort-variant</v-icon>
+                <v-icon v-show="!item.usePublic">mdi-sort-variant-lock</v-icon>
+              </v-list-item>
+            </v-list>
           </template>
         </v-container>
       </v-card-text>

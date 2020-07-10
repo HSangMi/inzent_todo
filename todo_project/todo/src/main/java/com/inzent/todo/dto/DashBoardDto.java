@@ -21,5 +21,6 @@ public class DashBoardDto {
     private String cId;
     private int managerCount;
     private String managerName;
+        private String img;
 
 }
