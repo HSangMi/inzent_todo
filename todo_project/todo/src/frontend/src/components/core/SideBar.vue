@@ -3,26 +3,22 @@
     id="core-navigation-drawer"
     app
     :dark="true"
-    color="rgb(66, 59, 107)"
+    color="rgb(134, 138, 140)"
     :right="$vuetify.rtl"
-    mini-variant
-    mini-variant-width="56"
     permanent
-    v-bind="$attrs"
+    v-model="drawer"
+    :mini-variant.sync="mini"
   >
     <v-divider class="mb-1" />
     <v-list dense nav>
       <v-list-item>
-        <v-list-item-avatar class="align-self-center" color="white" contain>
-          <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="30"
-          />
+        <v-list-item-avatar class="align-self-center mx-auto" color="white" contain size="35">
+          <v-img src="../../assets/inzent-logo.png" />
         </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title class="display-1" />
-        </v-list-item-content>
+        <v-list-item-title class="display-1 text-center">INZENT-TODO</v-list-item-title>
+        <v-btn icon @click.stop="mini = !mini">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
       </v-list-item>
     </v-list>
     <v-divider class="mb-2" />
@@ -44,7 +40,7 @@
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title></v-list-item-title>
+              <v-list-item-title>MY PAGE</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click.stop="dialog = true">
@@ -52,7 +48,7 @@
               <v-icon>mdi-location-exit</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title></v-list-item-title>
+              <v-list-item-title>LOGOUT</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -79,30 +75,32 @@ export default {
   data: () => ({
     name: "Sidebar",
     activeMenu: undefined,
+    drawer: true,
+    mini: false,
     menus: [
       {
         icon: "mdi-view-dashboard",
-        text: "test",
+        text: "DASHBOARD",
         to: "/dashboard"
       },
       {
         icon: "mdi-newspaper-variant-multiple-outline",
-        text: "test",
+        text: "PROJECTS",
         to: "/projects"
       },
       {
         icon: "mdi-calendar-month-outline",
-        text: "test",
+        text: "SCHEDULE",
         to: "/schedule"
       },
       {
         icon: "mdi-magnify",
-        text: "test",
+        text: "SEARCH",
         to: "/search"
       },
       {
         icon: "mdi-archive",
-        text: "test",
+        text: "ARCHIVE",
         to: "/archive"
       }
     ],

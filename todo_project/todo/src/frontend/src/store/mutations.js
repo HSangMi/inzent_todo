@@ -37,9 +37,37 @@ const mutations = {
   SET_HEADER_TITLE(state, string) {
     state.headerTitle = string;
   },
+  /////////////////////PROJECT///////////////////////////////
   SET_PROJECTS(state, projects) {
     console.log("mutations.SET_PROJECTS : 완료");
     state.projects = projects;
+  },
+  SET_PROJECT(state, project) {
+    state.project = project;
+  },
+  SET_TASK_LIST(state, taskList) {
+    state.taskList = taskList;
+  },
+  SET_ADD_SUB_TASK_MODAL(state, toggle) {
+    state.addSubTaskModal = toggle;
+  },
+  SET_ADD_TASK_MODAL(state, toggle) {
+    state.addTaskModal = toggle;
+  },
+  SET_SUPER_TASK_ID(state, taskId) {
+    state.taskSuperId = taskId;
+  },
+  SET_LAST_SUB_SORT_NO(state, sortNo) {
+    state.lastSubSortNo = sortNo;
+  },
+  SET_LABEL_LIST(state, labelList) {
+    state.labelList = labelList;
+  },
+  SET_MEMBER_LIST(state, memberList) {
+    state.memberList = memberList;
+  },
+  SET_TASK_INFO(state, taskInfo) {
+    state.taskInfo = taskInfo;
   },
   //////////////////////// DASHBOARD ////////////////////////
   SET_TODAY_LIST(state, todayList) {

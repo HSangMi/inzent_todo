@@ -19,4 +19,12 @@
             SELECT currval('seq_img')
         </selectKey>
 	</insert>
+	<insert id="insertFile" parameterType="filevo">
+		<![CDATA[
+			insert into tb_file
+			( save_name, org_name, ext, size, task_id )
+			values
+			( #{saveName}, #{orgName}, #{ext}, #{size}, #{taskId} )
+		]]>
+	</insert>
 </mapper>

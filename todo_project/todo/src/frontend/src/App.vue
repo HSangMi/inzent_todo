@@ -40,6 +40,6 @@ export default {
 </script>
 <style scoped>
 * {
-  background: #e8f5ff;
+  background: #ffffff;
 }
 </style>

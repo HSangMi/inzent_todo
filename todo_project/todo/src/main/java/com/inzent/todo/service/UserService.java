@@ -30,7 +30,7 @@ public class UserService {
         return userDao.selectLoginUser(user);
     }
 
-    public UserVo getById(String id) {
+    public UserDto getById(String id) {
         return userDao.selectById(id);
     }
 

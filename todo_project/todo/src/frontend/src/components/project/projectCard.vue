@@ -1,6 +1,6 @@
 <template>
   <v-col cols="12" xs="6" sm="4" md="3" lg="2">
-    <v-card class="mx-auto" width="250" min-heght="150">
+    <v-card class="mx-auto" min-heght="150">
       <router-link :to="`/projects/${project.id}`">
         <v-img
           class="white--text align-end"
@@ -16,18 +16,10 @@
 
           <v-card-title>{{ project.title }}</v-card-title>
         </v-img>
-        <v-progress-linear
-          color="deep-purple accent-4"
-          height="8"
-          value="30"
-        ></v-progress-linear>
+        <v-progress-linear color="deep-purple accent-4" height="8" value="30"></v-progress-linear>
 
-        <v-card-subtitle class="pb-0"
-          >{{ project.startDate }}~{{ project.endDate }}</v-card-subtitle
-        >
-        <v-card-text class="text--primary"
-          >manager : {{ project.manager }}</v-card-text
-        >
+        <v-card-subtitle class="pb-0">{{ project.startDate }}~{{ project.endDate }}</v-card-subtitle>
+        <v-card-text class="text--primary">manager : {{ project.manager }}</v-card-text>
       </router-link>
     </v-card>
   </v-col>
@@ -38,10 +30,10 @@ export default {
   props: ["project"],
   data() {
     return {};
-  },
-  mounted() {
-    console.log(this.project);
-  },
+  }
+  // mounted() {
+  //   console.log(this.project);
+  // }
 };
 </script>
 
