@@ -1,6 +1,6 @@
 <template>
   <v-card width="95%" class="mx-auto">
-    <v-card-title class="text-h5">WEEK TASKS</v-card-title>
+    <v-card-title class="text-h5">STARRED TASKS</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="9">
@@ -16,11 +16,11 @@
                 <th class="text-center" width="80">공개 여부</th>
               </tr>
             </thead>
-            <tbody v-if="weekList.length == 0">
+            <tbody v-if="starredList.length == 0">
               <td colspan="6" class="text-center">NO TASKS</td>
             </tbody>
             <tbody v-else>
-              <tr v-for="list in weekList" :key="list.name">
+              <tr v-for="list in starredList" :key="list.name">
                 <td class="text-center">
                   <router-link :to="`/projects/${list.prjId}`">{{ list.prjTitle }}</router-link>
                 </td>
@@ -73,13 +73,13 @@
       </v-col>
       <v-divider class="mx-4" vertical></v-divider>
       <v-col cols="12" md="2">
-        <p class="text-center mx-3 my-3">WEEK TASKS</p>
+        <p class="text-center mx-3 my-3">STARRED TASKS</p>
         <v-divider class="my-3"></v-divider>
-        <div v-if="weekList.length == 0">
+        <div v-if="starredList.length == 0">
           <p class="text-center">NO TASKS</p>
         </div>
         <div class="mx-5" v-else>
-          <canvas id="weekChart" width="300" height="300"></canvas>
+          <canvas id="starredChart" width="300" height="300"></canvas>
         </div>
       </v-col>
     </v-row>
@@ -97,19 +97,9 @@ export default {
     };
   },
   created() {
-    this.FETCH_WEEK_DASHBOARD().then(() => {
-      for (var i = 0; i < this.weekList.length; i++) {
-        // console.log("-----------------------");
-        // console.log(this.weekList.length);
-        // console.log(this.weekList[i].managerName.indexOf(","));
-        // var str = this.weekList[i].managerName.substring(1,this.weekList[i].managerName.indexOf(",")); // 한명 추출
-        // console.log(str);
-        // var s =this.weekList[i].managerName.substring(1,this.weekList[i].managerName.indexOf(",")) +"님 외 " +this.weekList[i].managerName.match(/,/g).length +"명";
-        // console.log(s);
-        // if (this.weekList[i].managerName.indexOf(",") != -1) {
-        // } //end if
-
-        switch (this.weekList[i].state) {
+    this.FETCH_STARRED_DASHBOARD().then(() => {
+      for (var i = 0; i < this.starredList.length; i++) {
+        switch (this.starredList[i].state) {
           case "h":
             this.chartStateCnt.h++;
             break;
@@ -125,15 +115,8 @@ export default {
           case "e":
             this.chartStateCnt.e++;
             break;
-        } // end switch
-
-        // var strArr = this.weekList[i].managerName.replace(,""); // managername 추출
-        // console.log('aaaaaa',s);
-
-        // var result = (strArr.match(/,/g)+1);
-        // console.log(result);
-      } // end for
-
+        }
+      }
       const chartObj = {
         type: "doughnut",
         data: {
@@ -160,11 +143,6 @@ export default {
           labels: ["보류", "진행", "완료", "대기", "긴급"]
         },
         options: {
-          /*           title: {
-            display: true,
-            text: "WEEK TASKS",
-            position: "top"
-          }, */
           legend: {
             position: "right",
             verticalAlign: "right"
@@ -181,16 +159,16 @@ export default {
           ]
         }
       };
-      chartjs.createChart("weekChart", chartObj);
+      chartjs.createChart("starredChart", chartObj);
     }); // store -> actions
   },
   computed: {
     ...mapState({
-      weekList: "weekList"
+      starredList: "starredList"
     })
   },
   methods: {
-    ...mapActions(["FETCH_WEEK_DASHBOARD"])
+    ...mapActions(["FETCH_STARRED_DASHBOARD"])
   }
 };
 </script>

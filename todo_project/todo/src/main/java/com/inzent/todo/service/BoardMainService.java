@@ -10,12 +10,26 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BoardMainService {
-    
+
     @Autowired
     private BoardMainDao boardMainDao;
 
-    public List<DashBoardDto> getTodayList(){
+    // 오늘 할일 목록
+    public List<DashBoardDto> getTodayList(String userId) {
+        System.out.println("BoardMain Service : get TodayList");
+        return boardMainDao.getTodayList(userId);
+    }
 
-        return boardMainDao.getTodayList();
+    // 주간 할일 목록
+    public List<DashBoardDto> getWeekList(String userId) {
+        System.out.println("BoardMain Service : get WeekList");
+
+        return boardMainDao.getWeekList(userId);
+    }
+
+    // 관심 할일 목록
+    public List<DashBoardDto> getStarredList(String userId) {
+        System.out.println("BoardMain Service : get StaredList");
+        return boardMainDao.getStarredList(userId);
     }
 }

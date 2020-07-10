@@ -3,6 +3,10 @@ package com.inzent.todo.service;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inzent.todo.dto.UserDto;
+import com.inzent.todo.vo.UserVo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,10 +16,13 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.vo.UserVo;
 
+=======
+>>>>>>> baesohyun
 @Service
 public class JwtService {
 

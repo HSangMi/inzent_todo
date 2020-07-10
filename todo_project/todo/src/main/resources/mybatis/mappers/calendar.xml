@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="calendar">
+    <select id="getCalendarInfo" parameterType="String" resultType="scheduledto">
+    <![CDATA[
+        SELECT 
+            a.prjId, 
+            a.pId, 
+            a.cId, 
+            a.prjTitle,
+            a.pTitle, 
+            a.cTitle, 
+            a.pStartDate, 
+            a.pEndDate, 
+            a.cStartDate, 
+            a.cEndDate, 
+            a.reg_date,
+            a.pState, 
+            a.cState, 
+            a.pUsePublic,
+            a.cUsePublic,
+            b.manager_count, 
+            b.manager_name
+        FROM 
+        (
+        select 
+            tp.id prjId, 
+            ttsp.task_id pId, 
+            tts.task_id cId, 
+            tp.title prjTitle, 
+            ttsp.title pTitle, 
+            tts.title cTitle, 
+            ttsp.start_date pStartDate, 
+            ttsp.end_date pEndDate, 
+            tts.start_date cStartDate, 
+            tts.end_date cEndDate, 
+            tts.reg_date, 
+            ttsp.state pState, 
+            tts.state cState, 
+            ttsp.use_public pUsePublic,
+            tts.use_public cUsePublic
+        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
+        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
+        and (tts.task_id in (
+            select tts.task_id from tb_task_sub tts 
+            where tts.task_super_id in (
+                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
+        )
+        AS a left outer join
+        (
+        select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name
+        from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
+        where ttm.task_id in (
+        select ttm.task_id 
+        from tb_task_manager ttm
+        where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
+        )
+        and ttm.task_id = tts2.task_id 
+        and ttm.member_no = tm.member_no
+        and tm.user_id = tu.id
+        group by ttm.task_id
+        )
+        AS b
+        ON a.cId = b.cId
+        order by a.reg_date desc
+    ]]>
+    </select>
+    <select id="getSuperTasks" parameterType="chkprjdto" resultType="chkstdto">
+    <![CDATA[
+        select task_id pId, title pTitle
+        from tb_task_super tts
+        where project_id = (select project_id from tb_member  where user_id=#{id} and project_id=#{chkProject});
+    ]]>
+    </select>
+   <select id="getClickDateList" parameterType="cddto" resultType="scheduledto">
+    <![CDATA[
+       SELECT 
+            a.prjId, 
+            a.pId, 
+            a.cId, 
+            a.prjTitle,
+            a.pTitle, 
+            a.cTitle, 
+            a.pStartDate, 
+            a.pEndDate, 
+            a.cStartDate, 
+            a.cEndDate, 
+            a.reg_date,
+            a.pState, 
+            a.cState, 
+            a.pUsePublic,
+            a.cUsePublic,
+            b.manager_count, 
+            b.manager_name,
+            b.img
+        FROM 
+        (
+        select 
+            tp.id prjId, 
+            ttsp.task_id pId, 
+            tts.task_id cId, 
+            tp.title prjTitle, 
+            ttsp.title pTitle, 
+            tts.title cTitle, 
+            ttsp.start_date pStartDate, 
+            ttsp.end_date pEndDate, 
+            tts.start_date cStartDate, 
+            tts.end_date cEndDate, 
+            tts.reg_date, 
+            ttsp.state pState, 
+            tts.state cState, 
+            ttsp.use_public pUsePublic,
+            tts.use_public cUsePublic
+        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
+        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
+        and (#{clickDate} between tts.start_date and tts.end_date)
+        and (tts.task_id in (
+            select tts.task_id from tb_task_sub tts 
+            where tts.task_super_id in (
+                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{id})))))
+        )
+        AS a left outer join
+        (
+        select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, array_to_string(array_agg(tu.img_code ),',') as img
+        from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
+        where ttm.task_id in (
+        select ttm.task_id 
+        from tb_task_manager ttm
+        where ttm.member_no in (select member_no from tb_member where user_id=#{id})
+        )
+        and ttm.task_id = tts2.task_id 
+        and ttm.member_no = tm.member_no
+        and tm.user_id = tu.id
+        group by ttm.task_id
+        )
+        AS b
+        ON a.cId = b.cId
+        order by a.reg_date desc
+    ]]>
+   </select>
+</mapper>

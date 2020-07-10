@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class UserDto {
     private String id;
+<<<<<<< HEAD
     private String password;
     private String name;
     private String birth;
@@ -20,4 +21,7 @@ public class UserDto {
     private String imgCode;
     private String deptCode;
     private String deptName;
+=======
+    private String userType;
+>>>>>>> baesohyun
 }

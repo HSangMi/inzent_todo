@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
 import javax.servlet.http.HttpServletRequest;
 
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
+=======
+>>>>>>> baesohyun
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.repository.UserDao;
 import com.inzent.todo.security.Auth;
@@ -62,7 +65,11 @@ public class UserController {
         // 존재/유효한 user가 있다면 token 생성
         if (userToken != null) {
             token = jwtService.createLoginToken(userToken);
+<<<<<<< HEAD
             UserDto loginUser = userService.getLoginUser(user);
+=======
+            UserVo loginUser = userService.getLoginUser(user);
+>>>>>>> baesohyun
             loginUser.setPassword(null);
             map.put("accessToken", token);
             map.put("loginUser", loginUser);
