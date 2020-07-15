@@ -208,5 +208,16 @@ const actions = {
         console.log(err);
       });
   },
+  FETCH_FILTER({ commit }) {
+    console.log("필터?");
+    return sohyun.schedule
+      .getFilter()
+      .then((result) => {
+        commit("SET_FILTER", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 export default actions;

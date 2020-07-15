@@ -90,13 +90,26 @@ const mutations = {
     state.clickDate = focus;
   },
   SET_FETCH_CLICKDATE(state, clickDate) {
+    console.log("???????", clickDate);
+    // let list = clickDate;
+    // let imgCode = null;
+    clickDate.forEach((item) => {
+      if (item.imgCode) {
+        item.imgCode = JSON.parse(item.imgCode);
+        item.managerName = JSON.parse(item.managerName);
+      }
+    });
     state.getClickDateList = clickDate;
+    console.log("asdf", state.getClickDateList);
   },
   SET_CALENDAR_LIST(state, calendarList) {
     state.calendarList = calendarList;
   },
   SET_FETCH_CHKPROJECT(state, data) {
     state.getSuperTasks = data;
+  },
+  SET_FILTER(state, data) {
+    state.getFilter = data;
   },
 };
 

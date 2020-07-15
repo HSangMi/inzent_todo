@@ -1,31 +1,23 @@
 <template>
-  <v-container fluid>
-    <v-card height="880" scrollable>
-      <template>
-        <v-tabs v-model="tabs" color="blue darken-4" centered>
-          <v-tab>Calendar</v-tab>
-          <v-tab>Gantt Chart</v-tab>
-        </v-tabs>
-      </template>
+  <div>
+    <v-container class="schedule-container" fluid tag="section">
+      <v-tabs v-model="tabs" color="blue darken-4">
+        <v-tab>Calendar</v-tab>
+        <v-tab>Gantt Chart</v-tab>
+      </v-tabs>
 
-      <v-tabs-items v-model="tabs">
+      <v-tabs-items v-model="tabs" class="schedule-tab">
         <v-tab-item>
-          <v-card flat>
-            <v-divider></v-divider>
-            <br />
-            <calendar></calendar>
-          </v-card>
+          <v-divider></v-divider>
+          <calendar class="schedule-wrapper"></calendar>
         </v-tab-item>
         <v-tab-item>
-          <v-card flat>
-            <v-divider></v-divider>
-            <br />
-            <gantt-chart></gantt-chart>
-          </v-card>
+          <v-divider></v-divider>
+          <gantt-chart class="schedule-wrapper"></gantt-chart>
         </v-tab-item>
       </v-tabs-items>
-    </v-card>
-  </v-container>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -35,14 +27,30 @@ import GanttChart from "../components/schedule/GanttChart.vue";
 export default {
   components: {
     Calendar,
-    GanttChart,
+    GanttChart
   },
   data() {
     return {
-      tabs: null,
+      tabs: null
     };
-  },
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+.schedule-container {
+  /* padding: 100px 30px 30px 30px; */
+  min-height: 100%;
+  padding: 0px;
+  /* overflow-x: scroll; */
+  /* height: 100%; */
+}
+
+/* .schedule-tab {
+  background: #eef2f9;
+} */
+
+/* .schedule-wrapper {
+  padding-top: 20px;
+} */
+</style>

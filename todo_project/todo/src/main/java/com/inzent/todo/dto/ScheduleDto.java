@@ -23,5 +23,5 @@ public class ScheduleDto {
     private String cState;
     private boolean cUsePublic;
     private String managerName;
-    private String img;
+    private String imgCode;
 }

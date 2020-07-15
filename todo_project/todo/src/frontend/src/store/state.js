@@ -28,5 +28,7 @@ const state = {
   getClickDateList: [],
   calendarList: [],
   getSuperTasks: [],
+  getFilter: [],
+  calImgCode: [],
 };
 export default state;

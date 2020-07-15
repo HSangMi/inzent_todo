@@ -95,7 +95,7 @@
             a.cUsePublic,
             b.manager_count, 
             b.manager_name,
-            b.img
+            b.img_code
         FROM 
         (
         select 
@@ -125,7 +125,7 @@
         )
         AS a left outer join
         (
-        select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, array_to_string(array_agg(tu.img_code ),',') as img
+        select ttm.task_id cId ,  count(tu."name") as manager_count, json_agg(tu."name") as manager_name, json_agg(tu.img_code) as img_code
         from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
         where ttm.task_id in (
         select ttm.task_id 
@@ -140,6 +140,14 @@
         AS b
         ON a.cId = b.cId
         order by a.reg_date desc
+    ]]>
+   </select>
+   <select id="getFilter" parameterType="String" resultType="filterdto">
+    <![CDATA[
+    select tp.id prjId, tp.title prjTitle, tu.id userId, tu.name userName 
+    from tb_member tm, tb_user tu, tb_project tp 
+    where (tp.id = tm.project_id ) and (tm.user_id = tu.id) 
+    and project_id in (select project_id from tb_member  where user_id=#{userId});
     ]]>
    </select>
 </mapper>

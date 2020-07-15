@@ -5,6 +5,7 @@ import java.util.List;
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
+import com.inzent.todo.dto.FilterDto;
 import com.inzent.todo.dto.ScheduleDto;
 
 import org.apache.ibatis.session.SqlSession;
@@ -36,5 +37,9 @@ public class ScheduleDao {
 
     public List<ScheduleDto> getClickDateList(ClickDateDto cddto) {
         return sqlsession.selectList("calendar.getClickDateList", cddto);
+    }
+
+    public List<FilterDto> getFilter(String userId) {
+        return sqlsession.selectList("calendar.getFilter", userId);
     }
 }

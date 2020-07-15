@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
+import com.inzent.todo.dto.FilterDto;
 import com.inzent.todo.dto.ScheduleDto;
 import com.inzent.todo.security.Auth;
 import com.inzent.todo.service.ScheduleService;
@@ -49,19 +50,41 @@ public class ScheduleController {
         return list;
     }
 
+    // 해당날짜 업무 조회
     @Auth
     @PostMapping("/clickdate")
     public List<ScheduleDto> getClickDateList(@RequestBody ClickDateDto cddto, HttpServletRequest req) {
-        System.out.println("으으응?");
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
         cddto.setId(userId);
 
-        System.out.println("들어왓느냐~~~~~~~~" + cddto.toString());
-
         List<ScheduleDto> list = scheduleService.getClickDateList(cddto);
         return list;
     }
+
+    // 필터 조회
+    @Auth
+    @GetMapping("/filter")
+    public List<FilterDto> getFilter(HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        List<FilterDto> list = scheduleService.getFilter(userId);
+        System.out.println("플젝 필터~~~" + list);
+        return list;
+    }
+
+    // // 담당자 필터
+    // @Auth
+    // @GetMapping("/calmemfilter")
+    // public List<MemFilterDto> getMemFilter(HttpServletRequest req) {
+    // UserVo user = (UserVo) req.getAttribute("user");
+    // String userId = user.getId();
+
+    // List<MemFilterDto> list = scheduleService.getMemFilter(userId);
+    // System.out.println("담당자 필터~~~" + list);
+    // return list;
+    // }
 
 }

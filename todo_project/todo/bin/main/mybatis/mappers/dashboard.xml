@@ -5,7 +5,7 @@
 <mapper namespace="dashboard">
     <select id="getTodayList" parameterType="String" resultType="dashboarddto">
     <![CDATA[
-   SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img
+   SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img_code
         FROM 
         (
             select tp.id prjId, tts.task_id cId, tp.title prjTitle, ttsp.title pTitle, tts.title cTitle, tts.start_date, tts.end_date, tts.reg_date, tts.state, tts.use_public
@@ -20,7 +20,7 @@
         )
         AS a left outer join
         (
-            select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, array_to_string(array_agg(tu.img_code ),',') as img
+            select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, json_agg(tu.img_code) as img_code
             from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
             where ttm.task_id in (
             select ttm.task_id 
@@ -39,7 +39,7 @@
     </select>
     <select id="getWeekList" parameterType="String" resultType="dashboarddto">
     <![CDATA[
-        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img
+        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img_code
         FROM 
         (
         select tp.id prjId, tts.task_id cId, tp.title prjTitle, ttsp.title pTitle, tts.title cTitle, tts.start_date, tts.end_date, tts.reg_date, tts.state, tts.use_public
@@ -54,7 +54,7 @@
         )
         AS a left outer join
         (
-        select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, array_to_string(array_agg(tu.img_code ),',') as img
+        select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, json_agg(tu.img_code) as img_code
         from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
         where ttm.task_id in (
         select ttm.task_id 
@@ -74,7 +74,7 @@
 
     <select id="getStarredList" parameterType="String" resultType="dashboarddto">
     <![CDATA[
-        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img
+        SELECT a.prjId, a.prjTitle, a.pTitle, a.cTitle, a.start_date, a.end_date, a.reg_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img_code
         FROM 
         (
         select tp2.id prjId, tst.task_id cId, tp2.title prjTitle, tts3.title pTitle, tts2.title cTitle, tts2.start_date , tts2.end_date , tts2.state , tts2.use_public , tts2.reg_date 
@@ -88,7 +88,7 @@
         )
         AS a left outer JOIN
         (
-        select ttm.task_id cId , count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, array_to_string(array_agg(tu.img_code ),',') as img
+        select ttm.task_id cId , count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, json_agg(tu.img_code) as img_code
         from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
         where ttm.task_id in (
         select ttm.task_id 

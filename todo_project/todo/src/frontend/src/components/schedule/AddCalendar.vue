@@ -14,8 +14,18 @@
         <v-stepper-content step="1">
           <v-card-title class="text-h5">1. SELCT PROJECT</v-card-title>
           <!-- 프로젝트 선택 -->
+          <v-alert
+            v-model="alert"
+            dense
+            outlined
+            type="error"
+            class="mx-5"
+            small
+          >
+            <span font-size="10px">NO SELECT PROJECT</span>
+          </v-alert>
           <v-select
-            class="mb-6 mx-5"
+            class="mx-5"
             v-model="chkProject"
             @change="fetchChkProject()"
             :items="selectProjects"
@@ -24,16 +34,7 @@
             label="PROJECT"
             outlined
           ></v-select>
-          <v-alert
-            v-model="alert"
-            dense
-            outlined
-            type="error"
-            width="300"
-            class="ma-5"
-          >
-            <span font-size="10px">NO SELECT PROJECT</span>
-          </v-alert>
+
           <v-divider></v-divider>
           <v-card-title class="text-h5">2. SELECT TASK</v-card-title>
           <!-- 업무 선택 -->
@@ -137,6 +138,7 @@ export default {
 
     // 선택한 프로젝트에 따라 업무 대 조회
     fetchChkProject() {
+      this.alert = false;
       const projectData = {
         chkProject: this.chkProject,
       };

@@ -25,6 +25,7 @@
 		<typeAlias alias="chkprjdto" type="com.inzent.todo.dto.ChkProjectDto"/>
 		<typeAlias alias="chkstdto" type="com.inzent.todo.dto.ChkSuperTasksDto"/>
 		<typeAlias alias="cddto" type="com.inzent.todo.dto.ClickDateDto"/>
+		<typeAlias alias="filterdto" type="com.inzent.todo.dto.FilterDto"/>
 
 	</typeAliases>
 	<mappers>

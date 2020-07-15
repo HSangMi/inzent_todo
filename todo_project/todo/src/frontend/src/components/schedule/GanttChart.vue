@@ -6,7 +6,7 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="10">
-      <div style="width:98%; height:700px; border:1px solid #CCD1D1">
+      <div style="width:98%; height:700px;">
         <gantt-elastic :tasks="tasks" :options="options"></gantt-elastic>
       </div>
     </v-col>
