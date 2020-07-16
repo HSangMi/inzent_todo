@@ -197,7 +197,6 @@ const actions = {
       });
   },
   FETCH_CALENDAR_CLICKDATE({ commit }, clickDate) {
-    console.log("여기까지 들어오나요~~~~");
     // 해당날짜의 업무 조회
     return sohyun.schedule
       .getClickDateList(clickDate)
@@ -209,11 +208,20 @@ const actions = {
       });
   },
   FETCH_FILTER({ commit }) {
-    console.log("필터?");
     return sohyun.schedule
       .getFilter()
       .then((result) => {
         commit("SET_FILTER", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  ADD_CAL_FILTER_ITEM({ commit }, calData) {
+    return sohyun.schedule
+      .addCalFilter(calData)
+      .then((result) => {
+        commit("SET_CALFILTER_ITEM", result);
       })
       .catch((err) => {
         console.log(err);

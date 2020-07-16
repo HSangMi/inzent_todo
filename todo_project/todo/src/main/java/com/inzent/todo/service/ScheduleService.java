@@ -2,6 +2,7 @@ package com.inzent.todo.service;
 
 import java.util.List;
 
+import com.inzent.todo.dto.CalFilterItemDto;
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
@@ -37,6 +38,25 @@ public class ScheduleService {
     // 프로젝트 필터 조회
     public List<FilterDto> getFilter(String userId) {
         return scheduledao.getFilter(userId);
+    }
+
+    // 캘린더 필터 아이템 추가 및 조회
+    public String addCalFilterItem(String calItem, String userId) {
+        String existUser = scheduledao.selectExistUser(userId);
+        String calFilter = "";
+        int cnt = 0;
+        if (existUser == null) { // 조회한 테이블에 user가 저장한 값이 없다면
+            cnt = scheduledao.addCalFilterItem(calItem, userId); // 테이블에 값 추가
+        } else { // 테이블에 user가 저장한 값이 있다면
+            cnt = scheduledao.updateFilterItem(calItem, userId); // 해당 유저의 테이블 값 수정
+        } // end else
+        if (cnt == 1) { // 값이 잘 들어갔다면
+            calFilter = scheduledao.selectCalFilterItem(userId); // 조회해라
+        } else {
+            System.out.println("필터값 넣기 실패~~!");
+        } // end else
+
+        return calFilter;
     }
 
 }

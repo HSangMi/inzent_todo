@@ -1,11 +1,22 @@
 <template>
   <v-row>
-    <v-col cols="12" md="2">
-      <v-card>
-        <v-treeview selectable :items="filter"></v-treeview>
+    <v-col cols="2">
+      <v-card class="border px-0" outlined>
+        <div class="ma-1">
+          <v-treeview
+            v-model="selection"
+            :items="filter"
+            :selection-type="selectionType"
+            selectable
+            return-object
+          ></v-treeview>
+        </div>
+        <div class="text-xs-center px-3">
+          <v-btn class="mb-3 mx-0" color="blue-grey" block small dark>RESET</v-btn>
+        </div>
       </v-card>
     </v-col>
-    <v-col cols="12" md="10">
+    <v-col cols="10">
       <div style="width:98%; height:700px;">
         <gantt-elastic :tasks="tasks" :options="options"></gantt-elastic>
       </div>
@@ -14,7 +25,7 @@
 </template>
 
 <script>
-// import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import GanttElastic from "gantt-elastic";
 
 export default {
@@ -42,8 +53,7 @@ export default {
       {
         id: 1,
         label: "Make some noise",
-        user:
-          '<a href="https://www.google.com/search?q=John+Doe" target="_blank" style="color:#0077c0;">John Doe</a>',
+        user: "user1",
         start: getDate(-24 * 5),
         duration: 15 * 24 * 60 * 60 * 1000,
         progress: 85,
@@ -53,8 +63,7 @@ export default {
       {
         id: 2,
         label: "With great power comes great responsibility",
-        user:
-          '<a href="https://www.google.com/search?q=Peter+Parker" target="_blank" style="color:#0077c0;">Peter Parker</a>',
+        user: "user2",
         parentId: 1,
         start: getDate(-24 * 4),
         duration: 4 * 24 * 60 * 60 * 1000,
@@ -78,8 +87,7 @@ export default {
       {
         id: 4,
         label: "Put that toy AWAY!",
-        user:
-          '<a href="https://www.google.com/search?q=Clark+Kent" target="_blank" style="color:#0077c0;">Clark Kent</a>',
+        user: "user3",
         start: getDate(-24 * 2),
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
@@ -89,8 +97,7 @@ export default {
       {
         id: 4,
         label: "Put that toy AWAY!",
-        user:
-          '<a href="https://www.google.com/search?q=Clark+Kent" target="_blank" style="color:#0077c0;">Clark Kent</a>',
+        user: "user4",
         start: getDate(-24 * 2),
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
@@ -100,8 +107,7 @@ export default {
       {
         id: 4,
         label: "Put that toy AWAY!",
-        user:
-          '<a href="https://www.google.com/search?q=Clark+Kent" target="_blank" style="color:#0077c0;">Clark Kent</a>',
+        user: "user5",
         start: getDate(-24 * 2),
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
@@ -187,62 +193,83 @@ export default {
     let filter = [
       {
         id: 1,
-        name: "프로젝트",
-        children: [
-          { id: 2, name: "Calendar : app" },
-          { id: 3, name: "Chrome : app" },
-          { id: 4, name: "Webstorm : app" }
-        ]
+        name: "PROJECT",
+        children: []
       },
       {
-        id: 5,
-        name: "담당자",
-        children: [
-          {
-            id: 6,
-            name: "vuetify :",
-            children: [
-              {
-                id: 7,
-                name: "src :",
-                children: [
-                  { id: 8, name: "index : ts" },
-                  { id: 9, name: "bootstrap : ts" }
-                ]
-              }
-            ]
-          },
-          {
-            id: 10,
-            name: "material2 :",
-            children: [
-              {
-                id: 11,
-                name: "src :",
-                children: [
-                  { id: 12, name: "v-btn : ts" },
-                  { id: 13, name: "v-card : ts" },
-                  { id: 14, name: "v-window : ts" }
-                ]
-              }
-            ]
-          }
-        ]
+        id: 2,
+        name: "MANAGER",
+        children: []
       },
       {
-        id: 15,
-        name: "공개여부",
+        id: 3,
+        name: "IS_PUBLIC",
         children: [
-          { id: 16, name: "공개" },
-          { id: 17, name: "개인용" }
+          { id: "true", name: "PUBLIC" },
+          { id: "false", name: "PRIVATE" }
         ]
       }
     ];
+    //////////////// Filter END ///////////////////
     return {
       tasks: tasks,
       options: options,
       filter: filter
     };
+  },
+  created() {
+    // store -> actions
+    this.fetchFilter();
+  },
+  computed: {
+    // 사용할 mapstate 불러옴
+    ...mapState({
+      getFilter: "getFilter"
+    })
+  },
+  methods: {
+    ...mapActions(["FETCH_FILTER"]),
+
+    fetchFilter() {
+      this.FETCH_FILTER().then(() => {
+        let list = this.getFilter;
+
+        /// 프로젝트 id 중복 제거
+        var prjArray = [];
+        var prjObj = {};
+        for (var i in list) {
+          prjObj[list[i]["prjId"]] = list[i];
+        }
+
+        for (i in prjObj) {
+          prjArray.push(prjObj[i]);
+        }
+
+        for (i in prjArray) {
+          this.filter[0].children.push({
+            id: prjArray[i].prjId,
+            name: prjArray[i].prjTitle
+          });
+        }
+
+        /// 담당자 중복 제거
+        var memArray = [];
+        var memObj = {};
+        for (var j in list) {
+          memObj[list[j]["userId"]] = list[j];
+        }
+        for (j in memObj) {
+          memArray.push(memObj[j]);
+        }
+
+        for (j in memArray) {
+          this.filter[1].children.push({
+            id: memArray[j].userId,
+            name: memArray[j].userName
+          });
+        }
+      });
+    }
   }
 };
 </script>

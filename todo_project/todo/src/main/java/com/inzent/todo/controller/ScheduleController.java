@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.inzent.todo.dto.CalFilterItemDto;
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
@@ -75,16 +76,24 @@ public class ScheduleController {
         return list;
     }
 
-    // // 담당자 필터
-    // @Auth
-    // @GetMapping("/calmemfilter")
-    // public List<MemFilterDto> getMemFilter(HttpServletRequest req) {
-    // UserVo user = (UserVo) req.getAttribute("user");
-    // String userId = user.getId();
+    // 필터값 추가후 꺼내오기
+    @Auth
+    @PostMapping("/addcalitem")
+    public String addCalFilterItem(@RequestBody String[] item, HttpServletRequest req) {
 
-    // List<MemFilterDto> list = scheduleService.getMemFilter(userId);
-    // System.out.println("담당자 필터~~~" + list);
-    // return list;
-    // }
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        String calItem = "";
+        for (int i = 0; i < item.length; i++) {
+            calItem += item[i];
+            if (i < item.length - 1) {
+                calItem += ",";
+            }
+        }
+
+        String calFilter = scheduleService.addCalFilterItem(calItem, userId);
+        return calFilter;
+    }
 
 }

@@ -37,10 +37,7 @@
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-avatar v-bind="attrs" v-on="on" size="20px">
-                              <img
-                                class="user-avatar"
-                                :src="'data:image;base64,'+ item.imgCode[index]"
-                              />
+                              <img class="user-avatar" :src="item.imgCode[index]" />
                             </v-avatar>
                           </template>
                           <span font-color="white" class="user-font">{{mem}}</span>

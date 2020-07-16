@@ -30,5 +30,6 @@ const state = {
   getSuperTasks: [],
   getFilter: [],
   calImgCode: [],
+  calFilterItem:[]
 };
 export default state;

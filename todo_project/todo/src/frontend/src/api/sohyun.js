@@ -61,7 +61,9 @@ export const schedule = {
     return request("post", "/schedule/addSub", addSub);
   },
   getFilter() {
-    console.log("필터 들어옴!!");
     return request("get", "/schedule/filter");
+  },
+  addCalFilter(calData) {
+    return request("post", "/schedule/addcalitem", calData);
   },
 };

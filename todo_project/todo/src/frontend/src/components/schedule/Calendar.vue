@@ -1,31 +1,24 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card class="border px-2">
-        <div class="ma-3">
-          <!-- <v-treeview selectable :items="items"></v-treeview> -->
+      <v-card class="border px-0" outlined>
+        <div class="ma-1">
           <v-treeview
             v-model="selection"
             :items="items"
             :selection-type="selectionType"
             selectable
             return-object
-            open-all
+            @input="chkFilter()"
           ></v-treeview>
         </div>
-        <div class="text-xs-center">
-          <v-btn class="mb-2 mx-1" color="blue-grey" block small dark>RESET</v-btn>
+        <div class="text-xs-center px-3">
+          <v-btn class="mb-3 mx-0" color="blue-grey" block small dark>RESET</v-btn>
         </div>
-        <!-- <v-col class="pa-6" cols="6">
-              <template v-if="!selection.length">No nodes selected.</template>
-              <template v-else>
-                <div v-for="node in selection" :key="node.id">{{ node.name }}</div>
-              </template>
-        </v-col>-->
       </v-card>
     </v-col>
     <v-col cols="10">
-      <v-card class="border">
+      <v-card class="border" outlined>
         <v-row class="fill-height">
           <v-col>
             <v-sheet height="64">
@@ -100,7 +93,6 @@ export default {
     DetailCalendar
   },
   data: () => ({
-    selected: [2],
     focus: "",
     type: "month",
     selectedEvent: {},
@@ -114,20 +106,20 @@ export default {
     items: [
       {
         id: 1,
-        name: "프로젝트",
+        name: "PROJECT",
         children: []
       },
       {
         id: 2,
-        name: "담당자",
+        name: "MANAGER",
         children: []
       },
       {
         id: 3,
-        name: "공개 여부",
+        name: "IS_PUBLIC",
         children: [
-          { id: "true", name: "공개" },
-          { id: "false", name: "비공개" }
+          { id: "true", name: "Public", value: true },
+          { id: "false", name: "Private" }
         ]
       }
       // {
@@ -135,7 +127,8 @@ export default {
       //   name: "외부 일정",
       //   children: [],
       // },
-    ]
+    ],
+    checked: ["PJ2020070102290349"]
     //////////////// Filter END ///////////////////
   }),
   created() {
@@ -148,7 +141,8 @@ export default {
     ...mapState({
       calendarList: "calendarList",
       getClickDateList: "getClickDateList",
-      getFilter: "getFilter"
+      getFilter: "getFilter",
+      calFilterItem: "calFilterItem"
     })
     // ...mapState(["clickDate"])
   },
@@ -164,7 +158,8 @@ export default {
     ...mapActions([
       "FETCH_CALENDAR_LIST",
       "FETCH_CALENDAR_CLICKDATE",
-      "FETCH_FILTER"
+      "FETCH_FILTER",
+      "ADD_CAL_FILTER_ITEM"
     ]),
     // 사용할 mapactions 등록
 
@@ -237,6 +232,20 @@ export default {
         }
       });
     },
+    chkFilter() {
+      console.log(this.selection);
+      let calData = [];
+      this.selection.forEach(item => {
+        calData.push(item.id);
+      });
+      this.ADD_CAL_FILTER_ITEM(calData).then(() => {
+        console.log("성공?!");
+      });
+    },
+    // test() {
+    //   console.log("dldldldl");
+    //   return [1];
+    // },
     fetchCalendarInfo() {
       this.FETCH_CALENDAR_LIST().then(() => {
         const events = [];

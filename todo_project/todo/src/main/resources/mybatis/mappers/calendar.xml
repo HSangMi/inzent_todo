@@ -5,67 +5,19 @@
 <mapper namespace="calendar">
     <select id="getCalendarInfo" parameterType="String" resultType="scheduledto">
     <![CDATA[
-        SELECT 
-            a.prjId, 
-            a.pId, 
-            a.cId, 
-            a.prjTitle,
-            a.pTitle, 
-            a.cTitle, 
-            a.pStartDate, 
-            a.pEndDate, 
-            a.cStartDate, 
-            a.cEndDate, 
-            a.reg_date,
-            a.pState, 
-            a.cState, 
-            a.pUsePublic,
-            a.cUsePublic,
-            b.manager_count, 
-            b.manager_name
-        FROM 
-        (
         select 
-            tp.id prjId, 
-            ttsp.task_id pId, 
-            tts.task_id cId, 
-            tp.title prjTitle, 
-            ttsp.title pTitle, 
-            tts.title cTitle, 
-            ttsp.start_date pStartDate, 
-            ttsp.end_date pEndDate, 
-            tts.start_date cStartDate, 
-            tts.end_date cEndDate, 
-            tts.reg_date, 
-            ttsp.state pState, 
-            tts.state cState, 
-            ttsp.use_public pUsePublic,
-            tts.use_public cUsePublic
-        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
-        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
-        and (tts.task_id in (
-            select tts.task_id from tb_task_sub tts 
-            where tts.task_super_id in (
-                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
-                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
-        )
-        AS a left outer join
-        (
-        select ttm.task_id cId ,  count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name
-        from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
-        where ttm.task_id in (
-        select ttm.task_id 
-        from tb_task_manager ttm
-        where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
-        )
-        and ttm.task_id = tts2.task_id 
-        and ttm.member_no = tm.member_no
-        and tm.user_id = tu.id
-        group by ttm.task_id
-        )
-        AS b
-        ON a.cId = b.cId
-        order by a.reg_date desc
+    ttsp.task_id id, 
+    ttsp.title title, 
+    ttsp.start_date startDate, 
+    ttsp.end_date endDate, 
+    ttsp.reg_date regDate, 
+    ttsp.state state, 
+    ttsp.use_public usePublic
+from tb_task_super ttsp, tb_project tp
+where(ttsp.project_id = tp.id) 
+and ttsp.task_id in (
+            select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+            select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id='sam2')))
     ]]>
     </select>
     <select id="getSuperTasks" parameterType="chkprjdto" resultType="chkstdto">
@@ -144,10 +96,40 @@
    </select>
    <select id="getFilter" parameterType="String" resultType="filterdto">
     <![CDATA[
-    select tp.id prjId, tp.title prjTitle, tu.id userId, tu.name userName 
-    from tb_member tm, tb_user tu, tb_project tp 
-    where (tp.id = tm.project_id ) and (tm.user_id = tu.id) 
-    and project_id in (select project_id from tb_member  where user_id=#{userId});
+        select tp.id prjId, tp.title prjTitle, tu.id userId, tu.name userName 
+        from tb_member tm, tb_user tu, tb_project tp 
+        where (tp.id = tm.project_id ) and (tm.user_id = tu.id) 
+        and project_id in (select project_id from tb_member  where user_id=#{userId});
     ]]>
+   </select>
+
+   <insert id="insertFilterItem" parameterType="map">
+   <![CDATA[
+    insert into tb_filter(filter_no, calendar_setting , user_id ) 
+    values(nextval('seq_filter'), #{calItem}, #{userId});
+   ]]>
+   </insert>
+
+   <update id="updateFilterItem" parameterType="map">
+   <![CDATA[
+        update tb_filter 
+        set calendar_setting = #{calItem} 
+        where user_id = #{userId}
+   ]]>
+   </update>
+
+   <select id="selectFilterItem" parameterType="String" resultType="String">
+   <![CDATA[
+        select calendar_setting 
+        from tb_filter
+        where user_id = #{userId}
+   ]]>
+   </select>
+
+   <select id="selectExistUser" parameterType="String" resultType="String">
+   <![CDATA[
+        select user_id from tb_filter
+        where user_id = #{userId}
+   ]]>
    </select>
 </mapper>

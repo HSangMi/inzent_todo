@@ -90,9 +90,6 @@ const mutations = {
     state.clickDate = focus;
   },
   SET_FETCH_CLICKDATE(state, clickDate) {
-    console.log("???????", clickDate);
-    // let list = clickDate;
-    // let imgCode = null;
     clickDate.forEach((item) => {
       if (item.imgCode) {
         item.imgCode = JSON.parse(item.imgCode);
@@ -100,7 +97,6 @@ const mutations = {
       }
     });
     state.getClickDateList = clickDate;
-    console.log("asdf", state.getClickDateList);
   },
   SET_CALENDAR_LIST(state, calendarList) {
     state.calendarList = calendarList;
@@ -110,6 +106,11 @@ const mutations = {
   },
   SET_FILTER(state, data) {
     state.getFilter = data;
+  },
+  SET_CALFILTER_ITEM(state, data) {
+    const dataArr = data.split(",");
+
+    state.calFilterItem = dataArr;
   },
 };
 
