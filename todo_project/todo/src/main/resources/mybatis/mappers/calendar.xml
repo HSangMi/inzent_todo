@@ -6,18 +6,36 @@
     <select id="getCalendarInfo" parameterType="String" resultType="scheduledto">
     <![CDATA[
         select 
-    ttsp.task_id id, 
-    ttsp.title title, 
-    ttsp.start_date startDate, 
-    ttsp.end_date endDate, 
-    ttsp.reg_date regDate, 
-    ttsp.state state, 
-    ttsp.use_public usePublic
-from tb_task_super ttsp, tb_project tp
-where(ttsp.project_id = tp.id) 
-and ttsp.task_id in (
-            select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
-            select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id='sam2')))
+            ttsp.task_id id, 
+            ttsp.title title, 
+            ttsp.start_date startDate, 
+            ttsp.end_date endDate, 
+            ttsp.reg_date regDate, 
+            ttsp.state state, 
+            ttsp.use_public usePublic
+        from tb_task_super ttsp, tb_project tp
+        where(ttsp.project_id = tp.id) 
+        and ttsp.task_id in (
+                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id='sam2')))
+    ]]>
+    </select>
+    <select id="getCalendarFilterInfo" parameterType="String" resultType="scheduledto">
+    <![CDATA[
+    select
+        ttsp.project_id, 
+        ttsp.task_id id, 
+        ttsp.title title, 
+        ttsp.start_date startDate, 
+        ttsp.end_date endDate, 
+        ttsp.reg_date regDate, 
+        ttsp.state state, 
+        ttsp.use_public usePublic
+    from tb_task_super ttsp
+    where ttsp.project_id ='PJ2020070803361360'
+    and ttsp.task_id in (
+                select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})));
     ]]>
     </select>
     <select id="getSuperTasks" parameterType="chkprjdto" resultType="chkstdto">
@@ -27,7 +45,7 @@ and ttsp.task_id in (
         where project_id = (select project_id from tb_member  where user_id=#{id} and project_id=#{chkProject});
     ]]>
     </select>
-   <select id="getClickDateList" parameterType="cddto" resultType="scheduledto">
+   <select id="getClickDateList" parameterType="cddto" resultType="cddetialdto">
     <![CDATA[
        SELECT 
             a.prjId, 

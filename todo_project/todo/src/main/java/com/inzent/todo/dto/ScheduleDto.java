@@ -8,20 +8,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ScheduleDto {
-    private String prjId;
-    private String prjTitle;
-    private String pId;
-    private String pTitle;
-    private String cId;
-    private String cTitle;
-    private String pStartDate;
-    private String pEndDate;
-    private String pState;
-    private boolean pUsePublic;
-    private String cStartDate;
-    private String cEndDate;
-    private String cState;
-    private boolean cUsePublic;
-    private String managerName;
-    private String imgCode;
+    private String id;
+    private String title;
+    private String startDate;
+    private String endDate;
+    private String regDate;
+    private String state;
+    private boolean usePublic;
 }

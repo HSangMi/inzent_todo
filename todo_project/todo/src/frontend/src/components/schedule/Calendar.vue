@@ -64,7 +64,7 @@
                 :event-color="getEventColor"
                 :type="type"
                 @click:more="showEvent"
-                @click:date="showEvent"
+                @click:day="showEvent"
                 @change="updateRange"
               ></v-calendar>
               <!-- 달력 끝 -->
@@ -250,28 +250,26 @@ export default {
       this.FETCH_CALENDAR_LIST().then(() => {
         const events = [];
         for (var i = 0; i < this.calendarList.length; i++) {
-          const taskName =
-            " [" +
-            this.calendarList[i].ptitle +
-            "] " +
-            this.calendarList[i].ctitle;
+          const taskName = this.calendarList[i].title;
 
-          const cStartDate = new Date(this.calendarList[i].cstartDate);
-          const cEndDate = new Date(this.calendarList[i].cendDate);
-          // const pStartDate = new Date(this.calendarList[i].pstartDate);
-          // const pEndDate = new Date(this.calendarList[i].pendDate);
+          let startDate = null;
+          let endDate = null;
+          if (
+            this.calendarList[i].startDate == "" ||
+            this.calendarList[i].endDate == ""
+          ) {
+            startDate = new Date(this.calendarList[i].regDate);
+            endDate = new Date(this.calendarList[i].regDate);
+          } else {
+            startDate = new Date(this.calendarList[i].startDate);
+            endDate = new Date(this.calendarList[i].endDate);
+          }
           events.push({
             name: taskName, // 타이틀
-            start: cStartDate, // 시작일
-            end: cEndDate, // 마감일
-            color: this.colors[this.colorState(this.calendarList[i].cstate)] // 색상
+            start: startDate, // 시작일
+            end: endDate, // 마감일
+            color: this.colors[this.colorState(this.calendarList[i].state)] // 색상
           });
-          // events.push({
-          //   name: this.calendarList[i].ptitle + "<v-icon>mdi-plus</v-icon>", // 타이틀
-          //   start: pStartDate, // 시작일
-          //   end: pEndDate, // 마감일
-          //   color: this.colors[this.colorState(this.calendarList[i].pstate)], // 색상
-          // });
         } // end for
         console.log(this.selectProjects);
 

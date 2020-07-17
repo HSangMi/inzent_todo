@@ -1,8 +1,9 @@
 package com.inzent.todo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.inzent.todo.dto.CalFilterItemDto;
+import com.inzent.todo.dto.CalDateDetailDto;
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
@@ -20,8 +21,17 @@ public class ScheduleService {
     private ScheduleDao scheduledao;
 
     // 캘린더 전체 조회
-    public List<ScheduleDto> getCalendatList(String userId) {
-        return scheduledao.getCalendatList(userId);
+    public List<ScheduleDto> getCalendarList(String userId) {
+        String existUser = scheduledao.selectExistUser(userId);
+        String filterItem = scheduledao.selectCalFilterItem(userId);
+        System.out.println("필터가 잘 왓냐능,,,," + filterItem);
+        List<ScheduleDto> list = new ArrayList<>();
+        if (existUser == null || filterItem == "") { // 유저아이디가 없거나 filterItem이 ""라면
+            list = scheduledao.getCalendarList(userId); // 전체 조회
+        } else {
+            list = scheduledao.getCalendarFilterList(userId); // 필터적용 조회
+        }
+        return list;
     }
 
     // 선택한 프로젝트의 업무대 조회
@@ -31,7 +41,7 @@ public class ScheduleService {
     }
 
     // 해당 날짜의 업무 조회
-    public List<ScheduleDto> getClickDateList(ClickDateDto cddto) {
+    public List<CalDateDetailDto> getClickDateList(ClickDateDto cddto) {
         return scheduledao.getClickDateList(cddto);
     }
 

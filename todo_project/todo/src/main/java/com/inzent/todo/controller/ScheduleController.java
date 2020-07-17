@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.inzent.todo.dto.CalDateDetailDto;
 import com.inzent.todo.dto.CalFilterItemDto;
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
@@ -30,11 +31,11 @@ public class ScheduleController {
 
     @Auth
     @GetMapping("/calendar")
-    public List<ScheduleDto> getCalendatList(HttpServletRequest req) {
+    public List<ScheduleDto> getCalendarList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
-        List<ScheduleDto> list = scheduleService.getCalendatList(userId);
+        List<ScheduleDto> list = scheduleService.getCalendarList(userId);
         return list;
     }
 
@@ -54,13 +55,13 @@ public class ScheduleController {
     // 해당날짜 업무 조회
     @Auth
     @PostMapping("/clickdate")
-    public List<ScheduleDto> getClickDateList(@RequestBody ClickDateDto cddto, HttpServletRequest req) {
+    public List<CalDateDetailDto> getClickDateList(@RequestBody ClickDateDto cddto, HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
         cddto.setId(userId);
 
-        List<ScheduleDto> list = scheduleService.getClickDateList(cddto);
+        List<CalDateDetailDto> list = scheduleService.getClickDateList(cddto);
         return list;
     }
 

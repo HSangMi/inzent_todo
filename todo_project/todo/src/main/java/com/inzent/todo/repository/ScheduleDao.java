@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.inzent.todo.dto.CalDateDetailDto;
 import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
@@ -20,24 +21,24 @@ public class ScheduleDao {
     @Autowired
     private SqlSession sqlsession;
 
-    public List<ScheduleDto> getCalendatList(String userId) {
+    // 필터없는 조회
+    public List<ScheduleDto> getCalendarList(String userId) {
         List<ScheduleDto> prjInfo = sqlsession.selectList("calendar.getCalendarInfo", userId);
         return prjInfo;
     }
 
-    // public List<Map<String,String>> getCalendarManagers(String userId){
-    // List<Map<String,String>> list = sqlsession.selectList("calendar.getManagers",
-    // userId);
-    // System.out.println(list);
-    // return list;
-    // }
+    // 필터 있는 조회
+    public List<ScheduleDto> getCalendarFilterList(String userId) {
+        List<ScheduleDto> prjInfo = sqlsession.selectList("calendar.getCalendarFilterInfo", userId);
+        return prjInfo;
+    }
 
     public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto chkprjdto) {
 
         return sqlsession.selectList("calendar.getSuperTasks", chkprjdto);
     }
 
-    public List<ScheduleDto> getClickDateList(ClickDateDto cddto) {
+    public List<CalDateDetailDto> getClickDateList(ClickDateDto cddto) {
         return sqlsession.selectList("calendar.getClickDateList", cddto);
     }
 
