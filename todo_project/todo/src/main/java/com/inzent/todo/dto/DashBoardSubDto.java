@@ -4,23 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @Setter
+@Getter
 @ToString
-public class DashBoardDto {
-
+public class DashBoardSubDto {
+    private String cId;
     private String cTitle;
+    private String prjTitle;
     private String startDate;
     private String endDate;
     private String regDate;
     private String state;
     private boolean usePublic;
-    private String pTitle;
-    private String prjTitle;
-    private String prjId;
-    private String cId;
-    private int managerCount;
+    private String imgCode;
     private String managerName;
-        private String img;
-
 }

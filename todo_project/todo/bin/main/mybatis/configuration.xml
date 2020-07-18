@@ -20,7 +20,7 @@
 		<typeAlias alias="memberdto" type="com.inzent.todo.dto.MemberDto"/>
 		<typeAlias alias="deptdto" type="com.inzent.todo.dto.DeptDto"/>
 		<typeAlias alias="userdto" type="com.inzent.todo.dto.UserDto"/>
-		<typeAlias alias="dashboarddto" type="com.inzent.todo.dto.DashBoardDto"/>
+		<typeAlias alias="dashsuperdto" type="com.inzent.todo.dto.DashBoardSuperDto"/>
 		<typeAlias alias="scheduledto" type="com.inzent.todo.dto.ScheduleDto"/>
 		<typeAlias alias="cddetialdto" type="com.inzent.todo.dto.CalDateDetailDto"/>
 		<typeAlias alias="chkprjdto" type="com.inzent.todo.dto.ChkProjectDto"/>

@@ -2,7 +2,7 @@ package com.inzent.todo.repository;
 
 import java.util.List;
 
-import com.inzent.todo.dto.DashBoardDto;
+import com.inzent.todo.dto.DashBoardSuperDto;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +14,19 @@ public class BoardMainDao {
     @Autowired
     private SqlSession sqlSession;
 
-    public List<DashBoardDto> getTodayList(String userId) {
+    public List<DashBoardSuperDto> getTodayList(String userId) {
         System.out.println("BoardMain Dao : get TodayList");
 
-        return sqlSession.selectList("dashboard.getTodayList", userId);
+        return sqlSession.selectList("dashboard.getTodaySuperList", userId);
     }
 
-    public List<DashBoardDto> getWeekList(String userId) {
+    public List<DashBoardSuperDto> getWeekList(String userId) {
         System.out.println("BoardMain Dao : get WeekList");
 
         return sqlSession.selectList("dashboard.getWeekList", userId);
     }
 
-    public List<DashBoardDto> getStarredList(String userId) {
+    public List<DashBoardSuperDto> getStarredList(String userId) {
         System.out.println("BoardMain Dao : get StarredList");
         return sqlSession.selectList("dashboard.getStarredList", userId);
     }

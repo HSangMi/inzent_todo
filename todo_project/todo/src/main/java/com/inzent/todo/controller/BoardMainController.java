@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.inzent.todo.dto.DashBoardDto;
+import com.inzent.todo.dto.DashBoardSuperDto;
 import com.inzent.todo.security.Auth;
 import com.inzent.todo.service.BoardMainService;
 import com.inzent.todo.vo.UserVo;
@@ -24,23 +24,23 @@ public class BoardMainController {
     // 오늘
     @Auth
     @GetMapping("/today")
-    public List<DashBoardDto> getTodayList(HttpServletRequest req) {
+    public List<DashBoardSuperDto> getTodayList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
         System.out.println("BoradMain Controller : get TodayList");
-        List<DashBoardDto> list = boardMainService.getTodayList(userId);
+        List<DashBoardSuperDto> list = boardMainService.getTodayList(userId);
         return list;
     }
 
     // 주간
     @Auth
     @GetMapping("/week")
-    public List<DashBoardDto> getWeekList(HttpServletRequest req) {
+    public List<DashBoardSuperDto> getWeekList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
         System.out.println("BoradMain Controller : get WeekList");
-        List<DashBoardDto> list = boardMainService.getWeekList(userId);
+        List<DashBoardSuperDto> list = boardMainService.getWeekList(userId);
 
         return list;
     }
@@ -48,12 +48,12 @@ public class BoardMainController {
     // 관심
     @Auth
     @GetMapping("/starred")
-    public List<DashBoardDto> getStarredList(HttpServletRequest req) {
+    public List<DashBoardSuperDto> getStarredList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
         System.out.println("BoradMain Controller : get InterestList");
-        List<DashBoardDto> list = boardMainService.getStarredList(userId);
+        List<DashBoardSuperDto> list = boardMainService.getStarredList(userId);
 
         return list;
     }
