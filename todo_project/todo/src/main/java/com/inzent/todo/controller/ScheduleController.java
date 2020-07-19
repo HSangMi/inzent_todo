@@ -84,7 +84,7 @@ public class ScheduleController {
 
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-
+        System.out.println("들어옴1");
         String calItem = "";
         for (int i = 0; i < item.length; i++) {
             calItem += item[i];

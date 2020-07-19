@@ -5,7 +5,7 @@
 <mapper namespace="dashboard">
     <select id="getTodaySuperList" parameterType="String" resultType="dashsuperdto">
     <![CDATA[
-        select ttsp.task_id pId, tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public
+        select distinct ttsp.task_id pId, tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public, ttsp.progress_rate 
         from tb_task_sub tts, tb_task_super ttsp, tb_project tp
         where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
         and ((current_date::varchar between tts.start_date and tts.end_date) or (current_date::varchar between ttsp.start_date and ttsp.end_date))
@@ -16,15 +16,133 @@
                     select id from tb_project where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
     ]]>
     </select>
-    <select id="getWeekList" parameterType="String" resultType="dashsuperdto">
+    <select id="getTodaySubList" parameterType="map" resultType="dashsubdto">
     <![CDATA[
-        
+        SELECT a.cId, a.cTitle, a.start_date, a.end_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img_code
+        FROM 
+        (
+        select tts.task_id cId, tts.title cTitle, tts.start_date, tts.end_date, tts.state, tts.use_public
+        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
+        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
+        and (current_date::varchar between tts.start_date and tts.end_date)
+        and ttsp.task_id=#{todaySub}
+        and (tts.task_id in (
+            select task_id from tb_task_sub 
+            where task_super_id in (
+                    select task_id from tb_task_super where project_id in (
+                    select id from tb_project where id in (select project_id from tb_member  where user_id=#{userId})))))
+        )
+        AS a left outer join
+        (
+        select tts2.task_id cId ,  count(tu."name") as manager_count, json_agg(tu."name") as manager_name, json_agg(tu.img_code) as img_code
+        from tb_task_manager ttm, tb_member tm, tb_user tu, tb_task_sub tts2 
+        where tts2.task_id in (
+        select ttm.task_id 
+        from tb_task_manager ttm
+        where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
+        )
+        and ttm.task_id = tts2.task_id 
+        and ttm.member_no = tm.member_no
+        and tm.user_id = tu.id
+        group by tts2.task_id
+        )
+        AS b
+        ON a.cId = b.cId
+        order by a.state='e' desc
     ]]>
     </select>
-
-    <select id="getStarredList" parameterType="String" resultType="dashsuperdto">
+    <select id="getWeekSuperList" parameterType="String" resultType="dashsuperdto">
     <![CDATA[
-        
+        select distinct ttsp.task_id pId, tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public, ttsp.progress_rate 
+        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
+        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
+        and ((((date_trunc('week',current_date)::date)::varchar between tts.start_date and tts.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between tts.start_date and tts.end_date)) or ((((date_trunc('week',current_date)::date)::varchar between ttsp.start_date and ttsp.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between ttsp.start_date and ttsp.end_date))))
+        and (tts.task_id in (
+            select tts.task_id from tb_task_sub tts 
+            where tts.task_super_id in (
+                    select task_id from tb_task_super where project_id in (
+                    select id from tb_project where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
+    ]]>
+    </select>
+    <select id="getWeekSubList" parameterType="map" resultType="dashsubdto">
+    <![CDATA[
+        SELECT a.cId, a.cTitle, a.start_date, a.end_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img_code
+        FROM 
+        (
+        select tts.task_id cId, tts.title cTitle, tts.start_date, tts.end_date, tts.state, tts.use_public
+        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
+        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
+        and ((date_trunc('week',current_date)::date)::varchar between tts.start_date and tts.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between tts.start_date and tts.end_date)
+        and ttsp.task_id=#{weekSub}
+        and (tts.task_id in (
+            select task_id from tb_task_sub 
+            where task_super_id in (
+                    select task_id from tb_task_super where project_id in (
+                    select id from tb_project where id in (select project_id from tb_member  where user_id=#{userId})))))
+        )
+        AS a left outer join
+        (
+        select tts2.task_id cId ,  count(tu."name") as manager_count, json_agg(tu."name") as manager_name, json_agg(tu.img_code) as img_code
+        from tb_task_manager ttm, tb_member tm, tb_user tu, tb_task_sub tts2 
+        where tts2.task_id in (
+        select ttm.task_id 
+        from tb_task_manager ttm
+        where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
+        )
+        and ttm.task_id = tts2.task_id 
+        and ttm.member_no = tm.member_no
+        and tm.user_id = tu.id
+        group by tts2.task_id
+        )
+        AS b
+        ON a.cId = b.cId
+        order by a.state='e' desc
+    ]]>
+    </select>
+    <select id="getStarredSuperList" parameterType="String" resultType="dashsuperdto">
+    <![CDATA[
+        select distinct ttsp.task_id pId, tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public, ttsp.progress_rate 
+        from tb_starred_task tst, tb_task_sub tts2 , tb_task_super ttsp , tb_project tp
+        where (tst.task_id = tts2.task_id ) and ( tts2.task_super_id = ttsp.task_id ) and (ttsp.project_id = tp.id )
+        and tst.task_id in (
+        select task_id from tb_task_sub
+        where task_super_id in (
+                select task_id from tb_task_super where project_id in (
+                select id from tb_project where id in (select project_id from tb_member  where user_id=#{userId}))))
+    ]]>
+    </select>
+    <select id="getStarredSubList" parameterType="map" resultType="dashsubdto">
+    <![CDATA[
+        SELECT a.cId, a.cTitle, a.start_date, a.end_date, a.state, a.use_public, b.manager_count, b.manager_name, b.img_code
+        FROM 
+        (
+        select tts.task_id cId, tts.title cTitle, tts.start_date, tts.end_date, tts.state, tts.use_public
+        from tb_starred_task tst, tb_task_sub tts , tb_task_super ttsp , tb_project tp
+        where (tst.task_id = tts.task_id ) and ( tts.task_super_id = ttsp.task_id ) and (ttsp.project_id = tp.id )
+        and ttsp.task_id=#{starredSub}
+        and tst.task_id in (
+        select task_id from tb_task_sub
+        where task_super_id in (
+                select task_id from tb_task_super where project_id in (
+                select id from tb_project where id in (select project_id from tb_member  where user_id=#{userId}))))
+        )
+        AS a left outer JOIN
+        (
+        select ttm.task_id cId , count(tu."name") as manager_count, array_to_string(array_agg(tu."name"),',') as manager_name, json_agg(tu.img_code) as img_code
+        from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
+        where ttm.task_id in (
+        select ttm.task_id 
+        from tb_task_manager ttm
+        where ttm.member_no in (select member_no from tb_member where user_id=#{userId})
+        )
+        and ttm.task_id = tts2.task_id 
+        and ttm.member_no = tm.member_no
+        and tm.user_id = tu.id
+        group by ttm.task_id
+        )
+        AS b
+        ON a.cId = b.cId
+        order by a.state='e' desc
     ]]>
     </select>
 

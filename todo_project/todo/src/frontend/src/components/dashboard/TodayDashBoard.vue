@@ -1,20 +1,21 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
+    <v-card-title class="text-h5">TODAY TASKS</v-card-title>
+    <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="9">
-        <v-toolbar flat>
-          <v-toolbar-title>TODAY TASKS</v-toolbar-title>
-          <v-divider></v-divider>
-        </v-toolbar>
         <v-data-table
           :headers="headers"
           :items="listItem"
           :items-per-page="5"
-          :expanded.sync="expanded"
+          :single-expand="singleExpand"
+          :expanded="expanded"
           show-expand
           item-key="pid"
           class="elevation-1"
-          @update:expanded="getSub(listItem[0].cid)"
+          height="250"
+          @update:expanded="getSub"
+          no-data-text="NO TASK"
         >
           <!-- 공개여부 아이콘 설정 -->
           <template v-slot:item.usePublic="{item}">
@@ -31,8 +32,32 @@
           </template>
 
           <!-- 업무 대 관련한 업무 소 출력 -->
-          <template v-slot:expanded-item="{ headers, item }">
-            <td>More info about {{ item.name }}</td>
+          <template v-slot:expanded-item>
+            <tr v-for="sub in todaySub" :key="sub.cid">
+              <td :colspan="2" class="text-center">{{ sub.ctitle }}</td>
+              <td class="text-center">{{ sub.startDate }} ~ {{ sub.endDate }}</td>
+              <td v-if="sub.state == 'P'" class="text-center">
+                <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>
+              </td>
+              <td v-if="sub.state == 'W'" class="text-center">
+                <v-chip class="ma-2" small color="yellow">대기</v-chip>
+              </td>
+              <td v-if="sub.state == 'H'" class="text-center">
+                <v-chip class="ma-2" small>보류</v-chip>
+              </td>
+              <td v-if="sub.state == 'E'" class="text-center">
+                <v-chip class="ma-2" small color="red" text-color="white">긴급</v-chip>
+              </td>
+              <td v-if="sub.state == 'C'" class="text-center">
+                <v-chip class="ma-2" small color="green" text-color="white">완료</v-chip>
+              </td>
+              <td v-show="sub.usePublic" class="text-center">
+                <v-icon small>mdi-lock-open-variant-outline</v-icon>
+              </td>
+              <td v-show="!sub.usePublic" class="text-center">
+                <v-icon small>mdi-lock-outline</v-icon>
+              </td>
+            </tr>
           </template>
         </v-data-table>
         <!-- <v-simple-table height="300px" class="mx-10">
@@ -97,9 +122,9 @@
           </template>
         </v-simple-table>-->
       </v-col>
-      <v-col cols="12" md="3">
+      <v-divider class="mx-4" vertical></v-divider>
+      <v-col cols="12" md="2">
         <!-- <p class="text-center mx-3 my-3">TODAY CHART</p> -->
-        <v-divider class="my-3"></v-divider>
         <div v-if="todayList.length == 0">
           <p class="text-center">NO TASKS</p>
         </div>
@@ -119,7 +144,7 @@ export default {
   data() {
     return {
       expanded: [],
-      getSuperId: "",
+      singleExpand: true,
       headers: [
         {
           text: "프로젝트",
@@ -128,7 +153,7 @@ export default {
           value: "prjTitle"
         },
         { text: "업무 명", value: "ptitle", align: "center" },
-        { text: "기간", value: "startDate", align: "center" },
+        { text: "기간", value: "dueDate", align: "center" },
         { text: "진행 상태", value: "state", align: "center" },
         { text: "공개 여부", value: "usePublic", align: "center" },
         { text: "", value: "data-table-expand" }
@@ -208,14 +233,17 @@ export default {
   },
   computed: {
     ...mapState({
-      todayList: "todayList"
+      todayList: "todayList",
+      todaySub: "todaySub"
     })
   },
   methods: {
-    ...mapActions(["FETCH_TODAY_DASHBOARD"]),
+    ...mapActions(["FETCH_TODAY_DASHBOARD", "FETCH_TODAYSUB_DASHBOARD"]),
     getSub(id) {
-      console.log("sub조회??" + id);
-      console.log(this.listItem);
+      if ("undefined" !== typeof id && 0 < id.length) {
+        let superId = id[0].pid;
+        this.FETCH_TODAYSUB_DASHBOARD(superId);
+      }
     }
   }
 };

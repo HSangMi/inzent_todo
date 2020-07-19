@@ -1,7 +1,10 @@
 package com.inzent.todo.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.inzent.todo.dto.DashBoardSubDto;
 import com.inzent.todo.dto.DashBoardSuperDto;
 
 import org.apache.ibatis.session.SqlSession;
@@ -14,21 +17,41 @@ public class BoardMainDao {
     @Autowired
     private SqlSession sqlSession;
 
-    public List<DashBoardSuperDto> getTodayList(String userId) {
+    public List<DashBoardSuperDto> getTodaySuperList(String userId) {
         System.out.println("BoardMain Dao : get TodayList");
 
         return sqlSession.selectList("dashboard.getTodaySuperList", userId);
     }
 
-    public List<DashBoardSuperDto> getWeekList(String userId) {
-        System.out.println("BoardMain Dao : get WeekList");
-
-        return sqlSession.selectList("dashboard.getWeekList", userId);
+    public List<DashBoardSubDto> getTodaySubList(String todaySub, String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("todaySub", todaySub);
+        map.put("userId", userId);
+        return sqlSession.selectList("dashboard.getTodaySubList", map);
     }
 
-    public List<DashBoardSuperDto> getStarredList(String userId) {
-        System.out.println("BoardMain Dao : get StarredList");
-        return sqlSession.selectList("dashboard.getStarredList", userId);
+    public List<DashBoardSuperDto> getWeekSuperList(String userId) {
+        System.out.println("BoardMain Dao : get WeekList");
+
+        return sqlSession.selectList("dashboard.getWeekSuperList", userId);
+    }
+
+    public List<DashBoardSubDto> getWeekSubList(String weekSub, String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("weekSub", weekSub);
+        map.put("userId", userId);
+        return sqlSession.selectList("dashboard.getWeekSubList", map);
+    }
+
+    public List<DashBoardSuperDto> getStarredSuperList(String userId) {
+        return sqlSession.selectList("dashboard.getStarredSuperList", userId);
+    }
+
+    public List<DashBoardSubDto> getStarredSubList(String starredSub, String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("starredSub", starredSub);
+        map.put("userId", userId);
+        return sqlSession.selectList("dashboard.getStarredSubList", map);
     }
 
 }

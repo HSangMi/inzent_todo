@@ -21,6 +21,7 @@
 		<typeAlias alias="deptdto" type="com.inzent.todo.dto.DeptDto"/>
 		<typeAlias alias="userdto" type="com.inzent.todo.dto.UserDto"/>
 		<typeAlias alias="dashsuperdto" type="com.inzent.todo.dto.DashBoardSuperDto"/>
+		<typeAlias alias="dashsubdto" type="com.inzent.todo.dto.DashBoardSubDto"/>
 		<typeAlias alias="scheduledto" type="com.inzent.todo.dto.ScheduleDto"/>
 		<typeAlias alias="cddetialdto" type="com.inzent.todo.dto.CalDateDetailDto"/>
 		<typeAlias alias="chkprjdto" type="com.inzent.todo.dto.ChkProjectDto"/>

@@ -17,4 +17,6 @@ public class DashBoardSuperDto {
     private String regDate;
     private String state;
     private boolean usePublic;
+    private String dueDate;
+    private String progressRate;
 }

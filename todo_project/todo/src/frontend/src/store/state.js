@@ -21,6 +21,9 @@ const state = {
   todayList: [],
   weekList: [],
   starredList: [],
+  todaySub: [],
+  weekSub: [],
+  starredSub: [],
   ///////// SCHEDULE /////////
   isAddCalendar: false,
   isDetailCalendar: false,
@@ -30,6 +33,6 @@ const state = {
   getSuperTasks: [],
   getFilter: [],
   calImgCode: [],
-  calFilterItem:[]
+  calFilterItem: [],
 };
 export default state;

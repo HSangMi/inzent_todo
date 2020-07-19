@@ -33,11 +33,23 @@ export const dashboard = {
   getTodayList() {
     return request("get", "/dashboard/today");
   },
+  getTodaySub(todaySub) {
+    console.log("머지...", todaySub);
+    return request("post", "/dashboard/todaysub", todaySub);
+  },
   getWeekList() {
     return request("get", "/dashboard/week");
   },
-  getInterestList() {
+  getWeekSub(weekSub) {
+    console.log("asdfa", weekSub);
+    return request("post", "/dashboard/weeksub", weekSub);
+  },
+  getStarredList() {
     return request("get", "/dashboard/starred");
+  },
+  getStarredSub(starredSub) {
+    console.log("asdfa", starredSub);
+    return request("post", "/dashboard/starredsub", starredSub);
   },
 };
 ///////////////////////////////////// SCHEDULE /////////////////////////////////////

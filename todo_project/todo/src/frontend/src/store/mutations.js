@@ -73,11 +73,20 @@ const mutations = {
   SET_TODAY_LIST(state, todayList) {
     state.todayList = todayList;
   },
+  SET_TODAY_SUB(state, todaySub) {
+    state.todaySub = todaySub;
+  },
   SET_WEEK_LIST(state, weekList) {
     state.weekList = weekList;
   },
+  SET_WEEK_SUB(state, weekSub) {
+    state.weekSub = weekSub;
+  },
   SET_STARRED_LIST(state, starredList) {
     state.starredList = starredList;
+  },
+  SET_STARRED_SUB(state, starredSub) {
+    state.starredSub = starredSub;
   },
   //////////////////////// SCHEDULE ////////////////////////
   SET_IS_ADD_CALENDAR(state, toggle) {

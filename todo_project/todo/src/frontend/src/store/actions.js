@@ -121,8 +121,8 @@ const actions = {
     });
   },
   //////////////////////// DASHBOARD ////////////////////////
+  //오늘 리스트
   FETCH_TODAY_DASHBOARD({ commit }) {
-    //오늘 리스트
     return sohyun.dashboard
       .getTodayList()
       .then((result) => {
@@ -133,8 +133,18 @@ const actions = {
         console.log(err);
       });
   },
+  FETCH_TODAYSUB_DASHBOARD({ commit }, todaySub) {
+    return sohyun.dashboard
+      .getTodaySub(todaySub)
+      .then((result) => {
+        commit("SET_TODAY_SUB", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  // 주간 리스트
   FETCH_WEEK_DASHBOARD({ commit }) {
-    // 주간 리스트
     return sohyun.dashboard
       .getWeekList()
       .then((result) => {
@@ -144,12 +154,32 @@ const actions = {
         console.log(err);
       });
   },
-  FETCH_STARRED_DASHBOARD({ commit }) {
-    // 관심 리스트
+  FETCH_WEEKSUB_DASHBOARD({ commit }, weekSub) {
     return sohyun.dashboard
-      .getInterestList()
+      .getWeekSub(weekSub)
+      .then((result) => {
+        commit("SET_WEEK_SUB", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  // 관심 리스트
+  FETCH_STARRED_DASHBOARD({ commit }) {
+    return sohyun.dashboard
+      .getStarredList()
       .then((result) => {
         commit("SET_STARRED_LIST", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_STARREDSUB_DASHBOARD({ commit }, starredSub) {
+    return sohyun.dashboard
+      .getStarredSub(starredSub)
+      .then((result) => {
+        commit("SET_STARRED_SUB", result);
       })
       .catch((err) => {
         console.log(err);
