@@ -57,6 +57,6 @@ export default {
 } */
 
 /* .schedule-wrapper {
-  padding-top: 20px;
+  padding: 0px 0px 15px 15px;
 } */
 </style>
