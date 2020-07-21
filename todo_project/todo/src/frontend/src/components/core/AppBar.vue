@@ -49,6 +49,7 @@
             src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
             max-height="20"
           />
+          
           <v-card-text>user</v-card-text>
         </v-btn>
       </template>
