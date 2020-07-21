@@ -26,9 +26,10 @@ public class ScheduleService {
     public List<ScheduleDto> getCalendarList(String userId) {
         String existUser = scheduledao.selectExistUser(userId);
         String filterItem = scheduledao.selectCalFilterItem(userId);
+        System.out.println(filterItem);
         // PJ2020072109523258::orange,zzz::0
         List<ScheduleDto> list = new ArrayList<>();
-        if (existUser.isEmpty() || filterItem.isEmpty()) { // 필터값이 없다면
+        if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
             list = scheduledao.getCalendarList(userId); // 전체 조회
         } else { // 필터 값이 있다면
             // 1. ::기준으로 배열에 담는다 (유형분류)
@@ -40,8 +41,12 @@ public class ScheduleService {
             String uItem = fItems[2]; // 공개여부
 
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("prjItem", prjItem);
-            map.put("memItem", memItem);
+            if (!prjItem[0].equals("")) {
+                map.put("prjItem", prjItem);
+            }
+            if (!memItem[0].equals("")) {
+                map.put("memItem", memItem);
+            }
             map.put("uItem", uItem);
             map.put("userId", userId);
 

@@ -34,7 +34,7 @@ public class ScheduleController {
     public List<ScheduleDto> getCalendarList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-        
+
         List<ScheduleDto> list = scheduleService.getCalendarList(userId);
         return list;
     }
@@ -77,6 +77,7 @@ public class ScheduleController {
 
         System.out.println("얄루루루" + superId);
         List<CalDateDetailDto> list = scheduleService.getSubList(superId, userId);
+        System.out.println("제바라라랄" + list);
         return list;
     }
 

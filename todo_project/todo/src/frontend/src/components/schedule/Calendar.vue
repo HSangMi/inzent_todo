@@ -234,6 +234,7 @@ export default {
     showEvent({ event }) {
       // 해당 이벤트
       const superId = event.id;
+      console.log(superId);
       this.FETCH_CALENDAR_EVENT(superId);
       this.SET_IS_DETAIL_SUB(true);
     },
@@ -268,7 +269,6 @@ export default {
     fetchChkItem() {
       // 저장된 필터 값
       this.FETCH_CHK_FILTER_ITEM().then(() => {
-        console.log("확이이이인", this.getChkFilterItem);
         var filterArr = this.getChkFilterItem.split("::");
         var prjFilter = filterArr[0];
         var prjFilterArr = prjFilter.split(",");
@@ -318,7 +318,6 @@ export default {
         for (j in calObj) {
           calArr.push(calObj[j]);
         }
-        console.log("하ㅏㅏㅏㅏㅏㅏㅏㅏㅏ", calArr);
         for (var i = 0; i < calArr.length; i++) {
           const taskName = calArr[i].title;
 

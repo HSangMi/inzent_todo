@@ -112,13 +112,13 @@ const mutations = {
     state.isDetailSub = toggle;
   },
   SET_FETCH_SUB_DETAIL(state, subList) {
+    console.log("이이잉?", subList);
     subList.forEach((item) => {
       if (item.imgCode) {
         item.imgCode = JSON.parse(item.imgCode);
         item.managerName = JSON.parse(item.managerName);
       }
     });
-    console.log(subList);
     state.getsubList = subList;
     state.getSuperTitle = subList[0].ptitle;
     state.getProjectTitle = subList[0].prjTitle;

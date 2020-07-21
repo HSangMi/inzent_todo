@@ -38,14 +38,18 @@
         and ttsp.task_id in (
                     select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
                     select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})))
+       <if test="prjItem">
         and 
-       <foreach collection="prjItem" item="item" index="index" separator="or">
-        ttsp.project_id =#{item}
+       <foreach open="(" close=")" collection="prjItem" item="pitem" index="index" separator="or">
+        ttsp.project_id =#{pitem}
        </foreach>
+       </if>
+       <if test="memItem">
        and
-       <foreach collection="memItem" item="item" index="index" separator="or">
-        ttsp.task_id in (select task_id from tb_task_manager where member_no in (select member_no from tb_member where user_id=#{item}))
+       <foreach  open="(" close=")" collection="memItem" item="mitem" index="index" separator="or">
+        ttsp.task_id in (select task_id from tb_task_manager where member_no in (select member_no from tb_member where user_id=#{mitem}))
        </foreach>
+       </if>
        <if test='uItem == "true" or uItem =="false"'>
         and 
         ttsp.use_public = #{uItem}::boolean;
