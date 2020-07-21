@@ -72,11 +72,11 @@
     <v-dialog v-model="logoutModal" max-width="290">
       <v-card>
         <v-card-title></v-card-title>
-        <v-card-text>로그아웃 하시겠습니까?</v-card-text>
+        <v-card-text>Do you want to logout?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click.prevent="logout">확인</v-btn>
-          <v-btn color="green darken-1" text @click="logoutModal = false">취소</v-btn>
+          <v-btn color="green darken-1" text @click="logoutModal = false">NO</v-btn>
+          <v-btn color="green darken-1" text @click.prevent="logout">YES</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -128,12 +128,12 @@ export default {
     menus2: [
       {
         icon: " mdi-account-multiple",
-        text: "사원 관리",
+        text: "USER MANAGEMENT",
         to: "/user_management"
       },
       {
         icon: "mdi-newspaper-variant-multiple-outline",
-        text: "프로젝트 관리",
+        text: "PROJECT MANAGEMENT",
         to: "/project_management"
       },
     ],

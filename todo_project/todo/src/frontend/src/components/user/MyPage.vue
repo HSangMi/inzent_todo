@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="mypageModal" width="400" persistent>
+  <v-dialog v-model="mypageModal" width="600" persistent >
     <v-card>
       <!-- <v-form
         ref="form"
@@ -10,7 +10,7 @@
       <v-card-title class="headline grey lighten-2"  primary-title>
         <span class="headline">프로필 수정</span>
       </v-card-title>
-      <v-container>
+      <v-container style="padding: 50px 50px 10px 50px;">
         <v-row>
           <v-col class="py-0">
             <v-hover>
@@ -261,13 +261,13 @@
             inset
           />
         </v-row> -->
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="onClose">Cancle</v-btn>
-          <!-- <v-btn color="blue darken-1" text type="submit">Create</v-btn> -->
-          <v-btn color="blue darken-1" text @click="onClose">Update</v-btn>
-        </v-card-actions>
       </v-container>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" text @click="onClose">Cancle</v-btn>
+        <!-- <v-btn color="blue darken-1" text type="submit">Create</v-btn> -->
+        <v-btn color="blue darken-1" text @click="onClose">Update</v-btn>
+      </v-card-actions>
       <!-- </v-form> -->
     </v-card>
   </v-dialog>
