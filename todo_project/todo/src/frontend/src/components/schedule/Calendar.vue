@@ -46,17 +46,17 @@
                 <v-radio-group v-model="publicSelection" @change="chkFilter()">
                   <v-radio class="px-5 pb-2" :value="0">
                     <template v-slot:label>
-                      <span class="font-filter">전체</span>
+                      <span class="font-filter">All</span>
                     </template>
                   </v-radio>
                   <v-radio class="px-5 pb-2" :value="true">
                     <template v-slot:label>
-                      <span class="font-filter">공개</span>
+                      <span class="font-filter">Public</span>
                     </template>
                   </v-radio>
                   <v-radio class="px-5 pb-2" :value="false">
                     <template v-slot:label>
-                      <span class="font-filter">비공개</span>
+                      <span class="font-filter">Private</span>
                     </template>
                   </v-radio>
                 </v-radio-group>
@@ -67,7 +67,7 @@
         </div>
       </v-card>
       <div class="text-xs-center ma-2">
-        <v-btn class="mx-1 my-2" color="blue-grey" block small dark @click="resetFilter()">RESET</v-btn>
+        <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">RESET</v-btn>
       </div>
       <!-- 필터 저장 초기화 -->
     </v-col>
