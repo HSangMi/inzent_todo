@@ -27,11 +27,15 @@ const state = {
   ///////// SCHEDULE /////////
   isAddCalendar: false,
   isDetailCalendar: false,
+  isDetailSub: false,
   clickDate: "",
   getClickDateList: [],
+  getsubList: [],
+  getSuperTitle: "",
   calendarList: [],
   getSuperTasks: [],
   getFilter: [],
+  getChkFilterItem: "",
   calImgCode: [],
   calFilterItem: [],
 };

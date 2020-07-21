@@ -7,78 +7,63 @@
     offset-x
   >
     <v-card>
-      <v-card-title>
-        <span class="headline">DETAILS TASKS</span>
+      <v-card-title class="pa-2">
+        <span class="headline px-7 py-4">DETAIL TASKS</span>
       </v-card-title>
       <v-card-text>
-        <v-container>
+        <v-container class="py-0">
           <v-divider></v-divider>
           <template v-if="clickDateList">
-            <!-- <v-list
-              subheader
-              three-line
-              v-for="item in clickDateList"
-              :key="item.ctitle"
-              @click="true"
-            >-->
             <v-list three-line>
-              <v-list-item-group multiple active-class="pink--text">
+              <v-list-item-group>
                 <template v-for="(item, index) in clickDateList">
-                  <v-list-item :key="item.cId">
+                  <v-list-item :key="item.pid" @click="getSub(item.pid)">
                     <v-list-item-content>
-                      <v-list-item-title class="text-h5" v-text="item.ctitle"></v-list-item-title>
-                      <v-spacer></v-spacer>
-                      <v-list-item-subtitle v-if="item.imgCode!=null">
-                        <v-tooltip
-                          bottom
-                          color="#5a5a5a"
-                          v-for="(mem, index) in item.managerName"
-                          :key="index"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-avatar v-bind="attrs" v-on="on" size="20px">
-                              <img class="user-avatar" :src="item.imgCode[index]" />
-                            </v-avatar>
-                          </template>
-                          <span font-color="white" class="user-font">{{mem}}</span>
-                        </v-tooltip>
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle v-if="item.imgCode==null">
-                        <span class="user-font my-5">No Member</span>
+                      <v-list-item-subtitle class="pb-2">
+                        <span class="detail-font">{{item.prjTitle}}</span>
                       </v-list-item-subtitle>
                       <v-spacer></v-spacer>
-                      <v-list-item-subtitle>
-                        <span
-                          class="detail-font"
-                        >{{item.prjTitle+' / '+item.ptitle+' / '+item.ctitle}}</span>
+                      <v-list-item-title class="text-h5 pb-3" v-text="item.ptitle"></v-list-item-title>
+                      <v-spacer></v-spacer>
+                      <v-list-item-subtitle v-if="item.pstartDate != '' && item.pendDate != ''">
+                        <span class="detail-font">{{item.pstartDate}} ~ {{item.pendDate}}</span>
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle v-if="item.pstartDate == '' && item.pendDate !=''">
+                        <span class="detail-font">{{item.pstartDate}} ~ 미정</span>
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle v-if="item.pstartDate != '' && item.pendDate == ''">
+                        <span class="detail-font">미정 ~ {{item.pendDate}}</span>
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle v-if="item.pstartDate == '' && item.pendDate == ''">
+                        <span class="detail-font">기간 미정</span>
                       </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-chip
-                        v-if="item.cstate == 'P' "
-                        class="text-center ma-2 my-5"
-                        x-small
+                        v-if="item.pstate == 'P' "
+                        class="text-center ma-5 my-5"
+                        small
                         color="blue"
                         text-color="white"
                       >진행</v-chip>
                       <v-chip
-                        v-if="item.cstate == 'W'"
-                        class="text-center ma-2 my-5"
-                        x-small
+                        v-if="item.pstate == 'W'"
+                        class="text-center ma-5 my-5"
+                        small
                         color="yellow"
                       >대기</v-chip>
-                      <v-chip v-if="item.cstate == 'H' " class="text-center ma-2" small>보류</v-chip>
+                      <v-chip v-if="item.pstate == 'H' " class="text-center ma-5" small>보류</v-chip>
                       <v-chip
-                        v-if="item.cstate == 'E'"
+                        v-if="item.pstate == 'E'"
                         class="text-center ma-2 my-5"
-                        x-small
+                        small
                         color="red"
                         text-color="white"
                       >긴급</v-chip>
                       <v-chip
-                        v-if="item.cstate == 'C'"
-                        class="text-center ma-2 my-5"
-                        x-small
+                        v-if="item.pstate == 'C'"
+                        class="text-center ma-5 my-5"
+                        small
                         color="green"
                         text-color="white"
                       >완료</v-chip>
@@ -87,9 +72,9 @@
                       <v-icon
                         class="my-5"
                         small
-                        v-show="item.cusePublic"
+                        v-show="item.pusePublic"
                       >mdi-lock-open-variant-outline</v-icon>
-                      <v-icon class="my-5" small v-show="!item.cusePublic">mdi-lock-outline</v-icon>
+                      <v-icon class="my-5" small v-show="!item.pusePublic">mdi-lock-outline</v-icon>
                     </v-list-item-action>
                   </v-list-item>
                   <v-divider v-if="index + 1 < clickDateList.length" :key="index"></v-divider>
@@ -109,7 +94,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
   data: () => ({
@@ -123,7 +108,14 @@ export default {
     ...mapState(["isDetailCalendar"])
   },
   methods: {
-    ...mapMutations(["SET_IS_DETAIL_CALENDAR"])
+    ...mapMutations(["SET_IS_DETAIL_CALENDAR", "SET_IS_DETAIL_SUB"]),
+    ...mapActions(["FETCH_CALENDAR_EVENT"]),
+    getSub(id) {
+      const superId = id;
+      console.log("aaaaaa", superId);
+      this.FETCH_CALENDAR_EVENT(superId);
+      this.SET_IS_DETAIL_SUB(true);
+    }
   }
 };
 </script>

@@ -65,6 +65,21 @@ public class ScheduleController {
         return list;
     }
 
+    // 해당 업무대의 업무 소 조회
+    @Auth
+    @PostMapping("/sublist")
+    public List<CalDateDetailDto> getSubList(@RequestBody String superId, HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        int length = superId.length();
+        superId = superId.substring(0, length - 1);
+
+        System.out.println("얄루루루" + superId);
+        List<CalDateDetailDto> list = scheduleService.getSubList(superId, userId);
+        return list;
+    }
+
     // 필터 조회
     @Auth
     @GetMapping("/filter")
@@ -73,28 +88,44 @@ public class ScheduleController {
         String userId = user.getId();
 
         List<FilterDto> list = scheduleService.getFilter(userId);
-        System.out.println("플젝 필터~~~" + list);
         return list;
+    }
+
+    // 필터 조회
+    @Auth
+    @GetMapping("/chkFilterItem")
+    public String getChkFilterItem(HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        String calItem = scheduleService.getChkFilterItem(userId);
+        return calItem;
     }
 
     // 필터값 추가후 꺼내오기
     @Auth
     @PostMapping("/addcalitem")
-    public String addCalFilterItem(@RequestBody String[] item, HttpServletRequest req) {
+    public void addCalFilterItem(@RequestBody CalFilterItemDto cfidto, HttpServletRequest req) {
 
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-        System.out.println("들어옴1");
-        String calItem = "";
-        for (int i = 0; i < item.length; i++) {
-            calItem += item[i];
-            if (i < item.length - 1) {
-                calItem += ",";
+        StringBuilder sbPrj = new StringBuilder();
+        StringBuilder sbMem = new StringBuilder();
+        for (String prj : cfidto.getPrjData()) {
+            if (sbPrj.length() > 0) {
+                sbPrj.append(",");
             }
-        }
-
+            sbPrj.append(prj);
+        } // end for
+        for (String mem : cfidto.getMemData()) {
+            if (sbMem.length() > 0) {
+                sbMem.append(",");
+            }
+            sbMem.append(mem);
+        } // end for
+        String calItem = ":P=" + sbPrj.toString() + ":M=" + sbMem.toString() + ":U=" + cfidto.getUseData();
         String calFilter = scheduleService.addCalFilterItem(calItem, userId);
-        return calFilter;
+        System.out.println("결과아아ㅏ아아아" + calFilter);
     }
 
 }

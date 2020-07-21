@@ -28,13 +28,13 @@ const request = (method, url, data) => {
       throw Error(result);
     });
 };
+
 ///////////////////////////////////// DASHBOARD /////////////////////////////////////
 export const dashboard = {
   getTodayList() {
     return request("get", "/dashboard/today");
   },
   getTodaySub(todaySub) {
-    console.log("머지...", todaySub);
     return request("post", "/dashboard/todaysub", todaySub);
   },
   getWeekList() {
@@ -60,6 +60,9 @@ export const schedule = {
   getClickDateList(clickDate) {
     return request("post", "/schedule/clickdate", clickDate);
   },
+  getSubList(superId) {
+    return request("post", "/schedule/sublist", superId);
+  },
   getChkProject(chkProject) {
     console.log(chkProject);
     return request("post", "/schedule/chkproject", chkProject);
@@ -75,7 +78,11 @@ export const schedule = {
   getFilter() {
     return request("get", "/schedule/filter");
   },
+  getChkFilterItem() {
+    return request("get", "/schedule/chkFilterItem");
+  },
   addCalFilter(calData) {
+    console.log(calData);
     return request("post", "/schedule/addcalitem", calData);
   },
 };

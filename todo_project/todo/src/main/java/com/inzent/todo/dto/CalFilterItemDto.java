@@ -8,6 +8,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class CalFilterItemDto {
-    private String[] calData;
+    private String[] prjData;
+    private String[] memData;
+    private String useData;
     private String id;
 }

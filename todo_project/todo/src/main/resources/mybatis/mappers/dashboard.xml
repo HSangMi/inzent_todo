@@ -72,7 +72,7 @@
         select tts.task_id cId, tts.title cTitle, tts.start_date, tts.end_date, tts.state, tts.use_public
         from tb_task_sub tts, tb_task_super ttsp, tb_project tp
         where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
-        and ((date_trunc('week',current_date)::date)::varchar between tts.start_date and tts.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between tts.start_date and tts.end_date)
+        and (((date_trunc('week',current_date)::date)::varchar between tts.start_date and tts.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between tts.start_date and tts.end_date))
         and ttsp.task_id=#{weekSub}
         and (tts.task_id in (
             select task_id from tb_task_sub 

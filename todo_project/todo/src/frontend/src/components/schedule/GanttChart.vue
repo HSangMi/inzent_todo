@@ -1,15 +1,52 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card class="border px-0" outlined>
-        <div class="ma-1">
-          <v-treeview
-            v-model="selection"
-            :items="filter"
-            :selection-type="selectionType"
-            selectable
-            return-object
-          ></v-treeview>
+      <v-card outlined max-height="838" class="overflow-y-auto">
+        <div class="mx-2">
+          <v-subheader>PROJECT</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item v-for="item in projectFilter" :key="item.prjId">
+              <v-list-item-content class="px-0">
+                <v-checkbox class="px-5" v-model="selection" :value="item.prjId">
+                  <template v-slot:label>
+                    <span class="font-filter">{{item.prjTitle}}</span>
+                  </template>
+                </v-checkbox>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-subheader>MANAGER</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item v-for="item in managerFilter" :key="item.userId">
+              <v-list-item-content class="px-0">
+                <v-checkbox class="px-5" v-model="selection" :value="item.userId">
+                  <template v-slot:label>
+                    <span class="font-filter">{{item.userName}}</span>
+                  </template>
+                </v-checkbox>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-subheader>USE_PUBLIC</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item>
+              <v-list-item-content class="px-0">
+                <v-checkbox class="px-5" v-model="selection" :value="this.usePublic[0]">
+                  <template v-slot:label>
+                    <span class="font-filter">public</span>
+                  </template>
+                </v-checkbox>
+                <v-checkbox class="px-5" v-model="selection" :value="this.usePublic[1]">
+                  <template v-slot:label>
+                    <span class="font-filter">private</span>
+                  </template>
+                </v-checkbox>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
         </div>
         <div class="text-xs-center px-3">
           <v-btn class="mb-3 mx-0" color="blue-grey" block small dark>RESET</v-btn>
@@ -190,31 +227,18 @@ export default {
       }
     };
     //////////////// Filter ///////////////////
-    let filter = [
-      {
-        id: 1,
-        name: "PROJECT",
-        children: []
-      },
-      {
-        id: 2,
-        name: "MANAGER",
-        children: []
-      },
-      {
-        id: 3,
-        name: "IS_PUBLIC",
-        children: [
-          { id: "true", name: "PUBLIC" },
-          { id: "false", name: "PRIVATE" }
-        ]
-      }
-    ];
+    let projectFilter = [];
+    let managerFilter = [];
+    let usePublic = [true, false];
+    let selection = [];
     //////////////// Filter END ///////////////////
     return {
       tasks: tasks,
       options: options,
-      filter: filter
+      projectFilter: projectFilter,
+      managerFilter: managerFilter,
+      usePublic: usePublic,
+      selection: selection
     };
   },
   created() {
@@ -235,38 +259,22 @@ export default {
         let list = this.getFilter;
 
         /// 프로젝트 id 중복 제거
-        var prjArray = [];
         var prjObj = {};
         for (var i in list) {
           prjObj[list[i]["prjId"]] = list[i];
         }
 
         for (i in prjObj) {
-          prjArray.push(prjObj[i]);
-        }
-
-        for (i in prjArray) {
-          this.filter[0].children.push({
-            id: prjArray[i].prjId,
-            name: prjArray[i].prjTitle
-          });
+          this.projectFilter.push(prjObj[i]);
         }
 
         /// 담당자 중복 제거
-        var memArray = [];
         var memObj = {};
         for (var j in list) {
           memObj[list[j]["userId"]] = list[j];
         }
         for (j in memObj) {
-          memArray.push(memObj[j]);
-        }
-
-        for (j in memArray) {
-          this.filter[1].children.push({
-            id: memArray[j].userId,
-            name: memArray[j].userName
-          });
+          this.managerFilter.push(memObj[j]);
         }
       });
     }
@@ -274,4 +282,18 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.border {
+  border: 1px solid #ccd1d1;
+  /* height: 850px; */
+}
+.project-filter .v-input--selection-controls {
+  margin-top: 0px;
+}
+.project-filter .v-list-item__content {
+  padding: 0px;
+}
+.font-filter {
+  font-size: 13px;
+}
+</style>

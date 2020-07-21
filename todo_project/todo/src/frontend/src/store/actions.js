@@ -228,10 +228,21 @@ const actions = {
   },
   FETCH_CALENDAR_CLICKDATE({ commit }, clickDate) {
     // 해당날짜의 업무 조회
+    console.log("날짜는??", clickDate);
     return sohyun.schedule
       .getClickDateList(clickDate)
       .then((result) => {
         commit("SET_FETCH_CLICKDATE", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_CALENDAR_EVENT({ commit }, superId) {
+    return sohyun.schedule
+      .getSubList(superId)
+      .then((result) => {
+        commit("SET_FETCH_SUB_DETAIL", result);
       })
       .catch((err) => {
         console.log(err);
@@ -242,6 +253,16 @@ const actions = {
       .getFilter()
       .then((result) => {
         commit("SET_FILTER", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_CHK_FILTER_ITEM({ commit }) {
+    return sohyun.schedule
+      .getChkFilterItem()
+      .then((result) => {
+        commit("SET_CHK_FITER_ITEM", result);
       })
       .catch((err) => {
         console.log(err);

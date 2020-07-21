@@ -40,6 +40,7 @@ public class BoardMainDao {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("weekSub", weekSub);
         map.put("userId", userId);
+        System.out.println("여기여기...." + weekSub);
         return sqlSession.selectList("dashboard.getWeekSubList", map);
     }
 

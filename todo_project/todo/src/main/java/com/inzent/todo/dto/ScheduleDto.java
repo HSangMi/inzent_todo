@@ -8,6 +8,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ScheduleDto {
+    private String prjId;
+    private String prjTitle;
     private String id;
     private String title;
     private String startDate;

@@ -66,7 +66,6 @@ public class BoardMainController {
         String userId = user.getId();
         System.out.println(weekSub);
         List<DashBoardSubDto> list = boardMainService.getWeekSubList(weekSub, userId);
-        System.out.println("성공성공" + list);
         return list;
     }
 

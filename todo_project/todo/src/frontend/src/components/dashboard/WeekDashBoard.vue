@@ -32,32 +32,49 @@
           </template>
 
           <!-- 업무 대 관련한 업무 소 출력 -->
-          <template v-slot:expanded-item>
-            <tr v-for="sub in weekSub" :key="sub.cid">
-              <td :colspan="2" class="text-center">{{ sub.ctitle }}</td>
-              <td class="text-center">{{ sub.startDate }} ~ {{ sub.endDate }}</td>
-              <td v-if="sub.state == 'P'" class="text-center">
-                <v-chip class="ma-2" small color="blue" text-color="white">진행</v-chip>
-              </td>
-              <td v-if="sub.state == 'W'" class="text-center">
-                <v-chip class="ma-2" small color="yellow">대기</v-chip>
-              </td>
-              <td v-if="sub.state == 'H'" class="text-center">
-                <v-chip class="ma-2" small>보류</v-chip>
-              </td>
-              <td v-if="sub.state == 'E'" class="text-center">
-                <v-chip class="ma-2" small color="red" text-color="white">긴급</v-chip>
-              </td>
-              <td v-if="sub.state == 'C'" class="text-center">
-                <v-chip class="ma-2" small color="green" text-color="white">완료</v-chip>
-              </td>
-              <td v-show="sub.usePublic" class="text-center">
-                <v-icon small>mdi-lock-open-variant-outline</v-icon>
-              </td>
-              <td v-show="!sub.usePublic" class="text-center">
-                <v-icon small>mdi-lock-outline</v-icon>
-              </td>
-            </tr>
+          <template v-slot:expanded-item="{headers}">
+            <td :colspan="headers.length" class="px-0">
+              <v-simple-table>
+                <tbody v-if="weekSub.length == 0">
+                  <tr style="background-color:#F5F5F5">
+                    <td colspan="weekSub.length" class="text-center">NO TASKS</td>
+                  </tr>
+                </tbody>
+                <tbody v-else>
+                  <tr v-for="sub in weekSub" :key="sub.cid" style="background-color:#F5F5F5">
+                    <td class="text-center" width="20%"></td>
+                    <td class="text-center" width="20%">
+                      <span class="sub">{{ sub.ctitle }}</span>
+                    </td>
+                    <td class="text-center sub" width="20%">
+                      <span class="sub">{{ sub.startDate }} ~ {{ sub.endDate }}</span>
+                    </td>
+                    <td v-if="sub.state == 'P'" class="text-center" width="20%">
+                      <v-chip x-small color="blue" text-color="white">진행</v-chip>
+                    </td>
+                    <td v-if="sub.state == 'W'" class="text-center" width="20%">
+                      <v-chip x-small color="yellow">대기</v-chip>
+                    </td>
+                    <td v-if="sub.state == 'H'" class="text-center" width="20%">
+                      <v-chip x-small>보류</v-chip>
+                    </td>
+                    <td v-if="sub.state == 'E'" class="text-center" width="20%">
+                      <v-chip x-small color="red" text-color="white">긴급</v-chip>
+                    </td>
+                    <td v-if="sub.state == 'C'" class="text-center" width="20%">
+                      <v-chip x-small color="green" text-color="white">완료</v-chip>
+                    </td>
+                    <td v-show="sub.usePublic" class="text-center" width="10%">
+                      <v-icon small>mdi-lock-open-variant-outline</v-icon>
+                    </td>
+                    <td v-show="!sub.usePublic" class="text-center" width="10%">
+                      <v-icon small>mdi-lock-outline</v-icon>
+                    </td>
+                    <td class="text-center" width="10%"></td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </td>
           </template>
         </v-data-table>
       </v-col>
@@ -88,13 +105,19 @@ export default {
           text: "프로젝트",
           align: "center",
           sortable: false,
-          value: "prjTitle"
+          value: "prjTitle",
+          width: "20%"
         },
-        { text: "업무 명", value: "ptitle", align: "center" },
-        { text: "기간", value: "dueDate", align: "center" },
-        { text: "진행 상태", value: "state", align: "center" },
-        { text: "공개 여부", value: "usePublic", align: "center" },
-        { text: "", value: "data-table-expand" }
+        { text: "업무 명", value: "ptitle", align: "center", width: "20%" },
+        { text: "기간", value: "dueDate", align: "center", width: "20%" },
+        { text: "진행 상태", value: "state", align: "center", width: "20%" },
+        {
+          text: "공개 여부",
+          value: "usePublic",
+          align: "center",
+          width: "10%"
+        },
+        { text: "", value: "data-table-expand", width: "10%" }
       ],
       listItem: [],
       //////////////////////// 차트 ////////////////////////////
@@ -187,4 +210,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.sub {
+  font-size: 12px;
+}
+</style>

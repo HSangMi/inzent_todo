@@ -105,7 +105,22 @@ const mutations = {
         item.managerName = JSON.parse(item.managerName);
       }
     });
+    console.log("뿌에에에에", clickDate);
     state.getClickDateList = clickDate;
+  },
+  SET_IS_DETAIL_SUB(state, toggle) {
+    state.isDetailSub = toggle;
+  },
+  SET_FETCH_SUB_DETAIL(state, subList) {
+    subList.forEach((item) => {
+      if (item.imgCode) {
+        item.imgCode = JSON.parse(item.imgCode);
+        item.managerName = JSON.parse(item.managerName);
+      }
+    });
+    console.log(subList);
+    state.getsubList = subList;
+    state.getSuperTitle = subList[0].ptitle;
   },
   SET_CALENDAR_LIST(state, calendarList) {
     state.calendarList = calendarList;
@@ -115,6 +130,10 @@ const mutations = {
   },
   SET_FILTER(state, data) {
     state.getFilter = data;
+  },
+  SET_CHK_FITER_ITEM(state, data) {
+    console.log("필터조회.......", data);
+    state.getChkFilterItem = data;
   },
   SET_CALFILTER_ITEM(state, data) {
     const dataArr = data.split(",");
