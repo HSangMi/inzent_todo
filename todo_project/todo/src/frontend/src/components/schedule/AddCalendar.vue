@@ -45,7 +45,7 @@
             ></v-select>
           </v-radio-group>
           <v-card-actions>
-            <v-btn text @click="SET_IS_ADD_CALENDAR(false)">CANCEL</v-btn>
+            <v-btn color="blue darken-1" text @click="SET_IS_ADD_CALENDAR(false)">CANCEL</v-btn>
             <v-spacer></v-spacer>
             <v-btn class="ma-2" color="primary" outlined small fab @click="isChkPrj()">
               <v-icon>mdi-chevron-right</v-icon>
@@ -59,12 +59,12 @@
             <v-card-title class="text-h5">3. ADD TASK</v-card-title>
           </v-card>
           <v-card-actions>
-            <v-btn color="primary" @click="addCalendarTask()">ADD</v-btn>
-            <v-btn text @click="SET_IS_ADD_CALENDAR(false)">CANCEL</v-btn>
-            <v-spacer></v-spacer>
             <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 1">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="SET_IS_ADD_CALENDAR(false)">CANCEL</v-btn>
+            <v-btn color="primary" @click="addCalendarTask()">ADD</v-btn>
           </v-card-actions>
           <!-- <v-btn class="ma-2" tile outlined color="primary" @click="e1 = 1">PREV</v-btn> -->
         </v-stepper-content>
