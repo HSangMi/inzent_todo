@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
+import com.inzent.todo.dto.TokenDto;
+import com.inzent.todo.dto.UpdateUserDto;
 import com.inzent.todo.dto.UserDto;
-import com.inzent.todo.vo.UserVo;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,24 @@ public class UserDao {
         }
     }
 
-    public UserVo selectUserIdPwd(UserVo user) {
+    // 로그인, 토큰 발행을 위한 user 정보 추출
+    // public UserVo selectUserIdPwd(UserVo user) {
+    // return sqlSession.selectOne("user.selectUserIdPwd", user);
+    // }
+    public TokenDto selectUserIdPwd(UserDto user) {
         return sqlSession.selectOne("user.selectUserIdPwd", user);
+    }
+
+    public UserDto selectLoginUser(UserDto user) {
+        return sqlSession.selectOne("user.selectLoginUser", user);
+    }
+
+    public UserDto selectLoginAdmin(UserDto user) {
+        return sqlSession.selectOne("user.selectLoginAdmin", user);
     }
 
     public UserDto selectById(String id) {
         return sqlSession.selectOne("user.selectById", id);
-    }
-
-    public UserDto selectLoginUser(UserVo user) {
-        return sqlSession.selectOne("user.selectLoginUser", user);
     }
 
     public String selectId(PwdDto pwdDto) {
@@ -51,5 +60,10 @@ public class UserDao {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("deptList", deptList);
         return sqlSession.selectList("user.selectUserList", map);
+    }
+
+    public UserDto updateUser(UpdateUserDto data) {
+        sqlSession.update("user.updateUserData", data);
+        return sqlSession.selectOne("user.selectById", data.getId());
     }
 }

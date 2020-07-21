@@ -25,17 +25,30 @@
 
     <v-list expand>
       <v-list-item-group v-model="activeMenu" color="defualt">
-        <v-list-item v-for="(menu, i) in menus" :key="`menu-${i + 1}`" :to="menu.to">
-          <v-list-item-icon>
-            <v-icon v-text="menu.icon"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="menu.text"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
+        <template v-if="userInfo.userType =='u'">
+          <v-list-item v-for="(menu, i) in menus1" :key="`menu-${i + 1}`" :to="menu.to">
+            <v-list-item-icon>
+              <v-icon v-text="menu.icon"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="menu.text"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        <template v-else>
+          <v-list-item v-for="(menu, i) in menus2" :key="`menu-${i + 1}`" :to="menu.to">
+            <v-list-item-icon>
+              <v-icon v-text="menu.icon"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="menu.text"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
         <div class="v-footer-item">
-          <v-list-item to="/profile">
+          <template v-if="userInfo.userType =='u'">
+          <!-- <v-list-item to="/profile"> -->
+          <v-list-item @click.prevent="mypageModal = true">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
@@ -43,7 +56,8 @@
               <v-list-item-title>MY PAGE</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click.stop="dialog = true">
+          </template>
+          <v-list-item @click.prevent="logoutModal = true">
             <v-list-item-icon>
               <v-icon>mdi-location-exit</v-icon>
             </v-list-item-icon>
@@ -54,30 +68,37 @@
         </div>
       </v-list-item-group>
     </v-list>
-    <v-dialog v-model="dialog" max-width="290">
+    <!-- 로그아웃 모달 -->
+    <v-dialog v-model="logoutModal" max-width="290">
       <v-card>
         <v-card-title></v-card-title>
         <v-card-text>로그아웃 하시겠습니까?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click.prevent="logout">확인</v-btn>
-          <v-btn color="green darken-1" text @click="dialog = false">취소</v-btn>
+          <v-btn color="green darken-1" text @click="logoutModal = false">취소</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <my-page :mypageModal="mypageModal" @close="mypageModal = false"></my-page>
+
   </v-navigation-drawer>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import MyPage from "../user/MyPage.vue"
 
 export default {
+  components: {
+    MyPage
+  },
   data: () => ({
     name: "Sidebar",
     activeMenu: undefined,
     drawer: true,
     mini: false,
-    menus: [
+    menus1: [
       {
         icon: "mdi-view-dashboard",
         text: "DASHBOARD",
@@ -104,11 +125,25 @@ export default {
         to: "/archive"
       }
     ],
-    dialog: false
+    menus2: [
+      {
+        icon: " mdi-account-multiple",
+        text: "사원 관리",
+        to: "/user_management"
+      },
+      {
+        icon: "mdi-newspaper-variant-multiple-outline",
+        text: "프로젝트 관리",
+        to: "/project_management"
+      },
+    ],
+    mypageModal: false,
+    logoutModal: false
   }),
   computed: {
     ...mapState({
       // isShowSubMenu: "isShowSubMenu"
+      userInfo: "userInfo"
     })
   },
   methods: {
@@ -127,7 +162,7 @@ export default {
     logout() {
       this.$store.commit("LOGOUT");
       this.$router.push("/login");
-      this.dialog = false;
+      this.logoutModal = false;
     }
   }
 };

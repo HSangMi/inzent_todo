@@ -3,7 +3,8 @@
    PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">
-   <select id="selectUserIdPwd" parameterType="uservo" resultType="uservo">
+   <!-- <select id="selectUserIdPwd" parameterType="uservo" resultType="uservo"> -->
+   <select id="selectUserIdPwd" parameterType="uservo" resultType="tokendto">
    <![CDATA[
       select id, user_type
       from tb_user
@@ -19,6 +20,14 @@
       and td.dept_code = tu.dept_code
    ]]>
    </select>
+
+   <select id="selectLoginAdmin" resultType="userdto">
+   <![CDATA[
+      select *
+      from tb_user
+      where id=#{id} and password=#{password}
+   ]]>
+   </select>
    
    <select id="selectById" parameterType="String" resultType="userdto">
    <![CDATA[
@@ -27,11 +36,6 @@
       where id=#{id}
       and td.dept_code = tu.dept_code
    ]]>
-   </select>
-
-   <select id="selectDeptName" parameterType="string">
-   <![CDATA[
-   ]]>]
    </select>
    
    <select id="selectId" parameterType="string" resultType="string">
@@ -67,5 +71,37 @@
          </otherwise>
       </choose>        
    </select>
+
+   <update id="updateUserData" parameterType="updateuserdto">
+      update tb_user 
+      <choose>
+         <when test="key.equals('imgCode')">
+            set img_code = #{value}
+         </when>
+         <when test="key.equals('name')">
+            set name = #{value}
+         </when>
+         <when test="key.equals('password')">
+            set password = #{value}
+         </when>
+         <when test="key.equals('birth')">
+            set birth = #{value}
+         </when>
+         <when test="key.equals('gender')">
+            set gender = #{value}
+         </when>
+         <when test="key.equals('phone')">
+            set phone = #{value}
+         </when>
+         <when test="key.equals('email')">
+            set email = #{value}
+         </when>
+         <when test="key.equals('rank')">
+            set rank = #{value}
+         </when>
+      </choose>
+      where id = #{id}
+   </update> 
+
    
 </mapper>

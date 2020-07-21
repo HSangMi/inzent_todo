@@ -43,6 +43,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 				System.out.println("!! authUser == null !!");
 				throw new AuthenticationException("접근 권한이 없습니다.");
 			}
+			System.out.println("로그인성공---" + authUser.toString());
 			request.setAttribute("user", authUser);
 		} else {
 			// response.sendRedirect(request.getContextPath() + "/login");

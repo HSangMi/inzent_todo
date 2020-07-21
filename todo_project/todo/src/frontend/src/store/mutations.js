@@ -105,14 +105,13 @@ const mutations = {
         item.managerName = JSON.parse(item.managerName);
       }
     });
-    console.log("뿌에에에에", clickDate);
     state.getClickDateList = clickDate;
   },
   SET_IS_DETAIL_SUB(state, toggle) {
     state.isDetailSub = toggle;
   },
   SET_FETCH_SUB_DETAIL(state, subList) {
-    console.log("이이잉?", subList);
+    console.log("업무 소 조회....", subList);
     subList.forEach((item) => {
       if (item.imgCode) {
         item.imgCode = JSON.parse(item.imgCode);

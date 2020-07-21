@@ -12,7 +12,7 @@
 import TodayDashBoard from "../components/dashboard/TodayDashBoard.vue";
 import WeekDashBoard from "../components/dashboard/WeekDashBoard.vue";
 import StarredDashBoard from "../components/dashboard/StarredDashBoard.vue";
-
+import { mapMutations } from "vuex"
 export default {
   data() {
     return {};
@@ -22,8 +22,12 @@ export default {
     WeekDashBoard,
     StarredDashBoard,
   },
-  created() {},
-  methods: {},
+  created() {
+    this.SET_HEADER_TITLE("DASHBOARD");
+  },
+  methods: {
+    ...mapMutations(["SET_HEADER_TITLE"]),
+  },
 };
 </script>
 

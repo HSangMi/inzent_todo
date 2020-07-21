@@ -8,6 +8,7 @@ const actions = {
     return api.auth.login(id, password).then((data) => {
       const accessToken = data.accessToken;
       const loginUser = data.loginUser;
+
       if (loginUser.gender == "f") {
         loginUser.gender = "여성";
       } else if (loginUser.gender == "m") {
@@ -16,10 +17,8 @@ const actions = {
         loginUser.gender = null;
       }
 
-      console.log(accessToken);
-      console.log(loginUser);
-      commit("LOGIN", { accessToken });
       commit("SET_USER_INFO", loginUser);
+      commit("LOGIN", { accessToken });
     });
   },
   LOGIN_BY_TOKEN({ commit }, { accessToken }) {
@@ -28,18 +27,20 @@ const actions = {
       // const accessToken = data.accessToken;
       console.log("------토큰으로 로그인-----");
       console.log(data);
-      const loginUser = data;
-      console.log(loginUser);
-      if (data.gender == "f") {
-        loginUser.gender = "여성";
-      } else if (data.gender == "m") {
-        loginUser.gender = "남성";
-      } else {
-        loginUser.gender = null;
+      if (data) {
+        const loginUser = data;
+        console.log(loginUser);
+        if (data.gender == "f") {
+          loginUser.gender = "여성";
+        } else if (data.gender == "m") {
+          loginUser.gender = "남성";
+        } else {
+          loginUser.gender = "비공개";
+        }
+        console.log(loginUser);
+        commit("SET_USER_INFO", loginUser);
       }
-      console.log(loginUser);
       commit("LOGIN", { accessToken });
-      commit("SET_USER_INFO", loginUser);
     });
   },
   PWD_CHECK(_, { id, password }) {
@@ -57,6 +58,20 @@ const actions = {
       console.log("action: FATCH_USERLIST 완료");
       console.log(data);
       commit("SET_USERLIST", data);
+    });
+  },
+  UPDATE_USER({ commit }, { id, key, value }) {
+    return api.user.update_user(id, key, value).then((data) => {
+      console.log("action: UPDATE_DATA 완료");
+      console.log(data);
+      if (data.gender == "f") {
+        data.gender = "여성";
+      } else if (data.gender == "m") {
+        data.gender = "남성";
+      } else {
+        data.gender = "비공개";
+      }
+      commit("SET_USER_INFO", data);
     });
   },
   ////////////////////////////// PROJECT////////////////////////////////

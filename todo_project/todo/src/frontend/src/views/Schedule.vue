@@ -23,7 +23,7 @@
 <script>
 import Calendar from "../components/schedule/Calendar.vue";
 import GanttChart from "../components/schedule/GanttChart.vue";
-
+import { mapMutations } from "vuex";
 export default {
   components: {
     Calendar,
@@ -33,6 +33,12 @@ export default {
     return {
       tabs: null
     };
+  },
+  created() {
+    this.SET_HEADER_TITLE("SCHEDULE");
+  },
+  methods: {
+    ...mapMutations(["SET_HEADER_TITLE"])
   }
 };
 </script>

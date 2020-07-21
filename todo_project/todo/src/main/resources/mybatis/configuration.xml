@@ -19,7 +19,9 @@
 		<typeAlias alias="taskdto" type="com.inzent.todo.dto.TaskDto"/>
 		<typeAlias alias="memberdto" type="com.inzent.todo.dto.MemberDto"/>
 		<typeAlias alias="deptdto" type="com.inzent.todo.dto.DeptDto"/>
+		<typeAlias alias="tokendto" type="com.inzent.todo.dto.TokenDto"/>
 		<typeAlias alias="userdto" type="com.inzent.todo.dto.UserDto"/>
+		<typeAlias alias="updateuserdto" type="com.inzent.todo.dto.UpdateUserDto"/>
 		<typeAlias alias="dashsuperdto" type="com.inzent.todo.dto.DashBoardSuperDto"/>
 		<typeAlias alias="dashsubdto" type="com.inzent.todo.dto.DashBoardSubDto"/>
 		<typeAlias alias="scheduledto" type="com.inzent.todo.dto.ScheduleDto"/>
