@@ -63,32 +63,36 @@ public class ScheduleService {
 
     // 해당 날짜의 업무 조회
     public List<CalDateDetailDto> getClickDateList(ClickDateDto cddto) {
-        // String existUser = scheduledao.selectExistUser(cddto.getId());
-        // String filterItem = scheduledao.selectCalFilterItem(cddto.getId());
-        // System.out.println(filterItem);
+        String existUser = scheduledao.selectExistUser(cddto.getId());
+        String filterItem = scheduledao.selectCalFilterItem(cddto.getId());
+        System.out.println(filterItem);
         // // PJ2020072109523258::orange,zzz::0
         List<CalDateDetailDto> list = new ArrayList<>();
-        // if (existUser.isEmpty() || filterItem.isEmpty() ||
-        // filterItem.equals("::::0")) { // 필터값이 없다면
-        list = scheduledao.getClickDateList(cddto); // 전체 조회
-        // } else { // 필터 값이 있다면
-        // // 1. ::기준으로 배열에 담는다 (유형분류)
-        // String[] fItems = filterItem.split("::");
+        if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
+            list = scheduledao.getClickDateList(cddto); // 전체 조회
+        } else { // 필터 값이 있다면
+            // // 1. ::기준으로 배열에 담는다 (유형분류)
+            String[] fItems = filterItem.split("::");
 
-        // // 2. 또 쪼개서 각 아이템배열에 넣는다
-        // String[] prjItem = fItems[0].split(","); // 프로젝트
-        // String[] memItem = fItems[1].split(","); // 담당자
-        // String uItem = fItems[2]; // 공개여부
+            // // 2. 또 쪼개서 각 아이템배열에 넣는다
+            String[] prjItem = fItems[0].split(","); // 프로젝트
+            String[] memItem = fItems[1].split(","); // 담당자
+            String uItem = fItems[2]; // 공개여부
 
-        // Map<String, Object> map = new HashMap<String, Object>();
-        // if (!prjItem[0].equals("")) {
-        // map.put("prjItem", prjItem);
-        // }
-        // if (!memItem[0].equals("")) {
-        // map.put("memItem", memItem);
-        // }
-        // map.put("uItem", uItem);
-        // map.put("userId", userId);
+            Map<String, Object> map = new HashMap<String, Object>();
+            if (!prjItem[0].equals("")) {
+                map.put("prjItem", prjItem);
+            }
+            if (!memItem[0].equals("")) {
+                map.put("memItem", memItem);
+            }
+            map.put("uItem", uItem);
+            map.put("clickDate", cddto.getClickDate());
+            map.put("userId", cddto.getId());
+
+            list = scheduledao.getClickDateFilterList(map);
+            System.out.println("상세필터적용" + list);
+        } // end else
         return list;
     }
 

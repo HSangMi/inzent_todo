@@ -81,6 +81,39 @@
                 select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{id}))))
     ]]>
    </select>
+   <select id="getClickDateFilterList" parameterType="map" resultType="cddetialdto">
+        select 
+            distinct 
+            ttsp.task_id pId, 
+            tp.title prjTitle, 
+            ttsp.title pTitle, 
+            ttsp.start_date pStartDate, 
+            ttsp.end_date pEndDate, 
+            ttsp.state pState, 
+            ttsp.use_public pUsePublic
+        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
+        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
+        and (#{clickDate} between ttsp.start_date and ttsp.end_date)
+        and (ttsp.task_id in (
+                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}))))
+        <if test="prjItem">
+        and 
+       <foreach open="(" close=")" collection="prjItem" item="pitem" index="index" separator="or">
+        ttsp.project_id =#{pitem}
+       </foreach>
+       </if>
+       <if test="memItem">
+       and
+       <foreach  open="(" close=")" collection="memItem" item="mitem" index="index" separator="or">
+        ttsp.task_id in (select task_id from tb_task_manager where member_no in (select member_no from tb_member where user_id=#{mitem}))
+       </foreach>
+       </if>
+       <if test='uItem == "true" or uItem =="false"'>
+        and 
+        ttsp.use_public = #{uItem}::boolean;
+       </if>
+    </select>
       <select id="getSubList" parameterType="map" resultType="cddetialdto">
     <![CDATA[
            SELECT 

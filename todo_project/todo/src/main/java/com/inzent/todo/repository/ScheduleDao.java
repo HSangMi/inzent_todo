@@ -38,8 +38,14 @@ public class ScheduleDao {
         return sqlsession.selectList("calendar.getSuperTasks", chkprjdto);
     }
 
+    // 필터 없는 업무 대 상세 조회
     public List<CalDateDetailDto> getClickDateList(ClickDateDto cddto) {
         return sqlsession.selectList("calendar.getClickDateList", cddto);
+    }
+
+    // 필터 있는 업무 대 상세 조회
+    public List<CalDateDetailDto> getClickDateFilterList(Map<String, Object> map) {
+        return sqlsession.selectList("calendar.getClickDateFilterList", map);
     }
 
     public List<CalDateDetailDto> getSubList(String superId, String userId) {
