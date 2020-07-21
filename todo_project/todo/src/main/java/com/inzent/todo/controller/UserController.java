@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
+import com.inzent.todo.dto.TokenDto;
+import com.inzent.todo.dto.UpdateUserDto;
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.repository.UserDao;
 import com.inzent.todo.security.Auth;
@@ -46,27 +48,35 @@ public class UserController {
         return "hello";
     }
 
+    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserVo user) {
+    public ResponseEntity<?> login(@RequestBody UserDto user) {
 
         String token = null;
 
         // 들어온 로그인 정보(ID, PWD)로 DB에서 조회
-
-        UserVo userToken = userService.getUserToken(user);
+        // UserVo userToken = userService.getUserToken(user);
+        TokenDto userToken = userService.getUserToken(user);
 
         Map<String, Object> map = new HashMap<String, Object>();
 
-        System.out.println(userToken);
-
-        // 존재/유효한 user가 있다면 token 생성
+        // 유저 정보가 있다면 token 생성
         if (userToken != null) {
-            token = jwtService.createLoginToken(userToken);
-            UserDto loginUser = userService.getLoginUser(user);
-
-            loginUser.setPassword(null);
+            token = jwtService.createLoginToken(userToken); // 토큰 발급
             map.put("accessToken", token);
-            map.put("loginUser", loginUser);
+            System.out.println(token);
+
+            if (userToken.getUserType().equals("u")) {
+                // 일반 유저
+                UserDto loginUser = userService.getLoginUser(user); // 유저 정보 추출
+                loginUser.setPassword(null);
+                map.put("loginUser", loginUser);
+            } else {
+                // 관리자
+                UserDto loginUser = userService.getLoginAdmin(user);
+                loginUser.setPassword(null);
+                map.put("loginUser", loginUser);
+            }
         }
 
         return token != null ? new ResponseEntity<Object>(map, HttpStatus.OK)
@@ -77,8 +87,13 @@ public class UserController {
     @PostMapping("/loginByToken")
     public UserDto login(HttpServletRequest req, @RequestBody String accessToken) {
         System.out.println("토큰이 이미 발급된 유저로그인");
+        UserVo temp = (UserVo) req.getAttribute("user");
+        System.out.println("user---" + temp);
+
         UserDto user = userService.getById(((UserVo) req.getAttribute("user")).getId());
-        user.setPassword(null);
+        if (user != null) {
+            user.setPassword(null);
+        }
         return user;
     }
 
@@ -95,6 +110,19 @@ public class UserController {
     @PostMapping("/userList")
     public List<UserDto> getUserList(@RequestBody String[] deptList) {
         return userService.getUserList(deptList);
+    }
+
+    @PostMapping("/updateUser")
+    public UserDto updateUser(@RequestBody UpdateUserDto data) {
+        if (data.getKey().equals("gender")) {
+            if (data.getValue().equals("남성"))
+                data.setValue("m");
+            else if (data.getValue().equals("여성"))
+                data.setValue("f");
+            else
+                data.setValue("");
+        }
+        return userService.updateUser(data);
     }
 
 }
