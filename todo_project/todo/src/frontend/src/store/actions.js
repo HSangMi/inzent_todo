@@ -228,7 +228,6 @@ const actions = {
   },
   FETCH_CALENDAR_CLICKDATE({ commit }, clickDate) {
     // 해당날짜의 업무 조회
-    console.log("날짜는??", clickDate);
     return sohyun.schedule
       .getClickDateList(clickDate)
       .then((result) => {
@@ -267,6 +266,9 @@ const actions = {
       .catch((err) => {
         console.log(err);
       });
+  },
+  RESET_CAL_FILTER() {
+    return sohyun.schedule.resetCalFilter();
   },
   ADD_CAL_FILTER_ITEM({ commit }, calData) {
     return sohyun.schedule

@@ -3,11 +3,16 @@
     <v-col cols="2">
       <v-card outlined max-height="838" class="overflow-y-auto">
         <div class="mx-2">
-          <v-subheader>PROJECT</v-subheader>
+          <v-subheader class="blue-grey lighten-4">PROJECT</v-subheader>
           <v-list class="project-filter">
             <v-list-item v-for="item in projectFilter" :key="item.prjId">
               <v-list-item-content class="px-0">
-                <v-checkbox class="px-5" v-model="selection" :value="item.prjId">
+                <v-checkbox
+                  class="px-3"
+                  v-model="prjSelection"
+                  :value="item.prjId"
+                  @change="chkFilter()"
+                >
                   <template v-slot:label>
                     <span class="font-filter">{{item.prjTitle}}</span>
                   </template>
@@ -16,11 +21,16 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader>MANAGER</v-subheader>
+          <v-subheader class="blue-grey lighten-4">MANAGER</v-subheader>
           <v-list class="project-filter">
             <v-list-item v-for="item in managerFilter" :key="item.userId">
               <v-list-item-content class="px-0">
-                <v-checkbox class="px-5" v-model="selection" :value="item.userId">
+                <v-checkbox
+                  class="px-5"
+                  v-model="memSelection"
+                  :value="item.userId"
+                  @change="chkFilter()"
+                >
                   <template v-slot:label>
                     <span class="font-filter">{{item.userName}}</span>
                   </template>
@@ -29,20 +39,27 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader>USE_PUBLIC</v-subheader>
+          <v-subheader class="blue-grey lighten-4">USE_PUBLIC</v-subheader>
           <v-list class="project-filter">
             <v-list-item>
               <v-list-item-content class="px-0">
-                <v-checkbox class="px-5" v-model="selection" :value="this.usePublic[0]">
-                  <template v-slot:label>
-                    <span class="font-filter">public</span>
-                  </template>
-                </v-checkbox>
-                <v-checkbox class="px-5" v-model="selection" :value="this.usePublic[1]">
-                  <template v-slot:label>
-                    <span class="font-filter">private</span>
-                  </template>
-                </v-checkbox>
+                <v-radio-group v-model="publicSelection" @change="chkFilter()">
+                  <v-radio class="px-5 pb-2" :value="0">
+                    <template v-slot:label>
+                      <span class="font-filter">전체</span>
+                    </template>
+                  </v-radio>
+                  <v-radio class="px-5 pb-2" :value="true">
+                    <template v-slot:label>
+                      <span class="font-filter">공개</span>
+                    </template>
+                  </v-radio>
+                  <v-radio class="px-5 pb-2" :value="false">
+                    <template v-slot:label>
+                      <span class="font-filter">비공개</span>
+                    </template>
+                  </v-radio>
+                </v-radio-group>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -229,21 +246,24 @@ export default {
     //////////////// Filter ///////////////////
     let projectFilter = [];
     let managerFilter = [];
-    let usePublic = [true, false];
-    let selection = [];
+    let prjSelection = [];
+    let memSelection = [];
+    let publicSelection = 0;
     //////////////// Filter END ///////////////////
     return {
       tasks: tasks,
       options: options,
       projectFilter: projectFilter,
       managerFilter: managerFilter,
-      usePublic: usePublic,
-      selection: selection
+      prjSelection: prjSelection,
+      memSelection: memSelection,
+      publicSelection: publicSelection
     };
   },
   created() {
     // store -> actions
     this.fetchFilter();
+    this.fetchChkItem();
   },
   computed: {
     // 사용할 mapstate 불러옴
@@ -275,6 +295,31 @@ export default {
         }
         for (j in memObj) {
           this.managerFilter.push(memObj[j]);
+        }
+      });
+    },
+    fetchChkItem() {
+      // 저장된 필터 값
+      this.FETCH_CHK_FILTER_ITEM().then(() => {
+        console.log("확이이이인", this.getChkFilterItem);
+        var filterArr = this.getChkFilterItem.split("::");
+        var prjFilter = filterArr[0];
+        var prjFilterArr = prjFilter.split(",");
+
+        var memFilter = filterArr[1];
+        var memFilterArr = memFilter.split(",");
+
+        var pulibcFilter = filterArr[2];
+        var publicFilterArr = pulibcFilter.split(",");
+
+        this.prjSelection = prjFilterArr;
+        this.memSelection = memFilterArr;
+        if (publicFilterArr[0] == "true") {
+          this.publicSelection = true;
+        } else if (publicFilterArr[0] == "false") {
+          this.publicSelection = false;
+        } else {
+          this.publicSelection = 0;
         }
       });
     }

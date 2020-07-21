@@ -28,8 +28,8 @@ public class ScheduleDao {
     }
 
     // 필터 있는 조회
-    public List<ScheduleDto> getCalendarFilterList(String userId) {
-        List<ScheduleDto> prjInfo = sqlsession.selectList("calendar.getCalendarFilterInfo", userId);
+    public List<ScheduleDto> getCalendarFilterList(Map<String, Object> map) {
+        List<ScheduleDto> prjInfo = sqlsession.selectList("calendar.getCalendarFilterInfo", map);
         return prjInfo;
     }
 
@@ -77,6 +77,10 @@ public class ScheduleDao {
     // 로그인한 유저가 캘린더 필터를 넣었는지 확인?
     public String selectExistUser(String userId) {
         return sqlsession.selectOne("calendar.selectExistUser", userId);
+    }
+
+    public int resetCalFilter(String userId) {
+        return sqlsession.update("calendar.deleteCalSetting", userId);
     }
 
 }

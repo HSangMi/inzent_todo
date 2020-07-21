@@ -121,6 +121,7 @@ const mutations = {
     console.log(subList);
     state.getsubList = subList;
     state.getSuperTitle = subList[0].ptitle;
+    state.getProjectTitle = subList[0].prjTitle;
   },
   SET_CALENDAR_LIST(state, calendarList) {
     state.calendarList = calendarList;

@@ -32,6 +32,7 @@ const state = {
   getClickDateList: [],
   getsubList: [],
   getSuperTitle: "",
+  getProjectTitle: "",
   calendarList: [],
   getSuperTasks: [],
   getFilter: [],

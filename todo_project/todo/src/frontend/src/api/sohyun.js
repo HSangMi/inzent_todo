@@ -81,6 +81,9 @@ export const schedule = {
   getChkFilterItem() {
     return request("get", "/schedule/chkFilterItem");
   },
+  resetCalFilter() {
+    return request("post", "/schedule/resetCalFilter");
+  },
   addCalFilter(calData) {
     console.log(calData);
     return request("post", "/schedule/addcalitem", calData);

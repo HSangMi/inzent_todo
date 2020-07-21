@@ -34,7 +34,7 @@ public class ScheduleController {
     public List<ScheduleDto> getCalendarList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-
+        
         List<ScheduleDto> list = scheduleService.getCalendarList(userId);
         return list;
     }
@@ -123,9 +123,19 @@ public class ScheduleController {
             }
             sbMem.append(mem);
         } // end for
-        String calItem = ":P=" + sbPrj.toString() + ":M=" + sbMem.toString() + ":U=" + cfidto.getUseData();
+        String calItem = sbPrj.toString() + "::" + sbMem.toString() + "::" + cfidto.getUseData();
         String calFilter = scheduleService.addCalFilterItem(calItem, userId);
         System.out.println("결과아아ㅏ아아아" + calFilter);
+    }
+
+    @Auth
+    @PostMapping("/resetCalFilter")
+    public void resetCalFilter(HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        scheduleService.resetCalFilter(userId);
+        System.out.println("초기화 성공");
     }
 
 }

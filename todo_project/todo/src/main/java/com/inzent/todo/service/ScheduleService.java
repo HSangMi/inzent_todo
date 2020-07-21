@@ -1,7 +1,9 @@
 package com.inzent.todo.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.inzent.todo.dto.CalDateDetailDto;
 import com.inzent.todo.dto.ChkProjectDto;
@@ -20,17 +22,31 @@ public class ScheduleService {
     @Autowired
     private ScheduleDao scheduledao;
 
-    // 캘린더 전체 조회
+    // 캘린더 전체 조회 (처음 조회)
     public List<ScheduleDto> getCalendarList(String userId) {
         String existUser = scheduledao.selectExistUser(userId);
         String filterItem = scheduledao.selectCalFilterItem(userId);
-        System.out.println("필터가 잘 왓냐능,,,," + filterItem);
+        // PJ2020072109523258::orange,zzz::0
         List<ScheduleDto> list = new ArrayList<>();
-        // if (existUser == null || filterItem == "") { // 유저아이디가 없거나 filterItem이 ""라면
-        list = scheduledao.getCalendarList(userId); // 전체 조회
-        // } else {
-        // list = scheduledao.getCalendarFilterList(userId); // 필터적용 조회
-        // }
+        if (existUser.isEmpty() || filterItem.isEmpty()) { // 필터값이 없다면
+            list = scheduledao.getCalendarList(userId); // 전체 조회
+        } else { // 필터 값이 있다면
+            // 1. ::기준으로 배열에 담는다 (유형분류)
+            String[] fItems = filterItem.split("::");
+
+            // 2. 또 쪼개서 각 아이템배열에 넣는다
+            String[] prjItem = fItems[0].split(","); // 프로젝트
+            String[] memItem = fItems[1].split(","); // 담당자
+            String uItem = fItems[2]; // 공개여부
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("prjItem", prjItem);
+            map.put("memItem", memItem);
+            map.put("uItem", uItem);
+            map.put("userId", userId);
+
+            list = scheduledao.getCalendarFilterList(map); // 필터적용 조회
+        } // end else
         return list;
     }
 
@@ -78,8 +94,12 @@ public class ScheduleService {
         return calFilter;
     }
 
-    // public String chkCalFilterItem(String userId){
-    // int cnt=scheduledao.addCalFilterItem(calItem, userId)
-    // }
+    // 필터 초기화
+    public void resetCalFilter(String userId) {
+        int cnt = scheduledao.resetCalFilter(userId);
+        if (cnt == 1) {
+            System.out.println("삭제 성공");
+        }
+    }
 
 }

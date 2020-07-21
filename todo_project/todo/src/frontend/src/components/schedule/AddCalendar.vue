@@ -90,7 +90,6 @@ export default {
     this.FETCH_CALENDAR_LIST().then(() => {
       this.selectProjects = this.calendarList;
     });
-    console.log("gggg", this.selectProjects);
   },
   computed: {
     ...mapState({

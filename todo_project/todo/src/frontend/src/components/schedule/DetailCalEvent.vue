@@ -12,6 +12,8 @@
           <v-icon>mdi-clipboard-text-outline</v-icon>
           {{getSuperTitle}}
         </span>
+        <v-spacer></v-spacer>
+        <span>*프로젝트 : {{getProjectTitle}}</span>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -128,7 +130,8 @@ export default {
   computed: {
     ...mapState({
       getsubList: "getsubList",
-      getSuperTitle: "getSuperTitle"
+      getSuperTitle: "getSuperTitle",
+      getProjectTitle: "getProjectTitle"
     }),
     ...mapState(["isDetailSub"])
   },

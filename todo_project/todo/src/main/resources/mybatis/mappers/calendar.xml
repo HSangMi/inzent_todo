@@ -22,23 +22,34 @@
                     select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})))
     ]]>
     </select>
-    <select id="getCalendarFilterInfo" parameterType="String" resultType="scheduledto">
-    <![CDATA[
+    <select id="getCalendarFilterInfo" parameterType="map" resultType="scheduledto">
     select
-        ttsp.project_id, 
-        ttsp.task_id id, 
-        ttsp.title title, 
-        ttsp.start_date startDate, 
-        ttsp.end_date endDate, 
-        ttsp.reg_date regDate, 
-        ttsp.state state, 
-        ttsp.use_public usePublic
-    from tb_task_super ttsp
-    where ttsp.project_id ='PJ2020070803361360'
-    and ttsp.task_id in (
-                select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
-                select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})));
-    ]]>
+            ttsp.project_id prjId, 
+            tp.title prjTitle,
+            ttsp.task_id id, 
+            ttsp.title title, 
+            ttsp.start_date startDate, 
+            ttsp.end_date endDate, 
+            ttsp.reg_date regDate, 
+            ttsp.state state, 
+            ttsp.use_public usePublic
+        from tb_task_super ttsp, tb_project tp
+        where (ttsp.project_id = tp.id) 
+        and ttsp.task_id in (
+                    select ttsp.task_id from tb_task_super ttsp where ttsp.project_id in (
+                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId})))
+        and 
+       <foreach collection="prjItem" item="item" index="index" separator="or">
+        ttsp.project_id =#{item}
+       </foreach>
+       and
+       <foreach collection="memItem" item="item" index="index" separator="or">
+        ttsp.task_id in (select task_id from tb_task_manager where member_no in (select member_no from tb_member where user_id=#{item}))
+       </foreach>
+       <if test='uItem == "true" or uItem =="false"'>
+        and 
+        ttsp.use_public = #{uItem}::boolean;
+       </if>
     </select>
     <select id="getSuperTasks" parameterType="chkprjdto" resultType="chkstdto">
     <![CDATA[
@@ -171,4 +182,11 @@
         where user_id = #{userId}
    ]]>
    </select>
+   <update id="deleteCalSetting" parameterType="String">
+    <![CDATA[
+       update tb_filter 
+       set calendar_setting = ''
+       where user_id=#{userId};
+    ]]>
+   </update>
 </mapper>
