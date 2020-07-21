@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card outlined max-height="800" class="overflow-y-auto mx-2">
+      <v-card outlined max-height="800" class="overflow-y-auto">
         <div class="mx-2">
           <v-subheader class="blue-grey lighten-4">PROJECT</v-subheader>
           <v-list class="project-filter">
@@ -290,14 +290,14 @@ export default {
         }
       });
     },
-    chkFilter() {
+    async chkFilter() {
       const calData = {
         prjData: this.prjSelection,
         memData: this.memSelection,
         useData: this.publicSelection
       };
 
-      this.ADD_CAL_FILTER_ITEM(calData);
+      await this.ADD_CAL_FILTER_ITEM(calData);
       this.fetchCalendarInfo();
     },
     resetFilter() {
@@ -307,18 +307,18 @@ export default {
       this.memSelection = [];
       this.publicSelection = 0;
     },
-    fetchCalendarInfo() {
-      this.FETCH_CALENDAR_LIST().then(() => {
+    async fetchCalendarInfo() {
+      await this.FETCH_CALENDAR_LIST().then(() => {
         const events = [];
         var calObj = {};
         var calArr = [];
-        for (var j in this.calendarList) {
-          calObj[this.calendarList[j]["id"]] = this.calendarList[j];
+        for (var i in this.calendarList) {
+          calObj[this.calendarList[i]["id"]] = this.calendarList[i];
         }
-        for (j in calObj) {
-          calArr.push(calObj[j]);
+        for (i in calObj) {
+          calArr.push(calObj[i]);
         }
-        for (var i = 0; i < calArr.length; i++) {
+        for (i = 0; i < calArr.length; i++) {
           const taskName = calArr[i].title;
 
           let startDate = null;
@@ -365,7 +365,6 @@ export default {
 <style scoped>
 .border {
   border: 1px solid #ccd1d1;
-  margin-right: 30px;
   /* height: 850px; */
 }
 .project-filter .v-input--selection-controls {
