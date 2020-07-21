@@ -4,17 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @Setter
+@Getter
 @ToString
-public class ScheduleDto {
-    private String prjId;
-    private String prjTitle;
-    private String id;
-    private String title;
+public class DashBoardSubDto {
+    private String cId;
+    private String cTitle;
     private String startDate;
     private String endDate;
-    private String regDate;
     private String state;
     private boolean usePublic;
+    private String imgCode;
+    private String managerName;
+    private int managerCount;
 }

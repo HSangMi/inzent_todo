@@ -1,24 +1,84 @@
 <template>
   <v-row>
-    <v-col cols="12" md="2">
-      <v-card>
-        <v-treeview selectable :items="items"></v-treeview>
+    <v-col cols="2">
+      <v-card outlined max-height="800" class="overflow-y-auto">
+        <div class="mx-2">
+          <v-subheader class="blue-grey lighten-4">PROJECT</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item v-for="item in projectFilter" :key="item.prjId">
+              <v-list-item-content class="px-0">
+                <v-checkbox
+                  class="px-3"
+                  v-model="prjSelection"
+                  :value="item.prjId"
+                  @change="chkFilter()"
+                >
+                  <template v-slot:label>
+                    <span class="font-filter">{{item.prjTitle}}</span>
+                  </template>
+                </v-checkbox>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-subheader class="blue-grey lighten-4">MANAGER</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item v-for="item in managerFilter" :key="item.userId">
+              <v-list-item-content class="px-0">
+                <v-checkbox
+                  class="px-5"
+                  v-model="memSelection"
+                  :value="item.userId"
+                  @change="chkFilter()"
+                >
+                  <template v-slot:label>
+                    <span class="font-filter">{{item.userName}}</span>
+                  </template>
+                </v-checkbox>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-subheader class="blue-grey lighten-4">USE_PUBLIC</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item>
+              <v-list-item-content class="px-0">
+                <v-radio-group v-model="publicSelection" @change="chkFilter()">
+                  <v-radio class="px-5 pb-2" :value="0">
+                    <template v-slot:label>
+                      <span class="font-filter">전체</span>
+                    </template>
+                  </v-radio>
+                  <v-radio class="px-5 pb-2" :value="true">
+                    <template v-slot:label>
+                      <span class="font-filter">공개</span>
+                    </template>
+                  </v-radio>
+                  <v-radio class="px-5 pb-2" :value="false">
+                    <template v-slot:label>
+                      <span class="font-filter">비공개</span>
+                    </template>
+                  </v-radio>
+                </v-radio-group>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+        </div>
       </v-card>
+      <div class="text-xs-center ma-2">
+        <v-btn class="mx-1 my-2" color="blue-grey" block small dark @click="resetFilter()">RESET</v-btn>
+      </div>
+      <!-- 필터 저장 초기화 -->
     </v-col>
-    <v-col cols="12" md="10">
-      <v-card style="width:95%; height:100%; border:1px solid #CCD1D1">
+    <v-col cols="10">
+      <v-card class="border" outlined>
         <v-row class="fill-height">
           <v-col>
             <v-sheet height="64">
               <v-toolbar flat color="white">
                 <!-- 오늘날짜이동 -->
-                <v-btn
-                  outlined
-                  class="mr-4"
-                  color="grey darken-2"
-                  @click="setToday"
-                  >Today</v-btn
-                >
+                <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">Today</v-btn>
                 <!-- < 이전 버튼 -->
                 <v-btn fab text small color="grey darken-2" @click="prev">
                   <v-icon small>mdi-chevron-left</v-icon>
@@ -28,9 +88,11 @@
                   <v-icon small>mdi-chevron-right</v-icon>
                 </v-btn>
                 <!-- 몇월인지 타이틀 -->
-                <v-toolbar-title v-if="$refs.calendar">{{
+                <v-toolbar-title v-if="$refs.calendar">
+                  {{
                   $refs.calendar.title
-                }}</v-toolbar-title>
+                  }}
+                </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <!-- 업무추가버튼 -->
                 <v-btn
@@ -47,7 +109,7 @@
               </v-toolbar>
             </v-sheet>
             <!-- 달력 시작 -->
-            <v-sheet height="680">
+            <v-sheet height="750">
               <v-calendar
                 ref="calendar"
                 v-model="focus"
@@ -55,14 +117,17 @@
                 :events="events"
                 :event-color="getEventColor"
                 :type="type"
-                @click:more="showEvent"
-                @click:date="showEvent"
+                @click:event="showEvent"
+                @click:date="showDate"
                 @change="updateRange"
               ></v-calendar>
               <!-- 달력 끝 -->
               <!-- 상세모달 창 시작 -->
               <detail-calendar />
               <!-- 상세모달 창 끝 -->
+              <!-- 업무소 모달 시작 -->
+              <detail-cal-event />
+              <!-- 업무소 모달 끝 -->
               <!-- 일정추가 모달 시작 -->
               <add-calendar />
               <!-- 일정추가 모달 끝 -->
@@ -78,21 +143,15 @@
 import { mapState, mapMutations, mapActions } from "vuex";
 import AddCalendar from "./AddCalendar.vue";
 import DetailCalendar from "./DetailCalendar.vue";
+import DetailCalEvent from "./DetailCalEvent.vue";
 
 export default {
   components: {
     AddCalendar,
     DetailCalendar,
+    DetailCalEvent
   },
   data: () => ({
-    selected: [2],
-    //////////// 업무 등록 ////////////
-    // e1: 1,
-    // isOpenCalendar: false,
-    // selectProjects: [], // 업무추가에서 선택할 프로젝트 아이템
-    // selectTasks: [], // 업무추가에서 선택할 업무대 아이템
-    // dialog: false,
-    //////////////////
     focus: "",
     type: "month",
     selectedEvent: {},
@@ -100,83 +159,50 @@ export default {
     selectedOpen: false,
     events: [],
     colors: ["#BFC9CA", "#5DADE2", "#82E0AA", "#F7DC6F", "#F1948A"],
-    //////////////// Filter ///////////////////
-    items: [
-      {
-        id: 1,
-        name: "프로젝트",
-        children: [
-          { id: 2, name: "Calendar : app" },
-          { id: 3, name: "Chrome : app" },
-          { id: 4, name: "Webstorm : app" },
-        ],
-      },
-      {
-        id: 5,
-        name: "담당자",
-        children: [
-          {
-            id: 6,
-            name: "vuetify :",
-            children: [
-              {
-                id: 7,
-                name: "src :",
-                children: [
-                  { id: 8, name: "index : ts" },
-                  { id: 9, name: "bootstrap : ts" },
-                ],
-              },
-            ],
-          },
-          {
-            id: 10,
-            name: "material2 :",
-            children: [
-              {
-                id: 11,
-                name: "src :",
-                children: [
-                  { id: 12, name: "v-btn : ts" },
-                  { id: 13, name: "v-card : ts" },
-                  { id: 14, name: "v-window : ts" },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: 15,
-        name: "공개여부",
-        children: [
-          { id: 16, name: "공개" },
-          { id: 17, name: "개인용" },
-        ],
-      },
-    ],
+    //////////////// Filt4er ///////////////////
+    projectFilter: [],
+    managerFilter: [],
+    prjSelection: [],
+    memSelection: [],
+    publicSelection: 0
     //////////////// Filter END ///////////////////
   }),
   created() {
     // store -> actions
     this.fetchCalendarInfo();
+    this.fetchFilter();
+    this.fetchChkItem();
   },
   computed: {
     // 사용할 mapstate 불러옴
     ...mapState({
       calendarList: "calendarList",
       getClickDateList: "getClickDateList",
-    }),
+      getFilter: "getFilter",
+      getChkFilterItem: "getChkFilterItem",
+      calFilterItem: "calFilterItem"
+    })
     // ...mapState(["clickDate"])
   },
   mounted() {
     this.$refs.calendar.checkChange();
   },
   methods: {
-    ...mapMutations(["SET_IS_ADD_CALENDAR"]),
-    ...mapMutations(["SET_IS_DETAIL_CALENDAR"]),
-    ...mapMutations(["IS_CLICK_DATE"]),
-    ...mapActions(["FETCH_CALENDAR_LIST", "FETCH_CALENDAR_CLICKDATE"]),
+    ...mapMutations([
+      "SET_IS_ADD_CALENDAR",
+      "SET_IS_DETAIL_CALENDAR",
+      "SET_IS_DETAIL_SUB",
+      "IS_CLICK_DATE"
+    ]),
+    ...mapActions([
+      "FETCH_CALENDAR_LIST",
+      "FETCH_CALENDAR_CLICKDATE",
+      "FETCH_CALENDAR_EVENT",
+      "FETCH_FILTER",
+      "FETCH_CHK_FILTER_ITEM",
+      "RESET_CAL_FILTER",
+      "ADD_CAL_FILTER_ITEM"
+    ]),
     // 사용할 mapactions 등록
 
     getEventColor(event) {
@@ -194,47 +220,122 @@ export default {
       // 다음 달 이동
       this.$refs.calendar.next();
     },
-    showEvent({ date }) {
+    showDate({ date }) {
       // 모달창 이벤트
       this.focus = date; // 들어온 해당 날짜
-      console.log("날짜날짜", this.focus);
       const clickDate = {
-        clickDate: this.focus,
+        clickDate: this.focus
       };
       this.FETCH_CALENDAR_CLICKDATE(clickDate).then(() => {
         this.SET_IS_DETAIL_CALENDAR(true);
-        console.log("result완료~~~~~~~~~~");
       });
       // this.IS_CLICK_DATE(this.focus);
+    },
+    showEvent({ event }) {
+      // 해당 이벤트
+      const superId = event.id;
+      console.log(superId);
+      this.FETCH_CALENDAR_EVENT(superId);
+      this.SET_IS_DETAIL_SUB(true);
     },
     updateRange() {
       this.fetchCalendarInfo();
     },
+    fetchFilter() {
+      // 필터에 나올 프로젝트명이랑 담당자등을 조회
+      this.FETCH_FILTER().then(() => {
+        let list = this.getFilter;
+
+        /// 프로젝트 id 중복 제거
+        var prjObj = {};
+        for (var i in list) {
+          prjObj[list[i]["prjId"]] = list[i];
+        }
+
+        for (i in prjObj) {
+          this.projectFilter.push(prjObj[i]);
+        }
+
+        /// 담당자 중복 제거
+        var memObj = {};
+        for (var j in list) {
+          memObj[list[j]["userId"]] = list[j];
+        }
+        for (j in memObj) {
+          this.managerFilter.push(memObj[j]);
+        }
+      });
+    },
+    fetchChkItem() {
+      // 저장된 필터 값
+      this.FETCH_CHK_FILTER_ITEM().then(() => {
+        var filterArr = this.getChkFilterItem.split("::");
+        var prjFilter = filterArr[0];
+        var prjFilterArr = prjFilter.split(",");
+
+        var memFilter = filterArr[1];
+        var memFilterArr = memFilter.split(",");
+
+        var pulibcFilter = filterArr[2];
+        var publicFilterArr = pulibcFilter.split(",");
+
+        this.prjSelection = prjFilterArr;
+        this.memSelection = memFilterArr;
+        if (publicFilterArr[0] == "true") {
+          this.publicSelection = true;
+        } else if (publicFilterArr[0] == "false") {
+          this.publicSelection = false;
+        } else {
+          this.publicSelection = 0;
+        }
+      });
+    },
+    chkFilter() {
+      const calData = {
+        prjData: this.prjSelection,
+        memData: this.memSelection,
+        useData: this.publicSelection
+      };
+
+      this.ADD_CAL_FILTER_ITEM(calData);
+      this.fetchCalendarInfo();
+    },
+    resetFilter() {
+      this.RESET_CAL_FILTER();
+      this.fetchCalendarInfo();
+      this.prjSelection = [];
+      this.memSelection = [];
+      this.publicSelection = 0;
+    },
     fetchCalendarInfo() {
       this.FETCH_CALENDAR_LIST().then(() => {
         const events = [];
-        console.log("???????", this.calendarList);
-        for (var i = 0; i < this.calendarList.length; i++) {
-          const taskName =
-            this.calendarList[i].ctitle +
-            " (" +
-            this.calendarList[i].ptitle +
-            ")";
-          const cStartDate = new Date(this.calendarList[i].cstartDate);
-          const cEndDate = new Date(this.calendarList[i].cendDate);
-          const pStartDate = new Date(this.calendarList[i].pstartDate);
-          const pEndDate = new Date(this.calendarList[i].pendDate);
+        var calObj = {};
+        var calArr = [];
+        for (var j in this.calendarList) {
+          calObj[this.calendarList[j]["id"]] = this.calendarList[j];
+        }
+        for (j in calObj) {
+          calArr.push(calObj[j]);
+        }
+        for (var i = 0; i < calArr.length; i++) {
+          const taskName = calArr[i].title;
+
+          let startDate = null;
+          let endDate = null;
+          if (calArr[i].startDate == "" || calArr[i].endDate == "") {
+            startDate = new Date(calArr[i].regDate);
+            endDate = new Date(calArr[i].regDate);
+          } else {
+            startDate = new Date(calArr[i].startDate);
+            endDate = new Date(calArr[i].endDate);
+          }
           events.push({
+            id: calArr[i].id,
             name: taskName, // 타이틀
-            start: cStartDate, // 시작일
-            end: cEndDate, // 마감일
-            color: this.colors[this.colorState(this.calendarList[i].cstate)], // 색상
-          });
-          events.push({
-            name: this.calendarList[i].ptitle + "<v-icon>mdi-plus</v-icon>", // 타이틀
-            start: pStartDate, // 시작일
-            end: pEndDate, // 마감일
-            color: this.colors[this.colorState(this.calendarList[i].pstate)], // 색상
+            start: startDate, // 시작일
+            end: endDate, // 마감일
+            color: this.colors[this.colorState(calArr[i].state)] // 색상
           });
         } // end for
         console.log(this.selectProjects);
@@ -256,9 +357,23 @@ export default {
         case "E":
           return 4;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+.border {
+  border: 1px solid #ccd1d1;
+  /* height: 850px; */
+}
+.project-filter .v-input--selection-controls {
+  margin-top: 0px;
+}
+.project-filter .v-list-item__content {
+  padding: 0px;
+}
+.font-filter {
+  font-size: 13px;
+}
+</style>

@@ -1,12 +1,77 @@
 <template>
   <v-row>
-    <v-col cols="12" md="2">
-      <v-card>
-        <v-treeview selectable :items="filter"></v-treeview>
+    <v-col cols="2">
+      <v-card outlined max-height="838" class="overflow-y-auto">
+        <div class="mx-2">
+          <v-subheader class="blue-grey lighten-4">PROJECT</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item v-for="item in projectFilter" :key="item.prjId">
+              <v-list-item-content class="px-0">
+                <v-checkbox
+                  class="px-3"
+                  v-model="prjSelection"
+                  :value="item.prjId"
+                  @change="chkFilter()"
+                >
+                  <template v-slot:label>
+                    <span class="font-filter">{{item.prjTitle}}</span>
+                  </template>
+                </v-checkbox>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-subheader class="blue-grey lighten-4">MANAGER</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item v-for="item in managerFilter" :key="item.userId">
+              <v-list-item-content class="px-0">
+                <v-checkbox
+                  class="px-5"
+                  v-model="memSelection"
+                  :value="item.userId"
+                  @change="chkFilter()"
+                >
+                  <template v-slot:label>
+                    <span class="font-filter">{{item.userName}}</span>
+                  </template>
+                </v-checkbox>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-subheader class="blue-grey lighten-4">USE_PUBLIC</v-subheader>
+          <v-list class="project-filter">
+            <v-list-item>
+              <v-list-item-content class="px-0">
+                <v-radio-group v-model="publicSelection" @change="chkFilter()">
+                  <v-radio class="px-5 pb-2" :value="0">
+                    <template v-slot:label>
+                      <span class="font-filter">전체</span>
+                    </template>
+                  </v-radio>
+                  <v-radio class="px-5 pb-2" :value="true">
+                    <template v-slot:label>
+                      <span class="font-filter">공개</span>
+                    </template>
+                  </v-radio>
+                  <v-radio class="px-5 pb-2" :value="false">
+                    <template v-slot:label>
+                      <span class="font-filter">비공개</span>
+                    </template>
+                  </v-radio>
+                </v-radio-group>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+        </div>
+        <div class="text-xs-center px-3">
+          <v-btn class="mb-3 mx-0" color="blue-grey" block small dark>RESET</v-btn>
+        </div>
       </v-card>
     </v-col>
-    <v-col cols="12" md="10">
-      <div style="width:98%; height:700px; border:1px solid #CCD1D1">
+    <v-col cols="10">
+      <div style="width:98%; height:700px;">
         <gantt-elastic :tasks="tasks" :options="options"></gantt-elastic>
       </div>
     </v-col>
@@ -14,7 +79,7 @@
 </template>
 
 <script>
-// import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import GanttElastic from "gantt-elastic";
 
 export default {
@@ -42,8 +107,7 @@ export default {
       {
         id: 1,
         label: "Make some noise",
-        user:
-          '<a href="https://www.google.com/search?q=John+Doe" target="_blank" style="color:#0077c0;">John Doe</a>',
+        user: "user1",
         start: getDate(-24 * 5),
         duration: 15 * 24 * 60 * 60 * 1000,
         progress: 85,
@@ -53,8 +117,7 @@ export default {
       {
         id: 2,
         label: "With great power comes great responsibility",
-        user:
-          '<a href="https://www.google.com/search?q=Peter+Parker" target="_blank" style="color:#0077c0;">Peter Parker</a>',
+        user: "user2",
         parentId: 1,
         start: getDate(-24 * 4),
         duration: 4 * 24 * 60 * 60 * 1000,
@@ -78,8 +141,7 @@ export default {
       {
         id: 4,
         label: "Put that toy AWAY!",
-        user:
-          '<a href="https://www.google.com/search?q=Clark+Kent" target="_blank" style="color:#0077c0;">Clark Kent</a>',
+        user: "user3",
         start: getDate(-24 * 2),
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
@@ -89,8 +151,7 @@ export default {
       {
         id: 4,
         label: "Put that toy AWAY!",
-        user:
-          '<a href="https://www.google.com/search?q=Clark+Kent" target="_blank" style="color:#0077c0;">Clark Kent</a>',
+        user: "user4",
         start: getDate(-24 * 2),
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
@@ -100,8 +161,7 @@ export default {
       {
         id: 4,
         label: "Put that toy AWAY!",
-        user:
-          '<a href="https://www.google.com/search?q=Clark+Kent" target="_blank" style="color:#0077c0;">Clark Kent</a>',
+        user: "user5",
         start: getDate(-24 * 2),
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
@@ -184,67 +244,101 @@ export default {
       }
     };
     //////////////// Filter ///////////////////
-    let filter = [
-      {
-        id: 1,
-        name: "프로젝트",
-        children: [
-          { id: 2, name: "Calendar : app" },
-          { id: 3, name: "Chrome : app" },
-          { id: 4, name: "Webstorm : app" }
-        ]
-      },
-      {
-        id: 5,
-        name: "담당자",
-        children: [
-          {
-            id: 6,
-            name: "vuetify :",
-            children: [
-              {
-                id: 7,
-                name: "src :",
-                children: [
-                  { id: 8, name: "index : ts" },
-                  { id: 9, name: "bootstrap : ts" }
-                ]
-              }
-            ]
-          },
-          {
-            id: 10,
-            name: "material2 :",
-            children: [
-              {
-                id: 11,
-                name: "src :",
-                children: [
-                  { id: 12, name: "v-btn : ts" },
-                  { id: 13, name: "v-card : ts" },
-                  { id: 14, name: "v-window : ts" }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 15,
-        name: "공개여부",
-        children: [
-          { id: 16, name: "공개" },
-          { id: 17, name: "개인용" }
-        ]
-      }
-    ];
+    let projectFilter = [];
+    let managerFilter = [];
+    let prjSelection = [];
+    let memSelection = [];
+    let publicSelection = 0;
+    //////////////// Filter END ///////////////////
     return {
       tasks: tasks,
       options: options,
-      filter: filter
+      projectFilter: projectFilter,
+      managerFilter: managerFilter,
+      prjSelection: prjSelection,
+      memSelection: memSelection,
+      publicSelection: publicSelection
     };
+  },
+  created() {
+    // store -> actions
+    this.fetchFilter();
+    this.fetchChkItem();
+  },
+  computed: {
+    // 사용할 mapstate 불러옴
+    ...mapState({
+      getFilter: "getFilter"
+    })
+  },
+  methods: {
+    ...mapActions(["FETCH_FILTER"]),
+
+    fetchFilter() {
+      this.FETCH_FILTER().then(() => {
+        let list = this.getFilter;
+
+        /// 프로젝트 id 중복 제거
+        var prjObj = {};
+        for (var i in list) {
+          prjObj[list[i]["prjId"]] = list[i];
+        }
+
+        for (i in prjObj) {
+          this.projectFilter.push(prjObj[i]);
+        }
+
+        /// 담당자 중복 제거
+        var memObj = {};
+        for (var j in list) {
+          memObj[list[j]["userId"]] = list[j];
+        }
+        for (j in memObj) {
+          this.managerFilter.push(memObj[j]);
+        }
+      });
+    },
+    fetchChkItem() {
+      // 저장된 필터 값
+      this.FETCH_CHK_FILTER_ITEM().then(() => {
+        console.log("확이이이인", this.getChkFilterItem);
+        var filterArr = this.getChkFilterItem.split("::");
+        var prjFilter = filterArr[0];
+        var prjFilterArr = prjFilter.split(",");
+
+        var memFilter = filterArr[1];
+        var memFilterArr = memFilter.split(",");
+
+        var pulibcFilter = filterArr[2];
+        var publicFilterArr = pulibcFilter.split(",");
+
+        this.prjSelection = prjFilterArr;
+        this.memSelection = memFilterArr;
+        if (publicFilterArr[0] == "true") {
+          this.publicSelection = true;
+        } else if (publicFilterArr[0] == "false") {
+          this.publicSelection = false;
+        } else {
+          this.publicSelection = 0;
+        }
+      });
+    }
   }
 };
 </script>
 
-<style></style>
+<style scoped>
+.border {
+  border: 1px solid #ccd1d1;
+  /* height: 850px; */
+}
+.project-filter .v-input--selection-controls {
+  margin-top: 0px;
+}
+.project-filter .v-list-item__content {
+  padding: 0px;
+}
+.font-filter {
+  font-size: 13px;
+}
+</style>

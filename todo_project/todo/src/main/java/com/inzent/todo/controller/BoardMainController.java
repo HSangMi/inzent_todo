@@ -4,13 +4,16 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.inzent.todo.dto.DashBoardDto;
+import com.inzent.todo.dto.DashBoardSubDto;
+import com.inzent.todo.dto.DashBoardSuperDto;
 import com.inzent.todo.security.Auth;
 import com.inzent.todo.service.BoardMainService;
 import com.inzent.todo.vo.UserVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,37 +27,68 @@ public class BoardMainController {
     // 오늘
     @Auth
     @GetMapping("/today")
-    public List<DashBoardDto> getTodayList(HttpServletRequest req) {
+    public List<DashBoardSuperDto> getTodaySuperList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-        System.out.println("BoradMain Controller : get TodayList");
-        List<DashBoardDto> list = boardMainService.getTodayList(userId);
+        List<DashBoardSuperDto> list = boardMainService.getTodaySuperList(userId);
+        return list;
+    }
+
+    @Auth
+    @PostMapping("/todaysub")
+    public List<DashBoardSubDto> getTodaySubList(@RequestBody String todaySub, HttpServletRequest req) {
+        int length = todaySub.length();
+        todaySub = todaySub.substring(0, length - 1);
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+        List<DashBoardSubDto> list = boardMainService.getTodaySubList(todaySub, userId);
         return list;
     }
 
     // 주간
     @Auth
     @GetMapping("/week")
-    public List<DashBoardDto> getWeekList(HttpServletRequest req) {
+    public List<DashBoardSuperDto> getWeekSuperList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
-        System.out.println("BoradMain Controller : get WeekList");
-        List<DashBoardDto> list = boardMainService.getWeekList(userId);
+        List<DashBoardSuperDto> list = boardMainService.getWeekSuperList(userId);
 
+        return list;
+    }
+
+    @Auth
+    @PostMapping("/weeksub")
+    public List<DashBoardSubDto> getWeekSubList(@RequestBody String weekSub, HttpServletRequest req) {
+        int length = weekSub.length();
+        weekSub = weekSub.substring(0, length - 1);
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+        System.out.println(weekSub);
+        List<DashBoardSubDto> list = boardMainService.getWeekSubList(weekSub, userId);
         return list;
     }
 
     // 관심
     @Auth
     @GetMapping("/starred")
-    public List<DashBoardDto> getStarredList(HttpServletRequest req) {
+    public List<DashBoardSuperDto> getStarredSuperList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
-        System.out.println("BoradMain Controller : get InterestList");
-        List<DashBoardDto> list = boardMainService.getStarredList(userId);
+        List<DashBoardSuperDto> list = boardMainService.getStarredSuperList(userId);
 
+        return list;
+    }
+
+    @Auth
+    @PostMapping("/starredsub")
+    public List<DashBoardSubDto> getStarredSubList(@RequestBody String starredSub, HttpServletRequest req) {
+        int length = starredSub.length();
+        starredSub = starredSub.substring(0, length - 1);
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+        List<DashBoardSubDto> list = boardMainService.getStarredSubList(starredSub, userId);
         return list;
     }
 

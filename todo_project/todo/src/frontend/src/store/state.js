@@ -21,12 +21,23 @@ const state = {
   todayList: [],
   weekList: [],
   starredList: [],
+  todaySub: [],
+  weekSub: [],
+  starredSub: [],
   ///////// SCHEDULE /////////
   isAddCalendar: false,
   isDetailCalendar: false,
+  isDetailSub: false,
   clickDate: "",
   getClickDateList: [],
+  getsubList: [],
+  getSuperTitle: "",
+  getProjectTitle: "",
   calendarList: [],
   getSuperTasks: [],
+  getFilter: [],
+  getChkFilterItem: "",
+  calImgCode: [],
+  calFilterItem: [],
 };
 export default state;

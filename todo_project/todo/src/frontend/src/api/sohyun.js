@@ -28,16 +28,28 @@ const request = (method, url, data) => {
       throw Error(result);
     });
 };
+
 ///////////////////////////////////// DASHBOARD /////////////////////////////////////
 export const dashboard = {
   getTodayList() {
     return request("get", "/dashboard/today");
   },
+  getTodaySub(todaySub) {
+    return request("post", "/dashboard/todaysub", todaySub);
+  },
   getWeekList() {
     return request("get", "/dashboard/week");
   },
-  getInterestList() {
+  getWeekSub(weekSub) {
+    console.log("asdfa", weekSub);
+    return request("post", "/dashboard/weeksub", weekSub);
+  },
+  getStarredList() {
     return request("get", "/dashboard/starred");
+  },
+  getStarredSub(starredSub) {
+    console.log("asdfa", starredSub);
+    return request("post", "/dashboard/starredsub", starredSub);
   },
 };
 ///////////////////////////////////// SCHEDULE /////////////////////////////////////
@@ -46,8 +58,10 @@ export const schedule = {
     return request("get", "/schedule/calendar");
   },
   getClickDateList(clickDate) {
-    console.log("으으으으음", clickDate);
     return request("post", "/schedule/clickdate", clickDate);
+  },
+  getSubList(superId) {
+    return request("post", "/schedule/sublist", superId);
   },
   getChkProject(chkProject) {
     console.log(chkProject);
@@ -60,5 +74,18 @@ export const schedule = {
   addSubTask(addSub) {
     console.log("업무소 : ", addSub);
     return request("post", "/schedule/addSub", addSub);
+  },
+  getFilter() {
+    return request("get", "/schedule/filter");
+  },
+  getChkFilterItem() {
+    return request("get", "/schedule/chkFilterItem");
+  },
+  resetCalFilter() {
+    return request("post", "/schedule/resetCalFilter");
+  },
+  addCalFilter(calData) {
+    console.log(calData);
+    return request("post", "/schedule/addcalitem", calData);
   },
 };

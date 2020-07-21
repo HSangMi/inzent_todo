@@ -21,12 +21,17 @@
 		<typeAlias alias="deptdto" type="com.inzent.todo.dto.DeptDto"/>
 		<typeAlias alias="tokendto" type="com.inzent.todo.dto.TokenDto"/>
 		<typeAlias alias="userdto" type="com.inzent.todo.dto.UserDto"/>
+<<<<<<< HEAD
 		<typeAlias alias="updateuserdto" type="com.inzent.todo.dto.UpdateUserDto"/>
 		<typeAlias alias="dashboarddto" type="com.inzent.todo.dto.DashBoardDto"/>
+		<typeAlias alias="dashsuperdto" type="com.inzent.todo.dto.DashBoardSuperDto"/>
+		<typeAlias alias="dashsubdto" type="com.inzent.todo.dto.DashBoardSubDto"/>
 		<typeAlias alias="scheduledto" type="com.inzent.todo.dto.ScheduleDto"/>
+		<typeAlias alias="cddetialdto" type="com.inzent.todo.dto.CalDateDetailDto"/>
 		<typeAlias alias="chkprjdto" type="com.inzent.todo.dto.ChkProjectDto"/>
 		<typeAlias alias="chkstdto" type="com.inzent.todo.dto.ChkSuperTasksDto"/>
 		<typeAlias alias="cddto" type="com.inzent.todo.dto.ClickDateDto"/>
+		<typeAlias alias="filterdto" type="com.inzent.todo.dto.FilterDto"/>
 
 	</typeAliases>
 	<mappers>

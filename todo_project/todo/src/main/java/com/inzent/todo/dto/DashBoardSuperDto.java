@@ -7,20 +7,16 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class DashBoardDto {
+public class DashBoardSuperDto {
 
-    private String cTitle;
+    private String pId;
+    private String pTitle;
+    private String prjTitle;
     private String startDate;
     private String endDate;
     private String regDate;
     private String state;
     private boolean usePublic;
-    private String pTitle;
-    private String prjTitle;
-    private String prjId;
-    private String cId;
-    private int managerCount;
-    private String managerName;
-        private String img;
-
+    private String dueDate;
+    private String progressRate;
 }
