@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card outlined max-height="800" class="overflow-y-auto">
+      <v-card outlined max-height="800" class="overflow-y-auto mx-2">
         <div class="mx-2">
           <v-subheader class="blue-grey lighten-4">PROJECT</v-subheader>
           <v-list class="project-filter">
@@ -365,7 +365,7 @@ export default {
 <style scoped>
 .border {
   border: 1px solid #ccd1d1;
-  /* height: 850px; */
+  margin-right: 30px;
 }
 .project-filter .v-input--selection-controls {
   margin-top: 0px;
