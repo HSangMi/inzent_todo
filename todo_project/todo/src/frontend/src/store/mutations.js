@@ -125,6 +125,9 @@ const mutations = {
   SET_CALENDAR_LIST(state, calendarList) {
     state.calendarList = calendarList;
   },
+  SET_FETCH_PROJECT(state, projectData) {
+    state.getProjects = projectData;
+  },
   SET_FETCH_CHKPROJECT(state, data) {
     state.getSuperTasks = data;
   },

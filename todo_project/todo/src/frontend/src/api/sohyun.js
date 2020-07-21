@@ -63,6 +63,9 @@ export const schedule = {
   getSubList(superId) {
     return request("post", "/schedule/sublist", superId);
   },
+  getProject() {
+    return request("post", "/schedule/getProjects");
+  },
   getChkProject(chkProject) {
     console.log(chkProject);
     return request("post", "/schedule/chkproject", chkProject);

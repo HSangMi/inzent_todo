@@ -55,6 +55,12 @@ public class ScheduleService {
         return list;
     }
 
+    // 업무 등록에서 프로젝트 조회
+    public List<Map<String, Object>> getProjects(String userId) {
+
+        return scheduledao.getProjects(userId);
+    }
+
     // 선택한 프로젝트의 업무대 조회
     public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto chkprjdto) {
 

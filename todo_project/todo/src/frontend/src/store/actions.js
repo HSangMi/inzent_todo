@@ -1,5 +1,6 @@
 import * as api from "../api";
 import * as sohyun from "../api/sohyun";
+// import state from "./state";
 // import * as util from "../utils/auth";
 // import state from './state'
 const actions = {
@@ -207,6 +208,16 @@ const actions = {
       .getCalendarList()
       .then((result) => {
         commit("SET_CALENDAR_LIST", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_CALENDAR_PRJOECT({ commit }) {
+    return sohyun.schedule
+      .getProject()
+      .then((result) => {
+        commit("SET_FETCH_PROJECT", result);
       })
       .catch((err) => {
         console.log(err);

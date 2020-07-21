@@ -1,6 +1,7 @@
 package com.inzent.todo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +37,16 @@ public class ScheduleController {
         String userId = user.getId();
 
         List<ScheduleDto> list = scheduleService.getCalendarList(userId);
+        return list;
+    }
+
+    @Auth
+    @PostMapping("/getProjects")
+    public List<Map<String, Object>> getProjects(HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+        List<Map<String, Object>> list = scheduleService.getProjects(userId);
+        System.out.println("잘아아아아" + list);
         return list;
     }
 

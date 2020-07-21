@@ -20,8 +20,8 @@
             v-model="chkProject"
             @change="fetchChkProject()"
             :items="selectProjects"
-            item-text="prjTitle"
-            item-value="prjId"
+            item-text="prjtitle"
+            item-value="prjid"
             label="PROJECT"
             outlined
           ></v-select>
@@ -87,20 +87,21 @@ export default {
     alert: false
   }),
   created() {
-    this.FETCH_CALENDAR_LIST().then(() => {
-      this.selectProjects = this.calendarList;
+    this.FETCH_CALENDAR_PRJOECT().then(() => {
+      console.log("추가ㅏㅏ", this.getProjects);
+      this.selectProjects = this.getProjects;
     });
   },
   computed: {
     ...mapState({
-      calendarList: "calendarList"
+      getProjects: "getProjects"
     }),
     ...mapState({ getSuperTasks: "getSuperTasks" }),
     ...mapState(["isAddCalendar"])
   },
   methods: {
     ...mapMutations(["SET_IS_ADD_CALENDAR"]),
-    ...mapActions(["FETCH_CALENDAR_LIST"]),
+    ...mapActions(["FETCH_CALENDAR_PRJOECT"]),
     ...mapActions(["FETCH_CALENDAR_SUPER_TASKS"]),
     ...mapActions(["ADD_CALENDAR_SUPER_TASKS"]),
     ...mapActions(["ADD_CALENDAR_SUB_TASKS"]),

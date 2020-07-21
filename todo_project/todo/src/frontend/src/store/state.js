@@ -34,6 +34,7 @@ const state = {
   getSuperTitle: "",
   getProjectTitle: "",
   calendarList: [],
+  getProjects: [],
   getSuperTasks: [],
   getFilter: [],
   getChkFilterItem: "",

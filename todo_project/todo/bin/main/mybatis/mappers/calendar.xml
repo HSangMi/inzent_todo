@@ -55,6 +55,13 @@
         ttsp.use_public = #{uItem}::boolean;
        </if>
     </select>
+    <select id="getProjects" parameterType="String" resultType="map">
+    <![CDATA[
+        select tp.id prjId, tp.title prjTitle
+        from tb_project tp 
+        where tp.id in (select project_id from tb_member  where user_id=#{userId});
+    ]]>
+    </select>
     <select id="getSuperTasks" parameterType="chkprjdto" resultType="chkstdto">
     <![CDATA[
         select task_id pId, title pTitle

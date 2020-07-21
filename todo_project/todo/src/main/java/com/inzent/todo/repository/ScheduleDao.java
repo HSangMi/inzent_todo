@@ -33,6 +33,13 @@ public class ScheduleDao {
         return prjInfo;
     }
 
+    // 업무등록의 프로젝트 조회
+    public List<Map<String, Object>> getProjects(String userId) {
+        List<Map<String, Object>> prjInfo = sqlsession.selectList("calendar.getProjects", userId);
+        
+        return prjInfo;
+    }
+
     public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto chkprjdto) {
 
         return sqlsession.selectList("calendar.getSuperTasks", chkprjdto);
