@@ -8,6 +8,7 @@ const mutations = {
   },
   LOGOUT(state) {
     state.accessToken = null;
+    state.userInfo = null;
     delete localStorage.accessToken;
     setAuthInHeader(null);
   },
