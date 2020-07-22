@@ -32,6 +32,21 @@
                     <v-spacer></v-spacer>
                   </v-radio-group>
                 </v-col>
+                <v-col v-if="managers.length">
+                  <p>MANAGERS</p>
+                  <v-tooltip v-for="member in managers" :key="member.id" bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-avatar v-if="member.imgCode" size="32" class="user-avatars">
+                        <img :src="member.imgCode" v-bind="attrs" v-on="on" />
+                      </v-avatar>
+                      <v-avatar v-else size="32" class="user-avatars" color="grey">
+                        <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                      </v-avatar>
+                    </template>
+                    <span>{{ member.name }}</span>
+                  </v-tooltip>
+                  <span class="pl-4">{{managers.length}}명</span>
+                </v-col>
                 <v-col cols="6" v-if="endDate || startDate">
                   <p>DATE</p>
                   <v-icon>mdi-calendar-month-outline</v-icon>
@@ -68,9 +83,14 @@
             <v-col cols="4" class="createTaskside pa-0">
               <v-subheader>ADD OPTIONS</v-subheader>
               <v-list-item>
-                <v-btn block depressed>
-                  <v-icon left>mdi-account-plus</v-icon>MEMBERS
+                <v-btn block depressed @click.prevent="isOpenAddMember = true">
+                  <v-icon left>mdi-account-plus</v-icon>managers
                 </v-btn>
+                <add-member
+                  :openModal="isOpenAddMember"
+                  @close="isOpenAddMember = false"
+                  @addMember="addMember"
+                />
               </v-list-item>
               <v-list-item>
                 <v-menu offset-y :close-on-content-click="false">
@@ -101,7 +121,7 @@
               <v-list-item>
                 <date-menu @addStartDate="addStartDate" @addEndDate="addEndDate" />
               </v-list-item>
-              <v-subheader>ACTIONS</v-subheader>
+              <!-- <v-subheader>ACTIONS</v-subheader>
               <v-list-item>
                 <v-btn block depressed>
                   <v-icon left>mdi-eye</v-icon>WATCH
@@ -111,7 +131,7 @@
                 <v-btn block depressed>
                   <v-icon left>mdi-archive-outline</v-icon>ARCHIVE
                 </v-btn>
-              </v-list-item>
+              </v-list-item>-->
             </v-col>
           </v-row>
           <!-- </v-container> -->
@@ -131,11 +151,13 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 import LabelMenu from "./LabelMenu.vue";
 import DateMenu from "./DateMenu.vue";
+import AddMember from "./AddMember.vue";
 export default {
   props: ["openModal"],
   components: {
     LabelMenu,
-    DateMenu
+    DateMenu,
+    AddMember
   },
   computed: {
     ...mapState({
@@ -152,9 +174,10 @@ export default {
   data: () => ({
     clear: false,
     dialog: false,
+    isOpenAddMember: false,
     title: "",
     description: "",
-    usePublic: undefined,
+    usePublic: "true",
     attachFiles: [],
     startDate: "", //new Date().toISOString().substr(0, 10),
     endDate: "",
@@ -162,13 +185,13 @@ export default {
     startDatePicker: false,
     endDatePicker: false,
     // taskState: undefined,
-    taskState: undefined,
+    taskState: -1,
     state: [
-      { name: "보류", color: "defualt", type: "C" },
-      { name: "진행", color: "primary", type: "C" },
+      { name: "보류", color: "defualt", type: "H" },
+      { name: "진행", color: "primary", type: "P" },
       { name: "완료", color: "success", type: "C" },
-      { name: "긴급", color: "error", type: "C" },
-      { name: "대기", color: "warning", type: "C" }
+      { name: "긴급", color: "error", type: "E" },
+      { name: "대기", color: "warning", type: "W" }
     ],
     // taskStateName: ["보류", "진행", "완료", "긴급", "대기"],
     // taskStateColor: ["defualt", "primary", "success", "error", "warning"],
@@ -191,7 +214,7 @@ export default {
     ],
     privateRules: [v => !!v || "private is required"],
     valid: true,
-    members: []
+    managers: []
   }),
 
   methods: {
@@ -216,7 +239,7 @@ export default {
         formData.append("labels", this.labels);
         formData.append(
           "state",
-          this.taskState ? this.state[this.taskState].type : "P"
+          this.taskState >= 0 ? this.state[this.taskState].type : "H"
         );
         if (this.attachFiles.length !== 0) {
           for (var i = 0, file; (file = this.attachFiles[i]); i++) {
@@ -225,7 +248,13 @@ export default {
         }
         formData.append("startDate", this.startDate);
         formData.append("endDate", this.endDate);
-        formData.append("members", this.members);
+
+        formData.append(
+          "manager",
+          this.managers.map(function(o) {
+            return o.memberNo;
+          })
+        );
         if (this.taskSuperId) {
           console.log("ADD SUB ~!!");
           console.log(this.lastSubSortNo);
@@ -251,23 +280,29 @@ export default {
 
     onClose() {
       // this.openModal = false;
-      this.SET_ADD_TASK_MODAL(false);
       this.formClear();
+      this.SET_ADD_TASK_MODAL(false);
       // this.$emit("close");
       this.SET_SUPER_TASK_ID("");
       this.SET_LAST_SUB_SORT_NO(0);
     },
     remove(item) {
-      const index = this.members.indexOf(item.name);
-      if (index >= 0) this.members.splice(index, 1);
+      const index = this.managers.indexOf(item.name);
+      if (index >= 0) this.managers.splice(index, 1);
     },
     formClear() {
-      this.$refs.form.reset();
+      //this.$refs.form.reset();
+      this.title = "";
+      this.description = "";
       this.taskLabel = [];
       this.taskState = undefined;
       this.startDate = "";
-      this.labels = "";
       this.endDate = "";
+      this.labels = "";
+      this.managers = [];
+      this.usePublic = "true";
+      this.attachFiles = [];
+      this.$refs.form.resetValidation();
       // this.clearLabel = true;
       // this.clearLabel = false;
     },
@@ -294,7 +329,15 @@ export default {
     },
     addEndDate(date) {
       this.endDate = date;
+    },
+    addMember(managers) {
+      console.log("addMember");
+      console.log(managers);
+      this.managers = managers;
     }
+    // getImgCode(item) {
+    //   return "data:image;base64," + item.imgCode;
+    // }
   }
 };
 </script>

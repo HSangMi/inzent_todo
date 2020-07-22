@@ -1,6 +1,9 @@
 <template>
   <v-app-bar id="app-bar" absolute app color="transparent" flat height="50">
-    <v-toolbar-title class="hidden-sm-and-down font-weight-light" v-text="headerTitle" />
+    <v-toolbar-title
+      class="hidden-sm-and-down font-weight-light"
+      v-text="headerTitle"
+    />
     <v-spacer />
 
     <v-text-field
@@ -21,16 +24,22 @@
     >
       <v-icon>mdi-view-dashboard</v-icon>
     </v-btn>-->
-    <v-menu bottom left offset-y origin="top right" transition="scale-transition">
+    <v-menu
+      bottom
+      left
+      offset-y
+      origin="top right"
+      transition="scale-transition"
+    >
       <template v-slot:activator="{ attrs, on }">
         <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
-          <v-badge color="red" overlap bordered>
+          <!-- <v-badge color="red" overlap bordered>
             <template v-slot:badge>
               <span>5</span>
-            </template>
+            </template> -->
 
-            <v-icon>mdi-bell</v-icon>
-          </v-badge>
+          <v-icon color="grey">mdi-bell</v-icon>
+          <!-- </v-badge> -->
         </v-btn>
       </template>
 
@@ -42,14 +51,14 @@
         </div>
       </v-list>
     </v-menu>
-    <v-menu bottom left offset-y origin="top right" transition="scale-transition">
+    <!-- <v-menu bottom left offset-y origin="top right" transition="scale-transition">
       <template v-slot:activator="{ attrs, on }">
         <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
           <v-img
             src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
             max-height="20"
           />
-          
+
           <v-card-text>user</v-card-text>
         </v-btn>
       </template>
@@ -61,7 +70,7 @@
           </app-bar-item>
         </div>
       </v-list>
-    </v-menu>
+    </v-menu>-->
   </v-app-bar>
 </template>
 
@@ -87,29 +96,29 @@ export default {
                   attrs: this.$attrs,
                   class: {
                     "black--text": !hover,
-                    "white--text secondary elevation-12": hover
+                    "white--text secondary elevation-12": hover,
                   },
                   props: {
                     activeClass: "",
                     dark: hover,
                     link: true,
-                    ...this.$attrs
-                  }
+                    ...this.$attrs,
+                  },
                 },
                 this.$slots.default
               );
-            }
-          }
+            },
+          },
         });
-      }
-    }
+      },
+    },
   },
 
   props: {
     value: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data: () => ({
@@ -118,23 +127,29 @@ export default {
       "You have 5 new tasks",
       "You're now friends with Andrew",
       "Another Notification",
-      "Another one"
+      "Another one",
     ],
     userHeaderMenu: ["user profile", "logout"],
-    search: ""
+    search: "",
   }),
 
   computed: {
     ...mapState({
       activeMenu: "activeMenu",
-      headerTitle: "headerTitle"
-    })
+      headerTitle: "headerTitle",
+    }),
   },
 
   methods: {
     ...mapMutations({
-      setDrawerSub: "SET_DRAWER_SUB"
-    })
-  }
+      setDrawerSub: "SET_DRAWER_SUB",
+    }),
+  },
 };
 </script>
+<style scoped>
+.v-toolbar__title {
+  font-weight: 600 !important;
+  color: dimgrey;
+}
+</style>

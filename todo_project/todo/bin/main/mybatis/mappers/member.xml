@@ -14,4 +14,28 @@
             SELECT currval('seq_mem')
         </selectKey>
 	</insert>
+	<insert id="insertMembers" parameterType="map">
+		insert into tb_member
+		(project_id, user_id)
+		values
+		<foreach collection="members" item="item" index="index" separator=",">
+			(#{projectId},#{item})
+		</foreach>
+	</insert>
+	<insert id="insertManagers" parameterType="map">
+		insert into tb_task_manager
+		(task_id, member_no)
+		values
+		<foreach collection="managers" item="item" index="index" separator=",">
+			(#{taskId},#{item})
+		</foreach>
+	</insert>
+	<delete id="deleteManagers">
+		delete from tb_task_manager
+		where
+		<foreach collection="managers" item="item" index="index" separator="or">
+		 task_id = #{taskId} and member_no = #{item}
+		</foreach>
+		
+	</delete>
 </mapper>

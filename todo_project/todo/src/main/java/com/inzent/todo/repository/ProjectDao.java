@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.inzent.todo.dto.MemberDto;
-import com.inzent.todo.dto.ProjectDto;
+import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.TaskDto;
+import com.inzent.todo.dto.TaskUpdateDto;
+import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.ProjectVo;
@@ -41,9 +43,14 @@ public class ProjectDao {
         return sqlSession.insert("project.insertTaskSub", taskDto);
     }
 
-    public List<ProjectVo> selectProjectList() {
+    public int updateSubTask(TaskUpdateDto taskDto) {
+        System.out.println("## ProjectDao - updateTaskSub");
+        return sqlSession.update("project.updateTaskSub", taskDto);
+    }
 
-        return sqlSession.selectList("project.selectProjectList");
+    public List<ProjectCardDto> selectProjectList(String userId) {
+
+        return sqlSession.selectList("project.selectProjectList", userId);
     }
 
     public ProjectVo selectProject(String pid) {
@@ -94,6 +101,14 @@ public class ProjectDao {
 
     public Object updateSortNo(TaskDto targetTask) {
         return sqlSession.update("project.updateSortNo", targetTask);
+    }
+
+    public int insertComment(CommentVo comment) {
+        return sqlSession.insert("comment.insertComment", comment);
+    }
+
+    public List<CommentVo> selectComments(String taskId) {
+        return sqlSession.selectList("comment.selectComments", taskId);
     }
 
 }

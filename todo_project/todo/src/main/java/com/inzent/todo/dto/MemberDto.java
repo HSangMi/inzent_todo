@@ -13,4 +13,8 @@ public class MemberDto {
     private String name;
     private String rank;
     private int posNo;
+    private String imgCode;
+    private String email;
+    private String phone;
+    private String deptName;
 }

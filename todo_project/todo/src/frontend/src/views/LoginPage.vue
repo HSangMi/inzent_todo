@@ -3,45 +3,82 @@
     <v-main>
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
-          <v-col cols="12" sm="8" md="4">
-            <v-card class="elevation-12">
-              <v-toolbar color="rgb(134, 138, 140)" dark flat>
+          <v-col class="pl-0" cols="6" sm="7" md="7">
+            <v-card>
+              <!-- <v-toolbar color="rgb(106, 115, 136)" dark flat>
                 <v-toolbar-title>Login form</v-toolbar-title>
                 <v-spacer></v-spacer>
-              </v-toolbar>
-              <v-card-text>
-                <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="onSubmit">
-                  <p
-                    v-if="error"
-                    style="font-size:15px; color: red;"
-                    align="center"
-                  >아이디 또는 패스워드가 틀렸습니다.</p>
-                  <v-text-field
-                    v-model="id"
-                    :rules="idRules"
-                    label="id"
-                    name="id"
-                    prepend-icon="mdi-account"
-                    type="text"
-                  ></v-text-field>
+              </v-toolbar> -->
+              <v-card-text class="pa-0">
+                <v-row class="pa-0 ma-0" style="height:400px">
+                  <v-col class="login-side" cols="4">
+                    <div style="display:inline-block">
+                      <!-- <v-avatar>
+                        <img src="../assets/inzent-logo.png" alt="John" />
+                      </v-avatar> -->
+                      <!-- <h2
+                        style="display:inline-block"
+                        class="white--text my-auto"
+                      >
+                        INZENT <br />
+                        TODO
+                      </h2> -->
+                    </div>
+                  </v-col>
+                  <v-col cols="7" class="ma-auto">
+                    <h2>LOGIN</h2>
+                    <br /><br />
+                    <v-form
+                      ref="form"
+                      v-model="valid"
+                      lazy-validation
+                      @submit.prevent="onSubmit"
+                    >
+                      <p
+                        v-if="error"
+                        style="font-size:15px; color: red;"
+                        align="center"
+                      >
+                        아이디 또는 패스워드가 틀렸습니다.
+                      </p>
+                      <v-text-field
+                        v-model="id"
+                        :rules="idRules"
+                        label="id"
+                        name="id"
+                        prepend-icon="mdi-account"
+                        type="text"
+                      ></v-text-field>
 
-                  <v-text-field
-                    v-model="password"
-                    :rules="passwordRules"
-                    id="password"
-                    label="Password"
-                    name="password"
-                    prepend-icon="mdi-lock"
-                    type="password"
-                  ></v-text-field>
-                  <v-card-actions>
-                    <v-checkbox v-model="idSave" color="rgb(134, 138, 140)" label="아이디 저장"></v-checkbox>
-                    <!-- <v-checkbox v-model="checkbox" :label="`Checkbox 1: ${checkbox.toString()}`"></v-checkbox> -->
-                    <v-spacer></v-spacer>
-                    <!-- <v-btn color="rgb(134, 138, 140)" dark type="">비밀번호 찾기</v-btn> -->
-                    <v-btn color="rgb(134, 138, 140)" dark type="submit">Login</v-btn>
-                  </v-card-actions>
-                </v-form>
+                      <v-text-field
+                        v-model="password"
+                        :rules="passwordRules"
+                        id="password"
+                        label="Password"
+                        name="password"
+                        prepend-icon="mdi-lock"
+                        type="password"
+                      ></v-text-field>
+                      <v-card-actions>
+                        <v-checkbox
+                          v-model="idSave"
+                          color="rgb(134, 138, 140)"
+                          label="아이디 저장"
+                        ></v-checkbox>
+                        <!-- <v-checkbox v-model="checkbox" :label="`Checkbox 1: ${checkbox.toString()}`"></v-checkbox> -->
+                        <v-spacer></v-spacer>
+                        <!-- <v-btn color="rgb(134, 138, 140)" dark type="">비밀번호 찾기</v-btn> -->
+                        <v-btn
+                          color="rgb(106, 115, 136)"
+                          class="font-weight-bold"
+                          text
+                          type="submit"
+                          >LOGIN</v-btn
+                        >
+                      </v-card-actions>
+                    </v-form>
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
           </v-col>
@@ -61,12 +98,12 @@ export default {
   data: () => ({
     valid: true,
     id: "",
-    idRules: [v => !!v || "id is required"],
+    idRules: [(v) => !!v || "id is required"],
     password: "",
-    passwordRules: [v => !!v || "password is required"],
+    passwordRules: [(v) => !!v || "password is required"],
     returnPath: "",
     error: "",
-    idSave: false
+    idSave: false,
   }),
   created() {
     this.returnPath = this.$route.query.returnPath || "/";
@@ -80,8 +117,8 @@ export default {
   computed: {
     ...mapState({
       accessToken: "accessToken",
-      userInfo: "userInfo"
-    })
+      userInfo: "userInfo",
+    }),
   },
   methods: {
     onSubmit() {
@@ -89,7 +126,7 @@ export default {
       this.$store
         .dispatch("LOGIN", { id, password })
         .then(() => {
-          console.log("submit ok--------------------------------------------")
+          console.log("submit ok--------------------------------------------");
           if (this.idSave == true) {
             this.$cookie.set("id", id, 1);
             this.$cookie.set("idSave", this.idSave, 1);
@@ -98,20 +135,27 @@ export default {
             this.$cookie.delete("idSave");
           }
 
-          if(this.userInfo.userType=="s") {
-            this.$router.push('/user_management')
-          }else{
+          if (this.userInfo.userType == "s") {
+            this.$router.push("/user_management");
+          } else {
             this.$router.push(this.returnPath);
           }
         })
         .catch(() => {
-          console.log("submit error--------------------------------------------")
+          console.log(
+            "submit error--------------------------------------------"
+          );
           this.error = true;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
+.login-side {
+  background-color: rgb(106, 115, 136);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
 </style>

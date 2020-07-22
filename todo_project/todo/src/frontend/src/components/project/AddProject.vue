@@ -1,12 +1,7 @@
 <template>
   <v-dialog v-model="openModal" max-width="640" persistent>
     <v-card>
-      <v-form
-        ref="form"
-        v-model="valid"
-        @submit.prevent="onSubmit"
-        lazy-validation
-      >
+      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
         <v-card-title class="headline grey lighten-2" primary-title>
           CREATE PROJECT
           <v-spacer></v-spacer>
@@ -15,12 +10,7 @@
           <!-- <v-container> -->
           <v-row>
             <v-col cols="12">
-              <v-text-field
-                label="PROJECT TITLE*"
-                v-model="title"
-                :rules="titleRules"
-                required
-              ></v-text-field>
+              <v-text-field label="PROJECT TITLE*" v-model="title" :rules="titleRules" required></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -31,12 +21,7 @@
             </v-col>
             <v-col cols="12">
               PRIVATE*
-              <v-radio-group
-                v-model="usePublic"
-                required
-                row
-                :rules="privateRules"
-              >
+              <v-radio-group v-model="usePublic" required row :rules="privateRules">
                 <br />
                 <v-radio label="Public" value="true"></v-radio>
                 <v-spacer></v-spacer>
@@ -64,11 +49,7 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker
-                  v-model="startDate"
-                  no-title
-                  @input="startDatePicker = false"
-                ></v-date-picker>
+                <v-date-picker v-model="startDate" no-title @input="startDatePicker = false"></v-date-picker>
               </v-menu>
             </v-col>
             <v-col cols="12" sm="6">
@@ -91,11 +72,7 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker
-                  v-model="endDate"
-                  no-title
-                  @input="endDatePicker = false"
-                ></v-date-picker>
+                <v-date-picker v-model="endDate" no-title @input="endDatePicker = false"></v-date-picker>
               </v-menu>
             </v-col>
             <v-col cols="12" sm="6">
@@ -104,44 +81,44 @@
                 <v-radio
                   on-icon="mdi-check-circle"
                   off-icon="mdi-checkbox-blank-circle"
-                  color="primary"
-                  value="1976d2"
-                  class="primary-icon"
+                  color="#EF9A9A"
+                  value="EF9A9A"
+                  class="red-icon"
                 ></v-radio>
                 <v-radio
                   on-icon="mdi-check-circle"
                   off-icon="mdi-checkbox-blank-circle"
-                  color="secondary"
-                  value="424242"
-                  class="secondary-icon"
+                  color="#FFCC80"
+                  value="FFCC80"
+                  class="yellow-icon"
                 ></v-radio>
                 <v-radio
                   on-icon="mdi-check-circle"
                   off-icon="mdi-checkbox-blank-circle"
-                  color="success"
-                  value="4caf50"
-                  class="success-icon"
+                  color="#81C784"
+                  value="81C784"
+                  class="green-icon"
                 ></v-radio>
                 <v-radio
                   on-icon="mdi-check-circle"
                   off-icon="mdi-checkbox-blank-circle"
-                  color="info"
-                  value="2196f3"
-                  class="info-icon"
+                  color="#448AFF"
+                  value="448AFF"
+                  class="blue-icon"
                 ></v-radio>
                 <v-radio
                   on-icon="mdi-check-circle"
                   off-icon="mdi-checkbox-blank-circle"
-                  color="warning"
-                  value="fb8c00"
-                  class="warning-icon"
+                  color="#5C6BC0"
+                  value="5C6BC0"
+                  class="puple-icon"
                 ></v-radio>
                 <v-radio
                   on-icon="mdi-check-circle"
                   off-icon="mdi-checkbox-blank-circle"
-                  color="error"
-                  value="ff5252"
-                  class="error-icon"
+                  color="#546E7A"
+                  value="546E7A"
+                  class="grey-icon"
                 ></v-radio>
               </v-radio-group>
             </v-col>
@@ -149,59 +126,46 @@
               <br />
               <v-file-input
                 :rules="imgRules"
-                v-model="coverImg"
+                v-model="coverImgFile"
                 accept="image/png, image/jpeg, image/bmp"
                 placeholder="cover Image"
                 prepend-icon="mdi-camera"
+                @change="createBase64Image(coverImgFile)"
               ></v-file-input>
             </v-col>
             <v-col cols="12">
               MEMBERS
               <br />
-              <v-autocomplete
-                v-model="members"
-                :items="people"
-                chips
-                label="Select"
-                item-text="name"
-                item-value="name"
-                multiple
-              >
-                <template v-slot:selection="data">
-                  <v-chip
-                    v-bind="data.attrs"
-                    :input-value="data.selected"
-                    close
-                    @click="data.select"
-                    @click:close="remove(data.item)"
-                  >
-                    <v-avatar left>
-                      <v-img :src="data.item.avatar"></v-img>
-                    </v-avatar>
-                    {{ data.item.name }}
-                  </v-chip>
-                </template>
-                <template v-slot:item="data">
-                  <template v-if="typeof data.item !== 'object'">
-                    <v-list-item-content
-                      v-text="data.item"
-                    ></v-list-item-content>
-                  </template>
-                  <template v-else>
-                    <v-list-item-avatar>
-                      <img :src="data.item.avatar" />
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-html="data.item.name"
-                      ></v-list-item-title>
-                      <v-list-item-subtitle
-                        v-html="data.item.group"
-                      ></v-list-item-subtitle>
-                    </v-list-item-content>
-                  </template>
-                </template>
-              </v-autocomplete>
+              <div class="pt-5">
+                <v-btn
+                  color="rgb(88, 110, 150)"
+                  fab
+                  dark
+                  depressed
+                  @click.prevent="isOpenSearch = true"
+                >
+                  <v-icon>mdi-account-plus</v-icon>
+                </v-btn>
+                <user-search
+                  :openModal="isOpenSearch"
+                  @close="isOpenSearch = false"
+                  @addMember="addMember"
+                />
+                <div v-if="members.length" class="ml-5 pl-3" style="display:inline-block">
+                  <v-tooltip v-for="member in members" :key="member.id" bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-avatar v-if="member.imgCode" size="56" class="user-avatars">
+                        <img :src="member.imgCode" v-bind="attrs" v-on="on" />
+                      </v-avatar>
+                      <v-avatar v-else size="56" class="user-avatars" color="grey">
+                        <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                      </v-avatar>
+                    </template>
+                    <span>{{ member.name }}</span>
+                  </v-tooltip>
+                  <span class="pl-4">{{members.length}}명</span>
+                </div>
+              </div>
             </v-col>
           </v-row>
           <!-- </v-container> -->
@@ -218,11 +182,16 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
+import UserSearch from "../user/UserSearch.vue";
 
 export default {
   props: ["openModal"],
+  components: {
+    UserSearch
+  },
   data: () => ({
+    isOpenSearch: false,
     dialog: false,
     title: "",
     description: "",
@@ -233,64 +202,20 @@ export default {
     endDatePicker: false,
     coverColor: "1976d2",
     coverImg: undefined,
+    coverImgFile: undefined,
     imgRules: [
-      (value) =>
+      value =>
         !value ||
         value.size < 2000000 ||
-        "Avatar size should be less than 2 MB!",
+        "Avatar size should be less than 2 MB!"
     ],
     titleRules: [
-      (v) => !!v || "title is required",
-      (v) => (v && v.length <= 100) || "title must be less than 100 characters",
+      v => !!v || "title is required",
+      v => (v && v.length <= 100) || "title must be less than 100 characters"
     ],
-    privateRules: [(v) => !!v || "private is required"],
+    privateRules: [v => !!v || "private is required"],
     valid: true,
-    people: [
-      { header: "Group 1" },
-      {
-        name: "Sandra Adams",
-        group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-      {
-        name: "Ali Connors",
-        group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-      {
-        name: "Trevor Hansen",
-        group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-      {
-        name: "Tucker Smith",
-        group: "Group 1",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-      { divider: true },
-      { header: "Group 2" },
-      {
-        name: "Britta Holt",
-        group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-      {
-        name: "Jane Smith ",
-        group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-      {
-        name: "John Smith",
-        group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-      {
-        name: "Sandra Williams",
-        group: "Group 2",
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      },
-    ],
-    members: [],
+    members: []
   }),
   methods: {
     ...mapActions(["ADD_PROJECT"]),
@@ -310,11 +235,16 @@ export default {
           formData.append("coverImg", this.coverImg);
         }
         formData.append("coverColor", this.coverColor);
-        formData.append("members", this.members);
+        var mems = [];
+        for (var a in this.members) {
+          if (this.userInfo.id !== this.members[a].id)
+            mems.push(this.members[a].id);
+        }
+        formData.append("members", mems);
 
-        this.ADD_PROJECT(formData).then((data) => {
-          console.log("-----");
-          console.log(data);
+        this.ADD_PROJECT(formData).then(data => {
+          // console.log("-----");
+          // console.log(data);
           this.$router.push(`/projects/${data.id}`);
         });
         this.formClear();
@@ -337,12 +267,36 @@ export default {
     validate() {
       return this.$refs.form.validate();
     },
+    addMember(members) {
+      this.members = members;
+    },
+    createBase64Image(fileObject) {
+      console.log("file object", fileObject);
+      if (fileObject !== undefined) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          this.image = e.target.result;
+          console.log("image", this.image);
+          this.coverImg = this.image;
+        };
+        reader.readAsDataURL(fileObject);
+      } else {
+        this.coverImg = undefined;
+      }
+    }
+    // getImgCode(item) {
+    //   return "data:image;base64," + item.imgCode;
+    // }
   },
   computed: {
+    ...mapState({
+      userInfo: "userInfo"
+      // user 멤버 no가져오기..
+    }),
     isCoverImg() {
-      return this.coverImg === undefined ? false : true;
-    },
-  },
+      return this.coverImgFile === undefined ? false : true;
+    }
+  }
 };
 </script>
 
@@ -354,22 +308,25 @@ export default {
   margin: 0px;
   font-size: 32px;
 }
-.primary-icon .v-icon {
-  color: #1976d2;
+.red-icon .v-icon {
+  color: #ef9a9a;
 }
-.secondary-icon .v-icon {
-  color: #424242;
+.yellow-icon .v-icon {
+  color: #ffcc80;
 }
-.success-icon .v-icon {
-  color: #4caf50;
+.green-icon .v-icon {
+  color: #81c784;
 }
-.info-icon .v-icon {
-  color: #2196f3;
+.blue-icon .v-icon {
+  color: #448aff;
 }
-.warning-icon .v-icon {
-  color: #fb8c00;
+.puple-icon .v-icon {
+  color: #5c6bc0;
 }
-.error-icon .v-icon {
-  color: #ff5252;
+.grey-icon .v-icon {
+  color: #546e7a;
+}
+.user-avatars {
+  margin-left: -15px;
 }
 </style>

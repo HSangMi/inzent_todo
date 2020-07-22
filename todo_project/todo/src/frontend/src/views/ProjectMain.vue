@@ -1,17 +1,21 @@
 <template>
   <v-container id="projectsMain" fluid tag="section">
-    <h4>관심 프로젝트</h4>
-    <v-divider></v-divider>
+    <!-- <h4>관심 프로젝트</h4>
+    <v-divider></v-divider> -->
     <v-row>
       <!-- <project-card /> -->
     </v-row>
     <h4>참여 중인 프로젝트</h4>
     <v-divider></v-divider>
     <v-row>
-      <v-col cols="12" xs="6" sm="4" md="3" lg="2">
-        <v-card class="mx-auto" height="100%" @click.prevent="isOpenProject = true">
+      <v-col cols="12" xs="6" sm="6" md="4" lg="2">
+        <v-card
+          class="mx-auto"
+          height="100%"
+          @click.prevent="isOpenProject = true"
+        >
           <v-card-text class="text--primary text-center">
-            <h3>새 프로젝트</h3>
+            <h3 class="my-2">새 프로젝트</h3>
             <v-icon large blue>mdi-plus</v-icon>
           </v-card-text>
         </v-card>
@@ -31,16 +35,16 @@ export default {
   name: "project-main",
   data: () => ({
     isOpenProject: false,
-    loading: false
+    loading: false,
   }),
   computed: {
     ...mapState({
-      projects: "projects"
-    })
+      projects: "projects",
+    }),
   },
   components: {
     ProjectCard: () => import("../components/project/projectCard.vue"),
-    AddProject: () => import("../components/project/AddProject.vue")
+    AddProject: () => import("../components/project/AddProject.vue"),
   },
   created() {
     console.log("프로젝트메인");
@@ -60,8 +64,8 @@ export default {
       this.FETCH_PROJECTS().finally(() => {
         this.loading = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

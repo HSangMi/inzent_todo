@@ -69,6 +69,9 @@ const mutations = {
   SET_TASK_INFO(state, taskInfo) {
     state.taskInfo = taskInfo;
   },
+  SET_COMMENTS(state, comments) {
+    state.taskInfo.comments = comments;
+  },
   //////////////////////// DASHBOARD ////////////////////////
   SET_TODAY_LIST(state, todayList) {
     state.todayList = todayList;

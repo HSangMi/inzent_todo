@@ -111,6 +111,12 @@ const actions = {
       .addSubTask(subTask)
       .then(() => dispatch("FETCH_PROJECT", state.project.id));
   },
+  UPDATE_TASK({ state, dispatch }, task) {
+    console.log("actions.UPDATE_TASK : ");
+    return api.project
+      .updateTask(task)
+      .then(() => dispatch("FETCH_PROJECT", state.project.id));
+  },
   ADD_NEW_LABEL(_, newLabel) {
     console.log(newLabel);
     return api.project.addNewLabel(newLabel).then(() => {});
@@ -133,8 +139,18 @@ const actions = {
     return api.project.reorderTask(targetTask).then((data) => {
       // console.log("리오더 끝!");
       // console.log(data);
-      commit("SET_TASK_LIST", data);
+      return commit("SET_TASK_LIST", data);
     });
+  },
+  ADD_COMMENT({ commit }, commentObj) {
+    console.log("ADD_COMMENT...");
+    return api.project.addComment(commentObj).then((comments) => {
+      console.log(comments);
+      commit("SET_COMMENTS", comments);
+    });
+  },
+  DOWNLOAD_FILE(_, file) {
+    return api.project.downloadFile(file);
   },
   //////////////////////// DASHBOARD ////////////////////////
   //오늘 리스트

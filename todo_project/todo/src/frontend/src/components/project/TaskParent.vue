@@ -1,48 +1,99 @@
 <template>
-  <v-card class="mr-4 super-task-card" width="300">
-    <v-card-title class="task-list-header">
+  <v-card class="mr-4 super-task-card pt-1" width="300">
+    <v-card-title>
       <v-icon v-if="!list.superTask.usePublic">mdi-lock</v-icon>
-      {{ list.superTask.title }}
+      <span class="task-list-header">{{ list.superTask.title }}</span>
+      <!-- <span class="grey--text pl-3 font-weight-regular">{{list.subTaskList.length}}</span> -->
       <v-spacer></v-spacer>
       <v-btn icon @click="show = !show">
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      </v-btn>-->
+      <v-menu offset-y :close-on-content-click="false">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn v-bind="attrs" v-on="on" icon>
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+        <v-list dense class="py-0">
+          <v-subheader class="text-center">Task Actions</v-subheader>
+          <v-divider></v-divider>
+          <v-list-item class="px-2">
+            <v-list-item-icon class="mr-2">
+              <v-icon small>mdi-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="pr-3">
+              <v-list-item-title>Sort by State</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item class="px-2">
+            <v-list-item-icon class="mr-2">
+              <v-icon small>mdi-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="pr-3">
+              <v-list-item-title>Change state to Complete</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item class="px-2">
+            <v-list-item-icon class="mr-2">
+              <v-icon small>mdi-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="pr-3">
+              <v-list-item-title>Sort by State</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card-title>
+    <!-- <v-progress-linear color="indigo lighten-1" height="8" value="30"></v-progress-linear> -->
     <v-expand-transition>
       <div v-show="show">
         <v-divider></v-divider>
         <v-card-text class="expand-card-text">
-          <v-row align="center" class="mx-0">
+          <router-link :to="`/projects/${board.id}/task/${list.superTask.taskId}`">
+            <!-- <v-row align="center" class="mx-0"> -->
             <!-- <v-rating :value="4.5" color="amber" dense half-increments readonly size="14"></v-rating> -->
-            <div
-              class="grey--text"
-            >{{ list.superTask.memberNo }} RegDate:{{ list.superTask.regDate }}</div>
-          </v-row>
+            <div>
+              <v-avatar v-if="resistrant.imgCode" size="24">
+                <img :src="resistrant.imgCode" />
+              </v-avatar>
+              <v-avatar v-else size="24">
+                <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+              </v-avatar>
+              {{resistrant.name}}
+              <span class="grey--text">{{ list.superTask.regDate }}</span>
+            </div>
+            <v-list-item three-line class="px-0" v-if="list.superTask.description">
+              <v-list-item-content>
+                <v-list-item-subtitle>{{list.superTask.description}}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <!-- <div class="grey--text">RegDate:{{ list.superTask.regDate }}</div> -->
+            <!-- </v-row> -->
 
-          <!-- <div class="my-4 subtitle-1">$ • Italian, Cafe</div> -->
+            <!-- <div class="my-4 subtitle-1">$ • Italian, Cafe</div> -->
 
-          <div class="my-4">{{ list.superTask.description }}</div>
-          <div class="my-2" v-if="list.superTask.startDate||list.superTask.endDate">
-            <v-chip label small color="#cacaca">
-              <v-icon left>mdi-clock-outline</v-icon>
-              {{list.superTask.startDate}} - {{ list.superTask.endDate}}
-            </v-chip>
-          </div>
-          <div v-if="list.superTask.labels">
-            <v-chip
-              v-for="label in setLabel(list.superTask.labels)"
-              :key="label.lableNo"
-              filter
-              label
-              small
-              dark
-              class="mr-1"
-              :color="label.labelColor"
-            >{{label.labelName}}</v-chip>
-          </div>
+            <!-- <div class="my-4">{{ list.superTask.description }}</div> -->
+            <div v-if="list.superTask.labels" class="pt-2">
+              <v-chip
+                v-for="label in setLabel(list.superTask.labels)"
+                :key="label.lableNo"
+                filter
+                small
+                dark
+                class="mr-1"
+                :color="label.labelColor"
+              >{{label.labelName}}</v-chip>
+            </div>
+            <div class="my-2" v-if="list.superTask.startDate||list.superTask.endDate">
+              <v-chip label small color="#cacaca">
+                <v-icon left>mdi-clock-outline</v-icon>
+                {{list.superTask.startDate}} - {{ list.superTask.endDate}}
+              </v-chip>
+            </div>
+          </router-link>
         </v-card-text>
       </div>
     </v-expand-transition>
@@ -82,8 +133,22 @@ export default {
       selection: 0,
       show: false,
       drag: false,
-      active: false
+      active: false,
+      resistrant: undefined
     };
+  },
+  created() {
+    console.log("created..");
+    this.resistrant = this.getMember(this.list.superTask.memberNo);
+    console.log(this.resistrant);
+    console.log(",,,");
+  },
+  mounted() {
+    console.log("mounted..");
+    console.dir(this.items);
+  },
+  beforeUpdate() {
+    console.log("beforeUpdate..");
   },
   components: {
     Draggable,
@@ -91,11 +156,12 @@ export default {
   },
   computed: {
     ...mapState({
-      labelList: "labelList"
+      labelList: "labelList",
+      memberList: "memberList"
     }),
     dragOptions() {
       return {
-        animation: "200",
+        animation: "400",
         ghostClass: "ghost",
         group: "kanban-board-list-items"
       };
@@ -112,11 +178,24 @@ export default {
       get() {
         console.log("get items..");
         // console.log(this.list.subTaskList);
+        // for (var i = 0; i < this.list.subTaskList.length; i++) {
+        //   console.log(
+        //     this.list.subTaskList[i].taskId,
+        //     this.list.subTaskList[i].sortNo
+        //   );
+        // }
         return this.list.subTaskList;
       },
       set(reorderedListItems) {
-        console.log("set items..");
-        console.log(reorderedListItems);
+        console.log("1. set items..");
+
+        // console.log(reorderedListItems);
+        for (var i = 0; i < reorderedListItems.length; i++) {
+          console.log(
+            reorderedListItems[i].taskId,
+            reorderedListItems[i].sortNo
+          );
+        }
 
         const payload = {
           boardId: this.board.id,
@@ -149,7 +228,7 @@ export default {
       this.SET_LAST_SUB_SORT_NO(sortNo);
     },
     reorderTaskListItems(payload) {
-      console.log("----reorderTaskItems-----");
+      console.log("2. reorderTaskItems...");
       // console.log("this.list", this.list);
       var targetTask = {};
       var items = payload.items;
@@ -159,9 +238,11 @@ export default {
       targetTask.projectId = payload.boardId; // 재호출용 데이터
       targetTask.memberNo = payload.memberNo; // 재호출용 데이터
 
+      for (var j = 0; j < items.length - 1; j++) {
+        console.log(items[j].taskId, items[j].sortNo);
+      }
       if (this.list.subTaskList.length === 0) {
         console.log("업무대 빵");
-        console.log(items);
         targetTask.taskId = items[0].taskId;
         targetTask.sortNo = 65535;
         return this.REORDER_TASK(targetTask);
@@ -176,10 +257,21 @@ export default {
         } else if (
           i > 0 &&
           i < items.length - 1 &&
-          items[i].sortNo <= items[i - 1].sortNo &&
-          items[i].sortNo < items[i + 1].sortNo
+          items[i].sortNo <= items[i - 1].sortNo
         ) {
-          console.log("카드가 중간에서 이동한 경우!", i);
+          //items[i].sortNo >= items[i + 1].sortNo) // && items[i].sortNo > items[i - 1].sortNo
+          console.log("앞에 카드보다 작은경우!!", i);
+          targetTask.taskId = items[i].taskId;
+          targetTask.sortNo = (items[i - 1].sortNo + items[i + 1].sortNo) / 2;
+          return this.REORDER_TASK(targetTask);
+        } else if (
+          i > 0 &&
+          i < items.length - 1 &&
+          items[i].sortNo >= items[i + 1].sortNo &&
+          items[i - 1].sortNo < items[i + 1].sortNo
+        ) {
+          //items[i].sortNo >= items[i + 1].sortNo) // && items[i].sortNo > items[i - 1].sortNo
+          console.log("뒤에 카드보다 큰 경우!", i);
           targetTask.taskId = items[i].taskId;
           targetTask.sortNo = (items[i - 1].sortNo + items[i + 1].sortNo) / 2;
           return this.REORDER_TASK(targetTask);
@@ -189,17 +281,22 @@ export default {
         ) {
           console.log("카드가 맨~~아래로 내려온경우", i);
           targetTask.taskId = items[i].taskId;
-          targetTask.sortNo = items[i - 1].sortNo + 65535;
+          targetTask.sortNo = items[i - 1].sortNo * 2;
           return this.REORDER_TASK(targetTask);
         } else if (items[i].taskSuperId != payload.taskSuperId) {
-          console.log("다른리스트로 옮겼지만 순서엔 문제없음");
+          console.log("다른리스트로 옮겼지만 순서엔 문제없음", i);
           // console.log("item의 슈퍼id: ", items[i].taskSuperId);
           // console.log("현재 리스트 id: ", payload.taskSuperId);
           targetTask.taskId = items[i].taskId;
+          targetTask.sortNo = items[i].sortNo;
           targetTask.taskSuperId = payload.taskSuperId;
           return this.REORDER_TASK(targetTask);
+        } else {
+          console.log("무슨경우 ?  ", i);
+          // return;
         }
       }
+      console.log("../end");
       // this.list.subTaskList = payload.items;
       // console.log("////reorderTaskItems-----");
       // this.REORDER_TASK(targetTask);
@@ -242,12 +339,24 @@ export default {
         //this.labels += this.taskLabel[i].labelNo + ":";
       }
       return taskLabel;
+    },
+    getMember(no) {
+      var mb = this.memberList.find(item => {
+        return item.memberNo == no;
+      });
+      return mb;
     }
+    // getImgCode(item) {
+    //   return "data:image;base64," + item.imgCode;
+    // }
   }
 };
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+}
 ul,
 li {
   list-style: none;
@@ -256,13 +365,19 @@ li {
 .task-list {
   padding: 0px;
 }
+.task-list-header {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 65%;
+}
 .super-task-card {
   background-color: #dcdcdc;
 }
 .super-task-card .v-card__title {
   font-size: 1.2em;
   font-weight: bold;
-  color: #9e9e9e;
+  color: #797070;
   /* background-color: #685083; */
   padding: 5px;
 }
@@ -272,6 +387,6 @@ li {
   flex-direction: column !important;
 }
 .expand-card-text {
-  background-color: #dcdcdc;
+  background-color: #9fa4b93b;
 }
 </style>

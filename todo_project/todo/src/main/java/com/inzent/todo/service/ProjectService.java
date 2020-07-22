@@ -1,18 +1,22 @@
 package com.inzent.todo.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.inzent.todo.dto.MemberDto;
+import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
 import com.inzent.todo.dto.TaskBoardListDto;
 import com.inzent.todo.dto.TaskDto;
+import com.inzent.todo.dto.TaskUpdateDto;
 import com.inzent.todo.repository.FileDao;
 import com.inzent.todo.repository.MemberDao;
 import com.inzent.todo.repository.ProjectDao;
 import com.inzent.todo.util.DBUtil;
 import com.inzent.todo.util.FileUtil;
+import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.ImageVo;
 import com.inzent.todo.vo.LabelVo;
@@ -38,9 +42,8 @@ public class ProjectService {
 
     public ProjectVo addProject(ProjectDto projectDto, String userId) throws Exception {
         System.out.println("ProjectService.addproject ---");
-        System.out.println(projectDto.toString());
-        System.out.println(projectDto.getMembers().size());
-        System.out.println(projectDto.getMembers().isEmpty());
+        // System.out.println(projectDto.toString());
+        System.out.println(projectDto.getMembers().length);
         ProjectVo projectVo = new ProjectVo();
         String projectId = DBUtil.generateKey("PJ");
         projectVo.setId(projectId);
@@ -58,34 +61,38 @@ public class ProjectService {
             projectVo.setImgNo("#" + projectDto.getCoverColor());
         } else {
             System.out.println("CoverImg !");
-            MultipartFile imgFile = projectDto.getCoverImg();
+            projectVo.setImgNo(projectDto.getCoverImg());
+            // MultipartFile imgFile = projectDto.getCoverImg();
 
-            String orgFileName = imgFile.getOriginalFilename();
-            String fileExtName = orgFileName.substring(orgFileName.lastIndexOf('.') + 1, orgFileName.length());
-            String saveFileName = DBUtil.generateSaveFileName(fileExtName);
+            // String orgFileName = imgFile.getOriginalFilename();
+            // String fileExtName = orgFileName.substring(orgFileName.lastIndexOf('.') + 1,
+            // orgFileName.length());
+            // String saveFileName = DBUtil.generateSaveFileName(fileExtName);
 
-            // 파일 업로드
-            FileUtil.writeImgFile(imgFile, saveFileName);
+            // // 파일 업로드
+            // FileUtil.writeImgFile(imgFile, saveFileName);
 
-            // DB에 img 저장
-            ImageVo imageVo = new ImageVo();
-            imageVo.setSaveName(saveFileName);
-            int img_key = fileDao.insertImg(imageVo);
-            projectVo.setImgNo(img_key + "");
+            // // DB에 img 저장
+            // ImageVo imageVo = new ImageVo();
+            // imageVo.setSaveName(saveFileName);
+            // int img_key = fileDao.insertImg(imageVo);
+            // projectVo.setImgNo(img_key + "");
         }
 
         // TODO 프로젝트 멤버테이블에 생성한사람, 멤버가 있다면 멤버도 추가
+
         MemberVo mem = new MemberVo();
         mem.setProjectId(projectId);
-        // 프로젝트 생성자 등록
         mem.setUserId(userId);
-        projectVo.setManager(memberDao.insertMember(mem));
+        projectVo.setManager(memberDao.insertMember(mem)); // 프로젝트 생성자 (매니저) 등록
 
-        if (projectDto.getMembers().isEmpty()) {
-            System.out.println("멤버 아직");
-        } else {
+        if (projectDto.getMembers().length != 0) {
+            Map<String, Object> map = new HashMap<String, Object>();
             System.out.println("멤버가 있지롱");
-            // 여러명등록해줘야해.ㅠㅠ
+            System.out.println(projectDto.getMembers().length);
+            map.put("projectId", projectId);
+            map.put("members", projectDto.getMembers());
+            memberDao.insertMembers(map);
         }
         projectDao.insertProject(projectVo);
 
@@ -113,12 +120,6 @@ public class ProjectService {
             projectDao.insertSubTask(taskDto);
 
         }
-
-        // superTask.setTaskId(taskId);
-
-        // 프로젝트 테이블에 insert
-        // projectVo에 Dto내용 뽑아서 담기!
-
         if (taskDto.getAttachFiles() != null) {
             System.out.println("Attach files... ");
             for (MultipartFile f : taskDto.getAttachFiles()) {
@@ -138,25 +139,82 @@ public class ProjectService {
                 fileDao.insertFile(file);
             }
         }
-
         // 담당자가 있다면, 담당자 테이블에 추가!
-        // MemberVo mem = new MemberVo();
-        // mem.setProjectId(projectId);
-        // // 프로젝트 생성자 등록
-        // mem.setUserId("userTestId");
-        // projectVo.setManager(memberDao.insertMember(mem));
+        if (taskDto.getManager().length != 0) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            System.out.println("멤버가 있지롱");
+            map.put("taskId", taskId);
+            map.put("managers", taskDto.getManager());
+            memberDao.insertManagers(map);
+            // 여러명등록해줘야해.ㅠㅠ
+        }
+    }
 
-        // if (projectDto.getMembers().isEmpty()) {
-        // System.out.println("멤버 아직");
-        // } else {
-        // System.out.println("멤버가 있지롱");
-        // // 여러명등록해줘야해.ㅠㅠ
+    public void updateTask(TaskUpdateDto taskDto) throws Exception {
+        System.out.println("-----------ProjectService.updateTask ----------");
+        System.out.println(taskDto.toString());
+        System.out.println("--------------------------------------------");
+
+        // if (taskDto.getSortNo() == 0) {
+        // taskDto.setSortNo(65535);
         // }
+        // String taskId = "";
+        if (taskDto.getTaskSuperId() != null) {
+            System.out.println(" :: UPDATE SUPER TASK:: ");
+            // taskId = DBUtil.generateKey("TP");
+            // taskDto.setTaskId(taskId);
+            // projectDao.insertSuperTask(taskDto);
+            // TODO UPDate SUPER TASK
+        } else {
+            System.out.println(" :: UPDATE SUB TASK:: ");
+            // taskId = DBUtil.generateKey("TB");
+            // taskDto.setTaskId(taskId);
+            projectDao.updateSubTask(taskDto);
+            // TODO UPDATE SUB TASK
+        }
+
+        // TODO 만약 삭제가 있다면, 삭제도 전달!!
+        if (taskDto.getAttachFiles() != null) {
+            System.out.println("Attach files... ");
+            for (MultipartFile f : taskDto.getAttachFiles()) {
+                String orgFileName = f.getOriginalFilename();
+                int size = (int) f.getSize();
+                String fileExtName = orgFileName.substring(orgFileName.lastIndexOf('.') + 1, orgFileName.length());
+                String saveFileName = DBUtil.generateSaveFileName(fileExtName);
+                // 파일 업로드
+                FileUtil.writeFile(f, saveFileName);
+                // DB에 img 저장
+                FileVo file = new FileVo();
+                file.setSaveName(saveFileName);
+                file.setOrgName(orgFileName);
+                file.setExt(fileExtName);
+                file.setSize(size);
+                file.setTaskId(taskDto.getTaskId());
+                fileDao.insertFile(file);
+            }
+        }
+        // 담당자가 있다면, 담당자 테이블에 추가!
+        if (taskDto.getAddManager().length != 0) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            System.out.println("멤버 추가가 있지롱");
+            map.put("taskId", taskDto.getTaskId());
+            map.put("managers", taskDto.getAddManager());
+            memberDao.insertManagers(map);
+            // 여러명등록해줘야해.ㅠㅠ
+        }
+        if (taskDto.getSubManager().length != 0) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            System.out.println("멤버 삭제가 있지롱");
+            map.put("taskId", taskDto.getTaskId());
+            map.put("managers", taskDto.getSubManager());
+            memberDao.deleteManagers(map);
+            // 여러명등록해줘야해.ㅠㅠ
+        }
 
     }
 
-    public List<ProjectVo> getProjectList() {
-        return projectDao.selectProjectList();
+    public List<ProjectCardDto> getProjectList(String userId) {
+        return projectDao.selectProjectList(userId);
     }
 
     public List<TaskBoardListDto> getTaskList(String pid, int memNo) {
@@ -213,6 +271,14 @@ public class ProjectService {
 
     public void reorderTask(TaskDto targetTask) {
         projectDao.updateSortNo(targetTask);
+    }
+
+    public void addComment(CommentVo comment) {
+        projectDao.insertComment(comment);
+    }
+
+    public List<CommentVo> getComments(String taskId) {
+        return projectDao.selectComments(taskId);
     }
 
 }

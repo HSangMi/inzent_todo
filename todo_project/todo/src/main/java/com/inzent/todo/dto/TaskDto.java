@@ -29,7 +29,8 @@ public class TaskDto {
     private MultipartFile[] attachFiles;
     private int fileCnt;
     private int commentCnt;
-    private String manager;
+    private int[] manager;
+    private String managerString;
 
     public boolean getUsePublic() {
         return usePublic;

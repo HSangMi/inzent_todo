@@ -1,8 +1,6 @@
 package com.inzent.todo.dto;
 
-// import javax.crypto.Cipher;
-
-import org.springframework.web.multipart.MultipartFile;
+import java.sql.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,20 +9,22 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProjectDto {
-
+public class ProjectCardDto {
+    private String id;
     private String title;
-    private String description;
+    private String state;
     private boolean usePublic;
+    private String description;
     private String startDate;
     private String endDate;
-    private String coverColor;
-    // private MultipartFile coverImg;
-    private String coverImg;
-    private String[] members;
+    private Date regDate;
+    private String imgNo;
+    private int manager;
+    private String userId;
+    private String imgCode;
+    private int memberCnt;
 
     public boolean getUsePublic() {
         return usePublic;
     }
-
 }

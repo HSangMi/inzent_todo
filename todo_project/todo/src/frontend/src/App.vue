@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <app-bar />
-    <side-bar />
+    <app-bar v-if="isLoginPage()" />
+    <side-bar v-if="isLoginPage()" />
     <v-main>
       <router-view></router-view>
     </v-main>
@@ -19,6 +19,12 @@ export default {
     AppBar: () => import("@/components/core/AppBar.vue"),
   },
   computed: {},
+  methods: {
+    /* 로그인 페이지에서는 Header, Navigator 숨기기 */
+    isLoginPage() {
+      return location.pathname !== "/login";
+    },
+  },
 };
 /* 
   components: {

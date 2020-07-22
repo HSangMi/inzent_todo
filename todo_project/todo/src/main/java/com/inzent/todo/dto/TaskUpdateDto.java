@@ -1,7 +1,5 @@
 package com.inzent.todo.dto;
 
-// import javax.crypto.Cipher;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
@@ -11,20 +9,22 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProjectDto {
-
+public class TaskUpdateDto {
+    private String taskId;
     private String title;
     private String description;
     private boolean usePublic;
     private String startDate;
     private String endDate;
-    private String coverColor;
-    // private MultipartFile coverImg;
-    private String coverImg;
-    private String[] members;
+    private char state;
+    private String taskSuperId;
+    private String labels;
+    private MultipartFile[] attachFiles;
+    private int[] addManager;
+    private int[] subManager;
+    private String managerString;
 
     public boolean getUsePublic() {
         return usePublic;
     }
-
 }

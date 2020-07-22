@@ -40,7 +40,11 @@
               @click:clear="inputStartDate(-1)"
             ></v-text-field>
           </template>
-          <v-date-picker v-model="startDate" no-title @input="inputStartDate"></v-date-picker>
+          <v-date-picker
+            v-model="startDate"
+            no-title
+            @input="inputStartDate"
+          ></v-date-picker>
         </v-menu>
         <br />
         <v-menu
@@ -75,7 +79,11 @@
               @click:clear="inputEndDate(-1)"
             ></v-text-field>
           </template>
-          <v-date-picker v-model="endDate" no-title @input="inputEndDate"></v-date-picker>
+          <v-date-picker
+            v-model="endDate"
+            no-title
+            @input="inputEndDate"
+          ></v-date-picker>
         </v-menu>
       </v-card-text>
     </v-card>
@@ -92,7 +100,7 @@ export default {
       startDate: "", //new Date().toISOString().substr(0, 10),
       endDate: "",
       startDatePicker: false,
-      endDatePicker: false
+      endDatePicker: false,
     };
   },
   computed: {
@@ -102,7 +110,7 @@ export default {
       },
       set(newVal) {
         this.$emit("addStartDate", newVal);
-      }
+      },
     },
     existEndDateModel: {
       get() {
@@ -110,8 +118,8 @@ export default {
       },
       set(newVal) {
         this.$emit("addEndDate", newVal);
-      }
-    }
+      },
+    },
   },
   methods: {
     inputStartDate(val) {
@@ -127,10 +135,9 @@ export default {
       }
       this.endDatePicker = false;
       this.$emit("addEndDate", this.endDate);
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

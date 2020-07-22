@@ -1,8 +1,11 @@
 <template>
   <div style="height:100%">
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
     <v-container class="project-container" fluid tag="section">
       <v-app-bar color="#FFFFFF" dense flat absolute>
-        <v-tabs>
+        <v-tabs color="grey">
           <v-tab>KANBAN BOARD</v-tab>
           <v-tab>GANTT CHART</v-tab>
         </v-tabs>
@@ -13,8 +16,8 @@
         <v-btn icon @click="onStar">
           <v-icon>{{ active ? "mdi-star" : "mdi-star-outline" }}</v-icon>
         </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
+        <v-btn icon color="grey lighten-1" @click.prevent="isOpenProjectInfo = true">
+          <v-icon>mdi-information</v-icon>
         </v-btn>
       </v-app-bar>
       <v-divider></v-divider>
@@ -42,6 +45,7 @@
       </div>
       <router-view :projectId="project.id"></router-view>
     </v-container>
+    <project-info :openModal="isOpenProjectInfo" @close="isOpenProjectInfo = false" />
   </div>
 </template>
 
@@ -51,6 +55,7 @@ import Draggable from "vuedraggable";
 
 import TaskParent from "../components/project/TaskParent";
 import AddSuperTask from "../components/project/AddTaskParent";
+import ProjectInfo from "../components/project/ProjectInfo.vue";
 // import AddSubTask from "../components/project/AddSubTask";
 //
 export default {
@@ -58,7 +63,8 @@ export default {
     TaskParent,
     AddSuperTask,
     // AddSubTask,
-    Draggable
+    Draggable,
+    ProjectInfo
     // TaskList,
   },
   data() {
@@ -66,15 +72,18 @@ export default {
       pid: 0,
       loading: false,
       selection: 1,
-      active: false
+      active: false,
+      isOpenProjectInfo: false
     };
   },
   created() {
     console.log("-------projectBoard--------");
+    this.loading = true;
     console.log(this.$route.params.pid);
     this.fetchData().then(() => {
       console.log("SETHEADER : " + this.project.title);
       console.log("패치데이터 완료");
+      this.loading = false;
       this.SET_HEADER_TITLE(this.project.title);
     });
   },
@@ -121,11 +130,11 @@ export default {
     fetchData() {
       return this.FETCH_PROJECT(this.$route.params.pid);
     },
-    reserve() {
-      this.loading = true;
+    // reserve() {
+    //   this.loading = true;
 
-      setTimeout(() => (this.loading = false), 2000);
-    },
+    //   //setTimeout(() => (this.loading = false), 2000);
+    // },
     onStar() {
       this.active = !this.active;
     },

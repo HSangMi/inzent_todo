@@ -1,20 +1,21 @@
 <template>
   <div>
-    <li class="sub-task-item">
+    <li class="sub-task-item" :class="`state${item.state}`">
       <router-link :to="`/projects/${board.id}/task/${item.taskId}`">
         <v-card class="rounded-lg mx-auto my-0" width="300" flat draggable="false">
           <v-card-title>
-            <v-icon v-if="!item.usePublic">mdi-lock</v-icon>
-            {{ item.title }}
+            <v-icon small v-if="!item.usePublic">mdi-lock</v-icon>
+            <span class="task-title">{{ item.title }}</span>
+            <!-- {{ item.sortNo }}\\{{item.taskId}} -->
             <v-spacer></v-spacer>
-            <v-btn icon @click="onStar">
+            <v-btn icon @click.prevent="onStar">
               <v-icon>{{ active ? "mdi-star" : "mdi-star-outline" }}</v-icon>
             </v-btn>
           </v-card-title>
-          <v-card-subtitle class="pa-0 px-2 pt-2" v-if="item.startDate||item.endDate">
+          <v-card-subtitle class="pa-0 px-2 pt-2" v-if="item.startDate || item.endDate">
             <v-chip label small color="#cacaca">
-              <v-icon left>mdi-clock-outline</v-icon>
-              {{item.startDate}} - {{ item.endDate}}
+              <v-icon small left>mdi-clock-outline</v-icon>
+              {{ item.startDate }} - {{ item.endDate }}
             </v-chip>
           </v-card-subtitle>
           <v-card-text class="px-2 pb-2">
@@ -28,7 +29,7 @@
                   dark
                   class="mr-1"
                   :color="label.labelColor"
-                >{{label.labelName}}</v-chip>
+                >{{ label.labelName }}</v-chip>
                 <!-- <v-chip-group
                 v-model="selection"
                 active-class="deep-purple accent-4 white--text"
@@ -47,13 +48,20 @@
                 {{ item.commentCnt }}
               </p>
               <v-spacer></v-spacer>
-              <v-tooltip v-for="manager in getManger(item.manager)" :key="manager.memberNo" bottom>
+              <v-tooltip
+                v-for="manager in getManger(item.managerString)"
+                :key="manager.memberNo"
+                bottom
+              >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-avatar size="36" class="user-avatars">
-                    <img src="https://cdn.vuetifyjs.com/images/john.jpg" v-bind="attrs" v-on="on" />
+                  <v-avatar v-if="manager.imgCode" size="36" class="user-avatars">
+                    <img :src="manager.imgCode" v-bind="attrs" v-on="on" />
+                  </v-avatar>
+                  <v-avatar v-else class="user-avatars" size="36" color="grey">
+                    <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
                   </v-avatar>
                 </template>
-                <span>{{manager.name}}</span>
+                <span>{{ manager.name }}</span>
               </v-tooltip>
               <!-- <v-avatar
               color="indigo"
@@ -106,9 +114,7 @@ export default {
     },
     getManger(managerString) {
       if (managerString !== null) {
-        console.log("매니저있음!", managerString);
         var managerNos = JSON.parse(managerString);
-        console.log("managerNos :", managerNos);
         const managers = [];
         for (var no in managerNos) {
           var mb = this.memberList.find(item => {
@@ -116,8 +122,6 @@ export default {
           });
           managers.push(mb);
         }
-        console.log(managers);
-        console.log("***********");
         return managers;
       }
     },
@@ -137,6 +141,9 @@ export default {
       }
       return label;
     }
+    // getImgCode(item) {
+    //   return "data:image;base64," + item.imgCode;
+    // }
   }
 };
 </script>
@@ -155,11 +162,33 @@ export default {
   -webkit-box-shadow: 0px 0px 4px 0px rgba(134, 134, 162, 0.21);
   -moz-box-shadow: 0px 0px 4px 0px rgba(134, 134, 162, 0.21);
   box-shadow: 0px 0px 4px 0px rgba(134, 134, 162, 0.21);
+  border-left: solid 8px;
+}
+.stateH {
+  border-color: #e0e0e0;
+}
+.stateP {
+  border-color: #2196f3;
+}
+.stateC {
+  border-color: #4caf50;
+}
+.stateE {
+  border-color: #ff5252;
+}
+.stateW {
+  border-color: #fb8c00;
 }
 
 .sub-task-item .v-card__title {
   font-size: 1em;
   padding: 0px 0px 0px 10px;
+}
+.task-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 82%;
 }
 .user-avatars {
   margin-left: -15px;

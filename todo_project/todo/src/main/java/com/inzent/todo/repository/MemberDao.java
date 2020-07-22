@@ -1,5 +1,7 @@
 package com.inzent.todo.repository;
 
+import java.util.Map;
+
 import com.inzent.todo.vo.MemberVo;
 
 import org.apache.ibatis.session.SqlSession;
@@ -15,6 +17,18 @@ public class MemberDao {
         System.out.println("MemberDao - insertMember");
         sqlSession.insert("member.insertMember", member);
         return member.getMemberNo();
+    }
+
+    public void insertMembers(Map<String, Object> map) {
+        sqlSession.insert("member.insertMembers", map);
+    }
+
+    public void insertManagers(Map<String, Object> map) {
+        sqlSession.insert("member.insertManagers", map);
+    }
+
+    public void deleteManagers(Map<String, Object> map) {
+        sqlSession.insert("member.deleteManagers", map);
     }
 
 }
