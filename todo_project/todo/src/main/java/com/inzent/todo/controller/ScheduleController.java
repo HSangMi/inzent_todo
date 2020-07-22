@@ -77,17 +77,15 @@ public class ScheduleController {
     }
 
     // 해당 업무대의 업무 소 조회
-    @Auth
     @PostMapping("/sublist")
-    public List<CalDateDetailDto> getSubList(@RequestBody String superId, HttpServletRequest req) {
-        UserVo user = (UserVo) req.getAttribute("user");
-        String userId = user.getId();
+    public List<CalDateDetailDto> getSubList(@RequestBody String superId) {
 
+        System.out.println("얄루루루1111" + superId);
         int length = superId.length();
         superId = superId.substring(0, length - 1);
 
-        System.out.println("얄루루루" + superId);
-        List<CalDateDetailDto> list = scheduleService.getSubList(superId, userId);
+        System.out.println("얄루루루2222" + superId);
+        List<CalDateDetailDto> list = scheduleService.getSubList(superId);
         System.out.println("제바라라랄" + list);
         return list;
     }

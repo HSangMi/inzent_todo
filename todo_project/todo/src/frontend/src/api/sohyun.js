@@ -61,6 +61,7 @@ export const schedule = {
     return request("post", "/schedule/clickdate", clickDate);
   },
   getSubList(superId) {
+    console.log("업무대----", superId);
     return request("post", "/schedule/sublist", superId);
   },
   getProject() {
