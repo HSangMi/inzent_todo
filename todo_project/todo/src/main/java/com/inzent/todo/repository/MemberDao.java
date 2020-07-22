@@ -14,7 +14,7 @@ public class MemberDao {
     private SqlSession sqlSession;
 
     public int insertMember(MemberVo member) {
-        System.out.println("MemberDao - insertMember");
+        // System.out.println("MemberDao - insertMember");
         sqlSession.insert("member.insertMember", member);
         return member.getMemberNo();
     }

@@ -20,11 +20,11 @@ public class UserDao {
     private SqlSession sqlSession;
 
     public void selectDao() {
-        System.out.println("Select DAO");
+        // System.out.println("Select DAO");
 
         List<String> list = sqlSession.selectList("user.selectTest");
         for (String s : list) {
-            System.out.println(s);
+            // System.out.println(s);
         }
     }
 

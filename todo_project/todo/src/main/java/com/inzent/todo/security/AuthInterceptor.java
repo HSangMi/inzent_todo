@@ -20,7 +20,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		// 1. handler 여부 판단
-		System.out.println("Auth Interceptor-------------");
+		// System.out.println("Auth Interceptor-------------");
 		if (handler instanceof HandlerMethod == false) {
 			return true;
 		}
@@ -36,14 +36,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			response.setStatus(401);
 			throw new AuthenticationException("접근 권한이 없습니다.");
 		}
-		System.out.println(jwtService);
+		// System.out.println(jwtService);
 		if (jwtService.isValidToken(jwtToken)) {
 			UserVo authUser = jwtService.getUser(jwtToken);
 			if (authUser == null) {
-				System.out.println("!! authUser == null !!");
+				// System.out.println("!! authUser == null !!");
 				throw new AuthenticationException("접근 권한이 없습니다.");
 			}
-			System.out.println("로그인성공---" + authUser.toString());
+			// System.out.println("로그인성공---" + authUser.toString());
 			request.setAttribute("user", authUser);
 		} else {
 			// response.sendRedirect(request.getContextPath() + "/login");

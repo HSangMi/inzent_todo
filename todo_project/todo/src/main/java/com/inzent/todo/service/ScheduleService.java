@@ -26,7 +26,7 @@ public class ScheduleService {
     public List<ScheduleDto> getCalendarList(String userId) {
         String existUser = scheduledao.selectExistUser(userId);
         String filterItem = scheduledao.selectCalFilterItem(userId);
-        System.out.println(filterItem);
+        // System.out.println(filterItem);
         // PJ2020072109523258::orange,zzz::0
         List<ScheduleDto> list = new ArrayList<>();
         if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
@@ -71,7 +71,7 @@ public class ScheduleService {
     public List<CalDateDetailDto> getClickDateList(ClickDateDto cddto) {
         String existUser = scheduledao.selectExistUser(cddto.getId());
         String filterItem = scheduledao.selectCalFilterItem(cddto.getId());
-        System.out.println(filterItem);
+        // System.out.println(filterItem);
         // // PJ2020072109523258::orange,zzz::0
         List<CalDateDetailDto> list = new ArrayList<>();
         if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
@@ -97,7 +97,7 @@ public class ScheduleService {
             map.put("userId", cddto.getId());
 
             list = scheduledao.getClickDateFilterList(map);
-            System.out.println("상세필터적용" + list);
+            // System.out.println("상세필터적용" + list);
         } // end else
         return list;
     }
@@ -129,7 +129,7 @@ public class ScheduleService {
         if (cnt == 1) { // 값이 잘 들어갔다면
             calFilter = scheduledao.selectCalFilterItem(userId); // 조회해라
         } else {
-            System.out.println("필터값 넣기 실패!");
+            // System.out.println("필터값 넣기 실패!");
         } // end else
 
         return calFilter;
@@ -139,7 +139,7 @@ public class ScheduleService {
     public void resetCalFilter(String userId) {
         int cnt = scheduledao.resetCalFilter(userId);
         if (cnt == 1) {
-            System.out.println("삭제 성공");
+            // System.out.println("삭제 성공");
         }
     }
 

@@ -26,7 +26,7 @@ public class JwtService {
 	// 토큰 발급
 	// public String createLoginToken(UserVo user) {
 	public String createLoginToken(TokenDto user) {
-		System.out.println();
+		// System.out.println();
 		long curTime = System.currentTimeMillis();
 		return Jwts.builder().setHeaderParam("typ", "JWT").setExpiration(new Date(curTime + (1000 * 60 * 60 * 24)))
 				.setIssuedAt(new Date(curTime)).claim(DATA_KEY, user)

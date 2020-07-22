@@ -18,7 +18,7 @@ public class BoardMainDao {
     private SqlSession sqlSession;
 
     public List<DashBoardSuperDto> getTodaySuperList(String userId) {
-        System.out.println("BoardMain Dao : get TodayList");
+        // System.out.println("BoardMain Dao : get TodayList");
 
         return sqlSession.selectList("dashboard.getTodaySuperList", userId);
     }
@@ -31,7 +31,7 @@ public class BoardMainDao {
     }
 
     public List<DashBoardSuperDto> getWeekSuperList(String userId) {
-        System.out.println("BoardMain Dao : get WeekList");
+        // System.out.println("BoardMain Dao : get WeekList");
 
         return sqlSession.selectList("dashboard.getWeekSuperList", userId);
     }
@@ -40,7 +40,7 @@ public class BoardMainDao {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("weekSub", weekSub);
         map.put("userId", userId);
-        System.out.println("여기여기...." + weekSub);
+        // System.out.println("여기여기...." + weekSub);
         return sqlSession.selectList("dashboard.getWeekSubList", map);
     }
 

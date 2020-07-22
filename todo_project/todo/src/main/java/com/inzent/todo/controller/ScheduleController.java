@@ -46,7 +46,7 @@ public class ScheduleController {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
         List<Map<String, Object>> list = scheduleService.getProjects(userId);
-        System.out.println("잘아아아아" + list);
+        // System.out.println("잘아아아아" + list);
         return list;
     }
 
@@ -80,13 +80,13 @@ public class ScheduleController {
     @PostMapping("/sublist")
     public List<CalDateDetailDto> getSubList(@RequestBody String superId) {
 
-        System.out.println("얄루루루1111" + superId);
+        // System.out.println("얄루루루1111" + superId);
         int length = superId.length();
         superId = superId.substring(0, length - 1);
 
-        System.out.println("얄루루루2222" + superId);
+        // System.out.println("얄루루루2222" + superId);
         List<CalDateDetailDto> list = scheduleService.getSubList(superId);
-        System.out.println("제바라라랄" + list);
+        // System.out.println("제바라라랄" + list);
         return list;
     }
 
@@ -135,7 +135,7 @@ public class ScheduleController {
         } // end for
         String calItem = sbPrj.toString() + "::" + sbMem.toString() + "::" + cfidto.getUseData();
         String calFilter = scheduleService.addCalFilterItem(calItem, userId);
-        System.out.println("결과아아ㅏ아아아" + calFilter);
+        // System.out.println("결과아아ㅏ아아아" + calFilter);
     }
 
     @Auth
@@ -145,7 +145,7 @@ public class ScheduleController {
         String userId = user.getId();
 
         scheduleService.resetCalFilter(userId);
-        System.out.println("초기화 성공");
+        // System.out.println("초기화 성공");
     }
 
 }

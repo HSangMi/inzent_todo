@@ -14,18 +14,18 @@ public class FileDao {
     private SqlSession sqlSession;
 
     public int insertImg(ImageVo imageVo) {
-        System.out.println("FileDao.insertImg");
+        // System.out.println("FileDao.insertImg");
         sqlSession.insert("file.insertImg", imageVo);
         return imageVo.getImgNo();
     }
 
     public int insertFile(FileVo file) {
-        System.out.println("FileDao.insertFile......");
+        // System.out.println("FileDao.insertFile......");
         return sqlSession.insert("file.insertFile", file);
     }
 
     public String selectImg() {
-        System.out.println("FileDao.insertImg");
+        // System.out.println("FileDao.insertImg");
         return sqlSession.selectOne("file.selectImg");
     }
 

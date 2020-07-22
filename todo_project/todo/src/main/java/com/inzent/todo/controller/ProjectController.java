@@ -53,8 +53,8 @@ public class ProjectController {
     @GetMapping("/")
     public List<ProjectCardDto> getProjectList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
-        System.out.println("Project Controller : get ProjectList");
-        System.out.println(user.toString());
+        // System.out.println("Project Controller : get ProjectList");
+        // System.out.println(user.toString());
 
         return projectService.getProjectList(user.getId());
         // return null;
@@ -65,10 +65,10 @@ public class ProjectController {
     public Map<String, Object> getProjectInfo(HttpServletRequest req, @PathVariable("pid") String pid) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-        System.out.println("Project Controller : getProjectInfo : " + pid);
+        // System.out.println("Project Controller : getProjectInfo : " + pid);
         // 멤버가 아니라면 못들어가게 막아야하지않나.?
         int memberNo = projectService.getMemberNo(pid, userId);
-        System.out.println("현재 사용자의 프로젝트 MEMBER NUM : " + memberNo);
+        // System.out.println("현재 사용자의 프로젝트 MEMBER NUM : " + memberNo);
 
         // 이 프로젝트에 속한 업무(대) 중 private이면서, 내 id와 같은 업무 가져오기..
         List<TaskBoardListDto> taskBoardList = projectService.getTaskList(pid, memberNo);
@@ -89,7 +89,7 @@ public class ProjectController {
     @Auth
     @PostMapping("/addProject")
     public ProjectVo addProject(HttpServletRequest req, ProjectDto projectDto) throws Exception {
-        System.out.println("Project Controller : addProject");
+        // System.out.println("Project Controller : addProject");
         UserVo user = (UserVo) req.getAttribute("user");
         return projectService.addProject(projectDto, user.getId());
 
@@ -99,15 +99,15 @@ public class ProjectController {
 
     @PostMapping("/addSuperTask")
     public void addSuperTask(TaskDto taskDto, HttpServletRequest req) throws Exception {
-        System.out.println("Project Controller : addSuperTask");
+        // System.out.println("Project Controller : addSuperTask");
         projectService.addTask(taskDto);
-        System.out.println(taskDto.toString());
+        // System.out.println(taskDto.toString());
         // System.out.println(projectDto.getCoverImg());
     }
 
     @PostMapping("/addSubTask")
     public void addSubTask(TaskDto taskDto, HttpServletRequest req) throws Exception {
-        System.out.println("Project Controller : addSubTask");
+        // System.out.println("Project Controller : addSubTask");
         projectService.addTask(taskDto);
         // System.out.println(projectDto.getCoverImg());
         // System.out.println(formObject.toString());
@@ -115,7 +115,7 @@ public class ProjectController {
 
     @PostMapping("/updateTask")
     public void updateTask(TaskUpdateDto taskDto, HttpServletRequest req) throws Exception {
-        System.out.println("Project Controller : updateTask");
+        // System.out.println("Project Controller : updateTask");
         // System.out.println(taskDto.getLabels().length());
         projectService.updateTask(taskDto);
         // System.out.println(projectDto.getCoverImg());
@@ -124,15 +124,15 @@ public class ProjectController {
 
     @PostMapping("/addNewLabel")
     public void addNewLabel(@RequestBody LabelVo newLabel) {
-        System.out.println("Project Controller : addNewLabel");
-        System.out.println(newLabel.toString());
+        // System.out.println("Project Controller : addNewLabel");
+        // System.out.println(newLabel.toString());
         projectService.addNewLabel(newLabel);
     }
 
     @PostMapping("/reorderTask")
     public List<TaskBoardListDto> reorderTask(@RequestBody TaskDto targetTask) {
-        System.out.println("Project Controller : reorderTask");
-        System.out.println(targetTask.toString());
+        // System.out.println("Project Controller : reorderTask");
+        // System.out.println(targetTask.toString());
         projectService.reorderTask(targetTask);
         // List<TaskBoardListDto> taskBoardList =
         return projectService.getTaskList(targetTask.getProjectId(), targetTask.getMemberNo());
@@ -142,8 +142,8 @@ public class ProjectController {
 
     @PostMapping("/addComment")
     public List<CommentVo> addComment(@RequestBody CommentVo comment) {
-        System.out.println("Project Controller : addComment");
-        System.out.println(comment.toString());
+        // System.out.println("Project Controller : addComment");
+        // System.out.println(comment.toString());
         projectService.addComment(comment);
         return projectService.getComments(comment.getTaskId());
         // projectService.reorderTask(targetTask);
@@ -176,8 +176,8 @@ public class ProjectController {
 
     @PostMapping("/download")
     public void downloadFile(HttpServletRequest request, HttpServletResponse response, @RequestBody FileVo f) {
-        System.out.println("파일 다운");
-        System.out.println(f.toString());
+        // System.out.println("파일 다운");
+        // System.out.println(f.toString());
 
         try {
             File file = new File("./upload/files", f.getSaveName());
@@ -190,7 +190,7 @@ public class ProjectController {
             response.setHeader("Content-Disposition", contentDisposition);
             response.setContentLength(fileSize);
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            // System.out.println(e);
         } catch (IOException e) {
             e.printStackTrace();
         }

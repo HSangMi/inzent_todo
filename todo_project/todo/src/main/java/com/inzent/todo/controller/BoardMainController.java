@@ -64,7 +64,7 @@ public class BoardMainController {
         weekSub = weekSub.substring(0, length - 1);
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-        System.out.println(weekSub);
+        // System.out.println(weekSub);
         List<DashBoardSubDto> list = boardMainService.getWeekSubList(weekSub, userId);
         return list;
     }

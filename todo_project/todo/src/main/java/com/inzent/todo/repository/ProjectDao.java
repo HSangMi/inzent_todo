@@ -26,25 +26,25 @@ public class ProjectDao {
 
     public int insertProject(ProjectVo projectVo) {
 
-        System.out.println("ProjectDao - insertProject");
+        // System.out.println("ProjectDao - insertProject");
 
-        System.out.println(projectVo.toString());
+        // System.out.println(projectVo.toString());
         return sqlSession.insert("project.insertProject", projectVo);
 
     }
 
     public int insertSuperTask(TaskDto taskDto) {
-        System.out.println("ProjectDao - insertTaskSuper");
+        // System.out.println("ProjectDao - insertTaskSuper");
         return sqlSession.insert("project.insertTaskSuper", taskDto);
     }
 
     public int insertSubTask(TaskDto taskDto) {
-        System.out.println("ProjectDao - insertTaskSub");
+        // System.out.println("ProjectDao - insertTaskSub");
         return sqlSession.insert("project.insertTaskSub", taskDto);
     }
 
     public int updateSubTask(TaskUpdateDto taskDto) {
-        System.out.println("## ProjectDao - updateTaskSub");
+        // System.out.println("## ProjectDao - updateTaskSub");
         return sqlSession.update("project.updateTaskSub", taskDto);
     }
 

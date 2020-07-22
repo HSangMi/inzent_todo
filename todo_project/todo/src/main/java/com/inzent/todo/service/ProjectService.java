@@ -41,9 +41,9 @@ public class ProjectService {
     private MemberDao memberDao;
 
     public ProjectVo addProject(ProjectDto projectDto, String userId) throws Exception {
-        System.out.println("ProjectService.addproject ---");
+        // System.out.println("ProjectService.addproject ---");
         // System.out.println(projectDto.toString());
-        System.out.println(projectDto.getMembers().length);
+        // System.out.println(projectDto.getMembers().length);
         ProjectVo projectVo = new ProjectVo();
         String projectId = DBUtil.generateKey("PJ");
         projectVo.setId(projectId);
@@ -57,10 +57,10 @@ public class ProjectService {
 
         // TODO 프로젝트 이미지가 있다면 저장, 없다면,색깔? 테마?
         if (projectDto.getCoverImg() == null) {
-            System.out.println("CoverImg is Empty..");
+            // System.out.println("CoverImg is Empty..");
             projectVo.setImgNo("#" + projectDto.getCoverColor());
         } else {
-            System.out.println("CoverImg !");
+            // System.out.println("CoverImg !");
             projectVo.setImgNo(projectDto.getCoverImg());
             // MultipartFile imgFile = projectDto.getCoverImg();
 
@@ -88,8 +88,8 @@ public class ProjectService {
 
         if (projectDto.getMembers().length != 0) {
             Map<String, Object> map = new HashMap<String, Object>();
-            System.out.println("멤버가 있지롱");
-            System.out.println(projectDto.getMembers().length);
+            // System.out.println("멤버가 있지롱");
+            // System.out.println(projectDto.getMembers().length);
             map.put("projectId", projectId);
             map.put("members", projectDto.getMembers());
             memberDao.insertMembers(map);
@@ -100,28 +100,28 @@ public class ProjectService {
     }
 
     public void addTask(TaskDto taskDto) throws Exception {
-        System.out.println("-----------ProjectService.addTask ----------");
-        System.out.println(taskDto.toString());
-        System.out.println("--------------------------------------------");
+        // System.out.println("-----------ProjectService.addTask ----------");
+        // System.out.println(taskDto.toString());
+        // System.out.println("--------------------------------------------");
 
         if (taskDto.getSortNo() == 0) {
             taskDto.setSortNo(65535);
         }
         String taskId = "";
         if (taskDto.getTaskSuperId() == null) {
-            System.out.println(" :: ADD SUPER TASK:: ");
+            // System.out.println(" :: ADD SUPER TASK:: ");
             taskId = DBUtil.generateKey("TP");
             taskDto.setTaskId(taskId);
             projectDao.insertSuperTask(taskDto);
         } else {
-            System.out.println(" :: ADD SUB TASK:: ");
+            // System.out.println(" :: ADD SUB TASK:: ");
             taskId = DBUtil.generateKey("TB");
             taskDto.setTaskId(taskId);
             projectDao.insertSubTask(taskDto);
 
         }
         if (taskDto.getAttachFiles() != null) {
-            System.out.println("Attach files... ");
+            // System.out.println("Attach files... ");
             for (MultipartFile f : taskDto.getAttachFiles()) {
                 String orgFileName = f.getOriginalFilename();
                 int size = (int) f.getSize();
@@ -142,7 +142,7 @@ public class ProjectService {
         // 담당자가 있다면, 담당자 테이블에 추가!
         if (taskDto.getManager().length != 0) {
             Map<String, Object> map = new HashMap<String, Object>();
-            System.out.println("멤버가 있지롱");
+            // System.out.println("멤버가 있지롱");
             map.put("taskId", taskId);
             map.put("managers", taskDto.getManager());
             memberDao.insertManagers(map);
@@ -151,22 +151,22 @@ public class ProjectService {
     }
 
     public void updateTask(TaskUpdateDto taskDto) throws Exception {
-        System.out.println("-----------ProjectService.updateTask ----------");
-        System.out.println(taskDto.toString());
-        System.out.println("--------------------------------------------");
+        // System.out.println("-----------ProjectService.updateTask ----------");
+        // System.out.println(taskDto.toString());
+        // System.out.println("--------------------------------------------");
 
         // if (taskDto.getSortNo() == 0) {
         // taskDto.setSortNo(65535);
         // }
         // String taskId = "";
         if (taskDto.getTaskSuperId() != null) {
-            System.out.println(" :: UPDATE SUPER TASK:: ");
+            // System.out.println(" :: UPDATE SUPER TASK:: ");
             // taskId = DBUtil.generateKey("TP");
             // taskDto.setTaskId(taskId);
             // projectDao.insertSuperTask(taskDto);
             // TODO UPDate SUPER TASK
         } else {
-            System.out.println(" :: UPDATE SUB TASK:: ");
+            // System.out.println(" :: UPDATE SUB TASK:: ");
             // taskId = DBUtil.generateKey("TB");
             // taskDto.setTaskId(taskId);
             projectDao.updateSubTask(taskDto);
@@ -175,7 +175,7 @@ public class ProjectService {
 
         // TODO 만약 삭제가 있다면, 삭제도 전달!!
         if (taskDto.getAttachFiles() != null) {
-            System.out.println("Attach files... ");
+            // System.out.println("Attach files... ");
             for (MultipartFile f : taskDto.getAttachFiles()) {
                 String orgFileName = f.getOriginalFilename();
                 int size = (int) f.getSize();
@@ -196,7 +196,7 @@ public class ProjectService {
         // 담당자가 있다면, 담당자 테이블에 추가!
         if (taskDto.getAddManager().length != 0) {
             Map<String, Object> map = new HashMap<String, Object>();
-            System.out.println("멤버 추가가 있지롱");
+            // System.out.println("멤버 추가가 있지롱");
             map.put("taskId", taskDto.getTaskId());
             map.put("managers", taskDto.getAddManager());
             memberDao.insertManagers(map);
@@ -204,7 +204,7 @@ public class ProjectService {
         }
         if (taskDto.getSubManager().length != 0) {
             Map<String, Object> map = new HashMap<String, Object>();
-            System.out.println("멤버 삭제가 있지롱");
+            // System.out.println("멤버 삭제가 있지롱");
             map.put("taskId", taskDto.getTaskId());
             map.put("managers", taskDto.getSubManager());
             memberDao.deleteManagers(map);
@@ -222,14 +222,14 @@ public class ProjectService {
         List<TaskBoardListDto> taskBoardList = new ArrayList<>();
 
         List<SuperTaskVo> superTaskList = projectDao.selectTaskList(pid, memNo);
-        System.out.println("superTaskList size : " + superTaskList.size());
-        System.out.println("--------------------------------------------");
+        // System.out.println("superTaskList size : " + superTaskList.size());
+        // System.out.println("--------------------------------------------");
         for (SuperTaskVo superTask : superTaskList) {
             TaskBoardListDto tbl = new TaskBoardListDto();
             tbl.setSuperTask(superTask);
             List<TaskDto> subTaskList = projectDao.selectTaskSubList(superTask.getTaskId(), memNo);
             if (subTaskList == null) {
-                System.out.println("서브태스크가 없습니다.");
+                // System.out.println("서브태스크가 없습니다.");
             } else {
                 // System.out.println("서브테스크가 있습니다.");
                 // System.out.println(subTaskList.toString());

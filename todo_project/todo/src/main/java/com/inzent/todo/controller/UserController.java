@@ -40,10 +40,10 @@ public class UserController {
 
     @GetMapping("/api/hello")
     public String hello() {
-        System.out.println("HELLO");
-        System.out.println(userDao);
+        // System.out.println("HELLO");
+        // System.out.println(userDao);
         userDao.selectDao();
-        System.out.println("db 성공!");
+        // System.out.println("db 성공!");
 
         return "hello";
     }
@@ -64,7 +64,7 @@ public class UserController {
         if (userToken != null) {
             token = jwtService.createLoginToken(userToken); // 토큰 발급
             map.put("accessToken", token);
-            System.out.println(token);
+            // System.out.println(token);
 
             if (userToken.getUserType().equals("u")) {
                 // 일반 유저
@@ -86,9 +86,9 @@ public class UserController {
     @Auth
     @PostMapping("/loginByToken")
     public UserDto login(HttpServletRequest req, @RequestBody String accessToken) {
-        System.out.println("토큰이 이미 발급된 유저로그인");
+        // System.out.println("토큰이 이미 발급된 유저로그인");
         UserVo temp = (UserVo) req.getAttribute("user");
-        System.out.println("user---" + temp);
+        // System.out.println("user---" + temp);
 
         UserDto user = userService.getById(((UserVo) req.getAttribute("user")).getId());
         if (user != null) {

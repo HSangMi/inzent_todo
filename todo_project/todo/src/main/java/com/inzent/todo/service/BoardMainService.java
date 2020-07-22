@@ -17,7 +17,7 @@ public class BoardMainService {
 
     // 오늘 할일 목록
     public List<DashBoardSuperDto> getTodaySuperList(String userId) {
-        System.out.println("BoardMain Service : get TodayList");
+        // System.out.println("BoardMain Service : get TodayList");
         List<DashBoardSuperDto> list = boardMainDao.getTodaySuperList(userId);
         String dueDate = null;
         String rate = null;
@@ -41,7 +41,7 @@ public class BoardMainService {
 
     // 주간 할일 목록
     public List<DashBoardSuperDto> getWeekSuperList(String userId) {
-        System.out.println("BoardMain Service : get WeekList");
+        // System.out.println("BoardMain Service : get WeekList");
 
         List<DashBoardSuperDto> list = boardMainDao.getWeekSuperList(userId);
         String dueDate = null;
@@ -66,7 +66,7 @@ public class BoardMainService {
 
     // 관심 할일 목록
     public List<DashBoardSuperDto> getStarredSuperList(String userId) {
-        System.out.println("BoardMain Service : get StaredList");
+        // System.out.println("BoardMain Service : get StaredList");
         return boardMainDao.getStarredSuperList(userId);
     }
 

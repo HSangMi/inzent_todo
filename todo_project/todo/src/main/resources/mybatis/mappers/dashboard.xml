@@ -6,14 +6,12 @@
     <select id="getTodaySuperList" parameterType="String" resultType="dashsuperdto">
     <![CDATA[
         select distinct ttsp.task_id pId, tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public, ttsp.progress_rate 
-        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
-        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
-        and ((current_date::varchar between tts.start_date and tts.end_date) or (current_date::varchar between ttsp.start_date and ttsp.end_date))
-        and (tts.task_id in (
-            select tts.task_id from tb_task_sub tts 
-            where tts.task_super_id in (
+        from  tb_task_super ttsp, tb_project tp
+        where  (ttsp.project_id = tp.id) 
+        and  (current_date::varchar between ttsp.start_date and ttsp.end_date)
+        and (ttsp.task_id in (
                     select task_id from tb_task_super where project_id in (
-                    select id from tb_project where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
+                    select id from tb_project where id in (select project_id from tb_member  where user_id=#{userId}))))
     ]]>
     </select>
     <select id="getTodaySubList" parameterType="map" resultType="dashsubdto">
@@ -54,14 +52,12 @@
     <select id="getWeekSuperList" parameterType="String" resultType="dashsuperdto">
     <![CDATA[
         select distinct ttsp.task_id pId, tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public, ttsp.progress_rate 
-        from tb_task_sub tts, tb_task_super ttsp, tb_project tp
-        where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id) 
-        and ((((date_trunc('week',current_date)::date)::varchar between tts.start_date and tts.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between tts.start_date and tts.end_date)) or ((((date_trunc('week',current_date)::date)::varchar between ttsp.start_date and ttsp.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between ttsp.start_date and ttsp.end_date))))
-        and (tts.task_id in (
-            select tts.task_id from tb_task_sub tts 
-            where tts.task_super_id in (
+        from  tb_task_super ttsp, tb_project tp
+        where (ttsp.project_id = tp.id) 
+        and  ((((date_trunc('week',current_date)::date)::varchar between ttsp.start_date and ttsp.end_date) or ((date_trunc('week',current_date)::date+6)::varchar between ttsp.start_date and ttsp.end_date)))
+        and (ttsp.task_id in (
                     select task_id from tb_task_super where project_id in (
-                    select id from tb_project where tp.id in (select project_id from tb_member  where user_id=#{userId})))))
+                    select id from tb_project where tp.id in (select project_id from tb_member  where user_id=#{userId}))))
     ]]>
     </select>
     <select id="getWeekSubList" parameterType="map" resultType="dashsubdto">
