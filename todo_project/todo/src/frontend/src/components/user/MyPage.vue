@@ -102,8 +102,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="updateUser('password', rePassword)">확인</v-btn>
-              <v-btn color="green darken-1" text @click="cancel">취소</v-btn>
+              <v-btn color="green darken-1" text @click="cancel">CANCEL</v-btn>
+              <v-btn color="green darken-1" text @click="updateUser('password', rePassword)">UPDATE</v-btn>
             </v-card-actions>
           </v-card>
           <v-card v-else>
@@ -130,8 +130,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click.prevent="pwdCheck">확인</v-btn>
-              <v-btn color="green darken-1" text @click="dialog = false">취소</v-btn>
+              <v-btn color="green darken-1" text @click="dialog = false">CANCEL</v-btn>
+              <v-btn color="green darken-1" text @click.prevent="pwdCheck">NEXT</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -336,6 +336,12 @@ export default {
       console.log("key: " + key)
       console.log("value: " + value)
       this.UPDATE_USER({id, key, value})      
+      if(key == "password") {
+        this.cancel()
+        this.prePassword = ""
+        this.newPassword = ""
+        this.rePassword = ""
+      }
     },
 
     dateEvent() {
