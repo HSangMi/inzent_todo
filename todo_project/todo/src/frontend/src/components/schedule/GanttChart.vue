@@ -1,9 +1,9 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card outlined max-height="838" class="overflow-y-auto">
+      <v-card outlined max-height="800" class="overflow-y-auto mx-2">
         <div class="mx-2">
-          <v-subheader class="blue-grey lighten-4">PROJECT</v-subheader>
+          <v-subheader class="blue-grey lighten-4">프로젝트</v-subheader>
           <v-list class="project-filter">
             <v-list-item v-for="item in projectFilter" :key="item.prjId">
               <v-list-item-content class="px-0">
@@ -21,7 +21,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">MANAGER</v-subheader>
+          <v-subheader class="blue-grey lighten-4">담당자</v-subheader>
           <v-list class="project-filter">
             <v-list-item v-for="item in managerFilter" :key="item.userId">
               <v-list-item-content class="px-0">
@@ -39,7 +39,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">USE_PUBLIC</v-subheader>
+          <v-subheader class="blue-grey lighten-4">공개 여부</v-subheader>
           <v-list class="project-filter">
             <v-list-item>
               <v-list-item-content class="px-0">
@@ -56,7 +56,7 @@
                   </v-radio>
                   <v-radio class="px-5 pb-2" :value="false">
                     <template v-slot:label>
-                      <span class="font-filter">비공개</span>
+                      <span class="font-filter">개인용</span>
                     </template>
                   </v-radio>
                 </v-radio-group>
@@ -65,10 +65,11 @@
           </v-list>
           <v-divider></v-divider>
         </div>
-        <div class="text-xs-center px-3">
-          <v-btn class="mb-3 mx-0" color="blue-grey" block small dark>RESET</v-btn>
-        </div>
       </v-card>
+      <!-- 필터 저장 초기화 -->
+      <div class="text-xs-center ma-2">
+        <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">RESET</v-btn>
+      </div>
     </v-col>
     <v-col cols="10">
       <div style="width:98%; height:700px;">
@@ -84,7 +85,7 @@ import GanttElastic from "gantt-elastic";
 
 export default {
   components: {
-    ganttElastic: GanttElastic
+    ganttElastic: GanttElastic,
     // ganttElasticFooter: { template: `<span>your footer</span>` },
   },
   data() {
@@ -111,7 +112,7 @@ export default {
         start: getDate(-24 * 5),
         duration: 15 * 24 * 60 * 60 * 1000,
         progress: 85,
-        type: "project"
+        type: "project",
         //collapsed: true,
       },
       {
@@ -127,8 +128,8 @@ export default {
         style: {
           base: {
             fill: "#1EBC61",
-            stroke: "#0EAC51"
-          }
+            stroke: "#0EAC51",
+          },
           /*'tree-row-bar': {
               fill: '#1EBC61',
               stroke: '#0EAC51'
@@ -136,7 +137,7 @@ export default {
             'tree-row-bar-polygon': {
               stroke: '#0EAC51'
             }*/
-        }
+        },
       },
       {
         id: 4,
@@ -146,7 +147,7 @@ export default {
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
         type: "task",
-        dependentOn: [3]
+        dependentOn: [3],
       },
       {
         id: 4,
@@ -156,7 +157,7 @@ export default {
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
         type: "task",
-        dependentOn: [3]
+        dependentOn: [3],
       },
       {
         id: 4,
@@ -166,8 +167,8 @@ export default {
         duration: 2 * 24 * 60 * 60 * 1000,
         progress: 50,
         type: "task",
-        dependentOn: [3]
-      }
+        dependentOn: [3],
+      },
     ];
 
     let options = {
@@ -175,27 +176,27 @@ export default {
       maxHeight: 650,
       title: {
         label: "Your project title as html (link or whatever...)",
-        html: false
+        html: false,
       },
       row: {
-        height: 24
+        height: 24,
       },
       calendar: {
         hour: {
-          display: false
-        }
+          display: false,
+        },
       },
       chart: {
         progress: {
-          bar: false
+          bar: false,
         },
         expander: {
-          display: true
-        }
+          display: true,
+        },
       },
       taskList: {
         expander: {
-          straight: false
+          straight: false,
         },
         columns: [
           {
@@ -208,21 +209,21 @@ export default {
             events: {
               click({ data }) {
                 alert("description clicked!\n" + data.label);
-              }
-            }
+              },
+            },
           },
           {
             id: 3,
             label: "MEMBER",
             value: "user",
             width: 130,
-            html: true
+            html: true,
           },
           {
             id: 3,
             label: "DUEDATE",
             value: "2020-06-23",
-            width: 78
+            width: 78,
           },
           {
             id: 5,
@@ -232,16 +233,16 @@ export default {
             style: {
               "task-list-header-label": {
                 "text-align": "center",
-                width: "100%"
+                width: "100%",
               },
               "task-list-item-value-container": {
                 "text-align": "center",
-                width: "100%"
-              }
-            }
-          }
-        ]
-      }
+                width: "100%",
+              },
+            },
+          },
+        ],
+      },
     };
     //////////////// Filter ///////////////////
     let projectFilter = [];
@@ -257,7 +258,7 @@ export default {
       managerFilter: managerFilter,
       prjSelection: prjSelection,
       memSelection: memSelection,
-      publicSelection: publicSelection
+      publicSelection: publicSelection,
     };
   },
   created() {
@@ -268,8 +269,8 @@ export default {
   computed: {
     // 사용할 mapstate 불러옴
     ...mapState({
-      getFilter: "getFilter"
-    })
+      getFilter: "getFilter",
+    }),
   },
   methods: {
     ...mapActions(["FETCH_FILTER"]),
@@ -322,8 +323,8 @@ export default {
           this.publicSelection = 0;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

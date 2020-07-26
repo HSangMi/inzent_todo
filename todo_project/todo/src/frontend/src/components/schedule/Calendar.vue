@@ -3,7 +3,7 @@
     <v-col cols="2">
       <v-card outlined max-height="800" class="overflow-y-auto mx-2">
         <div class="mx-2">
-          <v-subheader class="blue-grey lighten-4">PROJECT</v-subheader>
+          <v-subheader class="blue-grey lighten-4">프로젝트</v-subheader>
           <v-list class="project-filter">
             <v-list-item v-for="item in projectFilter" :key="item.prjId">
               <v-list-item-content class="px-0">
@@ -21,7 +21,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">MANAGER</v-subheader>
+          <v-subheader class="blue-grey lighten-4">담당자</v-subheader>
           <v-list class="project-filter">
             <v-list-item v-for="item in managerFilter" :key="item.userId">
               <v-list-item-content class="px-0">
@@ -39,24 +39,24 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">USE_PUBLIC</v-subheader>
+          <v-subheader class="blue-grey lighten-4">공개 여부</v-subheader>
           <v-list class="project-filter">
             <v-list-item>
               <v-list-item-content class="px-0">
                 <v-radio-group v-model="publicSelection" @change="chkFilter()">
                   <v-radio class="px-5 pb-2" :value="0">
                     <template v-slot:label>
-                      <span class="font-filter">All</span>
+                      <span class="font-filter">전체</span>
                     </template>
                   </v-radio>
                   <v-radio class="px-5 pb-2" :value="true">
                     <template v-slot:label>
-                      <span class="font-filter">Public</span>
+                      <span class="font-filter">공개</span>
                     </template>
                   </v-radio>
                   <v-radio class="px-5 pb-2" :value="false">
                     <template v-slot:label>
-                      <span class="font-filter">Private</span>
+                      <span class="font-filter">개인용</span>
                     </template>
                   </v-radio>
                 </v-radio-group>
@@ -66,10 +66,10 @@
           <v-divider></v-divider>
         </div>
       </v-card>
+      <!-- 필터 저장 초기화 -->
       <div class="text-xs-center ma-2">
         <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">RESET</v-btn>
       </div>
-      <!-- 필터 저장 초기화 -->
     </v-col>
     <v-col cols="10">
       <v-card class="border" outlined>
@@ -77,23 +77,6 @@
           <v-col>
             <v-sheet height="64">
               <v-toolbar flat color="white">
-                <!-- 오늘날짜이동 -->
-                <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">Today</v-btn>
-                <!-- < 이전 버튼 -->
-                <v-btn fab text small color="grey darken-2" @click="prev">
-                  <v-icon small>mdi-chevron-left</v-icon>
-                </v-btn>
-                <!-- > 다음 버튼 -->
-                <v-btn fab text small color="grey darken-2" @click="next">
-                  <v-icon small>mdi-chevron-right</v-icon>
-                </v-btn>
-                <!-- 몇월인지 타이틀 -->
-                <v-toolbar-title v-if="$refs.calendar">
-                  {{
-                  $refs.calendar.title
-                  }}
-                </v-toolbar-title>
-                <v-spacer></v-spacer>
                 <!-- 업무추가버튼 -->
                 <v-btn
                   class="mx-3"
@@ -106,6 +89,29 @@
                 >
                   <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
+                <v-spacer></v-spacer>
+                <!-- 오늘날짜이동 -->
+                <v-btn small outlined class="mr-4" color="grey darken-2" @click="setToday">오늘</v-btn>
+                <!-- < 이전 버튼 -->
+                <v-btn fab text color="grey darken-2" @click="prev">
+                  <v-icon small>mdi-chevron-left</v-icon>
+                </v-btn>
+                <!-- 몇월인지 타이틀 -->
+                <v-toolbar-title v-if="$refs.calendar">
+                  {{
+                  $refs.calendar.title
+                  }}
+                  <!-- > 다음 버튼 -->
+                  <v-btn fab text color="grey darken-2" @click="next">
+                    <v-icon small>mdi-chevron-right</v-icon>
+                  </v-btn>
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-switch v-model="google" class="ma-3">
+                  <template v-slot:label>
+                      <span class="my-3 font-filter">구글 연동</span>
+                    </template>
+                </v-switch>
               </v-toolbar>
             </v-sheet>
             <!-- 달력 시작 -->
@@ -149,9 +155,10 @@ export default {
   components: {
     AddCalendar,
     DetailCalendar,
-    DetailCalEvent
+    DetailCalEvent,
   },
   data: () => ({
+    google: false,
     focus: "",
     type: "month",
     selectedEvent: {},
@@ -164,7 +171,7 @@ export default {
     managerFilter: [],
     prjSelection: [],
     memSelection: [],
-    publicSelection: 0
+    publicSelection: 0,
     //////////////// Filter END ///////////////////
   }),
   created() {
@@ -180,8 +187,8 @@ export default {
       getClickDateList: "getClickDateList",
       getFilter: "getFilter",
       getChkFilterItem: "getChkFilterItem",
-      calFilterItem: "calFilterItem"
-    })
+      calFilterItem: "calFilterItem",
+    }),
     // ...mapState(["clickDate"])
   },
   mounted() {
@@ -192,7 +199,7 @@ export default {
       "SET_IS_ADD_CALENDAR",
       "SET_IS_DETAIL_CALENDAR",
       "SET_IS_DETAIL_SUB",
-      "IS_CLICK_DATE"
+      "IS_CLICK_DATE",
     ]),
     ...mapActions([
       "FETCH_CALENDAR_LIST",
@@ -201,7 +208,7 @@ export default {
       "FETCH_FILTER",
       "FETCH_CHK_FILTER_ITEM",
       "RESET_CAL_FILTER",
-      "ADD_CAL_FILTER_ITEM"
+      "ADD_CAL_FILTER_ITEM",
     ]),
     // 사용할 mapactions 등록
 
@@ -224,7 +231,7 @@ export default {
       // 모달창 이벤트
       this.focus = date; // 들어온 해당 날짜
       const clickDate = {
-        clickDate: this.focus
+        clickDate: this.focus,
       };
       this.FETCH_CALENDAR_CLICKDATE(clickDate).then(() => {
         this.SET_IS_DETAIL_CALENDAR(true);
@@ -294,7 +301,7 @@ export default {
       const calData = {
         prjData: this.prjSelection,
         memData: this.memSelection,
-        useData: this.publicSelection
+        useData: this.publicSelection,
       };
 
       await this.ADD_CAL_FILTER_ITEM(calData);
@@ -335,7 +342,7 @@ export default {
             name: taskName, // 타이틀
             start: startDate, // 시작일
             end: endDate, // 마감일
-            color: this.colors[this.colorState(calArr[i].state)] // 색상
+            color: this.colors[this.colorState(calArr[i].state)], // 색상
           });
         } // end for
         console.log(this.selectProjects);
@@ -357,8 +364,8 @@ export default {
         case "E":
           return 4;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
