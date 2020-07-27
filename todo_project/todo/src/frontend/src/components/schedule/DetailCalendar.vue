@@ -8,8 +8,73 @@
   >
     <v-card>
       <v-card-title class="pa-2">
-        <span class="headline px-7 py-4">DETAIL TASKS</span>
+        <span class="headline px-7 py-4"></span>
       </v-card-title>
+      <v-card-text class="py-0">
+        <v-timeline align-top dense>
+          <v-timeline-item color="pink" small>
+            <v-row class="pt-1">
+              <v-col cols="3">
+                <strong>5pm</strong>
+              </v-col>
+              <v-col>
+                <strong>New Icon</strong>
+                <div class="caption">Mobile App</div>
+              </v-col>
+            </v-row>
+          </v-timeline-item>
+
+          <v-timeline-item color="teal lighten-3" small>
+            <v-row class="pt-1">
+              <v-col cols="3">
+                <strong>3-4pm</strong>
+              </v-col>
+              <v-col>
+                <strong>Design Stand Up</strong>
+                <div class="caption mb-2">Hangouts</div>
+                <v-avatar>
+                  <v-img
+                    src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairFrida&accessoriesType=Kurt&hairColor=Red&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=GraphicShirt&clotheColor=Gray01&graphicType=Skull&eyeType=Wink&eyebrowType=RaisedExcitedNatural&mouthType=Disbelief&skinColor=Brown"
+                  ></v-img>
+                </v-avatar>
+                <v-avatar>
+                  <v-img
+                    src="https://avataaars.io/?avatarStyle=Circle&topType=ShortHairFrizzle&accessoriesType=Prescription02&hairColor=Black&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=BlazerSweater&clotheColor=Black&eyeType=Default&eyebrowType=FlatNatural&mouthType=Default&skinColor=Tanned"
+                  ></v-img>
+                </v-avatar>
+                <v-avatar>
+                  <v-img
+                    src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairMiaWallace&accessoriesType=Sunglasses&hairColor=BlondeGolden&facialHairType=Blank&clotheType=BlazerSweater&eyeType=Surprised&eyebrowType=RaisedExcited&mouthType=Smile&skinColor=Pale"
+                  ></v-img>
+                </v-avatar>
+              </v-col>
+            </v-row>
+          </v-timeline-item>
+
+          <v-timeline-item color="pink" small>
+            <v-row class="pt-1">
+              <v-col cols="3">
+                <strong>12pm</strong>
+              </v-col>
+              <v-col>
+                <strong>Lunch break</strong>
+              </v-col>
+            </v-row>
+          </v-timeline-item>
+
+          <v-timeline-item color="teal lighten-3" small>
+            <v-row class="pt-1">
+              <v-col cols="3">
+                <strong>9-11am</strong>
+              </v-col>
+              <v-col>
+                <strong>Finish Home Screen</strong>
+                <div class="caption">Web App</div>
+              </v-col>
+            </v-row>
+          </v-timeline-item>
+        </v-timeline>
+      </v-card-text>
       <v-card-text>
         <v-container class="py-0">
           <v-divider></v-divider>
@@ -98,14 +163,14 @@ import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
   data: () => ({
-    dateList: ""
+    dateList: "",
   }),
   created() {},
   computed: {
     ...mapState({
-      clickDateList: "getClickDateList"
+      clickDateList: "getClickDateList",
     }),
-    ...mapState(["isDetailCalendar"])
+    ...mapState(["isDetailCalendar"]),
   },
   methods: {
     ...mapMutations(["SET_IS_DETAIL_CALENDAR", "SET_IS_DETAIL_SUB"]),
@@ -115,8 +180,8 @@ export default {
       console.log("aaaaaa", superId);
       this.FETCH_CALENDAR_EVENT(superId);
       this.SET_IS_DETAIL_SUB(true);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -68,7 +68,6 @@ export const schedule = {
     return request("post", "/schedule/getProjects");
   },
   getChkProject(chkProject) {
-    console.log(chkProject);
     return request("post", "/schedule/chkproject", chkProject);
   },
   addSuperTask(addSuper) {

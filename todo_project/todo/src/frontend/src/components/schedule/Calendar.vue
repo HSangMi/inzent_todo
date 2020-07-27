@@ -109,8 +109,8 @@
                 <v-spacer></v-spacer>
                 <v-switch v-model="google" class="ma-3">
                   <template v-slot:label>
-                      <span class="my-3 font-filter">구글 연동</span>
-                    </template>
+                    <span class="my-3 font-filter">구글 연동</span>
+                  </template>
                 </v-switch>
               </v-toolbar>
             </v-sheet>
@@ -129,7 +129,7 @@
               ></v-calendar>
               <!-- 달력 끝 -->
               <!-- 상세모달 창 시작 -->
-              <detail-calendar />
+              <detail-calendar v-on:date="" />
               <!-- 상세모달 창 끝 -->
               <!-- 업무소 모달 시작 -->
               <detail-cal-event />
@@ -230,6 +230,7 @@ export default {
     showDate({ date }) {
       // 모달창 이벤트
       this.focus = date; // 들어온 해당 날짜
+      this.$emit=('date');
       const clickDate = {
         clickDate: this.focus,
       };

@@ -26,9 +26,9 @@
               @click="true"
             >-->
             <v-list three-line>
-              <v-list-item-group multiple active-class="grey lighten-3">
+              <v-list-item-group>
                 <template v-for="(item, index) in getsubList">
-                  <template v-if="!item.cid">No Sub Task...</template>
+                  <template style="text-align:center" v-if="!item.cid">업무 없음</template>
                   <template v-else>
                     <v-list-item :key="item.cId">
                       <v-list-item-content>
@@ -127,20 +127,20 @@ import { mapMutations, mapState } from "vuex";
 
 export default {
   data: () => ({
-    subList: ""
+    subList: "",
   }),
   created() {},
   computed: {
     ...mapState({
       getsubList: "getsubList",
       getSuperTitle: "getSuperTitle",
-      getProjectTitle: "getProjectTitle"
+      getProjectTitle: "getProjectTitle",
     }),
-    ...mapState(["isDetailSub"])
+    ...mapState(["isDetailSub"]),
   },
   methods: {
-    ...mapMutations(["SET_IS_DETAIL_SUB"])
-  }
+    ...mapMutations(["SET_IS_DETAIL_SUB"]),
+  },
 };
 </script>
 
