@@ -68,7 +68,7 @@
       </v-card>
       <!-- 필터 저장 초기화 -->
       <div class="text-xs-center ma-2">
-        <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">RESET</v-btn>
+        <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">초기화</v-btn>
       </div>
     </v-col>
     <v-col cols="10">
@@ -129,7 +129,7 @@
               ></v-calendar>
               <!-- 달력 끝 -->
               <!-- 상세모달 창 시작 -->
-              <detail-calendar v-on:date="" />
+              <detail-calendar/>
               <!-- 상세모달 창 끝 -->
               <!-- 업무소 모달 시작 -->
               <detail-cal-event />
