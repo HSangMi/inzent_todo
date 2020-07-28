@@ -147,6 +147,16 @@ const mutations = {
 
     state.calFilterItem = dataArr;
   },
+  //////////////////////// ARCHIVE ////////////////////////
+  SET_ARCHIVE_SUPER(state, data) {
+    state.archiveSuper = data;
+  },
+  SET_ARCHIVE_SUB(state, data) {
+    state.archiveSub = data;
+  },
+  SET_IS_ARCHIVE_DIALOG(state, toggle){
+    state.openArcDialog = toggle;
+  }
 };
 
 export default mutations;

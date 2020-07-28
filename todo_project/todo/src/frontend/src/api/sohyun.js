@@ -92,3 +92,11 @@ export const schedule = {
     return request("post", "/schedule/addcalitem", calData);
   },
 };
+export const archive = {
+  fetchArchiveSuper() {
+    return request("get", "/archive/archiveSuper");
+  },
+  fetchArchiveSub() {
+    return request("get", "/archive/archiveSub");
+  },
+};

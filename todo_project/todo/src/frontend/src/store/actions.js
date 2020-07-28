@@ -322,5 +322,26 @@ const actions = {
         console.log(err);
       });
   },
+  //////////////////////// ARCHIVE ////////////////////////
+  FETCH_ARCHIVE_SUPER({ commit }) {
+    return sohyun.archive
+      .fetchArchiveSuper()
+      .then((result) => {
+        commit("SET_ARCHIVE_SUPER", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_ARCHIVE_SUB({ commit }) {
+    return sohyun.archive
+      .fetchArchiveSub()
+      .then((result) => {
+        commit("SET_ARCHIVE_SUB", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 export default actions;

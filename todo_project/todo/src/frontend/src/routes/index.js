@@ -55,7 +55,7 @@ const router = new Router({
 		},
 		{
 			path: '/archive',
-			component: () => import('@/views/BoardMain.vue'),
+			component: () => import('@/views/Archive.vue'),
 			beforeEnter: requireAuth
 		},
 		{

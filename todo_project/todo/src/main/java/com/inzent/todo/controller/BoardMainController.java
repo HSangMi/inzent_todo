@@ -67,6 +67,7 @@ public class BoardMainController {
         // System.out.println(weekSub);
         List<DashBoardSubDto> list = boardMainService.getWeekSubList(weekSub, userId);
         return list;
+
     }
 
     // 관심

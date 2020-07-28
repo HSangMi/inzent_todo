@@ -4,7 +4,7 @@ import state from './state';
 import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
-import createPersistedState from 'vuex-persistedstate';
+// import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex);
 
@@ -13,7 +13,7 @@ const store = new Vuex.Store({
 	getters,
 	mutations,
 	actions,
-	plugins: [ createPersistedState() ]
+	// plugins: [ createPersistedState() ]
 });
 // 어플리케이션이 구동되었을때, 브라우저 저장소에서 token이 있는지 확인하고 세팅해줌
 //(자동 로그인)

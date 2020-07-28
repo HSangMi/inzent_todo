@@ -6,8 +6,8 @@
 <!-- 매핑시킬 매퍼를 type alias 등록하고 , 매퍼등록! -->
 <configuration>
 	<settings>
-      <setting name="mapUnderscoreToCamelCase" value="true"/>
-   </settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
 	<typeAliases>
 		<typeAlias alias="uservo" type="com.inzent.todo.vo.UserVo"/>
 		<typeAlias alias="imagevo" type="com.inzent.todo.vo.ImageVo"/>
@@ -33,15 +33,24 @@
 		<typeAlias alias="chkstdto" type="com.inzent.todo.dto.ChkSuperTasksDto"/>
 		<typeAlias alias="cddto" type="com.inzent.todo.dto.ClickDateDto"/>
 		<typeAlias alias="filterdto" type="com.inzent.todo.dto.FilterDto"/>
+		<typeAlias alias="arcsubdto" type="com.inzent.todo.dto.ArchiveSubDto"/>
+		<typeAlias alias="arcsuperdto" type="com.inzent.todo.dto.ArchiveSuperDto"/>
 
 	</typeAliases>
 	<mappers>
-		<mapper resource="mybatis/mappers/user.xml"/><!-- 현재경로 기준! -->
-		<mapper resource="mybatis/mappers/file.xml"/><!-- 현재경로 기준! -->
-		<mapper resource="mybatis/mappers/member.xml"/><!-- 현재경로 기준! -->
-		<mapper resource="mybatis/mappers/project.xml"/><!-- 현재경로 기준! -->
-		<mapper resource="mybatis/mappers/dashboard.xml"/><!-- 현재경로 기준! -->
-		<mapper resource="mybatis/mappers/calendar.xml"/><!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/user.xml"/>
+		<!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/file.xml"/>
+		<!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/member.xml"/>
+		<!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/project.xml"/>
+		<!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/dashboard.xml"/>
+		<!-- 현재경로 기준! -->
+		<mapper resource="mybatis/mappers/calendar.xml"/>
+		<!-- 현재경로 기준! -->
 		<mapper resource="mybatis/mappers/comment.xml"/>
-	</mappers>  
+		<mapper resource="mybatis/mappers/archive.xml"/>
+	</mappers>
 </configuration>

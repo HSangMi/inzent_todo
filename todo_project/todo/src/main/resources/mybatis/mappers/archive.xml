@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="archive">
+    <select id="getArchiveSupers" parameterType="String" resultType="arcsuperdto">
+    <![CDATA[
+        select tas.* , tp.title projectTitle 
+        from tb_archive_super tas , tb_project tp 
+        where tas.project_id = tp.id
+        union
+        select tas.* , tp.title projectTitle 
+        from tb_archive_super tas , tb_project tp, tb_member tm 
+        where tas.member_no in (select member_no from tb_member where user_id =#{userId}) and tas.use_public = false
+        and (tas.project_id = tp.id) and (tm.project_id = tp.id)
+    ]]>
+    </select>
+    <select id="getArchiveSubs" parameterType="String" resultType="arcsubdto">
+    <![CDATA[
+        select tas.*, tts.title superTitle, tp.title projectTitle 
+        from tb_archive_sub tas, tb_task_super tts , tb_project tp
+        where (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and tas.use_public = true
+        union
+        select tas.*, tts.title superTitle, tp.title projectTitle
+        from tb_archive_sub tas, tb_task_super tts , tb_project tp, tb_member tm 
+        where tas.member_no in (select member_no from tb_member where user_id =#{userId}) and tas.use_public = false
+        and (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and (tm.project_id = tp.id);
+    ]]>
+    </select>
+    <!-- <insert id="addSuper" parameterType="supertaskvo" resultType="int">
+    <![CDATA[
+    ]]>
+</insert>
+<insert id="addSub" parameterType="" resultType="int">
+<![CDATA[
+    ]]>
+</insert> -->
+    <!--  <delete id="delSuper" parameterType="String" resultType="int">
+    <![CDATA[
+        delete from tb_archive_super where task_id = '';
+    ]]>
+</delete>
+<delete id="delSub" parameterType="String" resultType="int">
+<![CDATA[
+        delete from tb_archive_sub where task_id = '';
+    ]]>
+</delete> -->
+</mapper>

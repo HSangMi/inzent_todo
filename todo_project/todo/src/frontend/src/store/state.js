@@ -40,5 +40,9 @@ const state = {
   getChkFilterItem: "",
   calImgCode: [],
   calFilterItem: [],
+  ///////// ARCHIVE /////////
+  archiveSuper: [],
+  archiveSub: [],
+  openArcDialog: false,
 };
 export default state;
