@@ -8,21 +8,18 @@
         <super-archive />
       </v-col>
     </v-row>
-    <archive-restore />
   </v-container>
 </template>
 
 <script>
 import SubArchive from "../components/archive/SubArchive.vue";
 import SuperArchive from "../components/archive/SuperArchive.vue";
-import ArchiveRestore from "../components/archive/ArchiveRestore";
 import { mapMutations } from "vuex";
 
 export default {
   components: {
     SubArchive,
     SuperArchive,
-    ArchiveRestore,
   },
   created() {
     this.SET_HEADER_TITLE("보관함");

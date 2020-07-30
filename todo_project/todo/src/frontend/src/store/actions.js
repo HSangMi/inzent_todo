@@ -343,5 +343,17 @@ const actions = {
         console.log(err);
       });
   },
+  DELETE_ARCHIVE_SUB(_, subId) {
+    return sohyun.archive.deleteArchiveSub(subId);
+  },
+  DELETE_ARCHIVE_SUPER(_, superId) {
+    return sohyun.archive.deleteArchiveSuper(superId);
+  },
+  RESTORE_ARCHIVE_SUB(_, subId) {
+    return sohyun.archive.restoreArchvieSub(subId);
+  },
+  RESTORE_ARCHIVE_SUPER(_, superId) {
+    return sohyun.archive.restoreArchvieSuper(superId);
+  },
 };
 export default actions;

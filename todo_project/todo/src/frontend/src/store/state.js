@@ -43,6 +43,5 @@ const state = {
   ///////// ARCHIVE /////////
   archiveSuper: [],
   archiveSub: [],
-  openArcDialog: false,
 };
 export default state;

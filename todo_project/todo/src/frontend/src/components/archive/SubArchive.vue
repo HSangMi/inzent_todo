@@ -17,14 +17,16 @@
       <template v-slot:default="props">
         <div class="mb-5">
           <v-row class="sub-row">
-            <v-col v-for="item in props.items" :key="item.title" cols="12" sm="6" md="2" lg="6">
+            <v-col v-for="item in props.items" :key="item.taskId" cols="12" md="6" lg="6">
               <v-card outlined class="mb-5">
-                <v-card-title class="subheading font-weight-bold">{{item.title}} > {{item.title}}</v-card-title>
+                <v-card-title
+                  class="subheading font-weight-bold"
+                >{{item.projectTitle}} > {{item.superTitle}}</v-card-title>
                 <v-card-text>{{item.title}}</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn small text @click.prevent="SET_IS_ARCHIVE_DIALOG(true)">복구</v-btn>
-                  <v-btn small text @click="deleteSub()">삭제</v-btn>
+                  <v-btn small text @click.prevent="restoreSub(item.taskId)">복구</v-btn>
+                  <v-btn small text @click.prevent="openDelDialog(item.taskId)">삭제</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -44,16 +46,23 @@
         </v-row>
       </template>
     </v-data-iterator>
+    <v-dialog v-model="openArcDialog" persistent max-width="290">
+      <v-card>
+        <v-card-title class="subheading font-weight-bold">업무를 삭제하시겠습니까?</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text small @click="deleteSubTask()">확인</v-btn>
+          <v-btn text small @click="openArcDialog=false">취소</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
-  // components: {
-  //   ArchiveDialog,
-  // },
   data() {
     return {
       filter: {},
@@ -61,8 +70,9 @@ export default {
       page: 1,
       itemsPerPage: 6,
       sortBy: "name",
-      keys: ["Name", "Calories"],
       items: [],
+      openArcDialog: false,
+      delId: "",
     };
   },
   created() {
@@ -78,20 +88,32 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["SET_IS_ARCHIVE_DIALOG"]),
-    ...mapActions(["FETCH_ARCHIVE_SUB"]),
+    ...mapActions([
+      "FETCH_ARCHIVE_SUB",
+      "DELTE_ARCHIVE_SUB",
+      "RESTORE_ARCHIVE_SUB",
+    ]),
     fetchArchiveSub() {
       this.FETCH_ARCHIVE_SUB().then(() => {
         console.log("아카이브 불러오기 성공", this.archiveSub);
         this.items = this.archiveSub;
       });
     },
-    restoreSub() {
-      this.dialog = true;
-      this.$emit("restore");
+    restoreSub(id) {
+      this.RESTORE_ARCHIVE_SUB(id).then(() => {
+        console.log("복구성공~~");
+        this.fetchArchiveSub();
+      });
     },
-    deleteSub() {
-      console.log("dkdkdkkd11111");
+    openDelDialog(id) {
+      this.openArcDialog = true;
+      this.delId = id;
+    },
+    deleteSubTask() {
+      this.DELETE_ARCHIVE_SUB(this.delId).then(() => {
+        this.fetchArchiveSub();
+        this.openArcDialog = false;
+      });
     },
     nextPage() {
       if (this.page + 1 <= this.numberOfPages) this.page += 1;

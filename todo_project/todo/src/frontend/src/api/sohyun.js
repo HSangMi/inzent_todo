@@ -41,14 +41,12 @@ export const dashboard = {
     return request("get", "/dashboard/week");
   },
   getWeekSub(weekSub) {
-    console.log("asdfa", weekSub);
     return request("post", "/dashboard/weeksub", weekSub);
   },
   getStarredList() {
     return request("get", "/dashboard/starred");
   },
   getStarredSub(starredSub) {
-    console.log("asdfa", starredSub);
     return request("post", "/dashboard/starredsub", starredSub);
   },
 };
@@ -98,5 +96,18 @@ export const archive = {
   },
   fetchArchiveSub() {
     return request("get", "/archive/archiveSub");
+  },
+  deleteArchiveSub(subId) {
+    return request("get", `/archive/deleteSub/${subId}`);
+  },
+  deleteArchiveSuper(superId) {
+    return request("get", `/archive/deleteSuper/${superId}`);
+  },
+  restoreArchvieSub(subId) {
+    return request("get", `/archive/restoreSub/${subId}`);
+  },
+  restoreArchvieSuper(superId) {
+    console.log("sohyun", superId);
+    return request("get", `/archive/restoreSuper/${superId}`);
   },
 };

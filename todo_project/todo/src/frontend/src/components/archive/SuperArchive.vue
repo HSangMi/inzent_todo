@@ -16,14 +16,14 @@
     >
       <template v-slot:default="props">
         <div class="mb-6">
-          <v-card outlined v-for="item in props.items" :key="item.title" class="ma-4">
-            <v-card-title class="subheading pa-2">{{ item.title }}</v-card-title>
+          <v-card outlined v-for="item in props.items" :key="item.taskId" class="ma-4">
+            <v-card-title class="subheading pa-2">{{ item.projectTitle }}</v-card-title>
             <v-divider></v-divider>
             <v-card-text class="archive-font mt-2 pa-1 mx-2">{{item.title}}</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small text @click="restoreSuper()">복구</v-btn>
-              <v-btn small text @click="deleteSuper()">삭제</v-btn>
+              <v-btn small text @click.prevent="restoreSuper(item.taskId)">복구</v-btn>
+              <v-btn small text @click.prevent="openDelDialog(item.taskId)">삭제</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -41,29 +41,39 @@
         </v-row>
       </template>
     </v-data-iterator>
+    <v-dialog v-model="openArcDialog" persistent max-width="290">
+      <v-card>
+        <v-card-title class="subheading font-weight-bold">업무를 삭제하시겠습니까?</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text small @click="deleteSuperTask()">확인</v-btn>
+          <v-btn text small @click="openArcDialog=false">취소</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   data() {
     return {
       itemsPerPageArray: [4, 8, 12],
-      search: "",
-      filter: {},
       sortDesc: false,
       page: 1,
       itemsPerPage: 4,
       sortBy: "name",
-      keys: ["Name", "Calories"],
       items: [],
+      openArcDialog: false,
+      delId: "",
     };
   },
   created() {
     this.fetchArchiveSuper();
   },
+
   computed: {
     ...mapState({ archiveSuper: "archiveSuper" }),
     numberOfPages() {
@@ -74,18 +84,33 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["FETCH_ARCHIVE_SUPER"]),
+    ...mapMutations(["SET_IS_ARCHIVE_DIALOG"]),
+    ...mapActions([
+      "FETCH_ARCHIVE_SUPER",
+      "DELETE_ARCHIVE_SUPER",
+      "RESTORE_ARCHIVE_SUPER",
+    ]),
     fetchArchiveSuper() {
       this.FETCH_ARCHIVE_SUPER().then(() => {
         console.log("슈퍼 아카이브", this.archiveSuper);
         this.items = this.archiveSuper;
       });
     },
-    restoreSuper() {
-      console.log("복구구구구");
+    restoreSuper(id) {
+      this.RESTORE_ARCHIVE_SUPER(id).then(() => {
+        console.log("복구성공~~");
+        this.fetchArchiveSuper();
+      });
     },
-    deleteSuper() {
-      console.log("삭제ㅔㅔㅔ");
+    openDelDialog(id) {
+      this.openArcDialog = true;
+      this.delId = id;
+    },
+    deleteSuperTask() {
+      this.DELETE_ARCHIVE_SUPER(this.delId).then(() => {
+        this.fetchArchiveSuper();
+        this.openArcDialog = false;
+      });
     },
     nextPage() {
       if (this.page + 1 <= this.numberOfPages) this.page += 1;

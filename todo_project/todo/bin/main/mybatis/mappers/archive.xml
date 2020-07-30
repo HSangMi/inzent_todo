@@ -4,29 +4,63 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="archive">
     <select id="getArchiveSupers" parameterType="String" resultType="arcsuperdto">
-    <![CDATA[
-        select tas.* , tp.title projectTitle 
+        <![CDATA[
+        select tas.task_id taskId, tas.title, tas.use_public, tp.title projectTitle 
         from tb_archive_super tas , tb_project tp 
         where tas.project_id = tp.id
         union
-        select tas.* , tp.title projectTitle 
+        select tas.task_id taskId, tas.title, tas.use_public, tp.title projectTitle 
         from tb_archive_super tas , tb_project tp, tb_member tm 
         where tas.member_no in (select member_no from tb_member where user_id =#{userId}) and tas.use_public = false
         and (tas.project_id = tp.id) and (tm.project_id = tp.id)
     ]]>
     </select>
     <select id="getArchiveSubs" parameterType="String" resultType="arcsubdto">
-    <![CDATA[
-        select tas.*, tts.title superTitle, tp.title projectTitle 
+        <![CDATA[
+        select tas.task_id taskId, tas.title, tas.use_public, tts.task_id superTaskId, tts.title superTitle, tp.title projectTitle 
         from tb_archive_sub tas, tb_task_super tts , tb_project tp
         where (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and tas.use_public = true
         union
-        select tas.*, tts.title superTitle, tp.title projectTitle
+        select tas.task_id taskId, tas.title, tas.use_public, tts.task_id superTaskId, tts.title superTitle, tp.title projectTitle
         from tb_archive_sub tas, tb_task_super tts , tb_project tp, tb_member tm 
         where tas.member_no in (select member_no from tb_member where user_id =#{userId}) and tas.use_public = false
-        and (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and (tm.project_id = tp.id);
+        and (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and (tm.project_id = tp.id)
     ]]>
     </select>
+    <delete id="delSub" parameterType="String">
+        delete from tb_archive_sub where task_id = #{subId}
+    </delete>
+    <delete id="delSuper" parameterType="String">
+        delete from tb_archive_super where task_id = #{superId};
+        delete from tb_task_sub where task_super_id = #{superId};
+    </delete>
+    <!-- Restore........... -->
+    <select id="getRestoreSubId" parameterType="String" resultType="restoresubvo">
+        <![CDATA[
+        select * from tb_archive_sub where task_id = #{subId}
+        ]]>
+    </select>
+    <insert id="restoreSub" parameterType="restoresubvo">
+        <![CDATA[
+        insert into tb_task_sub
+        ( task_id, title, description, use_public, start_date, end_date, sort_no, member_no, labels, task_super_id, state )
+        values
+        ( #{taskId}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{sortNo}, #{memberNo}, #{labels}, #{taskSuperId}, #{state})
+    ]]>
+    </insert>
+    <select id="getRestoreSuperId" parameterType="String" resultType="restoresupervo">
+        <![CDATA[
+        select * from tb_archive_super where task_id = #{superId}
+        ]]>
+    </select>
+    <insert id="restoreSuper" parameterType="restoresupervo">
+        <![CDATA[
+        insert into tb_task_super
+        ( task_id, title, description, use_public, start_date, end_date, sort_no, progress_rate, member_no, labels, project_id, state )
+        values
+        ( #{taskId}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{sortNo}, #{progressRate}, #{memberNo}, #{labels}, #{projectId}, #{state})
+    ]]>
+    </insert>
     <!-- <insert id="addSuper" parameterType="supertaskvo" resultType="int">
     <![CDATA[
     ]]>
@@ -35,14 +69,4 @@
 <![CDATA[
     ]]>
 </insert> -->
-    <!--  <delete id="delSuper" parameterType="String" resultType="int">
-    <![CDATA[
-        delete from tb_archive_super where task_id = '';
-    ]]>
-</delete>
-<delete id="delSub" parameterType="String" resultType="int">
-<![CDATA[
-        delete from tb_archive_sub where task_id = '';
-    ]]>
-</delete> -->
 </mapper>
