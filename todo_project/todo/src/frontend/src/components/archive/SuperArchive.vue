@@ -17,7 +17,12 @@
       <template v-slot:default="props">
         <div class="mb-6">
           <v-card outlined v-for="item in props.items" :key="item.taskId" class="ma-4">
-            <v-card-title class="subheading pa-2">{{ item.projectTitle }}</v-card-title>
+            <v-card-title class="subheading pa-2">
+              {{ item.projectTitle }}
+              <v-spacer></v-spacer>
+              <v-icon v-if="item.usePublic" small>mdi-lock-open-variant-outline</v-icon>
+              <v-icon v-if="!item.usePublic" small>mdi-lock-outline</v-icon>
+            </v-card-title>
             <v-divider></v-divider>
             <v-card-text class="archive-font mt-2 pa-1 mx-2">{{item.title}}</v-card-text>
             <v-card-actions>
@@ -35,7 +40,7 @@
             <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="formerPage">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
-            <span class="ma-2 grey--text">Page {{ page }} of {{ numberOfPages }}</span>
+            <span class="ma-2 grey--text">{{ page }} / {{ numberOfPages }} 페이지</span>
             <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="nextPage">
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>

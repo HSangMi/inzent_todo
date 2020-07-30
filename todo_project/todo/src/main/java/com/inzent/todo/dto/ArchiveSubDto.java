@@ -13,4 +13,5 @@ public class ArchiveSubDto {
     private String superTaskId;
     private String superTitle;
     private String projectTitle;
+    private boolean usePublic;
 }

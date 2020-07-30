@@ -19,9 +19,12 @@
           <v-row class="sub-row">
             <v-col v-for="item in props.items" :key="item.taskId" cols="12" md="6" lg="6">
               <v-card outlined class="mb-5">
-                <v-card-title
-                  class="subheading font-weight-bold"
-                >{{item.projectTitle}} > {{item.superTitle}}</v-card-title>
+                <v-card-title class="subheading font-weight-bold">
+                  {{item.projectTitle}} > {{item.superTitle}}
+                  <v-spacer></v-spacer>
+                  <v-icon v-if="item.usePublic" small>mdi-lock-open-variant-outline</v-icon>
+                  <v-icon v-if="!item.usePublic" small>mdi-lock-outline</v-icon>
+                </v-card-title>
                 <v-card-text>{{item.title}}</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -40,7 +43,7 @@
             <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="formerPage">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
-            <span class="ma-2 grey--text">page {{ page }} of {{ numberOfPages }}</span>
+            <span class="ma-2 grey--text">{{ page }} / {{ numberOfPages }} 페이지</span>
             <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="nextPage">
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
@@ -93,7 +96,7 @@ export default {
   methods: {
     ...mapActions([
       "FETCH_ARCHIVE_SUB",
-      "DELTE_ARCHIVE_SUB",
+      "DELETE_ARCHIVE_SUB",
       "RESTORE_ARCHIVE_SUB",
     ]),
     fetchArchiveSub() {

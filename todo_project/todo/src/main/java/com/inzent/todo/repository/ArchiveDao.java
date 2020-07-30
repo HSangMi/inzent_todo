@@ -32,15 +32,15 @@ public class ArchiveDao {
 
     public int deleteSuperTask(String superId) {
         int superCnt = sqlsession.delete("archive.delSuper", superId);
-        String archiveSuperId = sqlsession.selectOne("archive.existArchiveSuperId", superId);
-        String taskSuperId = sqlsession.selectOne("archive.existTaskSuperId", superId);
+        List<String> archiveSuperId = sqlsession.selectList("archive.existArchiveSuperId", superId);
+        List<String> taskSuperId = sqlsession.selectList("archive.existTaskSuperId", superId);
         System.out.println(archiveSuperId + "   " + taskSuperId);
         int subCnt = 0;
         if (superCnt == 1) {
-            if (archiveSuperId != null) {
+            if (archiveSuperId.size() > 0) {
                 subCnt = sqlsession.delete("archive.delArchiveSub", superId);
             } // end if
-            if (taskSuperId != null) {
+            if (taskSuperId.size() > 0) {
                 subCnt = sqlsession.delete("archive.delTaskSub", superId);
             } // end if
             System.out.println("삭제 성공!!");

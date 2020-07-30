@@ -21,10 +21,14 @@
         from tb_archive_sub tas, tb_task_super tts , tb_project tp
         where (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and tas.use_public = true
         union
+        select tas.task_id taskId, tas.title, tas.use_public, tas2.task_id superTaskId, tas2.title superTitle, tp.title projectTitle 
+        from tb_archive_sub tas, tb_archive_super tas2 , tb_project tp
+        where (tas.task_super_id = tas2.task_id) and (tas2.project_id = tp.id) and tas.use_public = true
+        union
         select tas.task_id taskId, tas.title, tas.use_public, tts.task_id superTaskId, tts.title superTitle, tp.title projectTitle
         from tb_archive_sub tas, tb_task_super tts , tb_project tp, tb_member tm 
         where tas.member_no in (select member_no from tb_member where user_id =#{userId}) and tas.use_public = false
-        and (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and (tm.project_id = tp.id)
+    and (tas.task_super_id = tts.task_id) and (tts.project_id = tp.id) and (tm.project_id = tp.id)
     ]]>
     </select>
     <delete id="delSub" parameterType="String">
