@@ -11,7 +11,7 @@
       :page="page"
       :sort-by="sortBy.toLowerCase()"
       hide-default-footer
-      no-data-text="없음"
+      no-data-text="보관된 업무 없음"
       class="ma-5"
     >
       <template v-slot:default="props">
@@ -35,15 +35,17 @@
       </template>
 
       <template v-slot:footer>
-        <v-row align="center" justify="center">
-          <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="formerPage">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <span class="ma-2 grey--text">page {{ page }} of {{ numberOfPages }}</span>
-          <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="nextPage">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </v-row>
+        <template v-if="numberOfPages!=0">
+          <v-row align="center" justify="center">
+            <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="formerPage">
+              <v-icon>mdi-chevron-left</v-icon>
+            </v-btn>
+            <span class="ma-2 grey--text">page {{ page }} of {{ numberOfPages }}</span>
+            <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="nextPage">
+              <v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
+          </v-row>
+        </template>
       </template>
     </v-data-iterator>
     <v-dialog v-model="openArcDialog" persistent max-width="290">
@@ -61,6 +63,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import { eventBus } from "../../main.js";
 
 export default {
   data() {
@@ -77,14 +80,14 @@ export default {
   },
   created() {
     this.fetchArchiveSub();
+    eventBus.$on("reloading", () => {
+      this.fetchArchiveSub();
+    });
   },
   computed: {
     ...mapState({ archiveSub: "archiveSub" }),
     numberOfPages() {
       return Math.ceil(this.items.length / this.itemsPerPage);
-    },
-    filteredKeys() {
-      return this.keys.filter((key) => key !== `Name`);
     },
   },
   methods: {

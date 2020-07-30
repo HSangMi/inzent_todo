@@ -23,7 +23,6 @@ public class ArchiveDao {
     }
 
     public List<ArchiveSubDto> getArchiveSubs(String userId) {
-        // 아카이브 슈퍼에 존재하면 띄우지는 마라
         return sqlsession.selectList("archive.getArchiveSubs", userId);
     }
 
@@ -33,12 +32,22 @@ public class ArchiveDao {
 
     public int deleteSuperTask(String superId) {
         int superCnt = sqlsession.delete("archive.delSuper", superId);
-        if (superCnt == 1) { // 성공했다면
-            System.out.println("관련된 하위업무도 같이 지우기");
+        String archiveSuperId = sqlsession.selectOne("archive.existArchiveSuperId", superId);
+        String taskSuperId = sqlsession.selectOne("archive.existTaskSuperId", superId);
+        System.out.println(archiveSuperId + "   " + taskSuperId);
+        int subCnt = 0;
+        if (superCnt == 1) {
+            if (archiveSuperId != null) {
+                subCnt = sqlsession.delete("archive.delArchiveSub", superId);
+            } // end if
+            if (taskSuperId != null) {
+                subCnt = sqlsession.delete("archive.delTaskSub", superId);
+            } // end if
+            System.out.println("삭제 성공!!");
         } else {
-            System.out.println("상위 삭제 실패....");
-        }
-        return superCnt;
+            System.out.println("삭제 실패");
+        } // end else
+        return subCnt;
     }
 
     public int restoreSubTask(String subId) {
