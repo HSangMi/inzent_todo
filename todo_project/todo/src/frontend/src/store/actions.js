@@ -239,6 +239,26 @@ const actions = {
         console.log(err);
       });
   },
+  FETCH_CHK_PROJECT_INFO({ commit }, chkProject) {
+    return sohyun.schedule
+      .getChkProjectInfo(chkProject)
+      .then((result) => {
+        commit("SET_CHK_PROJECTINFO", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_SUB_SORTNO({ commit }, chkSuperTask) {
+    return sohyun.schedule
+      .getSubSortNo(chkSuperTask)
+      .then((result) => {
+        commit("SET_SUB_SORTNO", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   FETCH_CALENDAR_SUPER_TASKS({ commit }, chkProject) {
     // 선택한 프로젝트의 업무 대 조회
     return sohyun.schedule

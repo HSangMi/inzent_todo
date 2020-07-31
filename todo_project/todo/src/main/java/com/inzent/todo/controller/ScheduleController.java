@@ -11,16 +11,20 @@ import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.FilterDto;
+import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ScheduleDto;
 import com.inzent.todo.security.Auth;
+import com.inzent.todo.service.ProjectService;
 import com.inzent.todo.service.ScheduleService;
 import com.inzent.todo.vo.UserVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,6 +33,8 @@ public class ScheduleController {
 
     @Autowired
     private ScheduleService scheduleService;
+    @Autowired
+    private ProjectService projectService;
 
     @Auth
     @GetMapping("/calendar")
@@ -61,6 +67,30 @@ public class ScheduleController {
 
         List<ChkSuperTasksDto> list = scheduleService.getSuperTasks(chkprjdto);
         return list;
+    }
+
+    // 선택한 프로젝트 정보 가지고 있기
+    @Auth
+    @PostMapping("/chkProjectInfo")
+    public Map<String, Object> getChkProjectInfo(@RequestBody ChkProjectDto chkprjdto, HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        chkprjdto.setId(userId);
+
+        Map<String, Object> map = scheduleService.getChkProjectInfo(chkprjdto);
+        List<MemberDto> memberList = projectService.getMemberList(chkprjdto.getChkProject());
+        map.put("memberList", memberList);
+        return map;
+    }
+
+    // 선택한 상위업무 정보 가지고 있기
+    @Auth
+    @GetMapping("/subSortno/{chkSuperTask}")
+    public String getSubSortNo(@PathVariable("chkSuperTask") String chkSuperTask) {
+        // UserVo user = (UserVo) req.getAttribute("user");
+        // String userId = user.getId();
+        return scheduleService.getSubSortNo(chkSuperTask);
     }
 
     // 해당날짜 업무 조회

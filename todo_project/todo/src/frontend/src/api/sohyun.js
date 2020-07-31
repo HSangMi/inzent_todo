@@ -68,14 +68,21 @@ export const schedule = {
   getChkProject(chkProject) {
     return request("post", "/schedule/chkproject", chkProject);
   },
-  addSuperTask(addSuper) {
-    console.log("업무대 : ", addSuper);
-    return request("post", "/schedule/addSuper", addSuper);
+  getChkProjectInfo(chkProject) {
+    return request("post", "/schedule/chkProjectInfo", chkProject);
   },
-  addSubTask(addSub) {
-    console.log("업무소 : ", addSub);
-    return request("post", "/schedule/addSub", addSub);
+  getSubSortNo(chkSuperTask) {
+    console.log("dmdkkkkk", chkSuperTask);
+    return request("get", `/schedule/subSortno/${chkSuperTask}`);
   },
+  // addSuperTask(addSuper) {
+  //   console.log("업무대 : ", addSuper);
+  //   return request("post", "/schedule/addSuper", addSuper);
+  // },
+  // addSubTask(addSub) {
+  //   console.log("업무소 : ", addSub);
+  //   return request("post", "/schedule/addSub", addSub);
+  // },
   getFilter() {
     return request("get", "/schedule/filter");
   },
@@ -90,6 +97,7 @@ export const schedule = {
     return request("post", "/schedule/addcalitem", calData);
   },
 };
+///////////////////////////////////// ARCHIVE /////////////////////////////////////
 export const archive = {
   fetchArchiveSuper() {
     return request("get", "/archive/archiveSuper");

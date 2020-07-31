@@ -42,14 +42,14 @@
         ]]>
     </delete>
     <!-- superid 존재 유무 -->
-    <select id="existArchiveSuperId" parameterType="String" resultType="String">
+    <select id="existArchiveSuperId" parameterType="String" resultType="boolean">
         <![CDATA[
-        select task_super_id from tb_archive_sub where task_super_id=#{superId};
+        select task_id from tb_archive_sub where task_super_id=#{superId};
         ]]>
     </select>
-    <select id="existTaskSuperId" parameterType="String" resultType="String">
+    <select id="existTaskSuperId" parameterType="String" resultType="boolean">
         <![CDATA[
-        select task_super_id from tb_task_sub where task_super_id=#{superId};
+        select task_id from tb_task_sub where task_super_id=#{superId};
         ]]>
     </select>
     <delete id="delArchiveSub" parameterType="String">

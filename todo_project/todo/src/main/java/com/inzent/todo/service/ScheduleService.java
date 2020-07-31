@@ -67,6 +67,18 @@ public class ScheduleService {
         return scheduledao.getSuperTasks(chkprjdto);
     }
 
+    // 선택한 프로젝트 정보 가지고 있기....
+    public Map<String, Object> getChkProjectInfo(ChkProjectDto chkprjdto) {
+
+        return scheduledao.getChkProjectInfo(chkprjdto);
+    }
+
+    // 선택한 상위업무 정보 가지고 있기....
+    public String getSubSortNo(String chkSuperTask) {
+
+        return scheduledao.getSubSortNo(chkSuperTask);
+    }
+
     // 해당 날짜의 업무 조회
     public List<CalDateDetailDto> getClickDateList(ClickDateDto cddto) {
         String existUser = scheduledao.selectExistUser(cddto.getId());

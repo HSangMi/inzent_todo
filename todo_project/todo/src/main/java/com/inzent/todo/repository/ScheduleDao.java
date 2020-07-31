@@ -10,6 +10,7 @@ import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.FilterDto;
 import com.inzent.todo.dto.ScheduleDto;
+import com.inzent.todo.vo.LabelVo;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,29 @@ public class ScheduleDao {
     // 업무등록의 프로젝트 조회
     public List<Map<String, Object>> getProjects(String userId) {
         List<Map<String, Object>> prjInfo = sqlsession.selectList("calendar.getProjects", userId);
-        
+
         return prjInfo;
     }
 
+    // 선택한 프로젝트의 업무대 조회
     public List<ChkSuperTasksDto> getSuperTasks(ChkProjectDto chkprjdto) {
 
         return sqlsession.selectList("calendar.getSuperTasks", chkprjdto);
+    }
+
+    // 선택한 프로젝트 정보 가지고 있기....
+    public Map<String, Object> getChkProjectInfo(ChkProjectDto chkprjdto) {
+        Map<String, Object> map = sqlsession.selectOne("calendar.getChkProjectInfo", chkprjdto);
+        String pid = chkprjdto.getChkProject();
+        List<LabelVo> labelVo = sqlsession.selectList("project.getLabelList", pid);
+        map.put("labelVo", labelVo);
+        return map;
+    }
+
+    // 선택한 상위업무 정보 가지고 있기....
+    public String getSubSortNo(String chkSuperTask) {
+        String sortNo = sqlsession.selectOne("calendar.getLastSortNo", chkSuperTask);
+        return sortNo;
     }
 
     // 필터 없는 업무 대 상세 조회
