@@ -15,7 +15,7 @@
           <!-- 프로젝트 선택 -->
           <!-- <v-card-title class="text-h5">프로젝트 선택</v-card-title> -->
           <v-select
-            class="mx-5 pt-5"
+            class="mx-5 pt-10"
             v-model="chkProject"
             @change="fetchChkProject()"
             :items="selectProjects"
@@ -39,7 +39,7 @@
         <v-stepper-content step="2">
           <!-- 업무 선택 -->
           <!-- <v-card-title class="text-h5">업무 선택</v-card-title> -->
-          <v-radio-group class="mb-6 mx-5 pt-5" v-model="radios" :mandatory="false">
+          <v-radio-group class="mb-6 mx-10 pt-5" v-model="radios" :mandatory="false">
             <!-- 업무 대 추가할 것인지 -->
             <v-radio class="mb-6" label="상위 업무 등록" value="addTask"></v-radio>
             <!-- 업무 대 선택 할것인지 -->
@@ -490,6 +490,9 @@ export default {
 </script>
 
 <style scoped>
+.v-text-field__details .v-input__control {
+  display: none;
+}
 .v-stepper__content {
   padding: 0px;
 }
