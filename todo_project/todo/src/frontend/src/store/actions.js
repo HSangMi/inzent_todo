@@ -270,24 +270,24 @@ const actions = {
         console.log(err);
       });
   },
-  ADD_CALENDAR_SUPER_TASKS(__, addSuper) {
-    // 업무 대 추가
-    return sohyun.schedule
-      .addSuperTask(addSuper)
-      .then((result) => result)
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-  ADD_CALENDAR_SUB_TASKS(__, addSub) {
-    // 업무 소 추가
-    return sohyun.schedule
-      .addSubTask(addSub)
-      .then((result) => result)
-      .catch((err) => {
-        console.log(err);
-      });
-  },
+  // ADD_CALENDAR_SUPER_TASKS(__, addSuper) {
+  //   // 업무 대 추가
+  //   return sohyun.schedule
+  //     .addSuperTask(addSuper)
+  //     .then((result) => result)
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // },
+  // ADD_CALENDAR_SUB_TASKS(__, addSub) {
+  //   // 업무 소 추가
+  //   return sohyun.schedule
+  //     .addSubTask(addSub)
+  //     .then((result) => result)
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // },
   FETCH_CALENDAR_CLICKDATE({ commit }, clickDate) {
     // 해당날짜의 업무 조회
     return sohyun.schedule

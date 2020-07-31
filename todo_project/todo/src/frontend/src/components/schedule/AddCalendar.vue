@@ -13,12 +13,9 @@
       <v-stepper-items>
         <v-stepper-content step="1">
           <!-- 프로젝트 선택 -->
-          <v-card-title class="text-h5">프로젝트 선택</v-card-title>
-          <v-alert v-model="alert" dense outlined type="error" class="mx-5 py-1" height="35px">
-            <span style="font-size:13px">프로젝트를 선택해주세요.</span>
-          </v-alert>
+          <!-- <v-card-title class="text-h5">프로젝트 선택</v-card-title> -->
           <v-select
-            class="mx-5"
+            class="mx-5 pt-5"
             v-model="chkProject"
             @change="fetchChkProject()"
             :items="selectProjects"
@@ -27,6 +24,9 @@
             label="프로젝트"
             outlined
           ></v-select>
+          <v-alert v-model="alert" dense outlined type="error" class="mx-5 py-1" height="35px">
+            <span style="font-size:13px">프로젝트를 선택해주세요.</span>
+          </v-alert>
           <v-card-actions>
             <v-btn color="blue darken-1" text @click="SET_IS_ADD_CALENDAR(false)">취소</v-btn>
             <v-spacer></v-spacer>
@@ -38,8 +38,8 @@
 
         <v-stepper-content step="2">
           <!-- 업무 선택 -->
-          <v-card-title class="text-h5">업무 선택</v-card-title>
-          <v-radio-group class="mb-6 mx-5" v-model="radios" :mandatory="false">
+          <!-- <v-card-title class="text-h5">업무 선택</v-card-title> -->
+          <v-radio-group class="mb-6 mx-5 pt-5" v-model="radios" :mandatory="false">
             <!-- 업무 대 추가할 것인지 -->
             <v-radio class="mb-6" label="상위 업무 등록" value="addTask"></v-radio>
             <!-- 업무 대 선택 할것인지 -->
@@ -76,8 +76,8 @@
                 <h4 v-else>상위 업무 등록</h4>
                 <v-spacer></v-spacer>
               </v-card-title>-->
-              <v-card-title v-if="taskSuperId" class="text-h5">하위 업무 등록</v-card-title>
-              <v-card-title v-else class="text-h5">상위 업무 등록</v-card-title>
+              <!-- <v-card-title v-if="taskSuperId" class="text-h5">하위 업무 등록</v-card-title>
+              <v-card-title v-else class="text-h5">상위 업무 등록</v-card-title>-->
               <v-card-text class="py-0 px-3">
                 <!-- <v-container> -->
                 <v-row>
@@ -346,26 +346,26 @@ export default {
       this.FETCH_SUB_SORTNO(this.chkSuperTask);
     },
     // 업무 추가
-    addCalendarTask() {
-      if (this.radios == "addTask") {
-        const addSupper = {
-          chkProject: this.chkProject,
-        };
-        // 업무 대 추가
-        this.ADD_CALENDAR_SUPER_TASKS(addSupper).then(() => {
-          console.log("super 추가");
-        });
-      } else {
-        const addSub = {
-          chkProject: this.chkProject,
-          chkSuperTask: this.chkSuperTask,
-        };
-        // 업무 소 추가
-        this.ADD_CALENDAR_SUB_TASKS(addSub).then(() => {
-          console.log("sub 추가");
-        });
-      }
-    },
+    // addCalendarTask() {
+    //   if (this.radios == "addTask") {
+    //     const addSupper = {
+    //       chkProject: this.chkProject,
+    //     };
+    //     // 업무 대 추가
+    //     this.ADD_CALENDAR_SUPER_TASKS(addSupper).then(() => {
+    //       console.log("super 추가");
+    //     });
+    //   } else {
+    //     const addSub = {
+    //       chkProject: this.chkProject,
+    //       chkSuperTask: this.chkSuperTask,
+    //     };
+    //     // 업무 소 추가
+    //     this.ADD_CALENDAR_SUB_TASKS(addSub).then(() => {
+    //       console.log("sub 추가");
+    //     });
+    //   }
+    // },
     isChkPrj() {
       console.log(this.chkProject);
       if (this.chkProject == "") {
@@ -408,9 +408,8 @@ export default {
         );
         if (this.taskSuperId) {
           console.log("ADD SUB ~!!");
-          console.log(this.lastSubSortNo);
+          console.log("sortno~~~~", this.lastSubSortNo);
           formData.append("taskSuperId", this.taskSuperId);
-
           formData.append("sortNo", this.lastSubSortNo);
           this.ADD_SUB_TASK(formData).then(() => {
             console.log("------------------");
@@ -491,12 +490,12 @@ export default {
 </script>
 
 <style scoped>
-/* .v-stepper__content {
+.v-stepper__content {
   padding: 0px;
-} */
+}
 .add-task-card-form .col {
   padding: 0px;
-  padding-top: 5px;
+  padding-top: 15px;
 }
 .add-task-card-form .formFieldCol {
   padding: 10px;

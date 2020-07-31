@@ -135,18 +135,22 @@ const mutations = {
   SET_CHK_PROJECTINFO(state, projectData) {
     console.log("선택된 프로젝트 정보...", projectData);
     state.project = {
-      id: projectData.projectId,
-      memberNo: projectData.memberNo,
+      id: projectData.project_id,
+      memberNo: projectData.member_no,
     };
     state.labelList = projectData.labelVo;
-    state.memberList=projectData.memberList;
+    state.memberList = projectData.memberList;
   },
   SET_CHK_SUPERID(state, superId) {
     state.taskSuperId = superId;
   },
   SET_SUB_SORTNO(state, sortNo) {
     console.log("선택된 상위업무 정보...", sortNo);
-    state.lastSubSortNo = sortNo;
+    if (sortNo == "") {
+      state.lastSubSortNo = 0;
+    } else {
+      state.lastSubSortNo = sortNo;
+    }
   },
   SET_FETCH_CHKPROJECT(state, data) {
     state.getSuperTasks = data;
