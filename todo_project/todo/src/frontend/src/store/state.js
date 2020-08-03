@@ -23,7 +23,6 @@ const state = {
   starredList: [],
   todaySub: [],
   weekSub: [],
-  starredSub: [],
   ///////// SCHEDULE /////////
   isAddCalendar: false,
   isDetailCalendar: false,

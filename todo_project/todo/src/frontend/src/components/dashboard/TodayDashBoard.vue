@@ -1,6 +1,6 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
-    <v-card-title class="text-h5">TODAY TASKS</v-card-title>
+    <v-card-title class="text-h5">오늘의 업무</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="9">
@@ -15,10 +15,8 @@
           class="elevation-1"
           height="250"
           @update:expanded="getSub"
+          no-data-text="오늘의 상위업무가 존재하지 않습니다."
         >
-          <template v-slot:item.no-data-text>
-            <span class="sub">업무 없음</span>
-          </template>
           <!-- 공개여부 아이콘 설정 -->
           <template v-slot:item.usePublic="{ item }">
             <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
@@ -39,7 +37,7 @@
               <v-simple-table>
                 <tbody v-if="todaySub.length == 0">
                   <tr style="background-color:#F5F5F5">
-                    <td colspan="todaySub.length" class="text-center">NO TASKS</td>
+                    <td colspan="todaySub.length" class="text-center">오늘의 하위업무가 존재하지 않습니다.</td>
                   </tr>
                 </tbody>
                 <tbody v-else>
@@ -101,7 +99,7 @@
       <v-col cols="12" md="2">
         <!-- <p class="text-center mx-3 my-3">TODAY CHART</p> -->
         <div v-if="todayList.length == 0">
-          <p class="text-center">NO TASKS</p>
+          <p class="text-center">오늘의 업무 차트가 존재하지 않습니다.</p>
         </div>
         <div class="mx-5" v-else>
           <canvas id="todayChart" width="300" height="300"></canvas>
@@ -146,6 +144,7 @@ export default {
   },
   created() {
     this.FETCH_TODAY_DASHBOARD().then(() => {
+      console.log("---", this.todayList);
       for (var i = 0; i < this.todayList.length; i++) {
         this.listItem.push(this.todayList[i]);
         switch (this.todayList[i].state) {

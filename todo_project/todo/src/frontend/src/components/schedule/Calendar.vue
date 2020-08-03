@@ -75,69 +75,71 @@
       <v-card class="border" outlined>
         <v-row class="fill-height">
           <v-col>
-            <v-sheet height="64">
-              <v-toolbar flat color="white">
-                <!-- 업무추가버튼 -->
-                <v-btn
-                  class="mx-3"
-                  outlined
-                  fab
-                  dark
-                  small
-                  color="blue"
-                  @click.prevent="SET_IS_ADD_CALENDAR(true)"
-                >
-                  <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-                <v-spacer></v-spacer>
-                <!-- 오늘날짜이동 -->
-                <v-btn small outlined class="mr-4" color="grey darken-2" @click="setToday">오늘</v-btn>
-                <!-- < 이전 버튼 -->
-                <v-btn fab text color="grey darken-2" @click="prev">
-                  <v-icon small>mdi-chevron-left</v-icon>
-                </v-btn>
-                <!-- 몇월인지 타이틀 -->
-                <v-toolbar-title v-if="$refs.calendar">
-                  {{
-                  $refs.calendar.title
-                  }}
-                  <!-- > 다음 버튼 -->
-                  <v-btn fab text color="grey darken-2" @click="next">
-                    <v-icon small>mdi-chevron-right</v-icon>
+            <v-card>
+              <v-sheet height="64">
+                <v-toolbar flat color="white">
+                  <!-- 업무추가버튼 -->
+                  <v-btn
+                    class="mx-3"
+                    outlined
+                    fab
+                    dark
+                    small
+                    color="blue"
+                    @click.prevent="SET_IS_ADD_CALENDAR(true)"
+                  >
+                    <v-icon dark>mdi-plus</v-icon>
                   </v-btn>
-                </v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-switch v-model="google" class="ma-3">
-                  <template v-slot:label>
-                    <span class="my-3 font-filter">구글 연동</span>
-                  </template>
-                </v-switch>
-              </v-toolbar>
-            </v-sheet>
-            <!-- 달력 시작 -->
-            <v-sheet height="750">
-              <v-calendar
-                ref="calendar"
-                v-model="focus"
-                color="primary"
-                :events="events"
-                :event-color="getEventColor"
-                :type="type"
-                @click:event="showEvent"
-                @click:date="showDate"
-                @change="updateRange"
-              ></v-calendar>
-              <!-- 달력 끝 -->
-              <!-- 상세모달 창 시작 -->
-              <detail-calendar/>
-              <!-- 상세모달 창 끝 -->
-              <!-- 업무소 모달 시작 -->
-              <detail-cal-event />
-              <!-- 업무소 모달 끝 -->
-              <!-- 일정추가 모달 시작 -->
-              <add-calendar />
-              <!-- 일정추가 모달 끝 -->
-            </v-sheet>
+                  <v-spacer></v-spacer>
+                  <!-- 오늘날짜이동 -->
+                  <v-btn small outlined class="mr-4" color="grey darken-2" @click="setToday">오늘</v-btn>
+                  <!-- < 이전 버튼 -->
+                  <v-btn fab text color="grey darken-2" @click="prev">
+                    <v-icon small>mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <!-- 몇월인지 타이틀 -->
+                  <v-toolbar-title v-if="$refs.calendar">
+                    {{
+                    $refs.calendar.title
+                    }}
+                    <!-- > 다음 버튼 -->
+                    <v-btn fab text color="grey darken-2" @click="next">
+                      <v-icon small>mdi-chevron-right</v-icon>
+                    </v-btn>
+                  </v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-switch v-model="google" class="ma-3">
+                    <template v-slot:label>
+                      <span class="my-3 font-filter">구글 연동</span>
+                    </template>
+                  </v-switch>
+                </v-toolbar>
+              </v-sheet>
+              <!-- 달력 시작 -->
+              <v-sheet height="750">
+                <v-calendar
+                  ref="calendar"
+                  v-model="focus"
+                  color="primary"
+                  :events="events"
+                  :event-color="getEventColor"
+                  :type="type"
+                  @click:event="showEvent"
+                  @click:date="showDate"
+                  @change="updateRange"
+                ></v-calendar>
+                <!-- 상세모달 창 시작 -->
+                <detail-calendar />
+                <!-- 상세모달 창 끝 -->
+                <!-- 달력 끝 -->
+                <!-- 업무소 모달 시작 -->
+                <detail-cal-event />
+                <!-- 업무소 모달 끝 -->
+                <!-- 일정추가 모달 시작 -->
+                <add-calendar />
+                <!-- 일정추가 모달 끝 -->
+              </v-sheet>
+            </v-card>
           </v-col>
         </v-row>
       </v-card>
@@ -189,6 +191,7 @@ export default {
       getChkFilterItem: "getChkFilterItem",
       calFilterItem: "calFilterItem",
     }),
+    ...mapState(["isDetailCalendar"]),
     // ...mapState(["clickDate"])
   },
   mounted() {
@@ -230,7 +233,8 @@ export default {
     showDate({ date }) {
       // 모달창 이벤트
       this.focus = date; // 들어온 해당 날짜
-      this.$emit=('date');
+      // console.log("날짜 히얼", this.focus);
+      // this.$emit("focus", this.focus);
       const clickDate = {
         clickDate: this.focus,
       };

@@ -65,13 +65,22 @@ public class BoardMainService {
     }
 
     // 관심 할일 목록
-    public List<DashBoardSuperDto> getStarredSuperList(String userId) {
-        // System.out.println("BoardMain Service : get StaredList");
-        return boardMainDao.getStarredSuperList(userId);
+    public List<DashBoardSuperDto> getStarredList(String userId) {
+
+        List<DashBoardSuperDto> list = boardMainDao.getStarredList(userId);
+        String dueDate = null;
+        String rate = null;
+        for (DashBoardSuperDto dto : list) {
+            if (dto.getStartDate().isEmpty() || dto.getEndDate().isEmpty()) {
+                dueDate = "미정";
+            } else {
+                dueDate = dto.getStartDate() + " ~ " + dto.getEndDate();
+            }
+            rate = dto.getProgressRate() + "%";
+            dto.setProgressRate(rate);
+            dto.setDueDate(dueDate);
+        } // end else
+        return list;
     }
 
-    public List<DashBoardSubDto> getStarredSubList(String starredSub, String userId) {
-
-        return boardMainDao.getStarredSubList(starredSub, userId);
-    }
 }

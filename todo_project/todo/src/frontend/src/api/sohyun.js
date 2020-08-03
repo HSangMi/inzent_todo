@@ -46,9 +46,6 @@ export const dashboard = {
   getStarredList() {
     return request("get", "/dashboard/starred");
   },
-  getStarredSub(starredSub) {
-    return request("post", "/dashboard/starredsub", starredSub);
-  },
 };
 ///////////////////////////////////// SCHEDULE /////////////////////////////////////
 export const schedule = {

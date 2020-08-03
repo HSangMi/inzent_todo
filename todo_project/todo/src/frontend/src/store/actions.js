@@ -207,16 +207,6 @@ const actions = {
         console.log(err);
       });
   },
-  FETCH_STARREDSUB_DASHBOARD({ commit }, starredSub) {
-    return sohyun.dashboard
-      .getStarredSub(starredSub)
-      .then((result) => {
-        commit("SET_STARRED_SUB", result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
   //////////////////////// SCHEDULE (CALENDAR) ////////////////////////
   FETCH_CALENDAR_LIST({ commit }) {
     // 캘린더 조회

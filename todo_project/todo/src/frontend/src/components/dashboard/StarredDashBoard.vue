@@ -1,6 +1,6 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
-    <v-card-title class="text-h5">STARRED TASKS</v-card-title>
+    <v-card-title class="text-h5">관심 업무</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="9">
@@ -8,15 +8,14 @@
           :headers="headers"
           :items="listItem"
           :items-per-page="5"
-          :single-expand="singleExpand"
-          :expanded="expanded"
-          show-expand
           item-key="pid"
           class="elevation-1"
           height="250"
-          @update:expanded="getSub"
-          no-data-text="NO TASK"
+          no-data-text="관심 업무가 존재하지 않습니다."
         >
+          <template v-slot:item.icon>
+            <v-icon color="yellow" small>mdi-star</v-icon>
+          </template>
           <!-- 공개여부 아이콘 설정 -->
           <template v-slot:item.usePublic="{item}">
             <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
@@ -32,7 +31,7 @@
           </template>
 
           <!-- 업무 대 관련한 업무 소 출력 -->
-          <template v-slot:expanded-item="{headers}">
+          <!-- <template v-slot:expanded-item="{headers}">
             <td :colspan="headers.length" class="px-0">
               <v-simple-table>
                 <tbody v-if="starredSub.length == 0">
@@ -75,13 +74,13 @@
                 </tbody>
               </v-simple-table>
             </td>
-          </template>
+          </template>-->
         </v-data-table>
       </v-col>
       <v-divider class="mx-4" vertical></v-divider>
       <v-col cols="12" md="2" class="mx-0 auto">
-        <!-- <div v-if="starredList.length == 0" class="text-center py-5">NO CHART</div> -->
-        <div class="mx-5">
+        <div v-if="starredList.length == 0" class="text-center py-5">관심 업무 차트가 존재하지 않습니다.</div>
+        <div class="mx-5" v-else>
           <canvas id="starredChart" width="300" height="300"></canvas>
         </div>
       </v-col>
@@ -99,31 +98,32 @@ export default {
       expanded: [],
       singleExpand: true,
       headers: [
+        { text: "", value: "icon", align: "center", width: "5%" },
+        { text: "업무 명", value: "ptitle", align: "center", width: "20%" },
         {
           text: "프로젝트",
           align: "center",
           sortable: false,
           value: "prjTitle",
-          width: "20%"
+          width: "25%",
         },
-        { text: "업무 명", value: "ptitle", align: "center", width: "20%" },
         { text: "기간", value: "dueDate", align: "center", width: "20%" },
         { text: "진행 상태", value: "state", align: "center", width: "20%" },
         {
           text: "공개 여부",
           value: "usePublic",
           align: "center",
-          width: "10%"
+          width: "10%",
         },
-        { text: "", value: "data-table-expand", width: "10%" }
       ],
       listItem: [],
       //////////////////////// 차트 ////////////////////////////
-      chartStateCnt: { H: 0, P: 0, C: 0, W: 0, E: 0 }
+      chartStateCnt: { H: 0, P: 0, C: 0, W: 0, E: 0 },
     };
   },
   created() {
     this.FETCH_STARRED_DASHBOARD().then(() => {
+      console.log("====", this.starredList);
       for (var i = 0; i < this.starredList.length; i++) {
         this.listItem.push(this.starredList[i]);
         switch (this.starredList[i].state) {
@@ -155,37 +155,37 @@ export default {
                 this.chartStateCnt.P,
                 this.chartStateCnt.C,
                 this.chartStateCnt.W,
-                this.chartStateCnt.E
+                this.chartStateCnt.E,
               ],
               backgroundColor: [
                 "#BFC9CA",
                 "#5DADE2",
                 "#82E0AA",
                 "#F7DC6F",
-                "#F1948A"
+                "#F1948A",
               ],
-              borderAlign: "left"
-            }
+              borderAlign: "left",
+            },
           ],
           // These labels appear in the legend and in the tooltips when hovering different arcs
-          labels: ["보류", "진행", "완료", "대기", "긴급"]
+          labels: ["보류", "진행", "완료", "대기", "긴급"],
         },
         options: {
           legend: {
             position: "right",
-            verticalAlign: "right"
+            verticalAlign: "right",
           },
-          responsive: false
+          responsive: false,
         },
         scales: {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true
-              }
-            }
-          ]
-        }
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
       };
       chartjs.createChart("starredChart", chartObj);
     }); // store -> actions
@@ -193,18 +193,12 @@ export default {
   computed: {
     ...mapState({
       starredList: "starredList",
-      starredSub: "starredSub"
-    })
+      starredSub: "starredSub",
+    }),
   },
   methods: {
-    ...mapActions(["FETCH_STARRED_DASHBOARD", "FETCH_STARREDSUB_DASHBOARD"]),
-    getSub(id) {
-      if ("undefined" !== typeof id && 0 < id.length) {
-        let superId = id[0].pid;
-        this.FETCH_STARREDSUB_DASHBOARD(superId);
-      }
-    }
-  }
+    ...mapActions(["FETCH_STARRED_DASHBOARD"]),
+  },
 };
 </script>
 

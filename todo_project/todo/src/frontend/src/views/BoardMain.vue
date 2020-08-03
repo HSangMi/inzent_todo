@@ -23,7 +23,7 @@ export default {
     StarredDashBoard,
   },
   created() {
-    this.SET_HEADER_TITLE("DASHBOARD");
+    this.SET_HEADER_TITLE("대시보드");
   },
   methods: {
     ...mapMutations(["SET_HEADER_TITLE"]),

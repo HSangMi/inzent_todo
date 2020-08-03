@@ -1,6 +1,6 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
-    <v-card-title class="text-h5">WEEK TASKS</v-card-title>
+    <v-card-title class="text-h5">주간 업무</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="9">
@@ -15,7 +15,7 @@
           class="elevation-1"
           height="250"
           @update:expanded="getSub"
-          no-data-text="NO TASK"
+          no-data-text="주간 상위 업무가 존재하지 않습니다."
         >
           <!-- 공개여부 아이콘 설정 -->
           <template v-slot:item.usePublic="{item}">
@@ -37,7 +37,7 @@
               <v-simple-table>
                 <tbody v-if="weekSub.length == 0">
                   <tr style="background-color:#F5F5F5">
-                    <td colspan="weekSub.length" class="text-center">NO TASKS</td>
+                    <td colspan="weekSub.length" class="text-center">주간 하위업무가 존재하지 않습니다.</td>
                   </tr>
                 </tbody>
                 <tbody v-else>
@@ -81,7 +81,7 @@
       <v-divider class="mx-4" vertical></v-divider>
       <v-col cols="12" md="2">
         <div v-if="weekList.length == 0">
-          <p class="text-center">NO TASKS</p>
+          <p class="text-center">주간 업무 차트가 존재하지 않습니다.</p>
         </div>
         <div class="mx-5" v-else>
           <canvas id="weekChart" width="300" height="300"></canvas>

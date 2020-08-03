@@ -89,9 +89,6 @@ const mutations = {
   SET_STARRED_LIST(state, starredList) {
     state.starredList = starredList;
   },
-  SET_STARRED_SUB(state, starredSub) {
-    state.starredSub = starredSub;
-  },
   //////////////////////// SCHEDULE ////////////////////////
   SET_IS_ADD_CALENDAR(state, toggle) {
     state.isAddCalendar = toggle; // toggle : 불린형

@@ -73,23 +73,12 @@ public class BoardMainController {
     // 관심
     @Auth
     @GetMapping("/starred")
-    public List<DashBoardSuperDto> getStarredSuperList(HttpServletRequest req) {
+    public List<DashBoardSuperDto> getStarredList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
 
-        List<DashBoardSuperDto> list = boardMainService.getStarredSuperList(userId);
+        List<DashBoardSuperDto> list = boardMainService.getStarredList(userId);
 
-        return list;
-    }
-
-    @Auth
-    @PostMapping("/starredsub")
-    public List<DashBoardSubDto> getStarredSubList(@RequestBody String starredSub, HttpServletRequest req) {
-        int length = starredSub.length();
-        starredSub = starredSub.substring(0, length - 1);
-        UserVo user = (UserVo) req.getAttribute("user");
-        String userId = user.getId();
-        List<DashBoardSubDto> list = boardMainService.getStarredSubList(starredSub, userId);
         return list;
     }
 

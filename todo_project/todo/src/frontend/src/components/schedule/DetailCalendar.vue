@@ -8,82 +8,74 @@
   >
     <v-card>
       <v-card-title class="pa-2">
-        <span class="headline px-7 py-4">ㅎㅎ</span>
+        <span class="headline px-7 py-4">dld</span>
       </v-card-title>
-      <v-card-text>
-        <v-container class="py-0">
-          <v-divider></v-divider>
-          <template v-if="clickDateList">
-            <v-list three-line>
-              <v-list-item-group>
-                <template v-for="(item, index) in clickDateList">
-                  <v-list-item :key="item.pid" @click="getSub(item.pid)">
-                    <v-list-item-content>
-                      <v-list-item-subtitle class="pb-2">
-                        <span class="detail-font">{{item.prjTitle}}</span>
-                      </v-list-item-subtitle>
-                      <v-spacer></v-spacer>
-                      <v-list-item-title class="text-h5 pb-3" v-text="item.ptitle"></v-list-item-title>
-                      <v-spacer></v-spacer>
-                      <v-list-item-subtitle v-if="item.pstartDate != '' && item.pendDate != ''">
-                        <span class="detail-font">{{item.pstartDate}} ~ {{item.pendDate}}</span>
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle v-if="item.pstartDate == '' && item.pendDate !=''">
-                        <span class="detail-font">{{item.pstartDate}} ~ 미정</span>
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle v-if="item.pstartDate != '' && item.pendDate == ''">
-                        <span class="detail-font">미정 ~ {{item.pendDate}}</span>
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle v-if="item.pstartDate == '' && item.pendDate == ''">
-                        <span class="detail-font">기간 미정</span>
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-chip
-                        v-if="item.pstate == 'P' "
-                        class="text-center ma-5 my-5"
-                        small
-                        color="blue"
-                        text-color="white"
-                      >진행</v-chip>
-                      <v-chip
-                        v-if="item.pstate == 'W'"
-                        class="text-center ma-5 my-5"
-                        small
-                        color="yellow"
-                      >대기</v-chip>
-                      <v-chip v-if="item.pstate == 'H' " class="text-center ma-5" small>보류</v-chip>
-                      <v-chip
-                        v-if="item.pstate == 'E'"
-                        class="text-center ma-2 my-5"
-                        small
-                        color="red"
-                        text-color="white"
-                      >긴급</v-chip>
-                      <v-chip
-                        v-if="item.pstate == 'C'"
-                        class="text-center ma-5 my-5"
-                        small
-                        color="green"
-                        text-color="white"
-                      >완료</v-chip>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-icon
-                        class="my-5"
-                        small
-                        v-show="item.pusePublic"
-                      >mdi-lock-open-variant-outline</v-icon>
-                      <v-icon class="my-5" small v-show="!item.pusePublic">mdi-lock-outline</v-icon>
-                    </v-list-item-action>
-                  </v-list-item>
-                  <v-divider v-if="index + 1 < clickDateList.length" :key="index"></v-divider>
-                </template>
-              </v-list-item-group>
-            </v-list>
-            <!-- <v-list-item-avatar></v-list-item-avatar> -->
-          </template>
-        </v-container>
+      <v-card-text class="py-0">
+        <template v-if="clickDateList">
+          <v-timeline dense>
+            <template v-for="item in clickDateList">
+              <v-timeline-item
+                :key="item.pid"
+                color="teal lighten-3"
+                small
+                class="mb-5"
+                @click="getSub(item.pid)"
+              >
+                <span class="detail-font">{{item.prjTitle}}</span>
+                <v-spacer></v-spacer>
+                <v-chip
+                  v-if="item.pstate == 'P' "
+                  class="text-center"
+                  x-small
+                  label
+                  color="blue"
+                  text-color="white"
+                >진행</v-chip>
+                <v-chip
+                  v-if="item.pstate == 'W'"
+                  class="text-center"
+                  x-small
+                  label
+                  color="yellow"
+                >대기</v-chip>
+                <v-chip v-if="item.pstate == 'H' " class="text-center" x-small label>보류</v-chip>
+                <v-chip
+                  v-if="item.pstate == 'E'"
+                  class="text-center"
+                  x-small
+                  label
+                  color="red"
+                  text-color="white"
+                >긴급</v-chip>
+                <v-chip
+                  v-if="item.pstate == 'C'"
+                  class="text-center"
+                  x-small
+                  label
+                  color="green"
+                  text-color="white"
+                >완료</v-chip>
+                <span @click="getSub(item.pid)" class="title-font">{{item.ptitle}}</span>
+                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer>
+                    <v-list-item-subtitle v-if="item.pstartDate != '' && item.pendDate != ''">
+                      <span class="detail-font">{{item.pstartDate}} ~ {{item.pendDate}}</span>
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle v-if="item.pstartDate == '' && item.pendDate !=''">
+                      <span class="detail-font">{{item.pstartDate}} ~ 미정</span>
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle v-if="item.pstartDate != '' && item.pendDate == ''">
+                      <span class="detail-font">미정 ~ {{item.pendDate}}</span>
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle v-if="item.pstartDate == '' && item.pendDate == ''">
+                      <span class="detail-font">기간 미정</span>
+                </v-list-item-subtitle>-->
+                <!-- <v-icon small class="my-5" v-show="item.pusePublic">mdi-lock-open-variant-outline</v-icon>
+                <v-icon small class="my-5" v-show="!item.pusePublic">mdi-lock-outline</v-icon>-->
+              </v-timeline-item>
+            </template>
+          </v-timeline>
+        </template>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -97,10 +89,13 @@
 import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
+  props: ["focus"],
   data: () => ({
     dateList: "",
   }),
-  created() {},
+  created() {
+    console.log("날짜는?", this.date);
+  },
   computed: {
     ...mapState({
       clickDateList: "getClickDateList",
@@ -127,6 +122,9 @@ export default {
 }
 .user-font {
   font-size: 11px;
+}
+.title-font {
+  font-size: 14px;
 }
 .user-list {
   padding-left: 15px;

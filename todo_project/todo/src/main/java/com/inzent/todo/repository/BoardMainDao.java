@@ -44,15 +44,9 @@ public class BoardMainDao {
         return sqlSession.selectList("dashboard.getWeekSubList", map);
     }
 
-    public List<DashBoardSuperDto> getStarredSuperList(String userId) {
-        return sqlSession.selectList("dashboard.getStarredSuperList", userId);
+    public List<DashBoardSuperDto> getStarredList(String userId) {
+        return sqlSession.selectList("dashboard.getStarredList", userId);
     }
 
-    public List<DashBoardSubDto> getStarredSubList(String starredSub, String userId) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("starredSub", starredSub);
-        map.put("userId", userId);
-        return sqlSession.selectList("dashboard.getStarredSubList", map);
-    }
 
 }
