@@ -129,7 +129,7 @@
                   @change="updateRange"
                 ></v-calendar>
                 <!-- 상세모달 창 시작 -->
-                <detail-calendar />
+                <detail-calendar :date="this.focus" />
                 <!-- 상세모달 창 끝 -->
                 <!-- 달력 끝 -->
                 <!-- 업무소 모달 시작 -->

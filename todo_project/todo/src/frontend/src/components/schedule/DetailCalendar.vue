@@ -8,7 +8,7 @@
   >
     <v-card>
       <v-card-title class="pa-2">
-        <span class="headline px-7 py-4">dld</span>
+        <span class="headline px-7 py-4">{{date}}</span>
       </v-card-title>
       <v-card-text class="py-0">
         <template v-if="clickDateList">
@@ -89,7 +89,7 @@
 import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
-  props: ["focus"],
+  props: ["date"],
   data: () => ({
     dateList: "",
   }),

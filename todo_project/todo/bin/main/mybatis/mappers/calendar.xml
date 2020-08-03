@@ -41,7 +41,7 @@
         <if test="prjItem">
         and 
             <foreach open="(" close=")" collection="prjItem" item="pitem" index="index" separator="or">
-        ttsp.project_id =#{pitem}
+        ttsp.project_id =#{pitem} 
             </foreach>
         </if>
         <if test="memItem">
@@ -52,7 +52,8 @@
         </if>
         <if test='uItem == "true" or uItem =="false"'>
         and 
-        ttsp.use_public = #{uItem}::boolean;
+        ttsp.use_public = #{uItem}::boolean
+        and tp.use_public=#{uItem}::boolean
         </if>
     </select>
     <select id="getProjects" parameterType="String" resultType="map">
@@ -139,7 +140,8 @@
         </if>
         <if test='uItem == "true" or uItem =="false"'>
         and 
-        ttsp.use_public = #{uItem}::boolean;
+        ttsp.use_public = #{uItem}::boolean
+        and tp.use_public=#{uItem}::boolean
         </if>
     </select>
     <select id="getSubList" parameterType="String" resultType="cddetialdto">
