@@ -332,6 +332,27 @@ const actions = {
         console.log(err);
       });
   },
+  //////////////////////// GANTT CHART ////////////////////////
+  FETCH_GANTT_SUPER({ commit }) {
+    return sohyun.schedule
+      .getGanttSuper()
+      .then((result) => {
+        commit("SET_GANTT_SUPER", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  ADD_GANTT_FILTER_ITEM({ commit }, calData) {
+    return sohyun.schedule
+      .addGanttFilter(calData)
+      .then((result) => {
+        commit("SET_GANTT_ITEM", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   //////////////////////// ARCHIVE ////////////////////////
   FETCH_ARCHIVE_SUPER({ commit }) {
     return sohyun.archive

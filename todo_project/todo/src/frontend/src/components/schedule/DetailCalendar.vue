@@ -11,7 +11,8 @@
         <span class="headline px-7 py-4">{{date}}</span>
       </v-card-title>
       <v-card-text class="py-0">
-        <template v-if="clickDateList">
+        <template v-if="clickDateList.length==0">업무 일정이 없습니다.</template>
+        <template v-else>
           <v-timeline dense>
             <template v-for="item in clickDateList">
               <v-timeline-item

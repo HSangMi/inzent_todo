@@ -54,7 +54,7 @@
         and (ttsp.task_id in (
                     select tts.task_id from tb_task_super tts
                     where tts.project_id in (
-                        select tp.id from tb_project tp where tp.id in (select project_id from tb_member where user_id=#{userId}) and tp.use_public=false) 
+                        select tp.i d from tb_project tp where tp.id in (select project_id from tb_member where user_id=#{userId}) and tp.use_public=false) 
                     and tts.member_no in (select member_no from tb_member tm where user_id=#{userId})
                     )
             )

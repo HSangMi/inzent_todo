@@ -69,7 +69,6 @@ export const schedule = {
     return request("post", "/schedule/chkProjectInfo", chkProject);
   },
   getSubSortNo(chkSuperTask) {
-    console.log("dmdkkkkk", chkSuperTask);
     return request("get", `/schedule/subSortno/${chkSuperTask}`);
   },
   // addSuperTask(addSuper) {
@@ -92,6 +91,13 @@ export const schedule = {
   addCalFilter(calData) {
     console.log(calData);
     return request("post", "/schedule/addcalitem", calData);
+  },
+  ///////////////////////////////////// ARCHIVE /////////////////////////////////////
+  getGanttSuper() {
+    return request("get", "/schedule/ganttSuper");
+  },
+  addGanttFilter(calData) {
+    return request("post", "/schedule/addganttitem", calData);
   },
 };
 ///////////////////////////////////// ARCHIVE /////////////////////////////////////

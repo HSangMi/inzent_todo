@@ -9,6 +9,7 @@ import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.FilterDto;
+import com.inzent.todo.dto.GanttChartInfoDto;
 import com.inzent.todo.dto.ScheduleDto;
 import com.inzent.todo.vo.LabelVo;
 
@@ -110,4 +111,12 @@ public class ScheduleDao {
         return sqlsession.update("calendar.deleteCalSetting", userId);
     }
 
+    ////////////////////////////////////// 간트차트 //////////////////////////////
+
+    public List<GanttChartInfoDto> getGanttChartSuperInfo(String userId) {
+        return sqlsession.selectList("ganttchart.getGanttSuperTasksInfo", userId);
+    }
+    public List<GanttChartInfoDto> getGanttChartSubInfo(String userId) {
+        return sqlsession.selectList("ganttchart.getGanttSubTasksInfo", userId);
+    }
 }

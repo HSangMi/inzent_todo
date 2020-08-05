@@ -1,6 +1,8 @@
 package com.inzent.todo.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.FilterDto;
+import com.inzent.todo.dto.GanttChartInfoDto;
 import com.inzent.todo.dto.ScheduleDto;
 import com.inzent.todo.repository.ScheduleDao;
 
@@ -153,6 +156,66 @@ public class ScheduleService {
         if (cnt == 1) {
             // System.out.println("삭제 성공");
         }
+    }
+
+    ////////////////////////////////////// 간트차트 //////////////////////////////
+
+    public List<GanttChartInfoDto> getGanttChartSuperInfo(String userId) {
+        List<GanttChartInfoDto> list = scheduledao.getGanttChartSuperInfo(userId);
+
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date startDate = null;
+            Date endDate = null;
+            long calDate = 0;
+            long calDateDays = 0;
+
+            for (GanttChartInfoDto dto : list) {
+                if (dto.getStart().equals("") || dto.getEnd().equals("")) {
+                    // 시작일이 없거나 마감일이 없으면
+                    dto.setDuration(1);
+                } else {
+                    startDate = format.parse(dto.getStart());
+                    endDate = format.parse(dto.getEnd());
+                    calDate = endDate.getTime() - startDate.getTime();
+                    calDateDays = calDate / (24 * 60 * 60 * 1000);
+                    calDateDays = Math.abs(calDateDays);
+                    dto.setDuration(calDateDays);
+                } // end else
+            } // end for
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<GanttChartInfoDto> getGanttChartSubInfo(String userId) {
+        List<GanttChartInfoDto> list = scheduledao.getGanttChartSubInfo(userId);
+
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date startDate = null;
+            Date endDate = null;
+            long calDate = 0;
+            long calDateDays = 0;
+
+            for (GanttChartInfoDto dto : list) {
+                if (dto.getStart().equals("") || dto.getEnd().equals("")) {
+                    // 시작일이 없거나 마감일이 없으면
+                    dto.setDuration(1);
+                } else {
+                    startDate = format.parse(dto.getStart());
+                    endDate = format.parse(dto.getEnd());
+                    calDate = endDate.getTime() - startDate.getTime();
+                    calDateDays = calDate / (24 * 60 * 60 * 1000);
+                    calDateDays = Math.abs(calDateDays);
+                    dto.setDuration(calDateDays);
+                } // end else
+            } // end for
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return list;
     }
 
 }

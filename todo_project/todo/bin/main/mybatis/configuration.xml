@@ -35,6 +35,7 @@
 		<typeAlias alias="chkstdto" type="com.inzent.todo.dto.ChkSuperTasksDto"/>
 		<typeAlias alias="cddto" type="com.inzent.todo.dto.ClickDateDto"/>
 		<typeAlias alias="filterdto" type="com.inzent.todo.dto.FilterDto"/>
+		<typeAlias alias="gcinfodto" type="com.inzent.todo.dto.GanttChartInfoDto"/>
 		<typeAlias alias="arcsubdto" type="com.inzent.todo.dto.ArchiveSubDto"/>
 		<typeAlias alias="arcsuperdto" type="com.inzent.todo.dto.ArchiveSuperDto"/>
 
@@ -54,5 +55,6 @@
 		<!-- 현재경로 기준! -->
 		<mapper resource="mybatis/mappers/comment.xml"/>
 		<mapper resource="mybatis/mappers/archive.xml"/>
+		<mapper resource="mybatis/mappers/ganttchart.xml"/>
 	</mappers>
 </configuration>

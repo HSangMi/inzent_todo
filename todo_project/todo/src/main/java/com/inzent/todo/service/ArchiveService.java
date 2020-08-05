@@ -40,4 +40,14 @@ public class ArchiveService {
     public int restoreSuperTask(String superId) {
         return archiveDao.restoreSuperTask(superId);
     }
+
+    public int sendToArchive(String taskId) {
+
+        if (taskId.startsWith("TP")) {
+            return archiveDao.sendToArchiveSuper(taskId);
+        } else {
+            return archiveDao.sendToArchiveSub(taskId);
+        }
+
+    }
 }

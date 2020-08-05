@@ -23,7 +23,7 @@ const state = {
   starredList: [],
   todaySub: [],
   weekSub: [],
-  ///////// SCHEDULE /////////
+  ///////// CALENDAR /////////
   isAddCalendar: false,
   isDetailCalendar: false,
   isDetailSub: false,
@@ -39,6 +39,9 @@ const state = {
   getChkFilterItem: "",
   calImgCode: [],
   calFilterItem: [],
+  ///////// GANTT CHART /////////
+  ganttSuper: [],
+  ganttFilterItem: [],
   ///////// ARCHIVE /////////
   archiveSuper: [],
   archiveSub: [],

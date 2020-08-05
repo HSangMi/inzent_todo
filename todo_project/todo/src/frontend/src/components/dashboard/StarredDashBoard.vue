@@ -1,6 +1,8 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
-    <v-card-title class="text-h5">관심 업무</v-card-title>
+    <v-card-title class="text-h5">
+      <v-icon color="yellow">mdi-star</v-icon> 관심 업무
+    </v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="9">
@@ -13,9 +15,6 @@
           height="250"
           no-data-text="관심 업무가 존재하지 않습니다."
         >
-          <template v-slot:item.icon>
-            <v-icon color="yellow" small>mdi-star</v-icon>
-          </template>
           <!-- 공개여부 아이콘 설정 -->
           <template v-slot:item.usePublic="{item}">
             <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
@@ -29,52 +28,6 @@
             <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
             <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
           </template>
-
-          <!-- 업무 대 관련한 업무 소 출력 -->
-          <!-- <template v-slot:expanded-item="{headers}">
-            <td :colspan="headers.length" class="px-0">
-              <v-simple-table>
-                <tbody v-if="starredSub.length == 0">
-                  <tr style="background-color:#F5F5F5">
-                    <td colspan="starredSub.length" class="text-center">NO TASKS</td>
-                  </tr>
-                </tbody>
-                <tbody v-else>
-                  <tr v-for="sub in starredSub" :key="sub.cid" style="background-color:#F5F5F5">
-                    <td class="text-center" width="20%"></td>
-                    <td class="text-center" width="20%">
-                      <span class="sub">{{ sub.ctitle }}</span>
-                    </td>
-                    <td class="text-center" width="20%">
-                      <span class="sub">{{ sub.startDate }} ~ {{ sub.endDate }}</span>
-                    </td>
-                    <td v-if="sub.state == 'P'" class="text-center" width="20%">
-                      <v-chip x-small color="blue" text-color="white">진행</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'W'" class="text-center" width="20%">
-                      <v-chip x-small color="yellow">대기</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'H'" class="text-center" width="20%">
-                      <v-chip x-small>보류</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'E'" class="text-center" width="20%">
-                      <v-chip x-small color="red" text-color="white">긴급</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'C'" class="text-center" width="20%">
-                      <v-chip x-small color="green" text-color="white">완료</v-chip>
-                    </td>
-                    <td v-show="sub.usePublic" class="text-center" width="10%">
-                      <v-icon small>mdi-lock-open-variant-outline</v-icon>
-                    </td>
-                    <td v-show="!sub.usePublic" class="text-center" width="10%">
-                      <v-icon small>mdi-lock-outline</v-icon>
-                    </td>
-                    <td class="text-center" width="10%"></td>
-                  </tr>
-                </tbody>
-              </v-simple-table>
-            </td>
-          </template>-->
         </v-data-table>
       </v-col>
       <v-divider class="mx-4" vertical></v-divider>
@@ -98,14 +51,13 @@ export default {
       expanded: [],
       singleExpand: true,
       headers: [
-        { text: "", value: "icon", align: "center", width: "5%" },
         { text: "업무 명", value: "ptitle", align: "center", width: "20%" },
         {
           text: "프로젝트",
           align: "center",
           sortable: false,
           value: "prjTitle",
-          width: "25%",
+          width: "30%",
         },
         { text: "기간", value: "dueDate", align: "center", width: "20%" },
         { text: "진행 상태", value: "state", align: "center", width: "20%" },

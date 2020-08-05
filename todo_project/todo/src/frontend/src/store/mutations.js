@@ -89,7 +89,7 @@ const mutations = {
   SET_STARRED_LIST(state, starredList) {
     state.starredList = starredList;
   },
-  //////////////////////// SCHEDULE ////////////////////////
+  //////////////////////// CALENDAR ////////////////////////
   SET_IS_ADD_CALENDAR(state, toggle) {
     state.isAddCalendar = toggle; // toggle : 불린형
   },
@@ -163,6 +163,56 @@ const mutations = {
     const dataArr = data.split(",");
 
     state.calFilterItem = dataArr;
+  },
+  //////////////////////// GANTT CHART ////////////////////////
+  SET_GANTT_SUPER(state, data) {
+    data.forEach((item) => {
+      if (item.managerName) {
+        item.managerName = JSON.parse(item.managerName);
+        item.managerCount = item.managerCount - 1;
+        if (item.managerCount > 0) {
+          item.managerName =
+            item.managerName[0] + " 외 " + item.managerCount + "명";
+        } else {
+          item.managerName = item.managerName[0];
+        } //end else
+      } else {
+        item.managerName = "없음";
+      } //end else
+
+      if (item.start != "") {
+        item.duration = item.duration * 24 * 60 * 60 * 1000;
+      } //end if
+
+      item.type = "task";
+      item.progress = 50;
+
+      if (item.parentId != null) {
+        item.title = "└ " + item.title;
+        item.style = {
+          base: {
+            fill: "#1EBC61",
+            stroke: "#0EAC51",
+          },
+        };
+      } //end if
+      if (item.state == "P") {
+        item.state = "진행";
+      } else if (item.state == "E") {
+        item.state = "긴급";
+      } else if (item.state == "C") {
+        item.state = "완료";
+      } else if (item.state == "W") {
+        item.state = "대기";
+      } else {
+        item.state = "보류";
+      }
+    });
+    state.ganttSuper = data;
+  },
+  SET_GANTT_ITEM(state, data) {
+    const dataArr = data.split(",");
+    state.ganttFilterItem = dataArr;
   },
   //////////////////////// ARCHIVE ////////////////////////
   SET_ARCHIVE_SUPER(state, data) {

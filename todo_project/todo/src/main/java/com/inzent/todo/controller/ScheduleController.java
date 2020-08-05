@@ -11,6 +11,7 @@ import com.inzent.todo.dto.ChkProjectDto;
 import com.inzent.todo.dto.ChkSuperTasksDto;
 import com.inzent.todo.dto.ClickDateDto;
 import com.inzent.todo.dto.FilterDto;
+import com.inzent.todo.dto.GanttChartInfoDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ScheduleDto;
 import com.inzent.todo.security.Auth;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -176,6 +176,51 @@ public class ScheduleController {
 
         scheduleService.resetCalFilter(userId);
         // System.out.println("초기화 성공");
+    }
+
+    ////////////////////////////////////// 간트차트 //////////////////////////////
+    @Auth
+    @GetMapping("/ganttSuper")
+    public List<GanttChartInfoDto> getGanttChartSuperInfo(HttpServletRequest req) {
+
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        List<GanttChartInfoDto> list = scheduleService.getGanttChartSuperInfo(userId);
+        list.addAll(getGanttChartSubInfo(userId));
+
+        return list;
+    }
+
+    public List<GanttChartInfoDto> getGanttChartSubInfo(String userId) {
+
+        return scheduleService.getGanttChartSubInfo(userId);
+    }
+
+    // 필터값 추가후 꺼내오기
+    @Auth
+    @PostMapping("/addganttitem")
+    public void addGanttFilterItem(@RequestBody CalFilterItemDto cfidto, HttpServletRequest req) {
+
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+        StringBuilder sbPrj = new StringBuilder();
+        StringBuilder sbMem = new StringBuilder();
+        for (String prj : cfidto.getPrjData()) {
+            if (sbPrj.length() > 0) {
+                sbPrj.append(",");
+            }
+            sbPrj.append(prj);
+        } // end for
+        for (String mem : cfidto.getMemData()) {
+            if (sbMem.length() > 0) {
+                sbMem.append(",");
+            }
+            sbMem.append(mem);
+        } // end for
+        String calItem = sbPrj.toString() + "::" + sbMem.toString() + "::" + cfidto.getUseData();
+        String calFilter = scheduleService.addCalFilterItem(calItem, userId);
+        // System.out.println("결과아아ㅏ아아아" + calFilter);
     }
 
 }

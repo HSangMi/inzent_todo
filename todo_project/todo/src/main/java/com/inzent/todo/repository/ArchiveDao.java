@@ -80,4 +80,39 @@ public class ArchiveDao {
         }
         return delCnt;
     }
+
+    public Object sendToArchive(String taskId) {
+        return null;
+    }
+
+    public int sendToArchiveSuper(String taskId) {
+        // RestoreSubVo vo = new RestoreSubVo();
+        // vo = sqlsession.selectOne("archive.getRestoreSubId", subId);
+        // System.out.println("=====" + vo);
+        // // vo에 담은 정보를 다시 복구시켜준 후
+        // int insertCnt = sqlsession.insert("archive.restoreSub", vo);
+        // int delCnt = 0;
+        // if (insertCnt == 1) { // 복구가 성공하면 해당 테이블에서 지움
+        // delCnt = sqlsession.delete("archive.delSub", subId);
+        // } else {
+        // System.out.println("복구 실패...........");
+        // }
+        // return delCnt;
+        return 0;
+    }
+
+    public int sendToArchiveSub(String taskId) {
+        // RestoreSubVo vo = new RestoreSubVo();
+        // vo = sqlsession.selectOne("archive.getTaskSubId", taskId);
+        // System.out.println("=====" + vo);
+        // // vo에 담은 정보를 다시 복구시켜준 후
+        // int insertCnt = sqlsession.insert("archive.insertTaskSub", vo);
+        // int delCnt = 0;
+        // if (insertCnt == 1) { // 복구가 성공하면 해당 테이블에서 지움
+        // delCnt = sqlsession.delete("archive.delSub", subId);
+        // } else {
+        // System.out.println("복구 실패...........");
+        // }
+        return 0;// delCnt;
+    }
 }

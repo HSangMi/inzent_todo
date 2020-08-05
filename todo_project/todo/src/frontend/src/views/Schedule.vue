@@ -2,8 +2,8 @@
   <div>
     <v-container class="schedule-container" fluid tag="section">
       <v-tabs v-model="tabs" color="blue darken-4">
-        <v-tab>Calendar</v-tab>
-        <v-tab>Gantt Chart</v-tab>
+        <v-tab>캘린더</v-tab>
+        <v-tab>간트차트</v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="tabs" class="schedule-tab">
@@ -35,7 +35,7 @@ export default {
     };
   },
   created() {
-    this.SET_HEADER_TITLE("SCHEDULE");
+    this.SET_HEADER_TITLE("스케줄");
   },
   methods: {
     ...mapMutations(["SET_HEADER_TITLE"])

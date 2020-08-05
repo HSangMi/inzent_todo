@@ -72,7 +72,7 @@
       </div>
     </v-col>
     <v-col cols="10">
-      <div style="width:98%; height:700px;">
+      <div style="width:98%; max-height:700px;">
         <gantt-elastic :tasks="tasks" :options="options"></gantt-elastic>
       </div>
     </v-col>
@@ -89,97 +89,14 @@ export default {
     // ganttElasticFooter: { template: `<span>your footer</span>` },
   },
   data() {
-    function getDate(hours) {
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth();
-      const currentDay = currentDate.getDate();
-      const timeStamp = new Date(
-        currentYear,
-        currentMonth,
-        currentDay,
-        0,
-        0,
-        0
-      ).getTime();
-      return new Date(timeStamp + hours * 60 * 60 * 1000).getTime();
-    }
-    let tasks = [
-      {
-        id: 1,
-        label: "Make some noise",
-        user: "user1",
-        start: getDate(-24 * 5),
-        duration: 15 * 24 * 60 * 60 * 1000,
-        progress: 85,
-        type: "project",
-        //collapsed: true,
-      },
-      {
-        id: 2,
-        label: "With great power comes great responsibility",
-        user: "user2",
-        parentId: 1,
-        start: getDate(-24 * 4),
-        duration: 4 * 24 * 60 * 60 * 1000,
-        progress: 50,
-        type: "milestone",
-        collapsed: true,
-        style: {
-          base: {
-            fill: "#1EBC61",
-            stroke: "#0EAC51",
-          },
-          /*'tree-row-bar': {
-              fill: '#1EBC61',
-              stroke: '#0EAC51'
-            },
-            'tree-row-bar-polygon': {
-              stroke: '#0EAC51'
-            }*/
-        },
-      },
-      {
-        id: 4,
-        label: "Put that toy AWAY!",
-        user: "user3",
-        start: getDate(-24 * 2),
-        duration: 2 * 24 * 60 * 60 * 1000,
-        progress: 50,
-        type: "task",
-        dependentOn: [3],
-      },
-      {
-        id: 4,
-        label: "Put that toy AWAY!",
-        user: "user4",
-        start: getDate(-24 * 2),
-        duration: 2 * 24 * 60 * 60 * 1000,
-        progress: 50,
-        type: "task",
-        dependentOn: [3],
-      },
-      {
-        id: 4,
-        label: "Put that toy AWAY!",
-        user: "user5",
-        start: getDate(-24 * 2),
-        duration: 2 * 24 * 60 * 60 * 1000,
-        progress: 50,
-        type: "task",
-        dependentOn: [3],
-      },
-    ];
+    let tasks = [];
+    let router = this.$router;
 
     let options = {
       maxRows: 100,
-      maxHeight: 650,
-      title: {
-        label: "Your project title as html (link or whatever...)",
-        html: false,
-      },
+      maxHeight: 750,
       row: {
-        height: 24,
+        height: 30,
       },
       calendar: {
         hour: {
@@ -200,47 +117,53 @@ export default {
         },
         columns: [
           {
-            id: 2,
-            label: "TASKS",
-            value: "label",
+            id: 1,
+            label: "업무", // 업무
+            value: "title", // tasks안에 있는 label에 넣겟다
             width: 200,
             expander: true,
             html: true,
             events: {
               click({ data }) {
-                alert("description clicked!\n" + data.label);
+                console.log("data", data);
+                router.push(`/projects/${data.projectId}`);
               },
             },
           },
           {
-            id: 3,
-            label: "MEMBER",
-            value: "user",
-            width: 130,
+            id: 2,
+            label: "담당자", // 담당자
+            value: "managerName", // tasks안에 있는 user를 넣겠다
+            width: 120,
             html: true,
+            // events: {
+            //   click() {
+            //     alert("담당자!");
+            //   },
+            // },
           },
           {
             id: 3,
-            label: "DUEDATE",
-            value: "2020-06-23",
-            width: 78,
+            label: "상태",
+            value: "state",
+            width: 50,
           },
-          {
-            id: 5,
-            label: "%",
-            value: "progress",
-            width: 35,
-            style: {
-              "task-list-header-label": {
-                "text-align": "center",
-                width: "100%",
-              },
-              "task-list-item-value-container": {
-                "text-align": "center",
-                width: "100%",
-              },
-            },
-          },
+          // {
+          //   id: 4,
+          //   label: "진행율",
+          //   value: "progress",
+          //   width: 35,
+          //   style: {
+          //     "task-list-header-label": {
+          //       "text-align": "center",
+          //       width: "100%",
+          //     },
+          //     "task-list-item-value-container": {
+          //       "text-align": "center",
+          //       width: "100%",
+          //     },
+          //   },
+          // },
         ],
       },
     };
@@ -263,6 +186,7 @@ export default {
   },
   created() {
     // store -> actions
+    this.fetchGanttInfo();
     this.fetchFilter();
     this.fetchChkItem();
   },
@@ -270,12 +194,28 @@ export default {
     // 사용할 mapstate 불러옴
     ...mapState({
       getFilter: "getFilter",
+      ganttSuper: "ganttSuper",
+      getChkFilterItem: "getChkFilterItem",
+      calFilterItem: "calFilterItem",
     }),
   },
   methods: {
-    ...mapActions(["FETCH_FILTER"]),
-
+    ...mapActions([
+      "FETCH_FILTER",
+      "FETCH_CHK_FILTER_ITEM",
+      "RESET_CAL_FILTER",
+      "FETCH_GANTT_SUPER",
+      "ADD_GANTT_FILTER_ITEM"
+    ]),
+    async fetchGanttInfo() {
+      await this.FETCH_GANTT_SUPER().then(() => {
+        this.tasks = this.ganttSuper;
+        console.log(this.tasks);
+      });
+    },
+    ///////////////////// 필터 //////////////////////
     fetchFilter() {
+      // 필터 조회
       this.FETCH_FILTER().then(() => {
         let list = this.getFilter;
 
@@ -324,6 +264,25 @@ export default {
         }
       });
     },
+    async chkFilter() {
+      const calData = {
+        prjData: this.prjSelection,
+        memData: this.memSelection,
+        useData: this.publicSelection,
+      };
+
+      await this.ADD_GANTT_FILTER_ITEM(calData); // 체크시, 간트필터 반영
+      this.fetchGanttInfo(); // 다시 조회
+    },
+    resetFilter() {
+      // 초기화 됬을 때 다시 조회
+      this.RESET_CAL_FILTER();
+      this.fetchGanttInfo();
+      this.prjSelection = [];
+      this.memSelection = [];
+      this.publicSelection = 0;
+    },
+    ////////////////////////////////////////////////////////////
   },
 };
 </script>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ganttchart">
+    <select id="getGanttSuperTasksInfo" parameterType="String" resultType="gcinfodto">
+        <![CDATA[
+   SELECT a.row_number, a.id, a.title, a.start, a.end, a.state, a.reg_date, a.project_id, b.manager_name, b.manager_count
+    FROM
+    (    
+        select row_number () over (order by task_id ), task_id id, title, start_date as start, end_date as end, progress_rate, reg_date, state, project_id
+        from tb_task_super
+        where project_id in
+        (select id from tb_project where id in (select project_id from tb_member where user_id=#{userId}))
+    )
+    AS a left outer join
+    (
+        select ttm.task_id id, json_agg(tu."name") as manager_name, count(tu.id) manager_count
+        from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_super tts2 
+        where  (ttm.task_id = tts2.task_id) 
+        and (ttm.member_no = tm.member_no)
+        and (tm.user_id = tu.id)
+        group by ttm.task_id
+    )
+    AS b
+    ON a.id = b.id
+    ]]>
+    </select>
+    <select id="getGanttSubTasksInfo" parameterType="String" resultType="gcinfodto">
+        <![CDATA[
+        SELECT a.id, a.title, a.start, a.end, a.parent_id, a.state, a.reg_date, a.project_id, b.manager_name, b.manager_count
+        FROM
+        (    
+            select tts.task_id id, tts.title, tts.start_date as start, tts.end_date as end, tts.task_super_id parent_id, tts.reg_date, tts.state, tp.id as project_id
+            from tb_task_sub tts, tb_task_super ttsp, tb_project tp 
+            where (tts.task_super_id = ttsp.task_id) and (ttsp.project_id = tp.id )
+            and tts.task_super_id in 
+            (select task_id from tb_task_super where project_id in (select id from tb_project where id in (select project_id from tb_member where user_id=#{userId})))
+        )
+        AS a left outer join
+        (
+            select ttm.task_id id, json_agg(tu."name") as manager_name, count(tu.id) manager_count
+            from tb_task_manager ttm, tb_member tm,tb_user tu, tb_task_sub tts2 
+            where  (ttm.task_id = tts2.task_id) 
+            and (ttm.member_no = tm.member_no)
+            and (tm.user_id = tu.id)
+            group by ttm.task_id
+        )
+        AS b
+        ON a.id = b.id
+    ]]>
+    </select>
+</mapper>
