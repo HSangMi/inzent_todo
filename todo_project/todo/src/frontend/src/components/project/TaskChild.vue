@@ -8,9 +8,13 @@
             <span class="task-title">{{ item.title }}</span>
             <!-- {{ item.sortNo }}\\{{item.taskId}} -->
             <v-spacer></v-spacer>
-            <v-btn icon @click.prevent="onStar">
-              <v-icon>{{ active ? "mdi-star" : "mdi-star-outline" }}</v-icon>
-            </v-btn>
+            <!-- <v-btn icon @click.prevent="onStar"> -->
+            <v-icon
+              class="pt-1 pr-1"
+              v-if="item.starred !==0"
+              color="amber darken-1"
+            >mdi-star-outline</v-icon>
+            <!-- </v-btn> -->
           </v-card-title>
           <v-card-subtitle class="pa-0 px-2 pt-2" v-if="item.startDate || item.endDate">
             <v-chip label small color="#cacaca">
@@ -87,14 +91,14 @@ export default {
   data() {
     return {
       selection: 1,
-      active: false
+      active: false,
     };
   },
   computed: {
     ...mapState({
       labelList: "labelList",
-      memberList: "memberList"
-    })
+      memberList: "memberList",
+    }),
   },
   created() {},
   methods: {
@@ -104,7 +108,7 @@ export default {
         const labels = [];
         labelsNo = labelsNo.slice(0, labelsNo.length - 1);
         for (var no in labelsNo) {
-          var lb = this.labelList.find(item => {
+          var lb = this.labelList.find((item) => {
             return item.labelNo == labelsNo[no];
           });
           labels.push(lb);
@@ -117,7 +121,7 @@ export default {
         var managerNos = JSON.parse(managerString);
         const managers = [];
         for (var no in managerNos) {
-          var mb = this.memberList.find(item => {
+          var mb = this.memberList.find((item) => {
             return item.memberNo == managerNos[no];
           });
           managers.push(mb);
@@ -132,7 +136,7 @@ export default {
       const labelArr = JSON.parse(labelString); // labelArr Json String으로 변환할것 -> DB에 저장하는값
       var label = []; // 라벨로 보여줄 객체뽑아올곳
       for (var i in labelArr) {
-        var lb = this.labelList.find(item => {
+        var lb = this.labelList.find((item) => {
           return item.labelNo == labelArr[i];
         });
         label.push(lb);
@@ -140,11 +144,11 @@ export default {
         //this.labels += this.taskLabel[i].labelNo + ":";
       }
       return label;
-    }
+    },
     // getImgCode(item) {
     //   return "data:image;base64," + item.imgCode;
     // }
-  }
+  },
 };
 </script>
 
@@ -182,7 +186,7 @@ export default {
 
 .sub-task-item .v-card__title {
   font-size: 1em;
-  padding: 0px 0px 0px 10px;
+  padding: 0px 0px 10px 10px;
 }
 .task-title {
   overflow: hidden;

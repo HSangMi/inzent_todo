@@ -31,6 +31,7 @@ public class TaskDto {
     private int commentCnt;
     private int[] manager;
     private String managerString;
+    private int starred;
 
     public boolean getUsePublic() {
         return usePublic;

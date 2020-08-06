@@ -4,15 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.TaskDto;
 import com.inzent.todo.dto.TaskUpdateDto;
+import com.inzent.todo.vo.CheckListItemVo;
+import com.inzent.todo.vo.CheckListVo;
 import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.ProjectVo;
 import com.inzent.todo.vo.SuperTaskVo;
+import com.inzent.todo.vo.StarredTaskVo;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +52,18 @@ public class ProjectDao {
         return sqlSession.update("project.updateTaskSub", taskDto);
     }
 
-    public List<ProjectCardDto> selectProjectList(String userId) {
+    public int updateSuperTask(TaskUpdateDto taskDto) {
+        // System.out.println("## ProjectDao - updateTaskSub");
+        return sqlSession.update("project.updateTaskSuper", taskDto);
+    }
 
-        return sqlSession.selectList("project.selectProjectList", userId);
+    public List<ProjectCardDto> selectAllProjectList(String userId) {
+        return sqlSession.selectList("project.selectAllProjectList", userId);
+    }
+
+    public List<ProjectCardDto> selectMyProjectList(String userId) {
+
+        return sqlSession.selectList("project.selectMyProjectList", userId);
     }
 
     public ProjectVo selectProject(String pid) {
@@ -61,10 +74,11 @@ public class ProjectDao {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("pid", pid);
         map.put("userId", userId);
-        return sqlSession.selectOne("project.selectMemberNo", map);
+        Integer mem = sqlSession.selectOne("project.selectMemberNo", map);
+        return (mem == null ? -1 : mem);
     }
 
-    public List<SuperTaskVo> selectTaskList(String pid, int memNo) {
+    public List<TaskDto> selectTaskList(String pid, int memNo) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("pid", pid);
         map.put("memNo", memNo);
@@ -92,7 +106,11 @@ public class ProjectDao {
     }
 
     public TaskDto getTask(String taskId) {
-        return sqlSession.selectOne("project.getTask", taskId);
+        if (taskId.startsWith("TP")) {
+            return sqlSession.selectOne("project.getSuperTask", taskId);
+        } else {
+            return sqlSession.selectOne("project.getSubTask", taskId);
+        }
     }
 
     public List<FileVo> getFiles(String taskId) {
@@ -109,6 +127,38 @@ public class ProjectDao {
 
     public List<CommentVo> selectComments(String taskId) {
         return sqlSession.selectList("comment.selectComments", taskId);
+    }
+
+    public int insertStarredTask(StarredTaskVo starred) {
+        return sqlSession.insert("project.insertStarred", starred);
+    }
+
+    public int insertCheckList(CheckListVo checkList) {
+        return sqlSession.insert("project.insertCheckList", checkList);
+    }
+
+    public List<CheckListDto> selectCheckList(String taskId) {
+        return sqlSession.selectList("project.selectCheckList", taskId);
+    }
+
+    public int insertCheckList(CheckListItemVo checkListItem) {
+        return sqlSession.insert("project.insertCheckListItem", checkListItem);
+    }
+
+    public int updateCheckListRate(int listNo) {
+        return sqlSession.update("project.updateCheckListRate", listNo);
+    }
+
+    public int updateCheckListItem(int itemNo) {
+        return sqlSession.update("project.updateCheckListItem", itemNo);
+    }
+
+    public int deleteCheckListItem(int itemNo) {
+        return sqlSession.delete("project.deleteCheckListItem", itemNo);
+    }
+
+    public int deleteCheckList(int listNo) {
+        return sqlSession.delete("project.deleteCheckList", listNo);
     }
 
 }

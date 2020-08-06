@@ -2,37 +2,39 @@
   <v-menu offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" block depressed>
-        <v-icon left>mdi-label-outline</v-icon>LABEL
+        <v-icon left>mdi-label-outline</v-icon>태그
       </v-btn>
     </template>
     <v-card class="my-chip-group">
       <v-card-title>
-        ADD LABELS{{this.taskLabel}}
+        ADD LABELS{{ this.taskLabel }}
         <!-- ADD LABELS {{this.labels}} -->
       </v-card-title>
       <v-card-text>
         <template v-if="existTaskLabel">
           <v-chip-group v-model="existTaskLabel" column multiple>
             <v-chip
-              v-for="(label) in labelList"
+              v-for="label in labelList"
               :key="label.labelNo"
               :value="label.labelNo"
               filter
               label
               :color="label.labelColor"
-            >{{label.labelName}}</v-chip>
+              >{{ label.labelName }}</v-chip
+            >
           </v-chip-group>
         </template>
         <template v-else>
           <v-chip-group v-model="taskLabel" @change="addLabel" column multiple>
             <v-chip
-              v-for="(label) in labelList"
+              v-for="label in labelList"
               :key="label.labelNo"
               :value="label.labelNo"
               filter
               label
               :color="label.labelColor"
-            >{{label.labelName}}</v-chip>
+              >{{ label.labelName }}</v-chip
+            >
           </v-chip-group>
         </template>
         <v-menu offset-x :close-on-content-click="false" top v-model="newLabel">
@@ -56,7 +58,12 @@
                   :counter="20"
                   required
                 ></v-text-field>
-                <v-radio-group v-model="labelColor" row required :rules="labelColorRules">
+                <v-radio-group
+                  v-model="labelColor"
+                  row
+                  required
+                  :rules="labelColorRules"
+                >
                   <v-radio
                     on-icon="mdi-check-circle"
                     off-icon="mdi-checkbox-blank-circle"
@@ -126,11 +133,11 @@ export default {
       labelName: "",
       labelColor: "",
       labelNameRules: [
-        v => !!v || "name is required",
-        v => (v && v.length <= 20) || "name must be less than 20 characters"
+        (v) => !!v || "name is required",
+        (v) => (v && v.length <= 20) || "name must be less than 20 characters",
       ],
-      labelColorRules: [v => !!v || "color is required"],
-      newLabel: false
+      labelColorRules: [(v) => !!v || "color is required"],
+      newLabel: false,
     };
   },
   created() {
@@ -138,7 +145,7 @@ export default {
   },
   computed: {
     ...mapState({
-      labelList: "labelList"
+      labelList: "labelList",
     }),
     existTaskLabel: {
       get() {
@@ -146,8 +153,8 @@ export default {
       },
       set(newVal) {
         this.$emit("setLabel", newVal);
-      }
-    }
+      },
+    },
     // addLabel(){
     //   console.log(this.taskLabel)
     //   return this.labelList
@@ -168,7 +175,7 @@ export default {
         const newLabelData = {
           labelName: this.labelName,
           labelColor: "#" + this.labelColor,
-          projectId: this.pid
+          projectId: this.pid,
         };
         console.log(newLabelData);
         this.ADD_NEW_LABEL(newLabelData).then(() => {
@@ -192,8 +199,8 @@ export default {
       // for (var label in this.taskLabel) {
       //   console.log(this.labelList[label]);
       // }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,7 +1,12 @@
 <template>
   <v-dialog v-model="openModal" max-width="800" persistent>
     <v-card>
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
+      <v-form
+        ref="form"
+        v-model="valid"
+        @submit.prevent="onSubmit"
+        lazy-validation
+      >
         <v-card-title class="headline grey lighten-2" primary-title>
           PROJECT INFO
           <v-spacer></v-spacer>
@@ -16,24 +21,51 @@
               <v-row>
                 <v-col cols="12">
                   <v-text-field
+                    :readonly="project.memberNo !== project.manager"
+                    label="PROJECT TITLE"
+                    v-model="setProjectInfo.title"
+                    :rules="titleRules"
+                    required
+                  ></v-text-field>
+                  <!-- <v-text-field
+                    v-if="!toggleTitle"
                     label="PROJECT TITLE"
                     v-model="project.title"
                     :rules="titleRules"
-                    :readonly="project.memberNo!==project.manager"
+                    @click.prevent="editTitle"
+                    readonly
                     required
-                  ></v-text-field>
+                  ></v-text-field>-->
+                  <!-- <v-text-field
+                    v-else
+                    label="PROJECT TITLE"
+                    v-model="title"
+                    :rules="titleRules"
+                    required
+                  ></v-text-field>-->
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field label="PROJECT DESCRIPTION" v-model="project.description"></v-text-field>
+                  <!-- <v-text-field
+                    v-if="!toggleDesc"
+                    label="PROJECT DESCRIPTION"
+                    readonly
+                    @click.prevent="editDescription"
+                    v-model="project.description"
+                  ></v-text-field>-->
+                  <v-text-field
+                    :readonly="project.memberNo !== project.manager"
+                    label="PROJECT DESCRIPTION"
+                    v-model="setProjectInfo.description"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   PRIVATE
                   <v-radio-group
-                    :value="(project.usePublic ? 'true':'falses')"
                     required
-                    :readonly="project.memberNo!==project.manager"
+                    :readonly="project.memberNo !== project.manager"
                     row
                     :rules="privateRules"
+                    v-model="setProjectInfo.usePublic"
                   >
                     <br />
                     <v-radio label="Public" value="true"></v-radio>
@@ -48,23 +80,27 @@
                     v-model="startDatePicker"
                     :close-on-content-click="false"
                     :nudge-right="40"
-                    :disabled="project.memberNo!==project.manager"
+                    :disabled="project.memberNo !== project.manager"
                     transition="scale-transition"
                     offset-y
                     min-width="290px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="project.startDate"
+                        v-model="setProjectInfo.startDate"
                         label="Start date"
                         prepend-icon="mdi-calendar"
                         readonly
-                        clearable
+                        :clearable="project.memberNo === project.manager"
                         v-bind="attrs"
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="startDate" no-title @input="startDatePicker = false"></v-date-picker>
+                    <v-date-picker
+                      v-model="setProjectInfo.startDate"
+                      no-title
+                      @input="startDatePicker = false"
+                    ></v-date-picker>
                   </v-menu>
                   <!-- </v-col> -->
                   <!-- <v-col cols="12" sm="6"> -->
@@ -73,97 +109,155 @@
                     v-model="endDatePicker"
                     :close-on-content-click="false"
                     :nudge-right="40"
-                    :disabled="project.memberNo!==project.manager"
+                    :disabled="project.memberNo !== project.manager"
                     transition="scale-transition"
                     offset-y
                     min-width="290px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="project.endDate"
+                        v-model="setProjectInfo.endDate"
                         label="End date"
                         prepend-icon="mdi-calendar"
                         readonly
-                        clearable
+                        :clearable="project.memberNo === project.manager"
                         v-bind="attrs"
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="endDate" no-title @input="endDatePicker = false"></v-date-picker>
+                    <v-date-picker
+                      v-model="setProjectInfo.endDate"
+                      no-title
+                      @input="endDatePicker = false"
+                    ></v-date-picker>
                   </v-menu>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  PROJECT COVER
-                  <v-radio-group v-model="coverColor" row :disabled="isCoverImg">
+                  <p>PROJECT COVER</p>
+                  <v-card
+                    height="65%"
+                    class="mx-auto project-card"
+                    :color="getColor()"
+                  >
+                    <v-img
+                      v-if="setProjectInfo.coverImg"
+                      height="100"
+                      :src="getImg()"
+                    ></v-img>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <!-- <v-row> -->
+                  <br />
+                  <v-radio-group
+                    v-model="setProjectInfo.coverColor"
+                    row
+                    hide-details
+                    :readonly="project.memberNo !== project.manager"
+                    @change="setCoverColor"
+                  >
                     <v-radio
                       on-icon="mdi-check-circle"
                       off-icon="mdi-checkbox-blank-circle"
                       color="#EF9A9A"
-                      value="EF9A9A"
+                      value="#EF9A9A"
                       class="red-icon"
                     ></v-radio>
                     <v-radio
                       on-icon="mdi-check-circle"
                       off-icon="mdi-checkbox-blank-circle"
                       color="#FFCC80"
-                      value="FFCC80"
+                      value="#FFCC80"
                       class="yellow-icon"
                     ></v-radio>
                     <v-radio
                       on-icon="mdi-check-circle"
                       off-icon="mdi-checkbox-blank-circle"
                       color="#81C784"
-                      value="81C784"
+                      value="#81C784"
                       class="green-icon"
                     ></v-radio>
                     <v-radio
                       on-icon="mdi-check-circle"
                       off-icon="mdi-checkbox-blank-circle"
                       color="#448AFF"
-                      value="448AFF"
+                      value="#448AFF"
                       class="blue-icon"
                     ></v-radio>
                     <v-radio
                       on-icon="mdi-check-circle"
                       off-icon="mdi-checkbox-blank-circle"
                       color="#5C6BC0"
-                      value="5C6BC0"
+                      value="#5C6BC0"
                       class="puple-icon"
                     ></v-radio>
                     <v-radio
                       on-icon="mdi-check-circle"
                       off-icon="mdi-checkbox-blank-circle"
                       color="#546E7A"
-                      value="546E7A"
+                      value="#546E7A"
                       class="grey-icon"
                     ></v-radio>
                   </v-radio-group>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <br />
+                  <!-- </v-col> -->
+                  <!-- <v-col cols="12" sm="12"> -->
                   <v-file-input
                     :rules="imgRules"
                     v-model="coverImgFile"
                     accept="image/png, image/jpeg, image/bmp"
                     placeholder="cover Image"
                     prepend-icon="mdi-camera"
+                    :disabled="project.memberNo !== project.manager"
                     @change="createBase64Image(coverImgFile)"
                   ></v-file-input>
+                  <!-- </v-row> -->
                 </v-col>
               </v-row>
             </v-col>
             <v-col cols="4">
+              <p>관리자</p>
+              <v-list-item>
+                <v-list-item-avatar
+                  v-if="getMember(project.manager).imgCode"
+                  size="32"
+                >
+                  <img :src="getMember(project.manager).imgCode" />
+                </v-list-item-avatar>
+                <v-list-item-avatar
+                  v-else
+                  size="32"
+                  class="user-avatars"
+                  color="grey"
+                >
+                  <v-icon fab dark>mdi-account</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-html="getMember(project.manager).name"
+                  ></v-list-item-title>
+                  <!-- <v-list-item-subtitle v-html="getDate(this.taskInfo.task.regDate)"></v-list-item-subtitle> -->
+                </v-list-item-content>
+              </v-list-item>
+              <!-- <v-avatar size="32" color="grey" class="mr-2">
+                <template v-if="getMember(project.manager).imgCode">
+                  <img :src="getMember(project.manager).imgCode" />
+                </template>
+                <template v-else>
+                  <v-icon fab dark>mdi-plus</v-icon>
+                </template>
+              </v-avatar>-->
+
               <p>
-                MEMBERS
-                <span class="pl-4">{{memberList.length}}명</span>
+                참여 중인 멤버
+                <span class="pl-4">{{ memberList.length }}명</span>
               </p>
               <div>
                 <v-btn
                   color="rgb(88, 110, 150)"
-                  flat
                   dark
                   block
                   depressed
+                  v-if="project.memberNo === project.manager"
                   @click.prevent="isOpenSearch = true"
                 >
                   <v-icon>mdi-account-plus</v-icon>
@@ -174,9 +268,9 @@
                   @addMember="addMember"
                 />
                 <div
-                  v-if="memberList!==[]"
+                  v-if="memberList !== []"
                   max-height="100%"
-                  style="height:550px"
+                  style="height:470px"
                   class="overflow-y-auto mt-3"
                 >
                   <v-list>
@@ -230,40 +324,68 @@ import UserSearch from "../user/UserSearch.vue";
 export default {
   props: ["openModal"],
   components: {
-    UserSearch
+    UserSearch,
   },
   data: () => ({
     isOpenSearch: false,
     dialog: false,
     title: "",
+    coverColor: "", //this.setCoverColor,
     description: "",
     usePublic: undefined,
     startDate: "", //new Date().toISOString().substr(0, 10),
     endDate: "",
     startDatePicker: false,
     endDatePicker: false,
-    coverColor: "1976d2",
     coverImg: undefined,
     coverImgFile: undefined,
     imgRules: [
-      value =>
+      (value) =>
         !value ||
         value.size < 2000000 ||
-        "Avatar size should be less than 2 MB!"
+        "Avatar size should be less than 2 MB!",
     ],
     titleRules: [
-      v => !!v || "title is required",
-      v => (v && v.length <= 100) || "title must be less than 100 characters"
+      (v) => !!v || "title is required",
+      (v) => (v && v.length <= 100) || "title must be less than 100 characters",
     ],
-    privateRules: [v => !!v || "private is required"],
+    privateRules: [(v) => !!v || "private is required"],
     valid: true,
-    members: []
+    members: [],
+    toggleTitle: false,
+    toggleDesc: false,
+    backupImg: "",
   }),
+  created() {
+    // console.log("ceretae,,,");
+  },
+  mounted() {
+    // console.log("mounted..!!!!!!!!!!!!");
+    // this.title = this.project.title;
+    // this.description = this.project.description;
+    // this.usePublic = this.project.usePublic ? "true" : "false";
+    // this.coverColor = this.project.imgNo[0] == "#" ? this.project.imgNo : "";
+    // this.startDate = this.project.startDate.trim();
+    // this.endDate = this.project.endDate.trim();
+  },
+  beforeUpdate() {
+    // console.log("before Update");
+  },
+  update() {
+    // console.log("Update!!");
+  },
   methods: {
     ...mapActions(["ADD_PROJECT"]),
     onSubmit() {
       // Create Project
+
       console.log("UPDATE Project");
+      console.log(this.setProjectInfo);
+      // console.log("title", this.title);
+      // console.log("desc", this.description);
+      // console.log("usePublic", this.usePublic);
+      // console.log("origin-public", this.project.usePublic);
+      console.log("------------");
       console.log(this.project);
       // if (this.validate()) {
       //   let formData = new FormData();
@@ -294,9 +416,13 @@ export default {
       //   this.$emit("close");
       // }
     },
+    setCoverColor() {
+      console.log(this.setProjectInfo.coverColor);
+      this.project.imgNo = this.setProjectInfo.coverColor;
+    },
     onClose() {
       // this.openModal = false;
-      // this.formClear();
+      this.formClear();
       this.$emit("close");
     },
     remove(item) {
@@ -304,29 +430,88 @@ export default {
       if (index >= 0) this.members.splice(index, 1);
     },
     formClear() {
-      this.$refs.form.reset();
-      this.coverColor = "1976d2";
+      this.title = "";
+      this.description = "";
+      this.toggleTitle = false;
+      this.toggleDesc = false;
+      this.startDate = "";
+      this.endDate = "";
+      this.coverColor = "";
+      this.setProjectInfo.coverImg = this.backupImg;
+      // this.coverColor = "1976d2";
     },
     validate() {
       return this.$refs.form.validate();
     },
     addMember(members) {
+      console.log("addMember", members.length);
       this.members = members;
     },
     createBase64Image(fileObject) {
       console.log("file object", fileObject);
       if (fileObject !== undefined) {
+        console.log("111");
         const reader = new FileReader();
-        reader.onload = e => {
+        // if (this.project.imgNo[0] == "#") this.backupColor = this.project.imgNo;
+        // else this.backupImg = this.project.imgNo;
+        this.backupImg = this.project.imgNo;
+
+        reader.onload = (e) => {
+          console.log("222");
           this.image = e.target.result;
+          // this.backupImg = this.project.imgNo;
+          this.project.imgNo = e.target.result;
           console.log("image", this.image);
-          this.coverImg = this.image;
         };
+        console.log("333");
+        //console.log(this.image);
+        //this.setProjectInfo.coverImg = this.image;
         reader.readAsDataURL(fileObject);
       } else {
-        this.coverImg = undefined;
+        console.log("사진지우기");
+        this.project.imgNo = this.backupImg;
+        // this.setProjectInfo.coverImg = undefined;
       }
-    }
+    },
+    getImg() {
+      // if (this.project.imgNo[0] == "#") return "";
+      // // console.log(this.project.imgNo);
+      // return this.project.imgNo; //"https://cdn.vuetifyjs.com/images/cards/house.jpg";
+      if (this.setProjectInfo.coverColor) "";
+      // console.log(this.project.imgNo);
+      return this.setProjectInfo.coverImg;
+    },
+    getColor() {
+      return this.setProjectInfo.coverColor;
+    },
+    getMember(no) {
+      var mb = this.memberList.find((item) => {
+        return item.memberNo == no;
+      });
+      return mb;
+    },
+    backupTitle() {
+      this.bTitle = this.project.title;
+      console.log("----------");
+      console.log(this.bTitle);
+    },
+    editTitle() {
+      console.log("editTitle..!!");
+      if (this.project.memberNo === this.project.manager) {
+        this.toggleTitle = !this.toggleTitle;
+        this.title = this.project.title;
+      }
+    },
+    editDescription() {
+      console.log("editDescription..!!");
+      if (this.project.memberNo === this.project.manager) {
+        this.toggleDesc = !this.toggleDesc;
+        this.description = this.project.description;
+      }
+    },
+    editPublic() {
+      console.log("edit Public");
+    },
     // getImgCode(item) {
     //   return "data:image;base64," + item.imgCode;
     // }
@@ -335,13 +520,37 @@ export default {
     ...mapState({
       userInfo: "userInfo",
       project: "project",
-      memberList: "memberList"
+      memberList: "memberList",
       // user 멤버 no가져오기..
     }),
     isCoverImg() {
       return this.coverImgFile === undefined ? false : true;
-    }
-  }
+    },
+    setProjectInfo() {
+      console.log("setProjectInfo..");
+      const projectInfo = {};
+      projectInfo.title = this.project.title;
+      projectInfo.description = this.project.description;
+      projectInfo.usePublic = this.project.usePublic ? "true" : "false";
+      if (this.project.imgNo[0] == "#")
+        projectInfo.coverColor = this.project.imgNo;
+      else projectInfo.coverImg = this.project.imgNo;
+      projectInfo.startDate = this.project.startDate.trim();
+      projectInfo.endDate = this.project.endDate.trim();
+
+      return projectInfo;
+    },
+  },
+  // setCoverColor: {
+  //   get() {
+  //     console.log("get");
+  //     return this.project.imgNo[0] == "#" ? this.project.imgNo[0] : undefined;
+  //   },
+  //   set(newVal) {
+  //     console.log("set");
+  //     this.coverColor = newVal;
+  //   },
+  // },
 };
 </script>
 

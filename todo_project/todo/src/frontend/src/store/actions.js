@@ -129,6 +129,7 @@ const actions = {
   },
   FETCH_TASK({ commit }, taskId) {
     return api.project.fetchTask(taskId).then((data) => {
+      console.log("FETCH_TASK 완료--------------");
       console.dir(data);
       commit("SET_TASK_INFO", data);
     });
@@ -151,6 +152,36 @@ const actions = {
   },
   DOWNLOAD_FILE(_, file) {
     return api.project.downloadFile(file);
+  },
+  ADD_STARED_TASK(_, data) {
+    return api.project.staredTask(data);
+  },
+  ADD_CHECK_LIST(_, data) {
+    return api.project.addCheckList(data);
+  },
+  ADD_NEW_CHECK_ITEM(_, data) {
+    console.log("action: ADD_NEW_CHECK_ITEM..");
+    console.log(data);
+    return api.project.addCheckListItem(data);
+  },
+  FETCH_CHECK_LISTS(_, taskId) {
+    console.log("testeests", taskId);
+    return api.project.getCheckLists(taskId);
+  },
+  SET_CHECK_ITEM(_, item) {
+    return api.project.setCheckItem(item);
+  },
+  DELETE_CHECK_ITEM(_, item) {
+    return api.project.deleteCheckItem(item);
+  },
+  DELETE_CHECK_LIST(_, checkList) {
+    return api.project.deleteCheckList(checkList);
+  },
+  DELETE_FILE(_, fileNo) {
+    return api.project.deleteFile(fileNo);
+  },
+  SEND_TO_ARCHIVE(_, taskId) {
+    return sohyun.archive.sendToArchive(taskId);
   },
   //////////////////////// DASHBOARD ////////////////////////
   //오늘 리스트

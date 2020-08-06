@@ -113,4 +113,30 @@ export const project = {
     });
     // return request("post", "/projects/download", file);
   },
+  staredTask(data) {
+    return request("post", "/projects/starredTask", data);
+  },
+  addCheckList(title) {
+    return request("post", "/projects/addCheckList", title);
+  },
+  addCheckListItem(data) {
+    console.log("data");
+    console.log("000000000000000000");
+    return request("post", "/projects/addCheckListItem", data);
+  },
+  getCheckLists(taskId) {
+    return request("post", "/projects/getCheckLists", taskId);
+  },
+  setCheckItem(item) {
+    return request("post", "/projects/setCheckItem", item);
+  },
+  deleteCheckItem(item) {
+    return request("post", "/projects/deleteCheckItem", item);
+  },
+  deleteCheckList(checkList) {
+    return request("post", "/projects/deleteCheckList", checkList);
+  },
+  deleteFile(fileNo) {
+    return request("get", "/projects/deleteFile?fileNo=" + fileNo);
+  },
 };

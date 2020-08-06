@@ -17,8 +17,13 @@
 		<typeAlias alias="labelvo" type="com.inzent.todo.vo.LabelVo"/>
 		<typeAlias alias="supertaskvo" type="com.inzent.todo.vo.SuperTaskVo"/>
 		<typeAlias alias="commentvo" type="com.inzent.todo.vo.CommentVo"/>
+		<typeAlias alias="starredtaskvo" type="com.inzent.todo.vo.StarredTaskVo"/>
+		<typeAlias alias="checklistvo" type="com.inzent.todo.vo.CheckListVo"/>
+		<typeAlias alias="checklistitemvo" type="com.inzent.todo.vo.CheckListItemVo"/>
+
 		<typeAlias alias="restoresubvo" type="com.inzent.todo.vo.RestoreSubVo"/>
 		<typeAlias alias="restoresupervo" type="com.inzent.todo.vo.RestoreSuperVo"/>
+
 		<typeAlias alias="projectcarddto" type="com.inzent.todo.dto.ProjectCardDto"/>
 		<typeAlias alias="taskdto" type="com.inzent.todo.dto.TaskDto"/>
 		<typeAlias alias="taskupdatedto" type="com.inzent.todo.dto.TaskUpdateDto"/>
@@ -38,6 +43,8 @@
 		<typeAlias alias="gcinfodto" type="com.inzent.todo.dto.GanttChartInfoDto"/>
 		<typeAlias alias="arcsubdto" type="com.inzent.todo.dto.ArchiveSubDto"/>
 		<typeAlias alias="arcsuperdto" type="com.inzent.todo.dto.ArchiveSuperDto"/>
+		<typeAlias alias="checklistdto" type="com.inzent.todo.dto.CheckListDto"/>
+
 
 	</typeAliases>
 	<mappers>

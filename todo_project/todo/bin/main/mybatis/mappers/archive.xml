@@ -89,6 +89,41 @@
         ( #{taskId}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{sortNo}, #{progressRate}, #{memberNo}, #{labels}, #{projectId}, #{state})
     ]]>
     </insert>
+    <select id="getTaskSubId" resultType="restoresubvo">
+        <![CDATA[
+        select * from tb_task_sub where task_id = #{taskId}
+        ]]>
+    </select>
+    <insert id="insertTaskSub" parameterType="restoresubvo">
+        <![CDATA[
+         insert into tb_archive_sub
+        ( task_id, title, description, use_public, start_date, end_date, sort_no, member_no, labels, task_super_id, state )
+        values
+        ( #{taskId}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{sortNo}, #{memberNo}, #{labels}, #{taskSuperId}, #{state})    ]]>
+    </insert>
+      <delete id="delSubFromTask" parameterType="String">
+        <![CDATA[
+          delete from tb_task_sub where task_id = #{subId}
+        ]]>
+    </delete>
+    <select id="getTaskSuperId" resultType="restoresupervo">
+        <![CDATA[
+          select * from tb_task_super where task_id = #{taskId}
+        ]]>
+    </select>
+    <insert id="insertTaskSuper" parameterType="restoresupervo">
+        <![CDATA[
+            insert into tb_archive_super
+            ( task_id, title, description, use_public, start_date, end_date, sort_no, progress_rate, member_no, labels, project_id, state )
+            values
+            ( #{taskId}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{sortNo}, #{progressRate}, #{memberNo}, #{labels}, #{projectId}, #{state})
+        ]]>
+    </insert>
+      <delete id="delSuperFromTask" parameterType="String">
+        <![CDATA[
+          delete from tb_task_super where task_id = #{subId}
+        ]]>
+    </delete>
     <!-- <insert id="addSuper" parameterType="supertaskvo" resultType="int">
     <![CDATA[
     ]]>

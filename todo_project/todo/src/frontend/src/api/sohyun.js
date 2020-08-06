@@ -131,4 +131,7 @@ export const archive = {
     console.log("sohyun", superId);
     return request("get", `/archive/restoreSuper/${superId}`);
   },
+  sendToArchive(taskId) {
+    return request("get", "/archive/sendToArchive?taskId=" + taskId);
+  },
 };

@@ -1,22 +1,18 @@
 package com.inzent.todo.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
@@ -25,11 +21,14 @@ import com.inzent.todo.dto.TaskDto;
 import com.inzent.todo.dto.TaskUpdateDto;
 import com.inzent.todo.security.Auth;
 import com.inzent.todo.service.ProjectService;
+import com.inzent.todo.vo.CheckListItemVo;
+import com.inzent.todo.vo.CheckListVo;
 import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.ProjectVo;
 import com.inzent.todo.vo.UserVo;
+import com.inzent.todo.vo.StarredTaskVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.http.HttpRequest;
@@ -39,6 +38,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -51,11 +51,10 @@ public class ProjectController {
 
     @Auth
     @GetMapping("/")
-    public List<ProjectCardDto> getProjectList(HttpServletRequest req) {
+    public Map<String, Object> getProjectList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         // System.out.println("Project Controller : get ProjectList");
         // System.out.println(user.toString());
-
         return projectService.getProjectList(user.getId());
         // return null;
     }
@@ -69,7 +68,6 @@ public class ProjectController {
         // 멤버가 아니라면 못들어가게 막아야하지않나.?
         int memberNo = projectService.getMemberNo(pid, userId);
         // System.out.println("현재 사용자의 프로젝트 MEMBER NUM : " + memberNo);
-
         // 이 프로젝트에 속한 업무(대) 중 private이면서, 내 id와 같은 업무 가져오기..
         List<TaskBoardListDto> taskBoardList = projectService.getTaskList(pid, memberNo);
         ProjectVo projectVo = projectService.getProject(pid);
@@ -165,13 +163,63 @@ public class ProjectController {
         TaskDto task = projectService.getTask(taskId);
         List<FileVo> files = projectService.getFiles(taskId);
         List<CommentVo> comments = projectService.getComments(taskId);
+        List<CheckListDto> checkLists = projectService.getCheckLists(taskId);
+        // System.out.println(checkLists.toString());
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("task", task);
         map.put("files", files);
         map.put("comments", comments);
+        map.put("checkLists", checkLists);
 
         return map;
+    }
+
+    @PostMapping("/starredTask")
+    public void staredTask(@RequestBody StarredTaskVo starred) {
+        System.out.println("staredTask");
+        projectService.addStarredTask(starred);
+    }
+
+    @PostMapping("/addCheckList")
+    public void addCheckList(@RequestBody CheckListVo checkList) {
+        System.out.println("addCheckList");
+        projectService.addCheckList(checkList);
+    }
+
+    @PostMapping("/addCheckListItem")
+    public void addCheckListItem(@RequestBody CheckListItemVo checkListItem) {
+        System.out.println("addCheckListItem" + checkListItem.toString());
+        projectService.addCheckListItem(checkListItem);
+        projectService.updateCheckListRate(checkListItem.getListNo());
+    }
+
+    @PostMapping("/getCheckLists")
+    public List<CheckListDto> getCheckLists(@RequestBody String taskId) {
+        System.out.println("getCheck..." + taskId);
+        taskId = taskId.substring(0, taskId.length() - 1);
+        return projectService.getCheckLists(taskId);
+        // 진행률 갱신!
+
+    }
+
+    @PostMapping("/setCheckItem")
+    public void setCheckItem(@RequestBody CheckListItemVo checkListItem) {
+        System.out.println("setCheckItem...1 : " + checkListItem.getItemNo());
+        projectService.updateCheckListItem(checkListItem.getItemNo());
+        projectService.updateCheckListRate(checkListItem.getListNo());
+    }
+
+    @PostMapping("/deleteCheckItem")
+    public void deleteCheckItem(@RequestBody CheckListItemVo checkListItem) {
+        System.out.println("deleteCheckItem... : " + checkListItem.getItemNo());
+        projectService.deleteCheckListItem(checkListItem.getItemNo());
+        projectService.updateCheckListRate(checkListItem.getListNo());
+    }
+
+    @PostMapping("/deleteCheckList")
+    public void deleteCheckList(@RequestBody CheckListVo checkList) {
+        projectService.deleteCheckList(checkList.getListNo());
     }
 
     @PostMapping("/download")
@@ -185,63 +233,25 @@ public class ProjectController {
             String mimeType = URLConnection.guessContentTypeFromName(file.getName());
             String contentDisposition = String.format("attachment; filename=%s", file.getName());
             int fileSize = Long.valueOf(file.length()).intValue();
-
+            // System.out.println(mimeType);
+            // System.out.println(file.getName());
+            // System.out.println(file.toPath());
             response.setContentType(mimeType);
             response.setHeader("Content-Disposition", contentDisposition);
             response.setContentLength(fileSize);
+            // System.out.println(response.getContentType());
         } catch (FileNotFoundException e) {
             // System.out.println(e);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // ServletContext context = request.getServletContext();
-        // 서버에 저장되는 기본 경로
-        // System.out.println("context:" + context);
-        // String uploadPath = context.getRealPath("/upload");
-        // System.out.println("uploadPath:" + uploadPath);
-        // path : 파일 저장된 경로
-        // String path = file.getPath();
-        // sName : 경로에 실제 존재하는 파일명
-        // String sName = file.getSaveName();
-        // // 파일을 읽기 위한 파일 객체 생성
-        // File f = new File("./upload/files", sName);
-        // // dName : 사용자 컴퓨터에 저장할 파일명
-        // String dName = file.getOrgName();
-        // // 다운로드할 이름을 주지 않은 경우 사용자 브라우져에 이미지 출력
-        // if (dName == null) {
-        // response.setHeader("Content-Type", "image/jpg");
-        // }
-        // // 다운로드
-        // else {
 
-        // response.setHeader("Content-Type", "application/octet-stream");
-        // // 한글이름으로 다운로드 처리
-        // dName = new String(dName.getBytes("utf-8"), "8859_1");
-        // response.setHeader("Content-Disposition", "attachment;filename=" + dName);
-        // response.setHeader("Content-Transfer-Encoding", "binary");
-        // response.setHeader("Content-Length", String.valueOf(f.length()));
-        // }
+    }
 
-        // // 특정 위치의 파일을 읽어서 사용자 브라우져로 출력
-        // FileInputStream fis = new FileInputStream(f);
-        // BufferedInputStream bis = new BufferedInputStream(fis);
-
-        // OutputStream out = response.getOutputStream();
-        // BufferedOutputStream bos = new BufferedOutputStream(out);
-
-        // while (true) {
-        // int ch = bis.read();
-        // if (ch == -1)
-        // break;
-
-        // bos.write(ch);
-        // }
-        // bis.close();
-        // fis.close();
-
-        // bos.close();
-        // out.close();
-
+    @GetMapping("/deleteFile")
+    public void deleteFile(@RequestParam int fileNo) {
+        System.out.println("deleteFIle : " + fileNo);
+        projectService.deleteFile(fileNo);
     }
 
 }

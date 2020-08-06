@@ -68,7 +68,7 @@
                 <v-icon>mdi-account</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>MY PAGE</v-list-item-title>
+                <v-list-item-title>내 정보</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </template>
@@ -77,7 +77,7 @@
               <v-icon>mdi-location-exit</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>LOGOUT</v-list-item-title>
+              <v-list-item-title>로그아웃</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -117,27 +117,27 @@ export default {
     menus1: [
       {
         icon: "mdi-view-dashboard",
-        text: "DASHBOARD",
+        text: "대시보드",
         to: "/dashboard",
       },
       {
         icon: "mdi-newspaper-variant-multiple-outline",
-        text: "PROJECTS",
+        text: "프로젝트",
         to: "/projects",
       },
       {
         icon: "mdi-calendar-month-outline",
-        text: "SCHEDULE",
+        text: "스케쥴",
         to: "/schedule",
       },
       {
         icon: "mdi-magnify",
-        text: "SEARCH",
+        text: "검색",
         to: "/search",
       },
       {
         icon: "mdi-archive",
-        text: "ARCHIVE",
+        text: "보관함",
         to: "/archive",
       },
     ],
@@ -189,6 +189,9 @@ export default {
   padding: 0px;
   left: -12px;
   min-height: 56px;
+}
+#core-navigation-drawer div.v-list-item__title {
+  font-size: 1rem !important;
 }
 #core-navigation-drawer .v-footer-item {
   position: fixed;

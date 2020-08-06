@@ -1,7 +1,12 @@
 <template>
   <v-dialog v-model="openModal" max-width="800" persistent>
     <v-card class="add-task-card-form">
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
+      <v-form
+        ref="form"
+        v-model="valid"
+        @submit.prevent="onSubmit"
+        lazy-validation
+      >
         <v-card-title class="headline grey lighten-2" primary-title>
           <h4 v-if="taskSuperId">CREATE SUB TASK</h4>
           <h4 v-else>CREATE SUPER TASK</h4>
@@ -24,7 +29,12 @@
               <v-row class="px-5 pb-4">
                 <v-col cols="6">
                   <p>PRIVATE*</p>
-                  <v-radio-group v-model="usePublic" required row :rules="privateRules">
+                  <v-radio-group
+                    v-model="usePublic"
+                    required
+                    row
+                    :rules="privateRules"
+                  >
                     <br />
                     <v-radio label="Public" value="true"></v-radio>
                     <v-spacer></v-spacer>
@@ -36,28 +46,37 @@
                   <p>MANAGERS</p>
                   <v-tooltip v-for="member in managers" :key="member.id" bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-avatar v-if="member.imgCode" size="32" class="user-avatars">
+                      <v-avatar
+                        v-if="member.imgCode"
+                        size="32"
+                        class="user-avatars"
+                      >
                         <img :src="member.imgCode" v-bind="attrs" v-on="on" />
                       </v-avatar>
-                      <v-avatar v-else size="32" class="user-avatars" color="grey">
-                        <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                      <v-avatar
+                        v-else
+                        size="32"
+                        class="user-avatars"
+                        color="grey"
+                      >
+                        <v-icon fab dark v-bind="attrs" v-on="on"
+                          >mdi-account</v-icon
+                        >
                       </v-avatar>
                     </template>
                     <span>{{ member.name }}</span>
                   </v-tooltip>
-                  <span class="pl-4">{{managers.length}}명</span>
+                  <span class="pl-4">{{ managers.length }}명</span>
                 </v-col>
                 <v-col cols="6" v-if="endDate || startDate">
                   <p>DATE</p>
                   <v-icon>mdi-calendar-month-outline</v-icon>
-                  {{startDate}} ~ {{endDate}}
+                  {{ startDate }} ~ {{ endDate }}
                 </v-col>
                 <v-col cols="6" v-if="taskState >= 0">
                   <p>STATE</p>
                   <v-chip filter :color="state[taskState].color">
-                    {{
-                    state[taskState].name
-                    }}
+                    {{ state[taskState].name }}
                   </v-chip>
                 </v-col>
                 <v-col cosl="6" v-if="taskLabel.length">
@@ -70,14 +89,25 @@
                     small
                     label
                     class="ma-1"
-                  >{{ label.labelName }}</v-chip>
+                    >{{ label.labelName }}</v-chip
+                  >
                 </v-col>
               </v-row>
               <v-col cols="12">
-                <v-textarea label="DESCRIPTION" v-model="description" auto-grow outlined></v-textarea>
+                <v-textarea
+                  label="DESCRIPTION"
+                  v-model="description"
+                  auto-grow
+                  outlined
+                ></v-textarea>
               </v-col>
               <v-col cols="12">
-                <v-file-input chips multiple label="File input" v-model="attachFiles"></v-file-input>
+                <v-file-input
+                  chips
+                  multiple
+                  label="File input"
+                  v-model="attachFiles"
+                ></v-file-input>
               </v-col>
             </v-col>
             <v-col cols="4" class="createTaskside pa-0">
@@ -109,7 +139,8 @@
                           filter
                           label
                           :color="st.color"
-                        >{{st.name}}</v-chip>
+                          >{{ st.name }}</v-chip
+                        >
                       </v-chip-group>
                     </v-card-text>
                   </v-card>
@@ -119,7 +150,10 @@
                 <label-menu :pid="this.project.id" @addLabel="addLabel" />
               </v-list-item>
               <v-list-item>
-                <date-menu @addStartDate="addStartDate" @addEndDate="addEndDate" />
+                <date-menu
+                  @addStartDate="addStartDate"
+                  @addEndDate="addEndDate"
+                />
               </v-list-item>
               <!-- <v-subheader>ACTIONS</v-subheader>
               <v-list-item>
@@ -157,16 +191,16 @@ export default {
   components: {
     LabelMenu,
     DateMenu,
-    AddMember
+    AddMember,
   },
   computed: {
     ...mapState({
       project: "project",
       labelList: "labelList",
       taskSuperId: "taskSuperId",
-      lastSubSortNo: "lastSubSortNo"
+      lastSubSortNo: "lastSubSortNo",
       // user 멤버 no가져오기..
-    })
+    }),
     // getTaskLabel() {
     //   return this.taskLabel;
     // }
@@ -191,30 +225,31 @@ export default {
       { name: "진행", color: "primary", type: "P" },
       { name: "완료", color: "success", type: "C" },
       { name: "긴급", color: "error", type: "E" },
-      { name: "대기", color: "warning", type: "W" }
+      { name: "대기", color: "warning", type: "W" },
     ],
     // taskStateName: ["보류", "진행", "완료", "긴급", "대기"],
     // taskStateColor: ["defualt", "primary", "success", "error", "warning"],
     taskLabel: [],
     labels: "",
     imgRules: [
-      value =>
+      (value) =>
         !value ||
         value.size < 2000000 ||
-        "Avatar size should be less than 2 MB!"
+        "Avatar size should be less than 2 MB!",
     ],
     menu: false,
     titleRules: [
-      v => !!v || "title is required",
-      v => (v && v.length <= 100) || "title must be less than 100 characters"
+      (v) => !!v || "title is required",
+      (v) => (v && v.length <= 100) || "title must be less than 100 characters",
     ],
     descRules: [
-      v =>
-        (v && v.length <= 100) || "description must be less than 100 characters"
+      (v) =>
+        (v && v.length <= 100) ||
+        "description must be less than 100 characters",
     ],
-    privateRules: [v => !!v || "private is required"],
+    privateRules: [(v) => !!v || "private is required"],
     valid: true,
-    managers: []
+    managers: [],
   }),
 
   methods: {
@@ -222,7 +257,7 @@ export default {
     ...mapMutations([
       "SET_ADD_TASK_MODAL",
       "SET_SUPER_TASK_ID",
-      "SET_LAST_SUB_SORT_NO"
+      "SET_LAST_SUB_SORT_NO",
     ]),
     onSubmit() {
       // Create Project
@@ -264,6 +299,7 @@ export default {
           this.ADD_SUB_TASK(formData).then(() => {
             console.log("------------------");
             console.log("ADD SUB  완료");
+            this.$emit("update");
             //this.$router.push(`/projects/${data.id}`);
           });
         } else {
@@ -271,6 +307,7 @@ export default {
           this.ADD_SUPER_TASK(formData).then(() => {
             console.log("------------------");
             console.log("ADD  SUPER 완료");
+            this.$emit("update");
             //this.$router.push(`/projects/${data.id}`);
           });
         }
@@ -313,7 +350,7 @@ export default {
       this.labels = JSON.stringify(labelArr); // labelArr Json String으로 변환할것 -> DB에 저장하는값
       this.taskLabel = []; // 라벨로 보여줄 객체뽑아올곳
       for (var i in labelArr) {
-        var lb = this.labelList.find(item => {
+        var lb = this.labelList.find((item) => {
           return item.labelNo == labelArr[i];
         });
         this.taskLabel.push(lb);
@@ -334,11 +371,11 @@ export default {
       console.log("addMember");
       console.log(managers);
       this.managers = managers;
-    }
+    },
     // getImgCode(item) {
     //   return "data:image;base64," + item.imgCode;
     // }
-  }
+  },
 };
 </script>
 

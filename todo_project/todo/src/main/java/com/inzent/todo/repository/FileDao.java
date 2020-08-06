@@ -29,4 +29,8 @@ public class FileDao {
         return sqlSession.selectOne("file.selectImg");
     }
 
+    public int deleteFile(int fileNo) {
+        return sqlSession.delete("file.deleteFile", fileNo);
+    }
+
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.inzent.todo.controller.CheckListDTO;
+import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
@@ -16,6 +18,8 @@ import com.inzent.todo.repository.MemberDao;
 import com.inzent.todo.repository.ProjectDao;
 import com.inzent.todo.util.DBUtil;
 import com.inzent.todo.util.FileUtil;
+import com.inzent.todo.vo.CheckListItemVo;
+import com.inzent.todo.vo.CheckListVo;
 import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.ImageVo;
@@ -23,6 +27,7 @@ import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.MemberVo;
 import com.inzent.todo.vo.ProjectVo;
 import com.inzent.todo.vo.SuperTaskVo;
+import com.inzent.todo.vo.StarredTaskVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -151,26 +156,17 @@ public class ProjectService {
     }
 
     public void updateTask(TaskUpdateDto taskDto) throws Exception {
-        // System.out.println("-----------ProjectService.updateTask ----------");
-        // System.out.println(taskDto.toString());
-        // System.out.println("--------------------------------------------");
-
         // if (taskDto.getSortNo() == 0) {
         // taskDto.setSortNo(65535);
         // }
         // String taskId = "";
-        if (taskDto.getTaskSuperId() != null) {
-            // System.out.println(" :: UPDATE SUPER TASK:: ");
-            // taskId = DBUtil.generateKey("TP");
-            // taskDto.setTaskId(taskId);
-            // projectDao.insertSuperTask(taskDto);
-            // TODO UPDate SUPER TASK
+        System.out.println(taskDto.toString());
+        if (taskDto.getTaskId().startsWith("TP")) {
+            System.out.println(" :: UPDATE SUPER TASK:: ");
+            projectDao.updateSuperTask(taskDto);
         } else {
-            // System.out.println(" :: UPDATE SUB TASK:: ");
-            // taskId = DBUtil.generateKey("TB");
-            // taskDto.setTaskId(taskId);
+            System.out.println(" :: UPDATE SUB TASK:: ");
             projectDao.updateSubTask(taskDto);
-            // TODO UPDATE SUB TASK
         }
 
         // TODO 만약 삭제가 있다면, 삭제도 전달!!
@@ -213,18 +209,22 @@ public class ProjectService {
 
     }
 
-    public List<ProjectCardDto> getProjectList(String userId) {
-        return projectDao.selectProjectList(userId);
+    public Map<String, Object> getProjectList(String userId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("allProject", projectDao.selectAllProjectList(userId));
+        map.put("myProject", projectDao.selectMyProjectList(userId));
+
+        return map;
     }
 
     public List<TaskBoardListDto> getTaskList(String pid, int memNo) {
         // System.out.println("UserID : " + userId);
         List<TaskBoardListDto> taskBoardList = new ArrayList<>();
 
-        List<SuperTaskVo> superTaskList = projectDao.selectTaskList(pid, memNo);
+        List<TaskDto> superTaskList = projectDao.selectTaskList(pid, memNo);
         // System.out.println("superTaskList size : " + superTaskList.size());
         // System.out.println("--------------------------------------------");
-        for (SuperTaskVo superTask : superTaskList) {
+        for (TaskDto superTask : superTaskList) {
             TaskBoardListDto tbl = new TaskBoardListDto();
             tbl.setSuperTask(superTask);
             List<TaskDto> subTaskList = projectDao.selectTaskSubList(superTask.getTaskId(), memNo);
@@ -279,6 +279,43 @@ public class ProjectService {
 
     public List<CommentVo> getComments(String taskId) {
         return projectDao.selectComments(taskId);
+    }
+
+    public void addStarredTask(StarredTaskVo starred) {
+        projectDao.insertStarredTask(starred);
+    }
+
+    public void addCheckList(CheckListVo checkList) {
+        projectDao.insertCheckList(checkList);
+    }
+
+    public List<CheckListDto> getCheckLists(String taskId) {
+        System.out.println("getCehckList..... " + taskId);
+        return projectDao.selectCheckList(taskId);
+    }
+
+    public int addCheckListItem(CheckListItemVo checkListItem) {
+        return projectDao.insertCheckList(checkListItem);
+    }
+
+    public void updateCheckListRate(int listNo) {
+        projectDao.updateCheckListRate(listNo);
+    }
+
+    public void updateCheckListItem(int itemNo) {
+        projectDao.updateCheckListItem(itemNo);
+    }
+
+    public void deleteCheckListItem(int itemNo) {
+        projectDao.deleteCheckListItem(itemNo);
+    }
+
+    public void deleteCheckList(int listNo) {
+        projectDao.deleteCheckList(listNo);
+    }
+
+    public void deleteFile(int fileNo) {
+        fileDao.deleteFile(fileNo);
     }
 
 }

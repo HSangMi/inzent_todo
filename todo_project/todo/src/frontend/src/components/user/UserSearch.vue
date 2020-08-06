@@ -35,6 +35,7 @@
               :search="search"
               v-model="selected"
               show-select
+              @input="test"
             >
               <template v-slot:item.avatar="{ item }">
                 <v-avatar size="32px" v-if="item.imgCode">
@@ -95,25 +96,37 @@ export default {
         text: "사진",
         align: "start",
         sortable: false,
-        value: "avatar"
+        value: "avatar",
       },
       { text: "이름", value: "name" },
       { text: "부서", value: "deptName" },
       { text: "직급", value: "rank" },
       { text: "연락처", value: "phone" },
-      { text: "이메일", value: "email" }
+      { text: "이메일", value: "email" },
     ],
     model: null,
-    myTree: ""
+    myTree: "",
   }),
   created() {
     this.fatch_data();
+    // console.log("this.memberList", this.memberList);
+    console.log("## created User SEARCH");
+    if (this.memberList.length) {
+      console.log("---------멤버리스트가 있냐?-------");
+      // console.log("memberList :", this.memberList);
+      this.selected = Object.assign([], this.memberList);
+      // this.selected = this.memberList;
+      // console.log("selected :", this.memberList);
+    } else {
+      console.log("---------멤버리스트없다!!?-------");
+    }
   },
   computed: {
     ...mapState({
       deptList: "deptList",
-      userList: "userList"
-    })
+      userList: "userList",
+      memberList: "memberList",
+    }),
   },
   methods: {
     ...mapActions(["FATCH_DEPTLIST", "FATCH_USERLIST"]),
@@ -123,7 +136,7 @@ export default {
         let list = this.deptList;
 
         // console.log("list", list);
-        list.forEach(item => {
+        list.forEach((item) => {
           for (let i = 0; i < list.length; i++) {
             if (item.parentDeptCode === list[i].deptCode) {
               item.parentId = list[i].id;
@@ -134,7 +147,7 @@ export default {
         // console.log("foreach list", list);
 
         let myTree = null;
-        list.forEach(item => {
+        list.forEach((item) => {
           if (myTree === null) {
             myTree = { id: item.id, name: item.deptName };
             console.log(";", myTree);
@@ -170,24 +183,40 @@ export default {
           return;
         } else {
           // tree에 children이 있다면
-          tree.children.forEach(child => {
+          tree.children.forEach((child) => {
             this.Recursive(item, child);
           });
         }
       }
     },
-
+    test(val) {
+      console.log("test ", val);
+      // this.selected = val.slice(1);
+      console.log("selected ", this.selected);
+    },
     onClose() {
+      console.log("## onclose실행");
+      if (this.memberList.length) {
+        console.log("---------멤버리스트가 있냐?-------");
+        console.log("memberList :", this.memberList);
+        // this.selected = Object.assign([], this.memberList);
+        // console.log("selected :", this.memberList);
+        this.selected = [];
+        /* this.selected = [];
+        this.selected = Object.assign([], this.memberList); */
+        console.log("selected :", this.selected);
+      }
       this.$emit("close");
     },
     onSubmit() {
-      // console.log(this.selected);
+      console.log(this.selected);
       // console.log(this.open);
       this.$emit("addMember", this.selected);
       this.$emit("close");
     },
     remove(item) {
       // console.log(item);
+      console.log("remove item실행..");
       const index = this.selected.indexOf(item);
       // console.log("index: " + index);
       if (index >= 0) this.selected.splice(index, 1);
@@ -196,7 +225,7 @@ export default {
     selectDept() {
       const selectedDept = [];
       for (let i = 0; i < this.selection.length; i++) {
-        var dptmt = this.deptList.find(item => {
+        var dptmt = this.deptList.find((item) => {
           return item.id == this.selection[i].id;
         });
         selectedDept.push(dptmt.deptCode);
@@ -207,11 +236,11 @@ export default {
       // console.log(selectedDept);
 
       this.FATCH_USERLIST(selectedDept);
-    }
+    },
     // getImgCode(item) {
     //   return "data:image;base64," + item.imgCode;
     // }
-  }
+  },
 };
 </script>
 

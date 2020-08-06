@@ -12,6 +12,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TaskBoardListDto {
-    private SuperTaskVo superTask;
+    private TaskDto superTask;
     private List<TaskDto> subTaskList;
 }

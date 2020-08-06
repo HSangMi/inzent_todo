@@ -2,7 +2,7 @@
   <v-menu offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" block depressed>
-        <v-icon left>mdi-calendar-month-outline</v-icon>DUE DATE
+        <v-icon left>mdi-calendar-month-outline</v-icon>기간
       </v-btn>
     </template>
     <v-card class="my-chip-group">

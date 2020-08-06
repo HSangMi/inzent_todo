@@ -1,8 +1,13 @@
 <template>
-  <v-col cols="12" xs="6" sm="6" md="4" lg="2">
+  <v-col cols="12" xs="6" sm="6" md="4" lg="3">
     <v-card class="mx-auto project-card" :color="getColor()" height="100%">
       <router-link :to="`/projects/${project.id}`">
-        <v-img v-if="project.imgNo" class="white--text align-end" height="100" :src="getImg()">
+        <v-img
+          v-if="project.imgNo"
+          class="white--text align-end"
+          height="100"
+          :src="getImg()"
+        >
           <!-- <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn icon>
@@ -28,7 +33,7 @@
             </v-avatar>
             {{ project.userId }}
           </v-chip>
-          외 {{project.memberCnt -1}} 명
+          외 {{ project.memberCnt - 1 }} 명
         </v-card-text>
         <v-card-subtitle class="py-0" min-height="400px">
           <v-chip
@@ -64,8 +69,8 @@ export default {
       if (this.project.imgNo[0] == "#") return "";
       // console.log(this.project.imgNo);
       return this.project.imgNo; //"https://cdn.vuetifyjs.com/images/cards/house.jpg";
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -83,7 +88,6 @@ export default {
 }
 .project-card .v-card__title {
   font-size: 1.3rem;
-  font-weight: bolder;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

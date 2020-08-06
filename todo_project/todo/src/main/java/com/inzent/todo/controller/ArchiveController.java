@@ -91,6 +91,12 @@ public class ArchiveController {
 
     @GetMapping("/sendToArchive")
     public void sendToArchive(@RequestParam String taskId) {
-        archiveService.sendToArchive(taskId);
+        System.out.println("아카이브 보내기 : " + taskId);
+        int cnt = archiveService.sendToArchive(taskId);
+        if (cnt == 1) {
+            System.out.println("아카이브 보내기 성공");
+        } else {
+            System.out.println(" 실패");
+        }
     }
 }

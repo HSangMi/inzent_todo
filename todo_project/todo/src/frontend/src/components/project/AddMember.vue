@@ -39,9 +39,6 @@
               </v-data-table>
             </template>
             <template v-else-if="existTaskManagers">
-              <!-- <p>existTaskManagers!@!</p> -->
-              <!-- <p>existTaskManagers length: {{existTaskManagers.length}}</p> -->
-              <!-- <p>selected : {{selected}}</p> -->
               <v-data-table
                 v-model="existTaskManagers"
                 :headers="headers"
@@ -155,21 +152,21 @@ export default {
         text: "사진",
         align: "start",
         sortable: false,
-        value: "avatar"
+        value: "avatar",
       },
       { text: "이름", value: "name" },
       { text: "부서", value: "deptName" },
       { text: "직급", value: "rank" },
       { text: "연락처", value: "phone" },
-      { text: "이메일", value: "email" }
+      { text: "이메일", value: "email" },
     ],
     model: null,
-    myTree: ""
+    myTree: "",
   }),
   created() {},
   computed: {
     ...mapState({
-      memberList: "memberList"
+      memberList: "memberList",
     }),
     existTaskManagers: {
       get() {
@@ -179,8 +176,8 @@ export default {
         console.log("existTaskManagers Setting,.,");
         console.log(newVal);
         this.selected = newVal; //업데이트 될 경우 변경될 값!
-      }
-    }
+      },
+    },
   },
   methods: {
     onClose() {
@@ -202,11 +199,11 @@ export default {
       console.log(this.selected);
       const index = this.selected.indexOf(item);
       if (index >= 0) this.selected.splice(index, 1);
-    }
+    },
     // getImgCode(item) {
     //   return "data:image;base64," + item.imgCode;
     // }
-  }
+  },
 };
 </script>
 

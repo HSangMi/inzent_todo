@@ -52,7 +52,9 @@
       <div v-show="show">
         <v-divider></v-divider>
         <v-card-text class="expand-card-text">
-          <router-link :to="`/projects/${board.id}/task/${list.superTask.taskId}`">
+          <router-link
+            :to="`/projects/${board.id}/super/task/${list.superTask.taskId}`"
+          >
             <!-- <v-row align="center" class="mx-0"> -->
             <!-- <v-rating :value="4.5" color="amber" dense half-increments readonly size="14"></v-rating> -->
             <div>
@@ -62,12 +64,18 @@
               <v-avatar v-else size="24">
                 <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
               </v-avatar>
-              {{resistrant.name}}
-              <span class="grey--text">{{ list.superTask.regDate }}</span>
+              {{ resistrant.name }}
+              <!-- <span class="grey--text">{{ list.superTask.regDate }}</span> -->
             </div>
-            <v-list-item three-line class="px-0" v-if="list.superTask.description">
+            <v-list-item
+              three-line
+              class="px-0"
+              v-if="list.superTask.description"
+            >
               <v-list-item-content>
-                <v-list-item-subtitle>{{list.superTask.description}}</v-list-item-subtitle>
+                <v-list-item-subtitle>{{
+                  list.superTask.description
+                }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
             <!-- <div class="grey--text">RegDate:{{ list.superTask.regDate }}</div> -->
@@ -85,14 +93,24 @@
                 dark
                 class="mr-1"
                 :color="label.labelColor"
-              >{{label.labelName}}</v-chip>
+                >{{ label.labelName }}</v-chip
+              >
             </div>
-            <div class="my-2" v-if="list.superTask.startDate||list.superTask.endDate">
+            <div
+              class="my-2"
+              v-if="list.superTask.startDate || list.superTask.endDate"
+            >
               <v-chip label small color="#cacaca">
-                <v-icon left>mdi-clock-outline</v-icon>
-                {{list.superTask.startDate}} - {{ list.superTask.endDate}}
+                <v-icon left small>mdi-clock-outline</v-icon>
+                {{ list.superTask.startDate }} - {{ list.superTask.endDate }}
               </v-chip>
             </div>
+            <p class="my-auto">
+              <v-icon size="20">mdi-paperclip</v-icon>
+              {{ list.superTask.fileCnt }}
+              <v-icon size="20">mdi-comment-text-outline</v-icon>
+              {{ list.superTask.commentCnt }}
+            </p>
           </router-link>
         </v-card-text>
       </div>
@@ -101,7 +119,10 @@
     <v-card-text class="list-content px-0 py-2">
       <ul class="task-list">
         <draggable v-model="items" v-bind="dragOptions" class="list-group">
-          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+          <transition-group
+            type="transition"
+            :name="!drag ? 'flip-list' : null"
+          >
             <task-child
               v-for="item in items"
               :item="item"
@@ -115,8 +136,12 @@
     </v-card-text>
     <!-- <v-divider></v-divider> -->
     <v-card-actions class="pa-0">
-      <v-btn text block @click.prevent="showAddTask(list.superTask.taskId, lastSubTaskPos)">
-        <v-icon>mdi-plus</v-icon>Add Sub Tasks
+      <v-btn
+        text
+        block
+        @click.prevent="showAddTask(list.superTask.taskId, lastSubTaskPos)"
+      >
+        <v-icon small>mdi-plus</v-icon>하위 업무 추가
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -134,36 +159,37 @@ export default {
       show: false,
       drag: false,
       active: false,
-      resistrant: undefined
+      resistrant: undefined,
     };
   },
   created() {
-    console.log("created..");
+    // console.log("created..");
     this.resistrant = this.getMember(this.list.superTask.memberNo);
-    console.log(this.resistrant);
-    console.log(",,,");
+    // console.log(this.resistrant);
+    // console.log(",,,");
   },
   mounted() {
-    console.log("mounted..");
-    console.dir(this.items);
+    // console.log("mounted..");
+    // console.dir(this.items);
   },
   beforeUpdate() {
-    console.log("beforeUpdate..");
+    // console.log("beforeUpdate..");
   },
   components: {
     Draggable,
-    TaskChild: () => import("./TaskChild.vue")
+    TaskChild: () => import("./TaskChild.vue"),
   },
   computed: {
     ...mapState({
       labelList: "labelList",
-      memberList: "memberList"
+      memberList: "memberList",
+      project: "project",
     }),
     dragOptions() {
       return {
         animation: "400",
         ghostClass: "ghost",
-        group: "kanban-board-list-items"
+        group: "kanban-board-list-items",
       };
     },
     lastSubTaskPos() {
@@ -176,7 +202,7 @@ export default {
     },
     items: {
       get() {
-        console.log("get items..");
+        // console.log("get items..");
         // console.log(this.list.subTaskList);
         // for (var i = 0; i < this.list.subTaskList.length; i++) {
         //   console.log(
@@ -201,7 +227,7 @@ export default {
           boardId: this.board.id,
           memberNo: this.board.memberNo,
           taskSuperId: this.list.superTask.taskId,
-          items: reorderedListItems
+          items: reorderedListItems,
         };
         // for (var i in reorderedListItems) {
         //   payload.items.push({
@@ -211,14 +237,14 @@ export default {
         //   });
         // }
         this.reorderTaskListItems(payload);
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapMutations([
       "SET_ADD_TASK_MODAL",
       "SET_SUPER_TASK_ID",
-      "SET_LAST_SUB_SORT_NO"
+      "SET_LAST_SUB_SORT_NO",
     ]),
     ...mapActions(["REORDER_TASK"]),
     showAddSubTask(taskId, sortNo) {
@@ -245,7 +271,9 @@ export default {
         console.log("업무대 빵");
         targetTask.taskId = items[0].taskId;
         targetTask.sortNo = 65535;
-        return this.REORDER_TASK(targetTask);
+        return this.REORDER_TASK(targetTask).then(() => {
+          this.$emit("update");
+        });
       }
       for (var i = 0; i < items.length; i++) {
         // console.log(i, "items[i]", item[i].sortNo);
@@ -253,7 +281,9 @@ export default {
           console.log("카드가 맨~~위로 올라온경우", i);
           targetTask.taskId = items[i].taskId;
           targetTask.sortNo = items[i + 1].sortNo / 2;
-          return this.REORDER_TASK(targetTask);
+          return this.REORDER_TASK(targetTask).then(() => {
+            this.$emit("update");
+          });
         } else if (
           i > 0 &&
           i < items.length - 1 &&
@@ -263,7 +293,9 @@ export default {
           console.log("앞에 카드보다 작은경우!!", i);
           targetTask.taskId = items[i].taskId;
           targetTask.sortNo = (items[i - 1].sortNo + items[i + 1].sortNo) / 2;
-          return this.REORDER_TASK(targetTask);
+          return this.REORDER_TASK(targetTask).then(() => {
+            this.$emit("update");
+          });
         } else if (
           i > 0 &&
           i < items.length - 1 &&
@@ -274,7 +306,9 @@ export default {
           console.log("뒤에 카드보다 큰 경우!", i);
           targetTask.taskId = items[i].taskId;
           targetTask.sortNo = (items[i - 1].sortNo + items[i + 1].sortNo) / 2;
-          return this.REORDER_TASK(targetTask);
+          return this.REORDER_TASK(targetTask).then(() => {
+            this.$emit("update");
+          });
         } else if (
           i == items.length - 1 &&
           items[i].sortNo < items[i - 1].sortNo
@@ -282,7 +316,9 @@ export default {
           console.log("카드가 맨~~아래로 내려온경우", i);
           targetTask.taskId = items[i].taskId;
           targetTask.sortNo = items[i - 1].sortNo * 2;
-          return this.REORDER_TASK(targetTask);
+          return this.REORDER_TASK(targetTask).then(() => {
+            this.$emit("update");
+          });
         } else if (items[i].taskSuperId != payload.taskSuperId) {
           console.log("다른리스트로 옮겼지만 순서엔 문제없음", i);
           // console.log("item의 슈퍼id: ", items[i].taskSuperId);
@@ -290,7 +326,9 @@ export default {
           targetTask.taskId = items[i].taskId;
           targetTask.sortNo = items[i].sortNo;
           targetTask.taskSuperId = payload.taskSuperId;
-          return this.REORDER_TASK(targetTask);
+          return this.REORDER_TASK(targetTask).then(() => {
+            this.$emit("update");
+          });
         } else {
           console.log("무슨경우 ?  ", i);
           // return;
@@ -322,16 +360,20 @@ export default {
       console.log("SUB TASK ADD..");
       console.log(sortNo);
       // this.SET_ADD_TASK_MODAL(true);
-      this.SET_ADD_TASK_MODAL(true);
-      this.SET_SUPER_TASK_ID(taskSuperId);
-      this.SET_LAST_SUB_SORT_NO(sortNo);
-      this.SET_LAST_SUB_SORT_NO(sortNo);
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+      } else {
+        this.SET_ADD_TASK_MODAL(true);
+        this.SET_SUPER_TASK_ID(taskSuperId);
+        this.SET_LAST_SUB_SORT_NO(sortNo);
+        this.SET_LAST_SUB_SORT_NO(sortNo);
+      }
     },
     setLabel(labelString) {
       const labelArr = JSON.parse(labelString); // labelArr Json String으로 변환할것 -> DB에 저장하는값
       var taskLabel = []; // 라벨로 보여줄 객체뽑아올곳
       for (var i in labelArr) {
-        var lb = this.labelList.find(item => {
+        var lb = this.labelList.find((item) => {
           return item.labelNo == labelArr[i];
         });
         taskLabel.push(lb);
@@ -341,21 +383,22 @@ export default {
       return taskLabel;
     },
     getMember(no) {
-      var mb = this.memberList.find(item => {
+      var mb = this.memberList.find((item) => {
         return item.memberNo == no;
       });
       return mb;
-    }
+    },
     // getImgCode(item) {
     //   return "data:image;base64," + item.imgCode;
     // }
-  }
+  },
 };
 </script>
 
 <style scoped>
 a {
   text-decoration: none;
+  color: #797070;
 }
 ul,
 li {
@@ -369,14 +412,13 @@ li {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 65%;
+  max-width: 60%;
 }
 .super-task-card {
   background-color: #dcdcdc;
 }
 .super-task-card .v-card__title {
   font-size: 1.2em;
-  font-weight: bold;
   color: #797070;
   /* background-color: #685083; */
   padding: 5px;

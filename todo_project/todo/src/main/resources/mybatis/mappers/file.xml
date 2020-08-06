@@ -27,4 +27,10 @@
 			( #{saveName}, #{orgName}, #{ext}, #{size}, #{taskId} )
 		]]>
 	</insert>
+	<delete id="deleteFile">
+		<![CDATA[
+			delete from tb_file
+			where file_no =#{fileNo};
+		]]>
+	</delete>
 </mapper>
