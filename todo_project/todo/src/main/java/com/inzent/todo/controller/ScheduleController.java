@@ -240,7 +240,7 @@ public class ScheduleController {
         String userId = user.getId();
 
         scheduleService.resetGanttFilter(userId);
-        // System.out.println("초기화 성공");
+        System.out.println("초기화 성공");
     }
 
 }

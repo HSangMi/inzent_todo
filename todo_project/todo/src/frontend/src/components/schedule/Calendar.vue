@@ -312,10 +312,10 @@ export default {
     },
     resetFilter() {
       this.RESET_CAL_FILTER();
-      this.fetchCalendarInfo();
       this.prjSelection = [];
       this.memSelection = [];
       this.publicSelection = 0;
+      this.fetchCalendarInfo();
     },
     async fetchCalendarInfo() {
       await this.FETCH_CALENDAR_LIST().then(() => {

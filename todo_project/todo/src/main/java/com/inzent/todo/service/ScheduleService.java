@@ -167,7 +167,8 @@ public class ScheduleService {
         System.out.println(existUser + "----" + filterItem);
         List<GanttChartInfoDto> list = new ArrayList<>();
         try {
-            if (existUser.isEmpty() || filterItem == null || filterItem.equals("::::0")) { // 필터값이 없다면
+            if (existUser.isEmpty() || filterItem.isEmpty() || filterItem == null || filterItem.equals("::::0")) { // 필터값이
+                                                                                                                   // 없다면
                 System.out.println("들어왔닝............");
                 list = scheduledao.getGanttChartSuperInfo(userId);
             } else { // 필터 값이 있다면
@@ -222,7 +223,8 @@ public class ScheduleService {
 
         List<GanttChartInfoDto> list = new ArrayList<>();
         try {
-            if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
+            if (existUser.isEmpty() || filterItem.isEmpty() || filterItem == null || filterItem.equals("::::0")) { // 필터값이
+                                                                                                                   // 없다면
                 list = scheduledao.getGanttChartSubInfo(userId);
             } else { // 필터 값이 있다면
                 // 1. ::기준으로 배열에 담는다 (유형분류)
@@ -274,6 +276,7 @@ public class ScheduleService {
     public String getChkGanttFilterItem(String userId) {
         return scheduledao.selectGanttFilterItem(userId);
     }
+
     // 캘린더 필터 아이템 추가 및 조회
     public String addGanttFilterItem(String ganttItem, String userId) {
         String existUser = scheduledao.selectExistUser(userId);

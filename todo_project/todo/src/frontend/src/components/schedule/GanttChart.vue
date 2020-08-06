@@ -283,10 +283,10 @@ export default {
     resetFilter() {
       // 초기화 됬을 때 다시 조회
       this.RESET_GANTT_FILTER();
-      this.fetchGanttInfo();
       this.prjSelection = [];
       this.memSelection = [];
       this.publicSelection = 0;
+      this.fetchGanttInfo();
     },
     ////////////////////////////////////////////////////////////
   },

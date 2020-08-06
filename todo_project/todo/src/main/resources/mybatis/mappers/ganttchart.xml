@@ -195,7 +195,7 @@
         <![CDATA[
        update tb_filter 
        set gaunt_setting = ''
-       where user_id=#{userId};
+       where user_id=#{userId}
     ]]>
     </update>
 </mapper>
