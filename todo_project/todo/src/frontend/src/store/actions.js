@@ -343,6 +343,26 @@ const actions = {
         console.log(err);
       });
   },
+  FETCH_CHK_GANTT_FILTER_ITEM({ commit }) {
+    return sohyun.schedule
+      .getChkGanttFilterItem()
+      .then((result) => {
+        commit("SET_CHK_GANTT_FITER_ITEM", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  FETCH_GANTT_FILTER({ commit }) {
+    return sohyun.schedule
+      .getGanttFilter()
+      .then((result) => {
+        commit("SET_GANTT_FILTER", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   ADD_GANTT_FILTER_ITEM({ commit }, calData) {
     return sohyun.schedule
       .addGanttFilter(calData)
@@ -352,6 +372,9 @@ const actions = {
       .catch((err) => {
         console.log(err);
       });
+  },
+  RESET_GANTT_FILTER() {
+    return sohyun.schedule.resetGanttFilter();
   },
   //////////////////////// ARCHIVE ////////////////////////
   FETCH_ARCHIVE_SUPER({ commit }) {

@@ -214,6 +214,12 @@ const mutations = {
     const dataArr = data.split(",");
     state.ganttFilterItem = dataArr;
   },
+  SET_CHK_GANTT_FITER_ITEM(state, data) {
+    state.getChkGanttFilterItem = data;
+  },
+  SET_GANTT_FILTER(state, data) {
+    state.getGanttFilter = data;
+  },
   //////////////////////// ARCHIVE ////////////////////////
   SET_ARCHIVE_SUPER(state, data) {
     state.archiveSuper = data;

@@ -73,7 +73,10 @@
     </v-col>
     <v-col cols="10">
       <div style="width:98%; max-height:700px;">
-        <gantt-elastic :tasks="tasks" :options="options"></gantt-elastic>
+        <template v-if="tasks.length==0">일정이 없습니다.</template>
+        <template v-else>
+          <gantt-elastic :tasks="tasks" :options="options"></gantt-elastic>
+        </template>
       </div>
     </v-col>
   </v-row>
@@ -193,19 +196,19 @@ export default {
   computed: {
     // 사용할 mapstate 불러옴
     ...mapState({
-      getFilter: "getFilter",
+      getGanttFilter: "getGanttFilter",
       ganttSuper: "ganttSuper",
-      getChkFilterItem: "getChkFilterItem",
-      calFilterItem: "calFilterItem",
+      getChkGanttFilterItem: "getChkGanttFilterItem",
+      ganntFilterItem: "ganntFilterItem",
     }),
   },
   methods: {
     ...mapActions([
-      "FETCH_FILTER",
-      "FETCH_CHK_FILTER_ITEM",
-      "RESET_CAL_FILTER",
+      "FETCH_GANTT_FILTER",
+      "FETCH_CHK_GANTT_FILTER_ITEM",
+      "RESET_GANTT_FILTER",
       "FETCH_GANTT_SUPER",
-      "ADD_GANTT_FILTER_ITEM"
+      "ADD_GANTT_FILTER_ITEM",
     ]),
     async fetchGanttInfo() {
       await this.FETCH_GANTT_SUPER().then(() => {
@@ -215,9 +218,10 @@ export default {
     },
     ///////////////////// 필터 //////////////////////
     fetchFilter() {
+      //ok
       // 필터 조회
-      this.FETCH_FILTER().then(() => {
-        let list = this.getFilter;
+      this.FETCH_GANTT_FILTER().then(() => {
+        let list = this.getGanttFilter;
 
         /// 프로젝트 id 중복 제거
         var prjObj = {};
@@ -240,10 +244,11 @@ export default {
       });
     },
     fetchChkItem() {
-      // 저장된 필터 값
-      this.FETCH_CHK_FILTER_ITEM().then(() => {
-        console.log("확이이이인", this.getChkFilterItem);
-        var filterArr = this.getChkFilterItem.split("::");
+      // 저장된 필터 값 체크되도록 보이기
+      this.FETCH_CHK_GANTT_FILTER_ITEM().then(() => {
+        // ok
+        console.log("확이이이인", this.getChkGanttFilterItem);
+        var filterArr = this.getChkGanttFilterItem.split("::");
         var prjFilter = filterArr[0];
         var prjFilterArr = prjFilter.split(",");
 
@@ -265,6 +270,7 @@ export default {
       });
     },
     async chkFilter() {
+      // 체크할때마다 디비에 저장 ok
       const calData = {
         prjData: this.prjSelection,
         memData: this.memSelection,
@@ -276,7 +282,7 @@ export default {
     },
     resetFilter() {
       // 초기화 됬을 때 다시 조회
-      this.RESET_CAL_FILTER();
+      this.RESET_GANTT_FILTER();
       this.fetchGanttInfo();
       this.prjSelection = [];
       this.memSelection = [];

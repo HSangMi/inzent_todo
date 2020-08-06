@@ -42,6 +42,8 @@ const state = {
   ///////// GANTT CHART /////////
   ganttSuper: [],
   ganttFilterItem: [],
+  getChkGanttFilterItem: "",
+  getGanttFilter: [],
   ///////// ARCHIVE /////////
   archiveSuper: [],
   archiveSub: [],

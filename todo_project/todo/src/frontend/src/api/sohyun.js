@@ -92,12 +92,22 @@ export const schedule = {
     console.log(calData);
     return request("post", "/schedule/addcalitem", calData);
   },
+
   ///////////////////////////////////// ARCHIVE /////////////////////////////////////
   getGanttSuper() {
     return request("get", "/schedule/ganttSuper");
   },
+  getGanttFilter() {
+    return request("get", "/schedule/filter");
+  },
   addGanttFilter(calData) {
     return request("post", "/schedule/addganttitem", calData);
+  },
+  getChkGanttFilterItem() {
+    return request("get", "/schedule/chkGanttFilterItem");
+  },
+  resetGanttFilter() {
+    return request("post", "/schedule/resetGanttFilter");
   },
 };
 ///////////////////////////////////// ARCHIVE /////////////////////////////////////

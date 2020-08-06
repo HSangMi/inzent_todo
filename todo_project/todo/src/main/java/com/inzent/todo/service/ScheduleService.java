@@ -160,10 +160,36 @@ public class ScheduleService {
 
     ////////////////////////////////////// 간트차트 //////////////////////////////
 
+    // 간트차트 전체 상위업무 조회 (처음 조회)
     public List<GanttChartInfoDto> getGanttChartSuperInfo(String userId) {
-        List<GanttChartInfoDto> list = scheduledao.getGanttChartSuperInfo(userId);
-
+        String existUser = scheduledao.selectExistUser(userId);
+        String filterItem = scheduledao.selectGanttFilterItem(userId);
+        System.out.println(existUser + "----" + filterItem);
+        List<GanttChartInfoDto> list = new ArrayList<>();
         try {
+            if (existUser.isEmpty() || filterItem == null || filterItem.equals("::::0")) { // 필터값이 없다면
+                System.out.println("들어왔닝............");
+                list = scheduledao.getGanttChartSuperInfo(userId);
+            } else { // 필터 값이 있다면
+                // 1. ::기준으로 배열에 담는다 (유형분류)
+                String[] fItems = filterItem.split("::");
+
+                // 2. 또 쪼개서 각 아이템배열에 넣는다
+                String[] prjItem = fItems[0].split(","); // 프로젝트
+                String[] memItem = fItems[1].split(","); // 담당자
+                String uItem = fItems[2]; // 공개여부
+                Map<String, Object> map = new HashMap<String, Object>();
+                if (!prjItem[0].equals("")) {
+                    map.put("prjItem", prjItem);
+                }
+                if (!memItem[0].equals("")) {
+                    map.put("memItem", memItem);
+                }
+                map.put("uItem", uItem);
+                map.put("userId", userId);
+                list = scheduledao.getGanttChartFilterSuperInfo(map); // 필터적용 조회
+                System.out.println("필터 적용" + list);
+            } // end else
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = null;
             Date endDate = null;
@@ -189,10 +215,37 @@ public class ScheduleService {
         return list;
     }
 
+    // 간트차트 전체 하위업무 조회
     public List<GanttChartInfoDto> getGanttChartSubInfo(String userId) {
-        List<GanttChartInfoDto> list = scheduledao.getGanttChartSubInfo(userId);
+        String existUser = scheduledao.selectExistUser(userId);
+        String filterItem = scheduledao.selectGanttFilterItem(userId);
 
+        List<GanttChartInfoDto> list = new ArrayList<>();
         try {
+            if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
+                list = scheduledao.getGanttChartSubInfo(userId);
+            } else { // 필터 값이 있다면
+                // 1. ::기준으로 배열에 담는다 (유형분류)
+                String[] fItems = filterItem.split("::");
+
+                // 2. 또 쪼개서 각 아이템배열에 넣는다
+                String[] prjItem = fItems[0].split(","); // 프로젝트
+                String[] memItem = fItems[1].split(","); // 담당자
+                String uItem = fItems[2]; // 공개여부
+
+                Map<String, Object> map = new HashMap<String, Object>();
+                if (!prjItem[0].equals("")) {
+                    map.put("prjItem", prjItem);
+                }
+                if (!memItem[0].equals("")) {
+                    map.put("memItem", memItem);
+                }
+                map.put("uItem", uItem);
+                map.put("userId", userId);
+
+                list = scheduledao.getGanttChartFilterSubInfo(map); // 필터적용 조회
+            } // end else
+
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = null;
             Date endDate = null;
@@ -216,6 +269,36 @@ public class ScheduleService {
             System.out.println(e);
         }
         return list;
+    }
+
+    public String getChkGanttFilterItem(String userId) {
+        return scheduledao.selectGanttFilterItem(userId);
+    }
+    // 캘린더 필터 아이템 추가 및 조회
+    public String addGanttFilterItem(String ganttItem, String userId) {
+        String existUser = scheduledao.selectExistUser(userId);
+        int cnt = 0;
+        String ganttFilter = "";
+        if (existUser == null) { // 조회한 테이블에 user가 저장한 값이 없다면
+            cnt = scheduledao.addGanttFilterItem(ganttItem, userId); // 테이블에 값 추가
+        } else { // 테이블에 user가 저장한 값이 있다면
+            cnt = scheduledao.updateGanttFilterItem(ganttItem, userId); // 해당 유저의 테이블 값 수정
+        } // end else
+        if (cnt == 1) { // 값이 잘 들어갔다면
+            ganttFilter = scheduledao.selectGanttFilterItem(userId); // 조회해라
+        } else {
+            // System.out.println("필터값 넣기 실패!");
+        } // end else
+
+        return ganttFilter;
+    }
+
+    // 필터 초기화
+    public void resetGanttFilter(String userId) {
+        int cnt = scheduledao.resetGanttFilter(userId);
+        if (cnt == 1) {
+            // System.out.println("삭제 성공");
+        }
     }
 
 }

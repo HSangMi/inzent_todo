@@ -186,7 +186,7 @@ export default {
       calendarList: "calendarList",
       getClickDateList: "getClickDateList",
       getFilter: "getFilter",
-      getChkFilterItem: "getChkFilterItem",
+      getChkCalFilterItem: "getChkCalFilterItem",
       calFilterItem: "calFilterItem",
     }),
     ...mapState(["isDetailCalendar"]),
@@ -279,7 +279,7 @@ export default {
     fetchChkItem() {
       // 저장된 필터 값
       this.FETCH_CHK_FILTER_ITEM().then(() => {
-        var filterArr = this.getChkFilterItem.split("::");
+        var filterArr = this.getChkCalFilterItem.split("::");
         var prjFilter = filterArr[0];
         var prjFilterArr = prjFilter.split(",");
 

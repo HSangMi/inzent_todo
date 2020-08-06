@@ -113,10 +113,52 @@ public class ScheduleDao {
 
     ////////////////////////////////////// 간트차트 //////////////////////////////
 
+    // 필터 없는 조회 (상위)
     public List<GanttChartInfoDto> getGanttChartSuperInfo(String userId) {
         return sqlsession.selectList("ganttchart.getGanttSuperTasksInfo", userId);
     }
+
+    // (하위)
     public List<GanttChartInfoDto> getGanttChartSubInfo(String userId) {
         return sqlsession.selectList("ganttchart.getGanttSubTasksInfo", userId);
     }
+
+    // 필터 있는 조회 (상위)
+    public List<GanttChartInfoDto> getGanttChartFilterSuperInfo(Map<String, Object> map) {
+        // System.out.println("여기까지 들어왔나요" + map);
+        List<GanttChartInfoDto> ganttInfo = sqlsession.selectList("ganttchart.getGanttFilterSuperInfo", map);
+        return ganttInfo;
+    }
+
+    // (하위)
+    public List<GanttChartInfoDto> getGanttChartFilterSubInfo(Map<String, Object> map) {
+        List<GanttChartInfoDto> ganttInfo = sqlsession.selectList("ganttchart.getGanttFilterSubInfo", map);
+        return ganttInfo;
+    }
+
+    // 간트차트 필터 아이템 추가
+    public int addGanttFilterItem(String calItem, String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("calItem", calItem);
+        map.put("userId", userId);
+        return sqlsession.insert("ganttchart.insertFilterItem", map);
+    }
+
+    // 간트차트 테이블 업데이트
+    public int updateGanttFilterItem(String calItem, String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("calItem", calItem);
+        map.put("userId", userId);
+        return sqlsession.update("ganttchart.updateFilterItem", map);
+    }
+
+    // 간트차트 필터 조회
+    public String selectGanttFilterItem(String userId) {
+        return sqlsession.selectOne("ganttchart.selectFilterItem", userId);
+    }
+
+    public int resetGanttFilter(String userId) {
+        return sqlsession.update("ganttchart.deleteGanttSetting", userId);
+    }
+
 }

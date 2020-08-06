@@ -188,7 +188,7 @@ public class ScheduleController {
 
         List<GanttChartInfoDto> list = scheduleService.getGanttChartSuperInfo(userId);
         list.addAll(getGanttChartSubInfo(userId));
-
+        // System.out.println("결과-------" + list);
         return list;
     }
 
@@ -197,6 +197,16 @@ public class ScheduleController {
         return scheduleService.getGanttChartSubInfo(userId);
     }
 
+    // 필터 조회
+    @Auth
+    @GetMapping("/chkGanttFilterItem")
+    public String getChkGanttFilterItem(HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        String calItem = scheduleService.getChkGanttFilterItem(userId);
+        return calItem;
+    }
     // 필터값 추가후 꺼내오기
     @Auth
     @PostMapping("/addganttitem")
@@ -218,9 +228,19 @@ public class ScheduleController {
             }
             sbMem.append(mem);
         } // end for
-        String calItem = sbPrj.toString() + "::" + sbMem.toString() + "::" + cfidto.getUseData();
-        String calFilter = scheduleService.addCalFilterItem(calItem, userId);
-        // System.out.println("결과아아ㅏ아아아" + calFilter);
+        String ganttItem = sbPrj.toString() + "::" + sbMem.toString() + "::" + cfidto.getUseData();
+        String ganttFilter = scheduleService.addGanttFilterItem(ganttItem, userId);
+        System.out.println("결과아아ㅏ아아아" + ganttFilter);
+    }
+
+    @Auth
+    @PostMapping("/resetGanttFilter")
+    public void resetGanttFilter(HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        scheduleService.resetGanttFilter(userId);
+        // System.out.println("초기화 성공");
     }
 
 }
