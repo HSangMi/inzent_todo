@@ -1,6 +1,9 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
-    <v-card-title class="text-h5">오늘의 업무</v-card-title>
+    <v-card-title class="text-h5"
+      ><v-icon>mdi-calendar-today</v-icon
+      ><span class="todayTitle">오늘의 업무</span></v-card-title
+    >
     <v-divider></v-divider>
     <v-row>
       <v-col cols="12" md="9">
@@ -17,18 +20,43 @@
           @update:expanded="getSub"
           no-data-text="오늘의 상위업무가 존재하지 않습니다."
         >
+          <template v-slot:item.prjTitle="{ item }">
+            <router-link :to="`/projects/${item.prjId}`">
+              {{ item.prjTitle }}
+            </router-link>
+          </template>
           <!-- 공개여부 아이콘 설정 -->
           <template v-slot:item.usePublic="{ item }">
-            <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
+            <v-icon small v-show="item.usePublic"
+              >mdi-lock-open-variant-outline</v-icon
+            >
             <v-icon small v-show="!item.usePublic">mdi-lock-outline</v-icon>
           </template>
           <!-- 진행상태 표시 -->
           <template v-slot:item.state="{ item }">
-            <v-chip v-if="item.state == 'P'" small color="blue" text-color="white">진행</v-chip>
+            <v-chip
+              v-if="item.state == 'P'"
+              small
+              color="blue"
+              text-color="white"
+              >진행</v-chip
+            >
             <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
             <v-chip v-if="item.state == 'H'" small>보류</v-chip>
-            <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
-            <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
+            <v-chip
+              v-if="item.state == 'E'"
+              small
+              color="red"
+              text-color="white"
+              >긴급</v-chip
+            >
+            <v-chip
+              v-if="item.state == 'C'"
+              small
+              color="green"
+              text-color="white"
+              >완료</v-chip
+            >
           </template>
 
           <!-- 업무 대 관련한 업무 소 출력 -->
@@ -37,20 +65,30 @@
               <v-simple-table>
                 <tbody v-if="todaySub.length == 0">
                   <tr style="background-color:#F5F5F5">
-                    <td colspan="todaySub.length" class="text-center">오늘의 하위업무가 존재하지 않습니다.</td>
+                    <td colspan="todaySub.length" class="text-center">
+                      오늘의 하위업무가 존재하지 않습니다.
+                    </td>
                   </tr>
                 </tbody>
                 <tbody v-else>
-                  <tr v-for="sub in todaySub" :key="sub.cid" style="background-color:#F5F5F5">
+                  <tr
+                    v-for="sub in todaySub"
+                    :key="sub.cid"
+                    style="background-color:#F5F5F5"
+                  >
                     <td class="text-center" width="20%"></td>
                     <td class="text-center" width="20%">
                       <span class="sub">{{ sub.ctitle }}</span>
                     </td>
                     <td class="text-center sub" width="20%">
-                      <span class="sub">{{ sub.startDate }} ~ {{ sub.endDate }}</span>
+                      <span class="sub"
+                        >{{ sub.startDate }} ~ {{ sub.endDate }}</span
+                      >
                     </td>
                     <td v-if="sub.state == 'P'" class="text-center" width="20%">
-                      <v-chip x-small color="blue" text-color="white">진행</v-chip>
+                      <v-chip x-small color="blue" text-color="white"
+                        >진행</v-chip
+                      >
                     </td>
                     <td v-if="sub.state == 'W'" class="text-center" width="20%">
                       <v-chip x-small color="yellow">대기</v-chip>
@@ -59,10 +97,14 @@
                       <v-chip x-small>보류</v-chip>
                     </td>
                     <td v-if="sub.state == 'E'" class="text-center" width="20%">
-                      <v-chip x-small color="red" text-color="white">긴급</v-chip>
+                      <v-chip x-small color="red" text-color="white"
+                        >긴급</v-chip
+                      >
                     </td>
                     <td v-if="sub.state == 'C'" class="text-center" width="20%">
-                      <v-chip x-small color="green" text-color="white">완료</v-chip>
+                      <v-chip x-small color="green" text-color="white"
+                        >완료</v-chip
+                      >
                     </td>
                     <td v-show="sub.usePublic" class="text-center" width="10%">
                       <v-icon small>mdi-lock-open-variant-outline</v-icon>
@@ -232,5 +274,9 @@ export default {
 <style scoped>
 .sub {
   font-size: 12px;
+}
+.todayTitle {
+  /* background: #ffffff; */
+  font-family: "Jeju Gothic", sans-serif;
 }
 </style>

@@ -14,7 +14,7 @@
                   @change="chkFilter()"
                 >
                   <template v-slot:label>
-                    <span class="font-filter">{{item.prjTitle}}</span>
+                    <span class="font-filter">{{ item.prjTitle }}</span>
                   </template>
                 </v-checkbox>
               </v-list-item-content>
@@ -32,7 +32,7 @@
                   @change="chkFilter()"
                 >
                   <template v-slot:label>
-                    <span class="font-filter">{{item.userName}}</span>
+                    <span class="font-filter">{{ item.userName }}</span>
                   </template>
                 </v-checkbox>
               </v-list-item-content>
@@ -68,12 +68,20 @@
       </v-card>
       <!-- 필터 저장 초기화 -->
       <div class="text-xs-center ma-2">
-        <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">초기화</v-btn>
+        <v-btn
+          class="mx-0 my-2"
+          color="blue-grey"
+          block
+          small
+          dark
+          @click="resetFilter()"
+          >초기화</v-btn
+        >
       </div>
     </v-col>
     <v-col cols="10">
       <div style="width:98%; max-height:700px;">
-        <template v-if="tasks.length==0">일정이 없습니다.</template>
+        <template v-if="tasks.length == 0">일정이 없습니다.</template>
         <template v-else>
           <gantt-elastic :tasks="tasks" :options="options"></gantt-elastic>
         </template>
@@ -128,8 +136,15 @@ export default {
             html: true,
             events: {
               click({ data }) {
-                console.log("data", data);
-                router.push(`/projects/${data.projectId}`);
+                if (confirm("해당 업무로 이동하시겠습니까??") == true) {
+                  //확인
+                  router.push(`/projects/${data.projectId}`);
+                } else {
+                  //취소
+                  return;
+                }
+
+                // router.push(`/projects/${data.projectId}`);
               },
             },
           },
@@ -306,5 +321,8 @@ export default {
 }
 .font-filter {
   font-size: 13px;
+}
+.gantt-elastic:hover {
+  cursor: default;
 }
 </style>
