@@ -53,6 +53,7 @@
               <p></p><v-spacer></v-spacer>
                 <v-dialog v-model="dialog" width="1000">
                   <template v-slot:activator="{ on, attrs }">
+                    <template v-if="this.userInfo.id == 'admin'">
                     <!-- <v-btn 
                       color="primary"
                       dark
@@ -72,6 +73,7 @@
                       v-on="on"
                       style="margin-right:20px"
                     >추가</v-btn>
+                    </template>
                   </template>
                   
                   <v-card width="auto">
