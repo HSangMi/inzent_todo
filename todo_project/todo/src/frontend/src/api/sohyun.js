@@ -46,6 +46,9 @@ export const dashboard = {
   getStarredList() {
     return request("get", "/dashboard/starred");
   },
+  delStarred(starId) {
+    return request("get", `/dashboard/deleteStarred/${starId}`);
+  },
 };
 ///////////////////////////////////// SCHEDULE /////////////////////////////////////
 export const schedule = {

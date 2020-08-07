@@ -194,66 +194,40 @@
     </select>
     <select id="getStarredList" parameterType="String" resultType="dashsuperdto">
         <![CDATA[
-        select tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public
-        from tb_starred_task tst, tb_task_super ttsp , tb_project tp
-        where  (ttsp.project_id = tp.id ) and (tst.task_id = ttsp.task_id )
+        select tst.star_id starId, tp.id prjId, tp.title prjTitle, ttsp.task_id pId, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public
+        from tb_starred_task tst, tb_task_super ttsp , tb_project tp, tb_member tm
+        where  (ttsp.project_id = tp.id ) and (tst.task_id = ttsp.task_id ) and (tm.project_id = tp.id)
         and tst.task_id in (
-                select tts.task_id from tb_task_super tts where tts.project_id in (
-                select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}) and tp.use_public=true) and tts.use_public = true)
+                select task_id from tb_task_super where project_id in (
+                select id from tb_project where id in (select project_id from tb_member  where user_id=#{userId})))
+        and (
+        (tp.use_public = true and ttsp.use_public =true) 
+        or (tp.use_public = true and ttsp.use_public = false and ttsp.member_no in (select member_no from tb_member where user_id=#{userId}))
+        or (tp.use_public = false and tm.user_id =#{userId} and ttsp.use_public = true)
+        or (tp.use_public = false and tm.user_id = #{userId} and ttsp.use_public = false and ttsp.member_no in (select member_no from tb_member where user_id=#{userId}))
+        )
         union
-        select tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public
-            from tb_starred_task tst, tb_task_super ttsp , tb_project tp
-            where  (ttsp.project_id = tp.id ) and (tst.task_id = ttsp.task_id )
-            and tst.task_id in (
-                    select tts.task_id from tb_task_super tts where tts.project_id in (
-                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}) and tp.use_public=true) and tts.use_public = false and tts.member_no in (select member_no from tb_member tm where user_id=#{userId}))
-        union
-        select tp.title prjTitle, tts2.title pTitle, tts2.start_date, tts2.end_date, tts2.reg_date, tts2.state, tts2.use_public
-            from tb_starred_task tst, tb_task_sub tts2, tb_task_super ttsp , tb_project tp
-            where  (ttsp.project_id = tp.id ) and (tst.task_id = tts2.task_id ) and (ttsp.task_id = tts2.task_super_id )
-            and tst.task_id in (
-                    select tts.task_id from tb_task_sub tts
-                    where task_super_id in (
-                    select tts.task_id from tb_task_super tts where tts.project_id in (
-                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}) and tp.use_public=true) and tts.use_public = true) and tts.use_public = true)
-        union 
-        select tp.title prjTitle, tts2.title pTitle, tts2.start_date, tts2.end_date, tts2.reg_date, tts2.state, tts2.use_public
-            from tb_starred_task tst, tb_task_sub tts2, tb_task_super ttsp , tb_project tp
-            where  (ttsp.project_id = tp.id ) and (tst.task_id = tts2.task_id ) and (ttsp.task_id = tts2.task_super_id )
-            and tst.task_id in (
-                    select tts.task_id from tb_task_sub tts
-                    where task_super_id in (
-                    select tts.task_id from tb_task_super tts where tts.project_id in (
-                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}) and tp.use_public=true) and tts.use_public = true) 
-                    and tts.use_public = false) 
-        union
-        select tp.title prjTitle, tts2.title pTitle, tts2.start_date, tts2.end_date, tts2.reg_date, tts2.state, tts2.use_public
-            from tb_starred_task tst, tb_task_sub tts2, tb_task_super ttsp , tb_project tp
-            where  (ttsp.project_id = tp.id ) and (tst.task_id = tts2.task_id ) and (ttsp.task_id = tts2.task_super_id )
-            and tst.task_id in (
-                    select tts.task_id from tb_task_sub tts
-                    where task_super_id in (
-                    select tts.task_id from tb_task_super tts where tts.project_id in (
-                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}) and tp.use_public=true) and tts.use_public = false and tts.member_no in (select member_no from tb_member tm where user_id=#{userId})) 
-                    and tts.use_public = false and tts.member_no in (select member_no from tb_member tm where user_id=#{userId}))
-        union
-        select tp.title prjTitle, ttsp.title pTitle, ttsp.start_date, ttsp.end_date, ttsp.reg_date, ttsp.state, ttsp.use_public
-            from tb_starred_task tst, tb_task_super ttsp , tb_project tp
-            where  (ttsp.project_id = tp.id ) and (tst.task_id = ttsp.task_id )
-            and tst.task_id in (
-                    select tts.task_id from tb_task_super tts where tts.project_id in (
-                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member  where user_id=#{userId}) and tp.use_public=false and tp.manager in (select member_no from tb_member tm where user_id=#{userId})))
-        union 
-        select tp.title prjTitle, tts2.title pTitle, tts2.start_date, tts2.end_date, tts2.reg_date, tts2.state, tts2.use_public
-            from tb_starred_task tst, tb_task_sub tts2, tb_task_super ttsp , tb_project tp
-            where  (ttsp.project_id = tp.id ) and (tst.task_id = tts2.task_id ) and (ttsp.task_id = tts2.task_super_id )
-            and tst.task_id in (
-                    select tts.task_id from tb_task_sub tts
-                    where task_super_id in (
-                    select tts.task_id from tb_task_super tts where tts.project_id in (
-                    select tp.id from tb_project tp where tp.id in (select project_id from tb_member where user_id=#{userId}) 
-                    and tp.use_public = false 
-                    and tp.manager in (select member_no from tb_member tm where user_id=#{userId}))))  
+        select tst.star_id starId, tp.id prjId, tp.title prjTitle, tts.task_id pId, tts.title pTitle, tts.start_date, tts.end_date, tts.reg_date, tts.state, tts.use_public
+        from tb_starred_task tst, tb_task_sub tts, tb_task_super ttsp , tb_project tp, tb_member tm
+        where  (ttsp.project_id = tp.id ) and (tst.task_id = tts.task_id ) and (ttsp.task_id = tts.task_super_id ) and (tm.project_id = tp.id)
+        and tst.task_id in (
+                select task_id from tb_task_sub
+                where task_super_id in (
+                select task_id from tb_task_super where project_id in (
+                select id from tb_project where id in (select project_id from tb_member  where user_id=#{userId}))))
+        and (
+        (tp.use_public = true and ttsp.use_public = true and tts.use_public = true)
+        or (tp.use_public = true and ttsp.use_public = true and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        or (tp.use_public = true and ttsp.use_public = false and tts.use_public = false and ttsp.member_no in (select member_no from tb_member where user_id=#{userId}) and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        or (tp.use_public = false and tm.user_id = #{userId} and ttsp.use_public = true and tts.use_public = true)
+        or (tp.use_public = false and tm.user_id = #{userId} and ttsp.use_public = true and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        or (tp.use_public = false and tm.user_id = #{userId} and ttsp.use_public = false and tts.use_public = false and ttsp.member_no in (select member_no from tb_member where user_id=#{userId}) and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        );    
     ]]>
     </select>
+    <delete id="deleteStarred" parameterType="int">
+        <![CDATA[
+        delete from tb_starred_task where star_id = #{starId}
+    ]]>
+    </delete>
 </mapper>

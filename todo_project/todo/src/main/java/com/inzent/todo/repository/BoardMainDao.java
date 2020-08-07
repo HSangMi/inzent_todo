@@ -48,5 +48,8 @@ public class BoardMainDao {
         return sqlSession.selectList("dashboard.getStarredList", userId);
     }
 
+    public int deleteStarred(int starId) {
+        return sqlSession.delete("dashboard.deleteStarred", starId);
+    }
 
 }

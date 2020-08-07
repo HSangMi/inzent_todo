@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class DashBoardSuperDto {
 
+    private String prjId;
     private String pId;
     private String pTitle;
     private String prjTitle;
@@ -19,4 +20,5 @@ public class DashBoardSuperDto {
     private boolean usePublic;
     private String dueDate;
     private String progressRate;
+    private int starId;
 }

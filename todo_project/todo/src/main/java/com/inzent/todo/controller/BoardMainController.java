@@ -12,6 +12,7 @@ import com.inzent.todo.vo.UserVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +81,13 @@ public class BoardMainController {
         List<DashBoardSuperDto> list = boardMainService.getStarredList(userId);
 
         return list;
+    }
+
+    @GetMapping("deleteStarred/{starId}")
+    public void deleteStarred(@PathVariable("starId") Integer starId) {
+        int cnt = boardMainService.deleteStarred(starId);
+        if (cnt == 1)
+            System.out.println("성공!");
     }
 
 }
