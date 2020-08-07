@@ -54,6 +54,7 @@
                         name="password"
                         prepend-icon="mdi-lock"
                         type="password"
+                        class="pwd"
                       ></v-text-field>
                       <v-card-actions>
                         <v-checkbox
@@ -156,5 +157,8 @@ export default {
   background-color: rgb(106, 115, 136);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+}
+.v-text-field__slot {
+  font-family: sans-serif;
 }
 </style>
