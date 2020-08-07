@@ -6,7 +6,7 @@
     />
     <v-spacer />
 
-    <v-text-field
+    <!-- <v-text-field
       v-model="search"
       append-icon="mdi-magnify"
       label="Search"
@@ -14,7 +14,7 @@
       single-line
       hide-details
     ></v-text-field>
-    <div class="mx-1" />
+    <div class="mx-1" /> -->
 
     <!-- <v-btn
       class="ml-2"
@@ -31,17 +31,17 @@
       origin="top right"
       transition="scale-transition"
     >
-      <template v-slot:activator="{ attrs, on }">
+      <!-- <template v-slot:activator="{ attrs, on }">
         <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
-          <!-- <v-badge color="red" overlap bordered>
+          <v-badge color="red" overlap bordered>
             <template v-slot:badge>
               <span>5</span>
-            </template> -->
+            </template>
 
           <v-icon color="grey">mdi-bell</v-icon>
-          <!-- </v-badge> -->
+          </v-badge>
         </v-btn>
-      </template>
+      </template> -->
 
       <v-list :tile="false" nav>
         <div>
