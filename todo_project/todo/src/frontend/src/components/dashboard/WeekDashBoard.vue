@@ -1,8 +1,9 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
     <v-card-title class="text-h5"
-      ><v-icon>mdi-calendar-week</v-icon
-      ><span class="weekTitle"> 주간 업무</span></v-card-title
+      ><v-icon>mdi-calendar-week</v-icon>&nbsp;<span class="weekTitle">
+        주간 업무</span
+      ></v-card-title
     >
     <v-divider></v-divider>
     <v-row>
@@ -19,11 +20,10 @@
           height="250"
           @update:expanded="getSub"
           no-data-text="주간 상위 업무가 존재하지 않습니다."
+          @click:row="goProjectPage"
         >
           <template v-slot:item.prjTitle="{ item }">
-            <router-link :to="`/projects/${item.prjId}`">
-              {{ item.prjTitle }}
-            </router-link>
+            {{ item.prjTitle }}
           </template>
           <!-- 공개여부 아이콘 설정 -->
           <template v-slot:item.usePublic="{ item }">
@@ -248,6 +248,9 @@ export default {
         this.FETCH_WEEKSUB_DASHBOARD(superId);
       }
     },
+    goProjectPage(value) {
+      this.$router.push(`/projects/${value.prjId}`);
+    },
   },
 };
 </script>
@@ -259,5 +262,8 @@ export default {
 .weekTitle {
   /* background: #ffffff; */
   font-family: "Jeju Gothic", sans-serif;
+}
+* {
+  cursor: default;
 }
 </style>

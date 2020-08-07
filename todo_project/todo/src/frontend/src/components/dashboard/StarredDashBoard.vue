@@ -2,7 +2,7 @@
   <v-card width="95%" class="mx-auto" outlined>
     <v-card-title class="text-h5">
       <v-icon color="yellow">mdi-star</v-icon>
-      <span class="starTitle"> 관심 업무</span>
+      &nbsp;<span class="starTitle">관심 업무</span>
     </v-card-title>
     <v-divider></v-divider>
     <v-row>
@@ -215,6 +215,9 @@ export default {
         this.openDialog = false;
       });
     },
+    goProjectPage(value) {
+      this.$router.push(`/projects/${value.prjId}`);
+    },
   },
 };
 </script>
@@ -233,5 +236,8 @@ export default {
 .starTitle {
   /* background: #ffffff; */
   font-family: "Jeju Gothic", sans-serif;
+}
+* {
+  cursor: default;
 }
 </style>

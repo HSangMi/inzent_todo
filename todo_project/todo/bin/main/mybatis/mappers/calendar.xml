@@ -154,7 +154,7 @@
         )
         </if>
     </select>
-    <select id="getSubList" parameterType="String" resultType="cddetialdto">
+    <select id="getSubList" parameterType="map" resultType="cddetialdto">
         <![CDATA[
         SELECT 
            c.prjId, c.prjTitle, c.pId, c.pTitle, c.pStartDate, c.pEndDate, c.pState, c.pUsePublic, c.cId, c.cTitle, c.cStartDate, c.cEndDate, c.reg_date, c.cUsePublic, d.manager_name, d.img_code
@@ -173,6 +173,7 @@
 			from tb_task_sub tts, tb_task_super ttsp
 			where (tts.task_super_id = ttsp.task_id)
 			and ttsp.task_id = #{superId}
+            and ((tts.use_public = true) or (tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId})))
 			)
 			AS b
 			ON a.pId = b.pId

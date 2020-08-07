@@ -73,8 +73,11 @@ public class ScheduleDao {
         return sqlsession.selectList("calendar.getClickDateFilterList", map);
     }
 
-    public List<CalDateDetailDto> getSubList(String superId) {
-        return sqlsession.selectList("calendar.getSubList", superId);
+    public List<CalDateDetailDto> getSubList(String superId, String userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("superId", superId);
+        map.put("userId", userId);
+        return sqlsession.selectList("calendar.getSubList", map);
     }
 
     public List<FilterDto> getFilter(String userId) {
