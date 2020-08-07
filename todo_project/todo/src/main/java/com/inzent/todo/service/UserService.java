@@ -5,7 +5,6 @@ import java.util.List;
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
 import com.inzent.todo.dto.TokenDto;
-import com.inzent.todo.dto.UpdateUserDto;
 import com.inzent.todo.dto.UserDto;
 import com.inzent.todo.repository.UserDao;
 
@@ -63,7 +62,24 @@ public class UserService {
         return userDao.selectUserList(deptList);
     }
 
-    public UserDto updateUser(UpdateUserDto data) {
-        return userDao.updateUser(data);
+    public UserDto updateUser(UserDto user, String id) {
+        UserDto dto = new UserDto();
+        dto.setId(id);
+        dto.setImgCode(user.getImgCode());
+        dto.setName(user.getName());
+        if (user.getPassword() != null)
+            dto.setPassword(user.getPassword());
+        dto.setBirth(user.getBirth());
+        if (user.getGender().equals("남성"))
+            dto.setGender("m");
+        else if (user.getGender().equals("여성"))
+            dto.setGender("f");
+        else
+            dto.setGender("");
+        dto.setPhone(user.getPhone());
+        dto.setEmail(user.getEmail());
+        dto.setRank(user.getRank());
+
+        return userDao.updateUser(dto);
     }
 }

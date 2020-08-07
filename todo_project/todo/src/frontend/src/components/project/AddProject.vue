@@ -146,7 +146,7 @@
                 >
                   <v-icon>mdi-account-plus</v-icon>
                 </v-btn>
-                <user-search
+                <user-search-modal
                   :openModal="isOpenSearch"
                   @close="isOpenSearch = false"
                   @addMember="addMember"
@@ -183,12 +183,12 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import UserSearch from "../user/UserSearch.vue";
+import UserSearchModal from "../user/UserSearchModal.vue";
 
 export default {
   props: ["openModal"],
   components: {
-    UserSearch
+    UserSearchModal
   },
   data: () => ({
     isOpenSearch: false,

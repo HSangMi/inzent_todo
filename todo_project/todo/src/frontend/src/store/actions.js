@@ -61,20 +61,20 @@ const actions = {
       commit("SET_USERLIST", data);
     });
   },
-  UPDATE_USER({ commit }, { id, key, value }) {
-    return api.user.update_user(id, key, value).then((data) => {
-      console.log("action: UPDATE_DATA 완료");
-      console.log(data);
-      if (data.gender == "f") {
-        data.gender = "여성";
-      } else if (data.gender == "m") {
-        data.gender = "남성";
-      } else {
-        data.gender = "비공개";
-      }
-      commit("SET_USER_INFO", data);
-    });
-  },
+  UPDATE_USER({ commit }, user) {
+		return api.user.update_user(user).then((data) => {
+			console.log('action: UPDATE_DATA 완료');
+			console.log(data);
+			if (data.gender == 'f') {
+				data.gender = '여성';
+			} else if (data.gender == 'm') {
+				data.gender = '남성';
+			} else {
+				data.gender = '비공개';
+			}
+			commit('SET_USER_INFO', data);
+		});
+	},
   ////////////////////////////// PROJECT////////////////////////////////
   ADD_PROJECT(_, newProject) {
     // console.log("actions.ADD_PROJECT : ");
@@ -440,5 +440,21 @@ const actions = {
   RESTORE_ARCHIVE_SUPER(_, superId) {
     return sohyun.archive.restoreArchvieSuper(superId);
   },
+  //////////////////////// ADMIN ////////////////////////
+	INSERT_USER(_, user) {
+		return api.admin.insert_user(user).then(() => {
+			console.log('action: INSERT_USER 완료');
+		});
+	},
+	MODIFY_USER(_, user) {
+		return api.admin.modify_user(user).then(() => {
+			console.log('action: MODIFY_USER 완료');
+		});
+	},
+	DELETE_USER(_, userId) {
+		return api.admin.delete_user(userId).then(() => {
+			console.log('action: DELETE_USER 완료');
+		});
+	}
 };
 export default actions;

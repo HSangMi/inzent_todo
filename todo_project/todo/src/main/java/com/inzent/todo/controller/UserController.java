@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
 import com.inzent.todo.dto.TokenDto;
-import com.inzent.todo.dto.UpdateUserDto;
 import com.inzent.todo.dto.UserDto;
-import com.inzent.todo.repository.UserDao;
+// import com.inzent.todo.repository.UserDao;
 import com.inzent.todo.security.Auth;
 import com.inzent.todo.service.JwtService;
 import com.inzent.todo.service.UserService;
@@ -29,8 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin("*")
 public class UserController {
-    @Autowired
-    private UserDao userDao;
+
+    // @Autowired
+    // private UserDao userDao;
 
     @Autowired
     private JwtService jwtService;
@@ -38,15 +38,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/api/hello")
-    public String hello() {
-        // System.out.println("HELLO");
-        // System.out.println(userDao);
-        userDao.selectDao();
-        // System.out.println("db 성공!");
+    // @GetMapping("/api/hello")
+    // public String hello() {
+    // // System.out.println("HELLO");
+    // // System.out.println(userDao);
+    // // userDao.selectDao();
+    // // System.out.println("db 성공!");
 
-        return "hello";
-    }
+    // return "hello";
+    // }
 
     // 로그인
     @PostMapping("/login")
@@ -87,9 +87,6 @@ public class UserController {
     @PostMapping("/loginByToken")
     public UserDto login(HttpServletRequest req, @RequestBody String accessToken) {
         // System.out.println("토큰이 이미 발급된 유저로그인");
-        UserVo temp = (UserVo) req.getAttribute("user");
-        // System.out.println("user---" + temp);
-
         UserDto user = userService.getById(((UserVo) req.getAttribute("user")).getId());
         if (user != null) {
             user.setPassword(null);
@@ -112,17 +109,11 @@ public class UserController {
         return userService.getUserList(deptList);
     }
 
+    @Auth
     @PostMapping("/updateUser")
-    public UserDto updateUser(@RequestBody UpdateUserDto data) {
-        if (data.getKey().equals("gender")) {
-            if (data.getValue().equals("남성"))
-                data.setValue("m");
-            else if (data.getValue().equals("여성"))
-                data.setValue("f");
-            else
-                data.setValue("");
-        }
-        return userService.updateUser(data);
+    public UserDto updateUser(HttpServletRequest req, @RequestBody UserDto user) {
+        UserVo u = (UserVo) req.getAttribute("user");
+        return userService.updateUser(user, u.getId());
     }
 
 }

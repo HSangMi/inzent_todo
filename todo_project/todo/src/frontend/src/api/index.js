@@ -62,8 +62,8 @@ export const user = {
   fatch_user(deptList) {
     return request("post", "/userList", deptList);
   },
-  update_user(id, key, value) {
-    return request("post", "/updateUser", { id: id, key: key, value: value });
+  update_user(user) {
+    return request('post', '/updateUser', user);
   },
 };
 /////////////////////////////////-- PROJECT --///////////////////////////////////////////
@@ -139,4 +139,26 @@ export const project = {
   deleteFile(fileNo) {
     return request("get", "/projects/deleteFile?fileNo=" + fileNo);
   },
+};
+/////////////////////////////////-- SEARCH --///////////////////////////////////////////
+export const search = {
+	fetchAll(srchData) {
+		console.log('srchData', srchData);
+		return axios.get(DOMAIN + '/search/fetchAll', { params: srchData });
+	}
+	// fatchTaskAll(search) {
+	// 	return request('get', `/search/taskAll/${search}`);
+	// }
+};
+/////////////////////////////////// ADMIN ////////////////////////////////////////////
+export const admin = {
+	insert_user(user) {
+		return request('post', '/admin/insertUser', user);
+	},
+	modify_user(user) {
+		return request('post', '/admin/modifyUser', user);
+	},
+	delete_user(userId) {
+		return request('post', '/admin/deleteUser', userId);
+	}
 };

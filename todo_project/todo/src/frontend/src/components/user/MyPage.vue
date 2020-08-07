@@ -1,18 +1,12 @@
 <template>
-  <v-dialog v-model="mypageModal" width="600" persistent >
+  <v-dialog v-model="mypageModal" width="600" persistent>
     <v-card>
-      <!-- <v-form
-        ref="form"
-        v-model="valid"
-        @submit.prevent="onSubmit"
-        lazy-validation
-      > -->
       <v-card-title class="headline grey lighten-2"  primary-title>
         <span class="headline">프로필 수정</span>
       </v-card-title>
-      <v-container style="padding: 50px 50px 10px 50px;">
-        <v-row>
-          <v-col class="py-0">
+      <v-container style="padding:10px 50px 10px 50px;">
+        <v-row style="margin-top:25px">
+          <v-col class="py-0" cols=6>
             <v-hover>
             <template v-slot:default="{ hover }">
               <div class="img-profile">
@@ -41,33 +35,32 @@
             </template>
             </v-hover>
           </v-col>
-        </v-row>
-        <v-row>
           <v-col
             class="py-0"
-            cols="12"
-            sm="12"
+            cols="6"
           >
-            <v-text-field
-              v-model="userInfo.name"
-              label="이름"
-              clearable
-              @focusout="updateUser('name', userInfo.name)"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col
-            class="py-0"
-            cols="12"
-            sm="12"
-          >
-            <v-text-field
-              v-model="password"
-              label="비밀번호"
-              readonly
-              @click.prevent="dialog = true"
-            ></v-text-field>
+            <v-col class="pa-0">
+              <v-text-field
+                v-model="userInfo.id"
+                label="ID"
+                disabled
+              />
+            </v-col>
+            <v-col class="pa-0">
+              <v-text-field
+                v-model="userInfo.name"
+                label="이름"
+                clearable
+              />
+            </v-col>
+            <v-col class="pa-0">
+              <v-text-field
+                v-model="password"
+                label="비밀번호"
+                readonly
+                @click.prevent="dialog = true"
+              ></v-text-field>
+            </v-col>
           </v-col>
         </v-row>
         <!-- 비밀번호 변경 dialog -->
@@ -102,8 +95,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancel">CANCEL</v-btn>
-              <v-btn color="green darken-1" text @click="updateUser('password', rePassword)">UPDATE</v-btn>
+              <v-btn color="green darken-1" text @click="cancel">취소</v-btn>
+              <v-btn color="green darken-1" text @click="updatePwd">확인</v-btn>
             </v-card-actions>
           </v-card>
           <v-card v-else>
@@ -130,8 +123,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="dialog = false">CANCEL</v-btn>
-              <v-btn color="green darken-1" text @click.prevent="pwdCheck">NEXT</v-btn>
+              <v-btn color="green darken-1" text @click="cancel">취소</v-btn>
+              <v-btn color="green darken-1" text @click="pwdCheck">다음</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -192,7 +185,6 @@
               :items="genders"
               label="성별"
               return-object
-              @change="updateUser('gender', userInfo.gender)"
             />
           </v-col>
         </v-row>
@@ -206,7 +198,6 @@
               v-model="userInfo.phone"
               label="휴대전화"
               clearable
-              @focusout="updateUser('phone', userInfo.phone)"
             />
           </v-col>
         </v-row>
@@ -220,7 +211,6 @@
               v-model="userInfo.email"
               label="이메일"
               clearable
-              @focusout="updateUser('email', userInfo.email)"
             />
           </v-col>
         </v-row>
@@ -245,36 +235,23 @@
               v-model="userInfo.rank"
               :items="ranks"
               label="직급"
-              @change="updateUser('rank', userInfo.rank)"
+              return-object
             />
           </v-col>
         </v-row>
-        <!-- <br><br>
-        <v-row>   
-          <v-input
-            hint
-            persistent-hint
-            label="구글 계정 연동"
-          />
-          <v-switch
-            v-model="switch1"
-            inset
-          />
-        </v-row> -->
       </v-container>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="onClose">Cancle</v-btn>
-        <!-- <v-btn color="blue darken-1" text type="submit">Create</v-btn> -->
-        <v-btn color="blue darken-1" text @click="onClose">Update</v-btn>
+        <v-btn color="blue darken-1" text @click="onClose">취소</v-btn>
+        <v-btn color="blue darken-1" text @click="updateUser(newPassword)">변경</v-btn>
       </v-card-actions>
-      <!-- </v-form> -->
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+
 export default {
   props: ["mypageModal"],
   data:() => ({
@@ -292,12 +269,12 @@ export default {
     overlay: false,
     imgCode: "",
     password: "********",
+    nPwd: "",
     newPassword: "",
     rePassword: "",
     prePassword: "",
     genders: ["여성", "남성","비공개"],
     ranks: ["부장", "과장", "차장", "대리", "사원"],
-    switch1: true,
     next: false,
     error: "",
   }),
@@ -310,7 +287,38 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["UPDATE_USER"]),
+    ...mapActions(["UPDATE_USER", "UPDATE_PWD"]),
+
+    updateUser() {
+      console.log("update user") 
+      console.log("nPwd", this.nPwd)
+      if(!this.nPwd) {
+        let data = {
+          imgCode: this.userInfo.imgCode,
+          name: this.userInfo.name,
+          birth: this.userInfo.birth,
+          gender: this.userInfo.gender,
+          phone: this.userInfo.phone,
+          email: this.userInfo.email,
+          rank: this.userInfo.rank
+        } 
+        this.UPDATE_USER(data)
+      } else {
+        let data = {
+          imgCode: this.userInfo.imgCode,
+          password: this.nPwd,
+          name: this.userInfo.name,
+          birth: this.userInfo.birth,
+          gender: this.userInfo.gender,
+          phone: this.userInfo.phone,
+          email: this.userInfo.email,
+          rank: this.userInfo.rank
+        } 
+        this.UPDATE_USER(data)
+      }
+
+      this.onClose()
+    },
     
     pwdCheck() {
       const id = this.userInfo.id;
@@ -325,28 +333,17 @@ export default {
       })
     },
 
-    cancel() {
-      this.dialog = false;
-      this.next = false;
-    },
-    
-    updateUser(key, value) {
-      const id = this.userInfo.id
-      console.log("id: " + id)
-      console.log("key: " + key)
-      console.log("value: " + value)
-      this.UPDATE_USER({id, key, value})      
-      if(key == "password") {
-        this.cancel()
-        this.prePassword = ""
-        this.newPassword = ""
-        this.rePassword = ""
-      }
+    updatePwd() {
+      console.log("new", this.newPassword)
+      this.nPwd = this.newPassword
+
+      confirm("비밀번호가 변경되었습니다.")
+      this.cancel()
     },
 
     dateEvent() {
       this.$refs.menu.save(this.userInfo.birth)
-      this.updateUser('birth', this.userInfo.birth)
+      // this.updateUser('birth', this.userInfo.birth)
     },
     
     createBase64Image(fileObject) {
@@ -354,17 +351,19 @@ export default {
       reader.onload = (e) => {        
         this.image = e.target.result;
         console.log("image", this.image)
-        this.updateUser('imgCode', this.image)
+        this.userInfo.imgCode = this.image
+        // this.updateUser('imgCode', this.image)
       };
       reader.readAsDataURL(fileObject);
     },
 
-    // onSubmit() {
-    //   console.log("update User");
-    //   // if(this.vaildate()) {
-        
-    //   // }
-    // },
+    cancel() {
+      this.next = false;
+      this.dialog = false;
+      this.prePassword = ''
+      this.newPassword = ''
+      this.rePassword = ''
+    },
 
     onClose() {
       this.$emit("close");
@@ -376,7 +375,7 @@ export default {
 <style>
 .img-profile{
   width: 150px;
-  margin-right: auto !important;
-  margin-left: auto !important;
+  margin-left: 30px;
+  margin-top: 10px;
 }
 </style>

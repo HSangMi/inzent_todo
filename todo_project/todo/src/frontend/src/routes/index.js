@@ -55,7 +55,7 @@ const router = new Router({
     },
     {
       path: "/search",
-      component: () => import("@/views/BoardMain.vue"),
+      component: () => import("@/views/Search.vue"),
       beforeEnter: requireAuth,
     },
     {
@@ -68,11 +68,11 @@ const router = new Router({
       component: () => import("@/views/UserManagement.vue"),
       beforeEnter: requireAuth,
     },
-    {
-      path: "/project_management",
-      component: () => import("@/views/ProjectManagement.vue"),
-      beforeEnter: requireAuth,
-    },
+    // {
+    //   path: "/project_management",
+    //   component: () => import("@/views/ProjectManagement.vue"),
+    //   beforeEnter: requireAuth,
+    // },
   ],
 });
 

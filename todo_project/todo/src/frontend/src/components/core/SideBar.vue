@@ -84,16 +84,15 @@
       </v-list-item-group>
     </v-list>
     <!-- 로그아웃 모달 -->
-    <v-dialog v-model="logoutModal" max-width="290">
+    <v-dialog v-model="logoutModal" max-width="230">
       <v-card>
         <v-card-title></v-card-title>
-        <v-card-text>Do you want to logout?</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
+        <v-card-text>로그아웃 하시겠습니까?</v-card-text>
+        <v-card-actions class="justify-center">
           <v-btn color="green darken-1" text @click="logoutModal = false"
-            >NO</v-btn
+            >아니요</v-btn
           >
-          <v-btn color="green darken-1" text @click.prevent="logout">YES</v-btn>
+          <v-btn color="green darken-1" text @click.prevent="logout">예</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -144,14 +143,14 @@ export default {
     menus2: [
       {
         icon: " mdi-account-multiple",
-        text: "USER MANAGEMENT",
+        text: "사원관리",
         to: "/user_management",
       },
-      {
-        icon: "mdi-newspaper-variant-multiple-outline",
-        text: "PROJECT MANAGEMENT",
-        to: "/project_management",
-      },
+      // {
+      //   icon: "mdi-newspaper-variant-multiple-outline",
+      //   text: "PROJECT MANAGEMENT",
+      //   to: "/project_management",
+      // },
     ],
     mypageModal: false,
     logoutModal: false,

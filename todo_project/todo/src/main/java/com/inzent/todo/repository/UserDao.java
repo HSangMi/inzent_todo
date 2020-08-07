@@ -6,7 +6,6 @@ import java.util.List;
 import com.inzent.todo.dto.DeptDto;
 import com.inzent.todo.dto.PwdDto;
 import com.inzent.todo.dto.TokenDto;
-import com.inzent.todo.dto.UpdateUserDto;
 import com.inzent.todo.dto.UserDto;
 
 import org.apache.ibatis.session.SqlSession;
@@ -19,14 +18,14 @@ public class UserDao {
     @Autowired
     private SqlSession sqlSession;
 
-    public void selectDao() {
-        // System.out.println("Select DAO");
+    // public void selectDao() {
+    // // System.out.println("Select DAO");
 
-        List<String> list = sqlSession.selectList("user.selectTest");
-        for (String s : list) {
-            // System.out.println(s);
-        }
-    }
+    // List<String> list = sqlSession.selectList("user.selectTest");
+    // for (String s : list) {
+    // // System.out.println(s);
+    // }
+    // }
 
     // 로그인, 토큰 발행을 위한 user 정보 추출
     // public UserVo selectUserIdPwd(UserVo user) {
@@ -62,8 +61,8 @@ public class UserDao {
         return sqlSession.selectList("user.selectUserList", map);
     }
 
-    public UserDto updateUser(UpdateUserDto data) {
-        sqlSession.update("user.updateUserData", data);
-        return sqlSession.selectOne("user.selectById", data.getId());
+    public UserDto updateUser(UserDto user) {
+        sqlSession.update("user.updateUserData", user);
+        return sqlSession.selectOne("user.selectById", user.getId());
     }
 }

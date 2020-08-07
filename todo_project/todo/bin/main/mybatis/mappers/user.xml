@@ -72,36 +72,22 @@
       </choose>        
    </select>
 
-   <update id="updateUserData" parameterType="updateuserdto">
+   <update id="updateUserData" parameterType="userdto">
       update tb_user 
-      <choose>
-         <when test="key.equals('imgCode')">
-            set img_code = #{value}
-         </when>
-         <when test="key.equals('name')">
-            set name = #{value}
-         </when>
-         <when test="key.equals('password')">
-            set password = #{value}
-         </when>
-         <when test="key.equals('birth')">
-            set birth = #{value}
-         </when>
-         <when test="key.equals('gender')">
-            set gender = #{value}
-         </when>
-         <when test="key.equals('phone')">
-            set phone = #{value}
-         </when>
-         <when test="key.equals('email')">
-            set email = #{value}
-         </when>
-         <when test="key.equals('rank')">
-            set rank = #{value}
-         </when>
-      </choose>
-      where id = #{id}
-   </update> 
+         set img_code = #{imgCode},
+             name = #{name},
+             birth = #{birth},
+             gender = #{gender},
+             phone = #{phone},
+             email = #{email},
+             rank = #{rank}
+             <choose>
+               <when test="password != null">
+                  , password = #{password}
+               </when>
+             </choose>
+         where id = #{id}
+   </update>
 
    
 </mapper>

@@ -5,25 +5,21 @@
         <v-row align="center" justify="center">
           <v-col class="pl-0" cols="6" sm="7" md="7">
             <v-card>
-              <!-- <v-toolbar color="rgb(106, 115, 136)" dark flat>
-                <v-toolbar-title>Login form</v-toolbar-title>
-                <v-spacer></v-spacer>
-              </v-toolbar> -->
               <v-card-text class="pa-0">
                 <v-row class="pa-0 ma-0" style="height:400px">
-                  <v-col class="login-side" cols="4">
-                    <div style="display:inline-block">
-                      <!-- <v-avatar>
-                        <img src="../assets/inzent-logo.png" alt="John" />
-                      </v-avatar> -->
-                      <!-- <h2
-                        style="display:inline-block"
-                        class="white--text my-auto"
-                      >
-                        INZENT <br />
-                        TODO
-                      </h2> -->
-                    </div>
+                  <v-col class="login-side" cols="4" justify="center">
+                      <!-- <v-img :aspect-ratio="16/9" src="../assets/loginpage.png"></v-img> -->
+                      <v-img width="280" src="../assets/loginpage.png"></v-img>
+                    <!-- <div style="display:inline-block">
+                      <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+                        <v-row` align="end" class="lightbox white--text pa-2 fill-height">
+                          <v-col>
+                            <div class="subheading">Jonathan Lee</div>
+                            <div class="body-1">heyfromjonathan@gmail.com</div>
+                          </v-col>
+                        </v-row>
+                      </v-img>`
+                    </div> -->
                   </v-col>
                   <v-col cols="7" class="ma-auto">
                     <h2>LOGIN</h2>
@@ -64,17 +60,20 @@
                           v-model="idSave"
                           color="rgb(134, 138, 140)"
                           label="아이디 저장"
+                          style="margin-right:15px"
                         ></v-checkbox>
-                        <!-- <v-checkbox v-model="checkbox" :label="`Checkbox 1: ${checkbox.toString()}`"></v-checkbox> -->
                         <v-spacer></v-spacer>
-                        <!-- <v-btn color="rgb(134, 138, 140)" dark type="">비밀번호 찾기</v-btn> -->
-                        <v-btn
+                        <!-- <v-btn 
                           color="rgb(106, 115, 136)"
                           class="font-weight-bold"
                           text
+                        >비밀번호 찾기</v-btn> -->
+                        <v-btn
+                          color="primary"
+                          class="font-weight-bold"
+                          text
                           type="submit"
-                          >LOGIN</v-btn
-                        >
+                        >로그인</v-btn>
                       </v-card-actions>
                     </v-form>
                   </v-col>

@@ -4,6 +4,8 @@ const state = {
   activeMenu: "",
   headerTitle: "",
   userInfo: {},
+  userList: [],
+  deptList: [],
   ///// PROJECT////////////
   projects: [],
   project: {},
@@ -14,9 +16,6 @@ const state = {
   lastSubSortNo: 0,
   labelList: [],
   memberList: [],
-  /////////
-  userList: [],
-  deptList: [],
   ///////// DASHBOARD /////////
   todayList: [],
   weekList: [],

@@ -31,7 +31,6 @@
 		<typeAlias alias="deptdto" type="com.inzent.todo.dto.DeptDto"/>
 		<typeAlias alias="tokendto" type="com.inzent.todo.dto.TokenDto"/>
 		<typeAlias alias="userdto" type="com.inzent.todo.dto.UserDto"/>
-		<typeAlias alias="updateuserdto" type="com.inzent.todo.dto.UpdateUserDto"/>
 		<typeAlias alias="dashsuperdto" type="com.inzent.todo.dto.DashBoardSuperDto"/>
 		<typeAlias alias="dashsubdto" type="com.inzent.todo.dto.DashBoardSubDto"/>
 		<typeAlias alias="scheduledto" type="com.inzent.todo.dto.ScheduleDto"/>
@@ -63,5 +62,7 @@
 		<mapper resource="mybatis/mappers/comment.xml"/>
 		<mapper resource="mybatis/mappers/archive.xml"/>
 		<mapper resource="mybatis/mappers/ganttchart.xml"/>
+		<mapper resource="mybatis/mappers/search.xml"/>
+		<mapper resource="mybatis/mappers/admin.xml"/>
 	</mappers>
 </configuration>
