@@ -30,7 +30,29 @@
       offset-y
       origin="top right"
       transition="scale-transition"
+      :value="userInfo"
     >
+      <!-- <v-img
+            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
+            max-height="20"
+          /> -->
+      <!-- <v-img :src="this.user.imgCode" max-height="20" /> -->
+      <template v-slot:activator="{ attrs, on }">
+        <v-btn
+          depressed
+          outline
+          class="mt-2"
+          min-width="0"
+          color="white"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-avatar size="30px">
+            <img :src="userInfo.imgCode" />
+          </v-avatar>
+          <v-card-text>{{ userInfo.id }}</v-card-text>
+        </v-btn>
+      </template>
       <!-- <template v-slot:activator="{ attrs, on }">
         <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
           <v-badge color="red" overlap bordered>
@@ -52,16 +74,6 @@
       </v-list>
     </v-menu>
     <!-- <v-menu bottom left offset-y origin="top right" transition="scale-transition">
-      <template v-slot:activator="{ attrs, on }">
-        <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
-          <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="20"
-          />
-
-          <v-card-text>user</v-card-text>
-        </v-btn>
-      </template>
 
       <v-list :tile="false" nav>
         <div>
@@ -96,7 +108,7 @@ export default {
                   attrs: this.$attrs,
                   class: {
                     "black--text": !hover,
-                    "white--text secondary elevation-12": hover,
+                    "white--text secondary": hover,
                   },
                   props: {
                     activeClass: "",
@@ -122,21 +134,16 @@ export default {
   },
 
   data: () => ({
-    notifications: [
-      "Mike John Responded to your email",
-      "You have 5 new tasks",
-      "You're now friends with Andrew",
-      "Another Notification",
-      "Another one",
-    ],
+    notifications: ["내 정보", "로그아웃"],
     userHeaderMenu: ["user profile", "logout"],
     search: "",
   }),
-
+  created() {},
   computed: {
     ...mapState({
       activeMenu: "activeMenu",
       headerTitle: "headerTitle",
+      userInfo: "userInfo",
     }),
   },
 

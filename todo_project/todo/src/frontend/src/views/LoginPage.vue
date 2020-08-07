@@ -5,11 +5,16 @@
         <v-row align="center" justify="center">
           <v-col class="pl-0" cols="6" sm="7" md="7">
             <v-card>
-              <v-card-text class="pa-0">
+              <v-card-text class="pa-0 ma-0">
                 <v-row class="pa-0 ma-0" style="height:400px">
-                  <v-col class="login-side" cols="4" justify="center">
-                      <!-- <v-img :aspect-ratio="16/9" src="../assets/loginpage.png"></v-img> -->
-                      <v-img width="280" src="../assets/loginpage.png"></v-img>
+                  <v-col
+                    class="login-side pa-0 ma-0 d-flex align-center"
+                    cols="4"
+                    justify="center"
+                  >
+                    <!-- <v-img :aspect-ratio="16/9" src="../assets/loginpage.png"></v-img> -->
+                    <v-img width="200" src="../assets/Inzent2.png"></v-img>
+                    <!-- <v-img width="300" src="../assets/loginpage.png"></v-img> -->
                     <!-- <div style="display:inline-block">
                       <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
                         <v-row` align="end" class="lightbox white--text pa-2 fill-height">
@@ -74,7 +79,8 @@
                           class="font-weight-bold"
                           text
                           type="submit"
-                        >로그인</v-btn>
+                          >로그인</v-btn
+                        >
                       </v-card-actions>
                     </v-form>
                   </v-col>

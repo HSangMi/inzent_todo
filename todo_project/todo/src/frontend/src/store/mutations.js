@@ -192,8 +192,8 @@ const mutations = {
         item.title = "└ " + item.title;
         item.style = {
           base: {
-            fill: "#1EBC61",
-            stroke: "#0EAC51",
+            fill: "#778899",
+            stroke: "#DCDCDC",
           },
         };
       } //end if

@@ -13,7 +13,7 @@
           &nbsp;<span class="superTitle">{{ getSuperTitle }}</span>
         </span>
         <v-spacer></v-spacer>
-        <span>*프로젝트 : {{ getProjectTitle }}</span>
+        <span>프로젝트 : {{ getProjectTitle }}</span>
       </v-card-title>
       <v-card-text>
         <v-container>

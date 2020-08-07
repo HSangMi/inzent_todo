@@ -111,7 +111,11 @@
         or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{id})))
         or    (tp.manager = tm.member_no and tm.user_id = #{id} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
         or    (tp.manager = tm.member_no and tm.user_id = #{id} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{id}))))
-        and (#{clickDate} between tts.start_date and tts.end_date)
+        and (
+        case when (tts.start_date='' or tts.end_date='') then (to_char(tts.reg_date, 'YYYY-MM-DD') = #{clickDate})
+        when (tts.start_date !='' or tts.end_date !='') then (#{clickDate} between tts.start_date and tts.end_date)
+        end
+        )
     ]]>
     </select>
     <select id="getClickDateFilterList" parameterType="map" resultType="cddetialdto">
@@ -129,7 +133,11 @@
         or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{userId})))
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{userId}))))
-        and (#{clickDate} between tts.start_date and tts.end_date)
+        and (
+        case when (tts.start_date='' or tts.end_date='') then (to_char(tts.reg_date, 'YYYY-MM-DD') = #{clickDate})
+        when (tts.start_date !='' or tts.end_date !='') then (#{clickDate} between tts.start_date and tts.end_date)
+        end
+        )
         <if test="prjItem">
         and (
             <foreach open="(" close=")" collection="prjItem" item="pitem" index="index" separator="or">

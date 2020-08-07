@@ -31,7 +31,7 @@
                   @click="getSub(item.pid)"
                 >
                   <v-row>
-                    <v-col cols="7">
+                    <v-col cols="7" @click="goProjectPage(item.prjId)">
                       <span class="detail-font">{{ item.prjTitle }}</span>
                       <v-spacer></v-spacer>
                       <v-chip
@@ -127,6 +127,17 @@ export default {
       const superId = id;
       this.FETCH_CALENDAR_EVENT(superId);
       this.SET_IS_DETAIL_SUB(true);
+    },
+    goProjectPage(prjId) {
+      console.log("aa", prjId);
+      if (confirm("해당 업무로 이동하시겠습니까??") == true) {
+        //확인
+        this.$router.push(`/projects/${prjId}`);
+        this.SET_IS_DETAIL_CALENDAR(false);
+      } else {
+        //취소
+        return;
+      }
     },
   },
 };
