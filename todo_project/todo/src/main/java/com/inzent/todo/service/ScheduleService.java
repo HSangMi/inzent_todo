@@ -118,8 +118,8 @@ public class ScheduleService {
     }
 
     // 해당 업무대의 업무 소 조회
-    public List<CalDateDetailDto> getSubList(String superId) {
-        return scheduledao.getSubList(superId);
+    public List<CalDateDetailDto> getSubList(String superId, String userId) {
+        return scheduledao.getSubList(superId, userId);
     }
 
     // 프로젝트 필터 조회

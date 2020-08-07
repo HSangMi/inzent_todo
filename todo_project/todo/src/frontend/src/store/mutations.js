@@ -105,6 +105,7 @@ const mutations = {
         item.imgCode = JSON.parse(item.imgCode);
         item.managerName = JSON.parse(item.managerName);
       }
+      item.icon = "mdi-clock-time-four-outline";
     });
     state.getClickDateList = clickDate;
   },

@@ -1,7 +1,8 @@
 <template>
   <v-card outlined height="730">
     <v-toolbar flat class="blue-grey lighten-5">
-      <h4>하위업무 보관함</h4>
+      <v-icon>mdi-archive-arrow-down-outline</v-icon>
+      &nbsp;<h4>하위업무 보관함</h4>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-divider></v-divider>
@@ -17,19 +18,31 @@
       <template v-slot:default="props">
         <div class="mb-5">
           <v-row class="sub-row">
-            <v-col v-for="item in props.items" :key="item.taskId" cols="12" md="6" lg="6">
+            <v-col
+              v-for="item in props.items"
+              :key="item.taskId"
+              cols="12"
+              md="6"
+              lg="6"
+            >
               <v-card outlined class="mb-5">
                 <v-card-title class="subheading font-weight-bold">
-                  {{item.projectTitle}} > {{item.superTitle}}
+                  {{ item.projectTitle }} > {{ item.superTitle }}
                   <v-spacer></v-spacer>
-                  <v-icon v-if="item.usePublic" small>mdi-lock-open-variant-outline</v-icon>
+                  <v-icon v-if="item.usePublic" small
+                    >mdi-lock-open-variant-outline</v-icon
+                  >
                   <v-icon v-if="!item.usePublic" small>mdi-lock-outline</v-icon>
                 </v-card-title>
-                <v-card-text>{{item.title}}</v-card-text>
+                <v-card-text>{{ item.title }}</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn small text @click.prevent="restoreSub(item.taskId)">복구</v-btn>
-                  <v-btn small text @click.prevent="openDelDialog(item.taskId)">삭제</v-btn>
+                  <v-btn small text @click.prevent="restoreSub(item.taskId)"
+                    >복구</v-btn
+                  >
+                  <v-btn small text @click.prevent="openDelDialog(item.taskId)"
+                    >삭제</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -38,13 +51,27 @@
       </template>
 
       <template v-slot:footer>
-        <template v-if="numberOfPages!=0">
+        <template v-if="numberOfPages != 0">
           <v-row align="center" justify="center">
-            <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="formerPage">
+            <v-btn
+              text
+              x-small
+              color="blue-grey"
+              class="ma-2 white--text"
+              @click="formerPage"
+            >
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
-            <span class="ma-2 grey--text">{{ page }} / {{ numberOfPages }} 페이지</span>
-            <v-btn text x-small color="blue-grey" class="ma-2 white--text" @click="nextPage">
+            <span class="ma-2 grey--text"
+              >{{ page }} / {{ numberOfPages }} 페이지</span
+            >
+            <v-btn
+              text
+              x-small
+              color="blue-grey"
+              class="ma-2 white--text"
+              @click="nextPage"
+            >
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
           </v-row>
@@ -53,11 +80,13 @@
     </v-data-iterator>
     <v-dialog v-model="openArcDialog" persistent max-width="290">
       <v-card>
-        <v-card-title class="subheading font-weight-bold">업무를 삭제하시겠습니까?</v-card-title>
+        <v-card-title class="subheading font-weight-bold"
+          >업무를 삭제하시겠습니까?</v-card-title
+        >
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text small @click="deleteSubTask()">확인</v-btn>
-          <v-btn text small @click="openArcDialog=false">취소</v-btn>
+          <v-btn text small @click="openArcDialog = false">취소</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -134,5 +163,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

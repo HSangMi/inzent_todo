@@ -238,6 +238,9 @@ const actions = {
         console.log(err);
       });
   },
+  DELETE_STARRED(__, starId) {
+    return sohyun.dashboard.delStarred(starId);
+  },
   //////////////////////// SCHEDULE (CALENDAR) ////////////////////////
   FETCH_CALENDAR_LIST({ commit }) {
     // 캘린더 조회

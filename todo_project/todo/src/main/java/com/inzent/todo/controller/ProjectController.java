@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
-import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
 import com.inzent.todo.dto.TaskBoardListDto;
 import com.inzent.todo.dto.TaskDto;
@@ -27,8 +26,8 @@ import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.ProjectVo;
-import com.inzent.todo.vo.UserVo;
 import com.inzent.todo.vo.StarredTaskVo;
+import com.inzent.todo.vo.UserVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.http.HttpRequest;

@@ -1,7 +1,5 @@
 package com.inzent.todo.dto;
 
-import com.inzent.todo.vo.CheckListVo;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

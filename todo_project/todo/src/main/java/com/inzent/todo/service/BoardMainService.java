@@ -83,4 +83,8 @@ public class BoardMainService {
         return list;
     }
 
+    public int deleteStarred(Integer starId) {
+        return boardMainDao.deleteStarred(starId);
+    }
+
 }

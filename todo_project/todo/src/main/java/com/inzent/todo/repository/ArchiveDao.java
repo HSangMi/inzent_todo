@@ -1,5 +1,6 @@
 package com.inzent.todo.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.inzent.todo.dto.ArchiveSubDto;
@@ -26,22 +27,49 @@ public class ArchiveDao {
         return sqlsession.selectList("archive.getArchiveSubs", userId);
     }
 
-    public int deleteSubTask(String subId) {
-        return sqlsession.delete("archive.delSub", subId);
+    public int deleteSubTask(String subId) { // 하위업무 삭제됬을 때 관련 테이블 다 삭제
+        int subCnt = sqlsession.delete("archive.delSub", subId);
+        if (subCnt == 1) {
+            String id = subId;
+            sqlsession.delete("archive.delFile", id);
+            sqlsession.delete("archive.delChkList", id);
+            sqlsession.delete("archive.delChkListItem", id);
+            sqlsession.delete("archive.delComment", id);
+            sqlsession.delete("archive.delManager", id);
+        }
+        return subCnt;
     }
 
-    public int deleteSuperTask(String superId) {
+    public int deleteSuperTask(String superId) {// 상위업무 삭제됬을 때 관련 테이블 다 삭제
         int superCnt = sqlsession.delete("archive.delSuper", superId);
         List<String> archiveSuperId = sqlsession.selectList("archive.existArchiveSuperId", superId);
         List<String> taskSuperId = sqlsession.selectList("archive.existTaskSuperId", superId);
         System.out.println(archiveSuperId + "   " + taskSuperId);
+        List<String> taskSubIds = new ArrayList<>();
         int subCnt = 0;
-        if (superCnt == 1) {
-            if (archiveSuperId.size() > 0) {
+        String id = superId;
+        if (superCnt == 1) { // 상위업무가 삭제되었다면
+            sqlsession.delete("archive.delFile", id);
+            sqlsession.delete("archive.delChkList", id);
+            sqlsession.delete("archive.delChkListItem", id);
+            sqlsession.delete("archive.delComment", id);
+            sqlsession.delete("archive.delManager", id);
+            if (archiveSuperId.size() > 0) { // 아카이브 테이블에서 삭제
                 subCnt = sqlsession.delete("archive.delArchiveSub", superId);
             } // end if
-            if (taskSuperId.size() > 0) {
-                subCnt = sqlsession.delete("archive.delTaskSub", superId);
+            if (taskSuperId.size() > 0) { // 관련 하위업무와 그 관련 테이블 다 삭제
+                taskSubIds = sqlsession.selectList("archive.getsubId", superId);
+                for (String taskSubId : taskSubIds) {
+                    subCnt = sqlsession.delete("archive.delTaskSub", taskSubId);
+                    if (subCnt == 1) {
+                        id = taskSubId;
+                        sqlsession.delete("archive.delFile", id);
+                        sqlsession.delete("archive.delChkList", id);
+                        sqlsession.delete("archive.delChkListItem", id);
+                        sqlsession.delete("archive.delComment", id);
+                        sqlsession.delete("archive.delManager", id);
+                    } // end if
+                } // end for
             } // end if
             System.out.println("삭제 성공!!");
         } else {
