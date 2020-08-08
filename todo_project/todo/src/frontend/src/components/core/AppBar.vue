@@ -6,37 +6,13 @@
     />
     <v-spacer />
 
-    <!-- <v-text-field
-      v-model="search"
-      append-icon="mdi-magnify"
-      label="Search"
-      style="max-width: 165px;"
-      single-line
-      hide-details
-    ></v-text-field>
-    <div class="mx-1" /> -->
-
-    <!-- <v-btn
-      class="ml-2"
-      min-width="0"
-      text
-      to="/"
-    >
-      <v-icon>mdi-view-dashboard</v-icon>
-    </v-btn>-->
     <v-menu
       bottom
-      left
+      right
       offset-y
       origin="top right"
       transition="scale-transition"
-      :value="userInfo"
     >
-      <!-- <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="20"
-          /> -->
-      <!-- <v-img :src="this.user.imgCode" max-height="20" /> -->
       <template v-slot:activator="{ attrs, on }">
         <v-btn
           depressed
@@ -45,7 +21,7 @@
           min-width="0"
           color="white"
           v-bind="attrs"
-          v-on="on"
+          v-on="on"          
         >
           <v-avatar size="30px">
             <img :src="userInfo.imgCode" />
@@ -53,42 +29,39 @@
           <v-card-text>{{ userInfo.id }}</v-card-text>
         </v-btn>
       </template>
-      <!-- <template v-slot:activator="{ attrs, on }">
-        <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
-          <v-badge color="red" overlap bordered>
-            <template v-slot:badge>
-              <span>5</span>
-            </template>
-
-          <v-icon color="grey">mdi-bell</v-icon>
-          </v-badge>
-        </v-btn>
-      </template> -->
-
       <v-list :tile="false" nav>
         <div>
           <app-bar-item v-for="(n, i) in notifications" :key="`item-${i}`">
-            <v-list-item-title v-text="n" />
+            <v-list-item style="margin-bottom:0px" @click="openModal(n)">
+              <v-list-item-title v-text="n" />
+            </v-list-item>
           </app-bar-item>
         </div>
       </v-list>
     </v-menu>
-    <!-- <v-menu bottom left offset-y origin="top right" transition="scale-transition">
 
-      <v-list :tile="false" nav>
-        <div>
-          <app-bar-item v-for="(n, i) in userHeaderMenu" :key="`item-${i}`">
-            <v-list-item-title v-text="n" />
-          </app-bar-item>
-        </div>
-      </v-list>
-    </v-menu>-->
+    <!-- 마이페이지 모달 -->
+    <my-page :mypageModal="mypageModal" @close="mypageModal = false"></my-page>
+    <!-- 로그아웃 모달 -->
+    <v-dialog v-model="logoutModal" max-width="230">
+      <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text>로그아웃 하시겠습니까?</v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn color="green darken-1" text @click="logoutModal = false"
+            >아니요</v-btn
+          >
+          <v-btn color="green darken-1" text @click.prevent="logout">예</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app-bar>
 </template>
 
 <script>
 // Components
 import { VHover, VListItem } from "vuetify/lib";
+import MyPage from "../user/MyPage.vue";
 
 // Utilities
 import { mapState, mapMutations } from "vuex";
@@ -108,7 +81,7 @@ export default {
                   attrs: this.$attrs,
                   class: {
                     "black--text": !hover,
-                    "white--text secondary": hover,
+                    "white--text secondary elevation-12": hover,
                   },
                   props: {
                     activeClass: "",
@@ -124,6 +97,7 @@ export default {
         });
       },
     },
+    MyPage,
   },
 
   props: {
@@ -135,10 +109,11 @@ export default {
 
   data: () => ({
     notifications: ["내 정보", "로그아웃"],
-    userHeaderMenu: ["user profile", "logout"],
     search: "",
+    mypageModal: false,
+    logoutModal: false,
   }),
-  created() {},
+
   computed: {
     ...mapState({
       activeMenu: "activeMenu",
@@ -151,6 +126,18 @@ export default {
     ...mapMutations({
       setDrawerSub: "SET_DRAWER_SUB",
     }),
+    openModal(item) {
+      if (item === "내 정보") {
+        this.mypageModal = true;
+      } else {
+        this.logoutModal = true;
+      }
+    },
+    logout() {
+      this.$store.commit("LOGOUT");
+      this.$router.push("/login");
+      this.logoutModal = false;
+    },
   },
 };
 </script>
