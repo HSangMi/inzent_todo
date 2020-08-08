@@ -68,12 +68,13 @@
                           label="아이디 저장"
                           style="margin-right:15px"
                         ></v-checkbox>
+                        <v-checkbox
+                          v-model="autoLogin"
+                          color="rgb(134, 138, 140)"
+                          label="자동 로그인"
+                          style="margin-right:15px"
+                        ></v-checkbox>
                         <v-spacer></v-spacer>
-                        <!-- <v-btn 
-                          color="rgb(106, 115, 136)"
-                          class="font-weight-bold"
-                          text
-                        >비밀번호 찾기</v-btn> -->
                         <v-btn
                           color="primary"
                           class="font-weight-bold"
@@ -110,6 +111,7 @@ export default {
     returnPath: "",
     error: "",
     idSave: false,
+    autoLogin: false,
   }),
   created() {
     this.returnPath = this.$route.query.returnPath || "/";
@@ -128,9 +130,9 @@ export default {
   },
   methods: {
     onSubmit() {
-      const { id, password } = this;
+      const { id, password, autoLogin } = this;
       this.$store
-        .dispatch("LOGIN", { id, password })
+        .dispatch("LOGIN", { id, password, autoLogin})
         .then(() => {
           console.log("submit ok--------------------------------------------");
           if (this.idSave == true) {
@@ -140,6 +142,8 @@ export default {
             this.$cookie.delete("id");
             this.$cookie.delete("idSave");
           }
+
+          
 
           if (this.userInfo.userType == "s") {
             this.$router.push("/user_management");

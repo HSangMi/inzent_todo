@@ -1,15 +1,20 @@
 import { setAuthInHeader } from "../api";
 const mutations = {
-  LOGIN(state, { accessToken }) {
+  LOGIN(state, { accessToken, autoLogin }) {
     if (!accessToken) return; //토큰정보가 없으면, 리턴
+    if(autoLogin == true) {
+      localStorage.setItem("accessToken", accessToken); // 로컬스토리지에 token값 저장
+    } else {
+      sessionStorage.setItem("accessToken", accessToken);
+    }
     state.accessToken = accessToken; // state에 토큰값 세팅
-    localStorage.setItem("accessToken", accessToken); // 로컬스토리지에 token값 저장
     setAuthInHeader(accessToken); // api의 requestHeader에 추가!
   },
   LOGOUT(state) {
     state.accessToken = null;
     state.userInfo = null;
     delete localStorage.accessToken;
+    delete sessionStorage.accessToken;
     setAuthInHeader(null);
   },
   // SET_IS_SHOW_SUB_MENU(state, { activeMenu }) {

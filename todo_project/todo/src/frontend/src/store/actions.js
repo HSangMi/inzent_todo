@@ -4,7 +4,7 @@ import * as sohyun from "../api/sohyun";
 // import * as util from "../utils/auth";
 // import state from './state'
 const actions = {
-  LOGIN({ commit }, { id, password }) {
+  LOGIN({ commit }, { id, password, autoLogin }) {
     // context객체중 commit만 받아옴, payload : 이메일, 비번
     return api.auth.login(id, password).then((data) => {
       const accessToken = data.accessToken;
@@ -19,7 +19,7 @@ const actions = {
       }
 
       commit("SET_USER_INFO", loginUser);
-      commit("LOGIN", { accessToken });
+      commit("LOGIN", { accessToken, autoLogin });
     });
   },
   LOGIN_BY_TOKEN({ commit }, { accessToken }) {
