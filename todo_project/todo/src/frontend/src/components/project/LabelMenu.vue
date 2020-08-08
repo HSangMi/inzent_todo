@@ -6,8 +6,8 @@
       </v-btn>
     </template>
     <v-card class="my-chip-group">
-      <v-card-title>
-        ADD LABELS{{ this.taskLabel }}
+      <v-card-title class="px-4 pb-0">
+        라벨 추가
         <!-- ADD LABELS {{this.labels}} -->
       </v-card-title>
       <v-card-text>
@@ -19,6 +19,7 @@
               :value="label.labelNo"
               filter
               label
+              text-color="white"
               :color="label.labelColor"
               >{{ label.labelName }}</v-chip
             >
@@ -31,6 +32,7 @@
               :key="label.labelNo"
               :value="label.labelNo"
               filter
+              text-color="white"
               label
               :color="label.labelColor"
               >{{ label.labelName }}</v-chip

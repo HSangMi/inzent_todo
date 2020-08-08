@@ -28,7 +28,11 @@ public class MemberDao {
     }
 
     public void deleteManagers(Map<String, Object> map) {
-        sqlSession.insert("member.deleteManagers", map);
+        sqlSession.delete("member.deleteManagers", map);
+    }
+
+    public void deleteMembers(Map<String, Object> map) {
+        sqlSession.delete("member.deleteMembers", map);
     }
 
 }

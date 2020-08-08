@@ -27,7 +27,7 @@
             flat
             hide-details
           ></v-textarea>-->
-          <input v-model="title" />
+          <input v-model="title" style=" width:65%;" />
           <v-spacer></v-spacer>
           <!-- <v-btn icon @click.prevent="onStar">
             <v-icon color="amber darken-1">{{ active ? "mdi-star" : "mdi-star-outline" }}</v-icon>
@@ -108,7 +108,7 @@
                   <p>STATE</p>
                   <v-chip filter :color="state[taskState].color">{{ state[taskState].name }}</v-chip>
                 </v-col>-->
-                <v-col class="py-3" cosl="12" v-if="taskLabel">
+                <v-col cosl="12" class="py-3" v-if="taskLabel.length > 2">
                   <span class="additional-title">
                     <v-icon small left>mdi-label-outline</v-icon>태그
                   </span>
@@ -298,7 +298,6 @@
                     class="mx-0 pb-5"
                     label="댓글을 입력하세요"
                     rows="1"
-                    solo
                     auto-grow
                     flat
                     outlined
@@ -309,12 +308,12 @@
                       <v-btn
                         depressed
                         icon
+                        small
                         @click.prevent="sendComment"
                         :disabled="invalidInput"
+                        style="margin-bottom:10px;"
                       >
-                        <v-icon color="blue" style="margin-bottom:10px;"
-                          >mdi-send</v-icon
-                        >
+                        <v-icon color="blue">mdi-send</v-icon>
                       </v-btn>
                     </template>
                     <template v-slot:prepend>
@@ -370,21 +369,24 @@
                               class="comment-btn"
                               v-if="comment.memberNo == project.memberNo"
                             >
-                              <v-btn
+                              <!-- <v-btn
                                 x-small
                                 icon
                                 @click.prevent="editComment()"
                                 color="grey lighten-1"
                               >
                                 <v-icon>mdi-lead-pencil</v-icon>
-                              </v-btn>
+                              </v-btn> -->
                               <v-btn
                                 x-small
                                 icon
-                                @click.prevent="deleteComment()"
+                                @click.prevent="
+                                  deleteComment(comment.commentNo)
+                                "
                                 color="grey lighten-1"
+                                class="mt-4"
                               >
-                                <v-icon>mdi-trash-can</v-icon>
+                                <v-icon small>mdi-trash-can-outline</v-icon>
                               </v-btn>
                             </span>
                           </div>
@@ -467,32 +469,50 @@
                         lazy-validation
                       >
                         <v-text-field
-                          label="CREATE CHECKLIST"
+                          label="체크리스트 이름"
                           v-model="checkListName"
                           :counter="20"
                           required
                         ></v-text-field>
                         <v-btn type="submit" block depressed>
-                          <v-icon left>mdi-plus</v-icon>CREATE
+                          <v-icon left>mdi-plus</v-icon>생성
                         </v-btn>
                       </v-form>
                     </v-card-text>
                   </v-card>
                 </v-menu>
               </v-list-item>
-              <v-subheader>동작</v-subheader>
+              <v-subheader>액션</v-subheader>
               <v-list-item>
-                <v-btn block depressed @click="watchTask">
-                  <v-icon left>mdi-eye</v-icon>관심업무
+                <v-btn
+                  v-if="this.taskInfo.task.starred"
+                  block
+                  depressed
+                  @click="setWatchTask"
+                >
+                  <v-icon left>mdi-star</v-icon>관심업무
+                </v-btn>
+                <v-btn v-else block depressed @click="setWatchTask">
+                  <v-icon left>mdi-star-outline</v-icon>관심업무
                 </v-btn>
                 <v-alert
                   class="watchAlret"
                   :value="watchSnackbar"
                   dense
+                  light
                   type="success"
+                  color="#7681a4"
                   transition="fade-transition"
-                  >관심업무로 등록되었습니다</v-alert
                 >
+                  <span v-if="this.taskInfo.task.starred == 0"
+                    >관심업무로<br />
+                    등록되었습니다</span
+                  >
+                  <span v-else
+                    >관심업무가<br />
+                    해제되었습니다</span
+                  >
+                </v-alert>
               </v-list-item>
               <v-list-item>
                 <v-btn block depressed @click="sendToArchive()">
@@ -632,7 +652,7 @@ export default {
     ],
     // taskStateName: ["보류", "진행", "완료", "긴급", "대기"],
     // taskStateColor: ["defualt", "primary", "success", "error", "warning"],
-    taskLabel: undefined,
+    taskLabel: "[]",
     labels: "",
     existLabel: undefined,
     existFiles: undefined,
@@ -675,9 +695,11 @@ export default {
       "ADD_SUB_TASK",
       "FETCH_TASK",
       "ADD_COMMENT",
+      "DELETE_COMMENT",
       "UPDATE_TASK",
       "DOWNLOAD_FILE",
       "ADD_STARED_TASK",
+      "DELETE_STARRED_TASK",
       "ADD_CHECK_LIST",
       "ADD_NEW_CHECK_ITEM",
       "FETCH_CHECK_LISTS",
@@ -935,31 +957,47 @@ export default {
     editComment() {
       console.log("댓글 수정");
     },
-    deleteComment() {
-      console.log("댓글 삭제");
+    deleteComment(cno) {
+      let temp = { commentNo: cno, taskId: this.$route.params.tid };
+      this.DELETE_COMMENT(temp).then((data) => {
+        console.log("댓글 삭제", data);
+        this.comments = this.taskInfo.comments;
+      });
     },
-    watchTask() {
-      console.log("watchTask");
+    setWatchTask() {
       this.watchSnackbar = true;
-
-      let data = {
-        memberNo: this.project.memberNo,
-        taskId: this.$route.params.tid,
-      };
-
-      // 관심업무 등록 요청!
-      this.ADD_STARED_TASK(data);
-
+      console.log("watchTask");
+      if (this.taskInfo.task.starred > 0) {
+        this.DELETE_STARRED_TASK(this.taskInfo.task.starred).then(() => {
+          setTimeout(
+            function() {
+              this.watchSnackbar = false;
+              this.taskInfo.task.starred = 0;
+              // console.log(this.watchSnackbar);
+            }.bind(this),
+            1000
+          );
+          // this.taskInfo.task.starred = 0;
+        });
+      } else {
+        let data = {
+          memberNo: this.project.memberNo,
+          taskId: this.$route.params.tid,
+        };
+        // 관심업무 등록 요청!
+        this.ADD_STARED_TASK(data).then((no) => {
+          setTimeout(
+            function() {
+              this.watchSnackbar = false;
+              this.taskInfo.task.starred = no;
+              // console.log(this.watchSnackbar);
+            }.bind(this),
+            1000
+          );
+          // this.taskInfo.task.starred = no;
+        });
+      }
       // 리턴으로 디테일 다시가져와서 뿌려주기..?
-
-      setTimeout(
-        function() {
-          console.log("????");
-          this.watchSnackbar = false;
-          console.log(this.watchSnackbar);
-        }.bind(this),
-        1500
-      );
     },
     showNewCheckItem(index) {
       if (this.project.memberNo === -1) {
@@ -1099,6 +1137,7 @@ span.additional-title {
   height: 36px;
   padding-left: 10px;
   font-size: 20px;
+  font-family: "Jeju Gothic";
 }
 .v-input--radio-group.v-input--radio-group--row .v-radio {
   margin-right: 0px;
@@ -1176,12 +1215,13 @@ div.comment-div .reg-date {
 }
 div.comment-balloon {
   max-width: 85%;
-  padding: 15px;
+  padding: 10px 16px 10px 16px;
   margin-left: 30px;
   background-color: #e0e5f1;
   border-radius: 20px;
   color: dimgrey;
   display: inline-block;
+  font-size: 13px;
 }
 p.comment-btn {
   text-align: right;
@@ -1196,6 +1236,7 @@ div.comment-avatar {
   position: absolute;
   top: 50px;
   z-index: 99;
-  width: 235px;
+  width: 168px;
+  font-size: 13px;
 }
 </style>

@@ -63,7 +63,7 @@ export const user = {
     return request("post", "/userList", deptList);
   },
   update_user(user) {
-    return request('post', '/updateUser', user);
+    return request("post", "/updateUser", user);
   },
 };
 /////////////////////////////////-- PROJECT --///////////////////////////////////////////
@@ -76,6 +76,10 @@ export const project = {
   addProject(project) {
     console.log(project);
     return request("post", "/projects/addProject", project);
+  },
+  updateProject(project) {
+    console.log(project);
+    return request("post", "/projects/updateProject", project);
   },
   addSuperTask(task) {
     return request("post", "/projects/addSuperTask", task);
@@ -107,6 +111,9 @@ export const project = {
   addComment(commentObj) {
     return request("post", "/projects/addComment", commentObj);
   },
+  deleteComment(commentNo) {
+    return request("post", "/projects/deleteComment", commentNo);
+  },
   downloadFile(file) {
     return axios.post(DOMAIN + "/projects/download", file, {
       responseType: "blob",
@@ -116,12 +123,16 @@ export const project = {
   staredTask(data) {
     return request("post", "/projects/starredTask", data);
   },
+  deleteStaredTask(no) {
+    console.log("deleteStarred");
+    console.dir(no);
+    return request("post", "/projects/deleteStarred", no);
+  },
   addCheckList(title) {
     return request("post", "/projects/addCheckList", title);
   },
   addCheckListItem(data) {
-    console.log("data");
-    console.log("000000000000000000");
+    // console.log("data");
     return request("post", "/projects/addCheckListItem", data);
   },
   getCheckLists(taskId) {
@@ -140,25 +151,26 @@ export const project = {
     return request("get", "/projects/deleteFile?fileNo=" + fileNo);
   },
 };
+
 /////////////////////////////////-- SEARCH --///////////////////////////////////////////
 export const search = {
-	fetchAll(srchData) {
-		console.log('srchData', srchData);
-		return axios.get(DOMAIN + '/search/fetchAll', { params: srchData });
-	}
-	// fatchTaskAll(search) {
-	// 	return request('get', `/search/taskAll/${search}`);
-	// }
+  fetchAll(srchData) {
+    console.log("srchData", srchData);
+    return axios.get(DOMAIN + "/search/fetchAll", { params: srchData });
+  },
+  // fatchTaskAll(search) {
+  // 	return request('get', `/search/taskAll/${search}`);
+  // }
 };
 /////////////////////////////////// ADMIN ////////////////////////////////////////////
 export const admin = {
-	insert_user(user) {
-		return request('post', '/admin/insertUser', user);
-	},
-	modify_user(user) {
-		return request('post', '/admin/modifyUser', user);
-	},
-	delete_user(userId) {
-		return request('post', '/admin/deleteUser', userId);
-	}
+  insert_user(user) {
+    return request("post", "/admin/insertUser", user);
+  },
+  modify_user(user) {
+    return request("post", "/admin/modifyUser", user);
+  },
+  delete_user(userId) {
+    return request("post", "/admin/deleteUser", userId);
+  },
 };

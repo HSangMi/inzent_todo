@@ -1,47 +1,56 @@
 <template>
   <v-card class="mr-4 super-task-card pt-1" width="300">
-    <v-card-title>
-      <v-icon v-if="!list.superTask.usePublic">mdi-lock</v-icon>
+    <v-card-title class="px-0">
+      <v-avatar size="20" class="mr-2" :color="stateColor">
+        <v-icon v-if="!list.superTask.usePublic" small color="white"
+          >mdi-lock</v-icon
+        >
+      </v-avatar>
+      <!-- <v-btn fab x-small depressed class="mr-2" :color="stateColor">
+        <v-icon v-if="!list.superTask.usePublic" small color="white"
+          >mdi-lock</v-icon
+        >
+      </v-btn> -->
       <span class="task-list-header">{{ list.superTask.title }}</span>
       <!-- <span class="grey--text pl-3 font-weight-regular">{{list.subTaskList.length}}</span> -->
       <v-spacer></v-spacer>
-      <v-btn icon @click="show = !show">
+      <v-btn icon @click="show = !show" small>
         <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
       </v-btn>
       <!-- <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>-->
-      <v-menu offset-y :close-on-content-click="false">
+      <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn v-bind="attrs" v-on="on" icon>
+          <v-btn v-bind="attrs" v-on="on" small icon>
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
         <v-list dense class="py-0">
-          <v-subheader class="text-center">Task Actions</v-subheader>
+          <v-subheader class="text-center">업무 액션</v-subheader>
           <v-divider></v-divider>
-          <v-list-item class="px-2">
+          <v-list-item class="px-2" @click="showDetailSuperTask()">
             <v-list-item-icon class="mr-2">
-              <v-icon small>mdi-plus</v-icon>
+              <v-icon small>mdi-card-text-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="pr-3">
-              <v-list-item-title>Sort by State</v-list-item-title>
+              <v-list-item-title>업무 상세보기</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item class="px-2">
+          <!-- <v-list-item class="px-2">
             <v-list-item-icon class="mr-2">
               <v-icon small>mdi-plus</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="pr-3">
-              <v-list-item-title>Change state to Complete</v-list-item-title>
+              <v-list-item-title>관심업무 등록</v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
-          <v-list-item class="px-2">
+          </v-list-item> -->
+          <v-list-item class="px-2" @click="sendToArchive">
             <v-list-item-icon class="mr-2">
-              <v-icon small>mdi-plus</v-icon>
+              <v-icon small left>mdi-archive-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="pr-3">
-              <v-list-item-title>Sort by State</v-list-item-title>
+              <v-list-item-title>아카이브 보내기</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -50,72 +59,72 @@
     <!-- <v-progress-linear color="indigo lighten-1" height="8" value="30"></v-progress-linear> -->
     <v-expand-transition>
       <div v-show="show">
-        <v-divider></v-divider>
-        <v-card-text class="expand-card-text">
-          <router-link
+        <!-- <v-divider></v-divider> -->
+        <v-card-text class="expand-card-text pa-3">
+          <!-- <router-link
             :to="`/projects/${board.id}/super/task/${list.superTask.taskId}`"
+          > -->
+          <!-- <v-row align="center" class="mx-0"> -->
+          <!-- <v-rating :value="4.5" color="amber" dense half-increments readonly size="14"></v-rating> -->
+          <div>
+            <v-avatar v-if="resistrant.imgCode" size="24">
+              <img :src="resistrant.imgCode" />
+            </v-avatar>
+            <v-avatar v-else size="24">
+              <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+            </v-avatar>
+            {{ resistrant.name }}
+            <!-- <span class="grey--text">{{ list.superTask.regDate }}</span> -->
+          </div>
+          <v-list-item
+            three-line
+            class="px-0"
+            v-if="list.superTask.description"
           >
-            <!-- <v-row align="center" class="mx-0"> -->
-            <!-- <v-rating :value="4.5" color="amber" dense half-increments readonly size="14"></v-rating> -->
-            <div>
-              <v-avatar v-if="resistrant.imgCode" size="24">
-                <img :src="resistrant.imgCode" />
-              </v-avatar>
-              <v-avatar v-else size="24">
-                <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
-              </v-avatar>
-              {{ resistrant.name }}
-              <!-- <span class="grey--text">{{ list.superTask.regDate }}</span> -->
-            </div>
-            <v-list-item
-              three-line
-              class="px-0"
-              v-if="list.superTask.description"
-            >
-              <v-list-item-content>
-                <v-list-item-subtitle>{{
-                  list.superTask.description
-                }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <!-- <div class="grey--text">RegDate:{{ list.superTask.regDate }}</div> -->
-            <!-- </v-row> -->
+            <v-list-item-content>
+              <v-list-item-subtitle>{{
+                list.superTask.description
+              }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <!-- <div class="grey--text">RegDate:{{ list.superTask.regDate }}</div> -->
+          <!-- </v-row> -->
 
-            <!-- <div class="my-4 subtitle-1">$ • Italian, Cafe</div> -->
+          <!-- <div class="my-4 subtitle-1">$ • Italian, Cafe</div> -->
 
-            <!-- <div class="my-4">{{ list.superTask.description }}</div> -->
-            <div v-if="list.superTask.labels" class="pt-2">
-              <v-chip
-                v-for="label in setLabel(list.superTask.labels)"
-                :key="label.lableNo"
-                filter
-                small
-                dark
-                class="mr-1"
-                :color="label.labelColor"
-                >{{ label.labelName }}</v-chip
-              >
-            </div>
-            <div
-              class="my-2"
-              v-if="list.superTask.startDate || list.superTask.endDate"
+          <!-- <div class="my-4">{{ list.superTask.description }}</div> -->
+          <div v-if="list.superTask.labels" class="pt-2">
+            <v-chip
+              v-for="label in setLabel(list.superTask.labels)"
+              :key="label.lableNo"
+              filter
+              small
+              dark
+              class="mr-1"
+              :color="label.labelColor"
+              >{{ label.labelName }}</v-chip
             >
-              <v-chip label small color="#cacaca">
-                <v-icon left small>mdi-clock-outline</v-icon>
-                {{ list.superTask.startDate }} - {{ list.superTask.endDate }}
-              </v-chip>
-            </div>
-            <p class="my-auto">
-              <v-icon size="20">mdi-paperclip</v-icon>
-              {{ list.superTask.fileCnt }}
-              <v-icon size="20">mdi-comment-text-outline</v-icon>
-              {{ list.superTask.commentCnt }}
-            </p>
-          </router-link>
+          </div>
+          <div
+            class="my-2"
+            v-if="list.superTask.startDate || list.superTask.endDate"
+          >
+            <v-chip label small color="#cacaca">
+              <v-icon left small>mdi-clock-outline</v-icon>
+              {{ list.superTask.startDate }} - {{ list.superTask.endDate }}
+            </v-chip>
+          </div>
+          <p class="my-auto">
+            <v-icon small>mdi-paperclip</v-icon>
+            {{ list.superTask.fileCnt }}
+            <v-icon small>mdi-comment-text-outline</v-icon>
+            {{ list.superTask.commentCnt }}
+          </p>
+          <!-- </router-link> -->
         </v-card-text>
       </div>
     </v-expand-transition>
-    <v-divider></v-divider>
+    <!-- <v-divider></v-divider> -->
     <v-card-text class="list-content px-0 py-2">
       <ul class="task-list">
         <draggable v-model="items" v-bind="dragOptions" class="list-group">
@@ -173,7 +182,13 @@ export default {
     // console.dir(this.items);
   },
   beforeUpdate() {
-    // console.log("beforeUpdate..");
+    console.log("beforeUpdate..");
+  },
+  updated() {
+    console.log("Update..");
+  },
+  beforeDestroy() {
+    console.log("beforeDestroy..");
   },
   components: {
     Draggable,
@@ -200,6 +215,27 @@ export default {
       if (lastSubTask) sortNo = lastSubTask.sortNo + sortNo;
       return sortNo;
     },
+    stateColor() {
+      let color = "";
+      switch (this.list.superTask.state) {
+        case "H":
+          color = "#e0e0e0";
+          break;
+        case "P":
+          color = "#2196f3";
+          break;
+        case "C":
+          color = "#4caf50";
+          break;
+        case "E":
+          color = "#ff5252";
+          break;
+        case "W":
+          color = "#fb8c00";
+          break;
+      }
+      return color;
+    },
     items: {
       get() {
         // console.log("get items..");
@@ -214,7 +250,10 @@ export default {
       },
       set(reorderedListItems) {
         console.log("1. set items..");
-
+        if (this.project.memberNo === -1) {
+          alert("참여 멤버가 아닙니다 !");
+          return;
+        }
         // console.log(reorderedListItems);
         for (var i = 0; i < reorderedListItems.length; i++) {
           console.log(
@@ -246,7 +285,25 @@ export default {
       "SET_SUPER_TASK_ID",
       "SET_LAST_SUB_SORT_NO",
     ]),
-    ...mapActions(["REORDER_TASK"]),
+    ...mapActions(["REORDER_TASK", "SEND_TO_ARCHIVE_SUPER"]),
+    showDetailSuperTask() {
+      this.show = false;
+      this.$router.push(
+        `/projects/${this.board.id}/super/task/${this.list.superTask.taskId}`
+      );
+    },
+    sendToArchive() {
+      this.show = false;
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
+      this.SEND_TO_ARCHIVE_SUPER(this.list.superTask.taskId).then(() => {
+        alert("보관함으로 이동했습니다.");
+        this.$emit("update");
+        //this.onClose();
+      });
+    },
     showAddSubTask(taskId, sortNo) {
       console.log(sortNo);
       this.SET_ADD_SUB_TASK_MODAL(true);
@@ -255,6 +312,7 @@ export default {
     },
     reorderTaskListItems(payload) {
       console.log("2. reorderTaskItems...");
+      // alert("2.reorder");
       // console.log("this.list", this.list);
       var targetTask = {};
       var items = payload.items;
@@ -430,5 +488,9 @@ li {
 }
 .expand-card-text {
   background-color: #9fa4b93b;
+}
+.list-content {
+  /* max-height: 100%; */
+  overflow: auto;
 }
 </style>

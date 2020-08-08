@@ -7,6 +7,7 @@ import java.util.Map;
 import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ProjectCardDto;
+import com.inzent.todo.dto.ProjectDto;
 import com.inzent.todo.dto.TaskDto;
 import com.inzent.todo.dto.TaskUpdateDto;
 import com.inzent.todo.vo.CheckListItemVo;
@@ -93,6 +94,13 @@ public class ProjectDao {
         return sqlSession.selectList("project.selectTaskSubList", map);
     }
 
+    public int insertAllCheckListItems(List<CheckListItemVo> items, int listNo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("lno", listNo);
+        map.put("itemList", items);
+        return sqlSession.insert("project.insertAllCheckListItems", map);
+    }
+
     public int insertNewLabel(LabelVo label) {
         return sqlSession.insert("project.insertNewLabel", label);
     }
@@ -125,24 +133,37 @@ public class ProjectDao {
         return sqlSession.insert("comment.insertComment", comment);
     }
 
+    public int deleteComment(int commentNo) {
+        return sqlSession.delete("comment.deleteComment", commentNo);
+    }
+
     public List<CommentVo> selectComments(String taskId) {
         return sqlSession.selectList("comment.selectComments", taskId);
     }
 
     public int insertStarredTask(StarredTaskVo starred) {
-        return sqlSession.insert("project.insertStarred", starred);
+        sqlSession.insert("project.insertStarred", starred);
+        return starred.getStarId();
+    }
+
+    public int deleteStarred(int starId) {
+        return sqlSession.delete("project.deleteStarred", starId);
     }
 
     public int insertCheckList(CheckListVo checkList) {
         return sqlSession.insert("project.insertCheckList", checkList);
     }
 
-    public List<CheckListDto> selectCheckList(String taskId) {
-        return sqlSession.selectList("project.selectCheckList", taskId);
+    public int insertCheckList(CheckListDto checkList) {
+        return sqlSession.insert("project.insertCheckList", checkList);
     }
 
     public int insertCheckList(CheckListItemVo checkListItem) {
         return sqlSession.insert("project.insertCheckListItem", checkListItem);
+    }
+
+    public List<CheckListDto> selectCheckList(String taskId) {
+        return sqlSession.selectList("project.selectCheckList", taskId);
     }
 
     public int updateCheckListRate(int listNo) {
@@ -159,6 +180,10 @@ public class ProjectDao {
 
     public int deleteCheckList(int listNo) {
         return sqlSession.delete("project.deleteCheckList", listNo);
+    }
+
+    public Object updateProject(ProjectDto projectDto) {
+        return sqlSession.update("project.updateProject", projectDto);
     }
 
 }

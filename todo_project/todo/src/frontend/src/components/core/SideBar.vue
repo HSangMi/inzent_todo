@@ -20,9 +20,7 @@
         >
           <v-img src="../../assets/inzent-logo.png" />
         </v-list-item-avatar>
-        <v-list-item-title class="display-1 text-center"
-          >INZENT-TODO</v-list-item-title
-        >
+        <v-list-item-title class="text-center">INZENT-TODO</v-list-item-title>
         <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>

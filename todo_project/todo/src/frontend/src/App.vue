@@ -51,6 +51,7 @@ export default {
   /* background: #ffffff; */
   font-family: "Jeju Gothic", sans-serif;
 }
+
 /* html,
 body {
   height: 100%;

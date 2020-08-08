@@ -14,4 +14,7 @@ public class CheckListDto {
     private int progressRate;
     private int memberNo;
     private String checkListItems;
+
+    public CheckListDto() {
+    }
 }

@@ -11,6 +11,12 @@
 			( #{memberNo}, #{content}, #{taskId} )
 		]]>
 	</insert>
+	<delete id="deleteComment" >
+		<![CDATA[
+			delete from tb_comment
+			where comment_no = #{commentNo}
+		]]>
+	</delete>
 	<select id="selectComments" resultType="commentvo">
 	 <![CDATA[
       select *

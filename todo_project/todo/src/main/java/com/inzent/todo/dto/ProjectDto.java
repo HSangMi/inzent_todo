@@ -10,15 +10,16 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ProjectDto {
-
+    private String id;
     private String title;
     private String description;
     private boolean usePublic;
     private String startDate;
     private String endDate;
-    private String coverColor;
-    private String coverImg;
+    private String imgNo;
     private String[] members;
+    private String[] newMems;
+    private String[] delMems;
 
     public boolean getUsePublic() {
         return usePublic;

@@ -1,13 +1,22 @@
 <template>
   <v-dialog v-model="openModal" max-width="800" persistent>
     <v-card class="detail-task-card-form">
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
-        <v-card-title class="headline grey lighten-2 card-detail py-2" primary-title>
+      <v-form
+        ref="form"
+        v-model="valid"
+        @submit.prevent="onSubmit"
+        lazy-validation
+      >
+        <v-card-title
+          class="headline grey lighten-2 card-detail py-2"
+          primary-title
+        >
           <v-chip
             v-if="taskState !== undefined"
             class="mr-5"
             :color="state[taskState].color"
-          >{{ state[taskState].name }}</v-chip>
+            >{{ state[taskState].name }}</v-chip
+          >
           <!-- <v-textarea
             v-model="title"
             class="mx-0 pb-5"
@@ -18,7 +27,7 @@
             flat
             hide-details
           ></v-textarea>-->
-          <input v-model="title" />
+          <input v-model="title" style=" width:65%;" />
           <v-spacer></v-spacer>
           <!-- <v-btn icon @click.prevent="onStar">
             <v-icon color="amber darken-1">{{ active ? "mdi-star" : "mdi-star-outline" }}</v-icon>
@@ -30,7 +39,7 @@
         <v-card-text class="py-0 px-3">
           <!-- <v-container> -->
           <v-row style="max-height:750px" class="overflow-y-auto">
-            <v-col cols="8" class="formFieldCol">
+            <v-col cols="9" class="formFieldCol">
               <v-row class="px-4 pb-4">
                 <v-col cols="12" class="pb-3">
                   <v-radio-group
@@ -41,90 +50,132 @@
                     hide-details
                   >
                     <span class="additional-title">
-                      <v-icon small>mdi-plus</v-icon>PRIVATE
+                      <v-icon small left>mdi-lock-outline</v-icon>공개여부
                     </span>
-                    <v-radio label="Public" value="true" class="mr-5"></v-radio>
-                    <v-radio label="Private" value="false"></v-radio>
+                    <v-radio label="공개" value="true" class="mr-5"></v-radio>
+                    <v-radio label="비공개" value="false"></v-radio>
                     <v-spacer></v-spacer>
                   </v-radio-group>
                 </v-col>
                 <v-col cols="12" v-if="managers.length" class="py-3">
                   <span class="additional-title">
-                    <v-icon small>mdi-account-outline</v-icon>MANAGERS
+                    <v-icon small left>mdi-account-outline</v-icon>담당자
                   </span>
-                  <div v-if="managers.length" class="pl-4" style="display:inline-block">
-                    <v-tooltip v-for="member in managers" :key="member.userId" bottom>
+                  <div
+                    v-if="managers.length"
+                    class="pl-4"
+                    style="display:inline-block"
+                  >
+                    <v-tooltip
+                      v-for="member in managers"
+                      :key="member.userId"
+                      bottom
+                    >
                       <template v-slot:activator="{ on, attrs }">
-                        <v-avatar v-if="member.imgCode" size="32" class="user-avatars">
+                        <v-avatar
+                          v-if="member.imgCode"
+                          size="32"
+                          class="user-avatars"
+                        >
                           <img :src="member.imgCode" v-bind="attrs" v-on="on" />
                         </v-avatar>
-                        <v-avatar v-else size="32" class="user-avatars" color="grey">
-                          <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                        <v-avatar
+                          v-else
+                          size="32"
+                          class="user-avatars"
+                          color="grey"
+                        >
+                          <v-icon fab dark v-bind="attrs" v-on="on"
+                            >mdi-account</v-icon
+                          >
                         </v-avatar>
                       </template>
                       <span>{{ member.name }}</span>
                     </v-tooltip>
-                    <span class="pl-4">{{managers.length}}명</span>
+                    <span class="pl-4">{{ managers.length }}명</span>
                   </div>
                 </v-col>
                 <v-col cols="12" class="py-3" v-if="endDate || startDate">
                   <span class="additional-title">
-                    <v-icon small>mdi-clock-outline</v-icon>DUE DATE
+                    <v-icon small left>mdi-calendar-month-outline</v-icon>기한
                   </span>
-                  <v-icon>mdi-calendar-month-outline</v-icon>
-                  {{ startDate }} ~ {{ endDate }}
+                  <v-chip label small color="#cacaca">
+                    <v-icon small left>mdi-clock-outline</v-icon>
+                    {{ startDate }} ~ {{ endDate }}
+                  </v-chip>
                 </v-col>
                 <!-- <v-col cols="6" v-if="taskState !== undefined">
                   <p>STATE</p>
                   <v-chip filter :color="state[taskState].color">{{ state[taskState].name }}</v-chip>
                 </v-col>-->
-                <v-col class="py-3" cosl="12" v-if="taskLabel">
+                <v-col cosl="12" class="py-3" v-if="taskLabel.length > 2">
                   <span class="additional-title">
-                    <v-icon small>mdi-label-outline</v-icon>LABEL
+                    <v-icon small left>mdi-label-outline</v-icon>태그
                   </span>
                   <v-chip
                     v-for="(label, i) in setLabel(taskLabel)"
                     :key="i"
                     :color="label.labelColor"
                     dark
+                    label
+                    small
                     class="ma-1"
-                  >{{ label.labelName }}</v-chip>
+                    >{{ label.labelName }}</v-chip
+                  >
                 </v-col>
               </v-row>
               <v-row class="px-4 pb-4">
                 <v-col cols="12" class="py-3">
-                  <v-icon>mdi-text</v-icon>
-                  <span>DESCRIPTION</span>
-                  <v-textarea solo flat v-model="description" auto-grow rows="2"></v-textarea>
+                  <span class="additional-title">
+                    <v-icon small left>mdi-text</v-icon>내용
+                  </span>
+                  <!-- <v-icon>mdi-text</v-icon>
+                  내용 -->
+                  <v-textarea
+                    solo
+                    flat
+                    v-model="description"
+                    auto-grow
+                    rows="2"
+                  ></v-textarea>
                 </v-col>
                 <v-col cols="12" v-if="existFiles">
-                  <p>
-                    <v-icon>mdi-paperclip</v-icon>ATTACHMENTS
-                  </p>
+                  <span class="additional-title">
+                    <v-icon small left>mdi-paperclip</v-icon>첨부파일
+                  </span>
                   <v-list>
                     <v-card
                       class="mx-3 mb-2"
                       outlined
-                      v-for="(file,index) in existFiles"
+                      v-for="(file, index) in existFiles"
                       :key="file.fileNo"
                     >
-                      <v-list-item
-                        class="px-2"
-                        @click.prevent="downloadFile(index)"
-                        style="z-index:97"
-                      >
-                        <v-list-item-avatar tile color="grey" size="60">
+                      <v-list-item class="px-2" style="z-index:97">
+                        <v-list-item-avatar
+                          tile
+                          color="grey"
+                          size="60"
+                          @click.prevent="downloadFile(index)"
+                        >
                           <v-icon x-large>mdi-file-outline</v-icon>
                         </v-list-item-avatar>
-                        <v-list-item-content>
+                        <v-list-item-content
+                          @click.prevent="downloadFile(index)"
+                        >
                           <v-list-item-title class="mb-1 headline">
                             {{ file.orgName }}
                             <span>({{ file.size }} bytes)</span>
                           </v-list-item-title>
-                          <v-list-item-subtitle>{{ file.regDate }}</v-list-item-subtitle>
+                          <v-list-item-subtitle>{{
+                            file.regDate
+                          }}</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-btn icon @click.prevent="btnTest" style="z-index:9999 !important">
+                          <v-btn
+                            icon
+                            @click.prevent="deleteFile(index)"
+                            style="z-index:'9999' !important"
+                          >
                             <v-icon color="grey lighten-1">mdi-close</v-icon>
                           </v-btn>
                         </v-list-item-action>
@@ -141,35 +192,128 @@
                   <v-file-input
                     chips
                     multiple
-                    label="File input"
+                    label="파일 추가"
                     v-model="attachFiles"
                     hide-details
                   ></v-file-input>
+                </v-col>
+                <v-col cols="12" v-if="existCheckLists" class="pt-3">
+                  <v-slide-x-transition group>
+                    <v-card
+                      flat
+                      class="mx-3 mb-2"
+                      v-for="(checkList, index) in existCheckLists"
+                      :key="checkList.listNo"
+                    >
+                      <v-card-title class="px-0">
+                        <v-icon>mdi-checkbox-marked-outline</v-icon
+                        ><span>{{ checkList.title }}</span>
+                        <v-spacer></v-spacer>
+                        <v-btn icon small @click="showNewCheckItem(index)"
+                          ><v-icon small>mdi-plus</v-icon></v-btn
+                        >
+                        <v-btn
+                          icon
+                          small
+                          @click="deleteCheckList(checkList.listNo)"
+                          ><v-icon small>mdi-trash-can-outline</v-icon></v-btn
+                        >
+                      </v-card-title>
+                      <v-progress-linear
+                        v-model="checkList.progressRate"
+                        color="indigo lighten-24"
+                      ></v-progress-linear>
+                      <v-card-text class="px-0">
+                        <v-text-field
+                          v-show="showNewCheckItems[index]"
+                          label="NEW CHECK ITEM"
+                          v-model="newCheckItem"
+                          required
+                          dense
+                          auto-grow
+                          outlined
+                          hide-details
+                        >
+                          <v-icon slot="prepend">mdi-plus</v-icon>
+                          <v-icon
+                            v-if="newCheckItem.trim()"
+                            slot="append"
+                            @click="addNewCheckItem(checkList.listNo)"
+                            color="green"
+                            >mdi-check</v-icon
+                          >
+                        </v-text-field>
+                        <v-slide-x-transition group>
+                          <div
+                            v-for="(item, i) in getCheckListItems(
+                              checkList.checkListItems
+                            )"
+                            :key="i"
+                            class="px-0"
+                          >
+                            <v-btn
+                              @click="check(item.item_no, checkList.listNo)"
+                              icon
+                            >
+                              <v-icon
+                                v-if="item.is_checked"
+                                color="indigo lighten-1"
+                                >mdi-checkbox-marked</v-icon
+                              >
+                              <v-icon v-else>mdi-checkbox-blank-outline</v-icon>
+                            </v-btn>
+                            <p style="display:inline-block">{{ item.title }}</p>
+                            <v-btn
+                              icon
+                              small
+                              style="float:right"
+                              @click="
+                                deleteCheckItem(item.item_no, checkList.listNo)
+                              "
+                            >
+                              <v-icon color="grey lighten-1" small
+                                >mdi-window-close</v-icon
+                              >
+                            </v-btn>
+                          </div>
+                        </v-slide-x-transition>
+                        <!-- <pre>{{ checkList }}</pre> -->
+                      </v-card-text>
+                    </v-card>
+                  </v-slide-x-transition>
                 </v-col>
               </v-row>
               <!-- <v-divider></v-divider> -->
               <v-row class="pa-4 comment-row">
                 <v-col cols="12">
-                  <p>
-                    <v-icon>mdi-forum</v-icon>ACTIVITY
-                  </p>
+                  <span class="additional-title">
+                    <v-icon small left>mdi-forum</v-icon>댓글
+                  </span>
+                  <br /><br />
                   <!-- <v-avatar size="32" color="grey">
                     <v-icon fab dark v-bind="attrs" v-on="on">mdi-plus</v-icon>
                   </v-avatar>-->
                   <v-textarea
                     v-model="comment"
                     class="mx-0 pb-5"
-                    label="comments.."
+                    label="댓글을 입력하세요"
                     rows="1"
-                    solo
                     auto-grow
                     flat
                     outlined
                     hide-details
+                    dense
                   >
                     <template v-slot:append>
-                      <v-btn depressed icon @click.prevent="sendComment" :disabled="invalidInput">
-                        <v-icon color="blue" style="margin-bottom:10px;">mdi-send</v-icon>
+                      <v-btn
+                        depressed
+                        icon
+                        small
+                        @click.prevent="sendComment"
+                        :disabled="invalidInput"
+                        style="margin-bottom:10px;"
+                      >
+                        <v-icon color="blue">mdi-send</v-icon>
                       </v-btn>
                     </template>
                     <template v-slot:prepend>
@@ -186,12 +330,25 @@
 
                   <template v-if="comments.length">
                     <v-slide-x-transition group>
-                      <div class="my-1" v-for="comment in comments" :key="comment.commentNo">
-                        <div class="comment-div" text color="info" max-width="95%">
+                      <div
+                        class="my-1"
+                        v-for="comment in comments"
+                        :key="comment.commentNo"
+                      >
+                        <div
+                          class="comment-div"
+                          text
+                          color="info"
+                          max-width="95%"
+                        >
                           <div class="comment-avatar">
                             <v-avatar size="32" color="grey" class="mr-2">
-                              <template v-if="getMember(comment.memberNo).imgCode">
-                                <img :src="getMember(comment.memberNo).imgCode" />
+                              <template
+                                v-if="getMember(comment.memberNo).imgCode"
+                              >
+                                <img
+                                  :src="getMember(comment.memberNo).imgCode"
+                                />
                               </template>
                               <template v-else>
                                 <v-icon fab dark>mdi-plus</v-icon>
@@ -199,27 +356,37 @@
                             </v-avatar>
                           </div>
                           <p>
-                            <span class="user-name">{{getMember(comment.memberNo).name}}</span>
-                            <span class="reg-date">{{comment.regDate}}</span>
+                            <span class="user-name">{{
+                              getMember(comment.memberNo).name
+                            }}</span>
+                            <span class="reg-date">{{ comment.regDate }}</span>
                           </p>
                           <div>
-                            <div class="comment-balloon">{{comment.content}}</div>
-                            <span class="comment-btn" v-if="comment.memberNo == project.memberNo">
-                              <v-btn
+                            <div class="comment-balloon">
+                              {{ comment.content }}
+                            </div>
+                            <span
+                              class="comment-btn"
+                              v-if="comment.memberNo == project.memberNo"
+                            >
+                              <!-- <v-btn
                                 x-small
                                 icon
                                 @click.prevent="editComment()"
                                 color="grey lighten-1"
                               >
                                 <v-icon>mdi-lead-pencil</v-icon>
-                              </v-btn>
+                              </v-btn> -->
                               <v-btn
                                 x-small
                                 icon
-                                @click.prevent="deleteComment()"
+                                @click.prevent="
+                                  deleteComment(comment.commentNo)
+                                "
                                 color="grey lighten-1"
+                                class="mt-4"
                               >
-                                <v-icon>mdi-trash-can</v-icon>
+                                <v-icon small>mdi-trash-can-outline</v-icon>
                               </v-btn>
                             </span>
                           </div>
@@ -230,11 +397,11 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="4" class="createTaskside pa-0">
-              <v-subheader>ADD OPTIONS</v-subheader>
+            <v-col cols="3" class="createTaskside pa-0">
+              <v-subheader>추가 옵션</v-subheader>
               <v-list-item>
                 <v-btn block depressed @click.prevent="isOpenAddMember = true">
-                  <v-icon left>mdi-account-plus</v-icon>MEMBERS
+                  <v-icon left>mdi-account-plus</v-icon>담당자
                 </v-btn>
                 <add-member
                   :openModal="isOpenAddMember"
@@ -247,7 +414,7 @@
                 <v-menu offset-y :close-on-content-click="false">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on" block depressed>
-                      <v-icon left>mdi-plus</v-icon>STATE
+                      <v-icon left>mdi-rotate-left</v-icon>상태
                     </v-btn>
                   </template>
                   <v-card class="my-chip-group">
@@ -260,7 +427,8 @@
                           filter
                           label
                           :color="st.color"
-                        >{{ st.name }}</v-chip>
+                          >{{ st.name }}</v-chip
+                        >
                       </v-chip-group>
                     </v-card-text>
                   </v-card>
@@ -282,36 +450,96 @@
                   :existEndDate="existEndDate"
                 />
               </v-list-item>
-              <v-subheader>ACTIONS</v-subheader>
               <v-list-item>
-                <v-btn block depressed @click="watchTask">
-                  <v-icon left>mdi-eye</v-icon>WATCH
+                <v-menu
+                  offset-x
+                  :close-on-content-click="false"
+                  top
+                  v-model="newCheckList"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on" block depressed>
+                      <v-icon left>mdi-format-list-bulleted</v-icon>체크리스트
+                    </v-btn>
+                  </template>
+                  <v-card class="my-chip-group">
+                    <v-card-text>
+                      <v-form
+                        @submit.prevent="onCheckListSubmit"
+                        lazy-validation
+                      >
+                        <v-text-field
+                          label="체크리스트 이름"
+                          v-model="checkListName"
+                          :counter="20"
+                          required
+                        ></v-text-field>
+                        <v-btn type="submit" block depressed>
+                          <v-icon left>mdi-plus</v-icon>생성
+                        </v-btn>
+                      </v-form>
+                    </v-card-text>
+                  </v-card>
+                </v-menu>
+              </v-list-item>
+              <v-subheader>액션</v-subheader>
+              <v-list-item>
+                <v-btn
+                  v-if="this.taskInfo.task.starred"
+                  block
+                  depressed
+                  @click="setWatchTask"
+                >
+                  <v-icon left>mdi-star</v-icon>관심업무
+                </v-btn>
+                <v-btn v-else block depressed @click="setWatchTask">
+                  <v-icon left>mdi-star-outline</v-icon>관심업무
                 </v-btn>
                 <v-alert
                   class="watchAlret"
                   :value="watchSnackbar"
                   dense
+                  light
                   type="success"
+                  color="#7681a4"
                   transition="fade-transition"
-                >관심업무로 등록되었습니다</v-alert>
+                >
+                  <span v-if="this.taskInfo.task.starred == 0"
+                    >관심업무로<br />
+                    등록되었습니다</span
+                  >
+                  <span v-else
+                    >관심업무가<br />
+                    해제되었습니다</span
+                  >
+                </v-alert>
               </v-list-item>
               <v-list-item>
-                <v-btn block depressed>
-                  <v-icon left>mdi-archive-outline</v-icon>ARCHIVE
+                <v-btn block depressed @click="sendToArchive()">
+                  <v-icon left>mdi-archive-outline</v-icon>보관함
                 </v-btn>
               </v-list-item>
-              <v-subheader>RESISTRANT</v-subheader>
+              <v-subheader>작성자</v-subheader>
               <v-list-item v-if="resistrant">
                 <v-list-item-avatar v-if="resistrant.imgCode" size="32">
                   <!-- <pre>getMemberImg(taskInfo.task.memberNo)}}</pre> -->
                   <img :src="resistrant.imgCode" />
                 </v-list-item-avatar>
-                <v-list-item-avatar v-else size="32" class="user-avatars" color="grey">
+                <v-list-item-avatar
+                  v-else
+                  size="32"
+                  class="user-avatars"
+                  color="grey"
+                >
                   <v-icon fab dark>mdi-account</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-html="resistrant.name"></v-list-item-title>
-                  <v-list-item-subtitle v-html="getDate(this.taskInfo.task.regDate)"></v-list-item-subtitle>
+                  <v-list-item-title
+                    v-html="resistrant.name"
+                  ></v-list-item-title>
+                  <v-list-item-subtitle
+                    v-html="getDate(this.taskInfo.task.regDate)"
+                  ></v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-col>
@@ -321,8 +549,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="onClose">Cancle</v-btn>
-          <v-btn color="blue darken-1" text type="submit">SAVE</v-btn>
+          <v-btn text @click="onClose">취소</v-btn>
+          <v-btn color="blue darken-1" text type="submit">저장</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -330,6 +558,8 @@
 </template>
 
 <script>
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
 import { mapState, mapActions, mapMutations } from "vuex";
 import LabelMenu from "./LabelMenu.vue";
 import DateMenu from "./DateMenu.vue";
@@ -383,6 +613,10 @@ export default {
           this.taskInfo.task.managerString
         );
       }
+      this.existCheckLists = this.taskInfo.checkLists;
+      // this.showNewCheckItems.length = this.existCheckLists.length;
+      // this.showNewCheckItems.fill(false);
+
       this.resistrant = this.getMember(this.taskInfo.task.memberNo);
       this.description = this.taskInfo.task.description;
       this.comments = this.taskInfo.comments;
@@ -418,13 +652,14 @@ export default {
     ],
     // taskStateName: ["보류", "진행", "완료", "긴급", "대기"],
     // taskStateColor: ["defualt", "primary", "success", "error", "warning"],
-    taskLabel: undefined,
+    taskLabel: "[]",
     labels: "",
     existLabel: undefined,
     existFiles: undefined,
     existStartDate: undefined,
     existEndDate: undefined,
     existManagers: undefined,
+    existCheckLists: undefined,
     imgRules: [
       (value) =>
         !value ||
@@ -448,6 +683,10 @@ export default {
     comment: "",
     comments: [],
     watchSnackbar: false,
+    checkListName: "",
+    newCheckList: false,
+    showNewCheckItems: [],
+    newCheckItem: "",
   }),
 
   methods: {
@@ -456,12 +695,26 @@ export default {
       "ADD_SUB_TASK",
       "FETCH_TASK",
       "ADD_COMMENT",
+      "DELETE_COMMENT",
       "UPDATE_TASK",
       "DOWNLOAD_FILE",
       "ADD_STARED_TASK",
+      "DELETE_STARRED_TASK",
+      "ADD_CHECK_LIST",
+      "ADD_NEW_CHECK_ITEM",
+      "FETCH_CHECK_LISTS",
+      "SET_CHECK_ITEM",
+      "DELETE_CHECK_ITEM",
+      "DELETE_CHECK_LIST",
+      "DELETE_FILE",
+      "SEND_TO_ARCHIVE",
     ]),
     ...mapMutations(["SET_ADD_TASK_MODAL", "SET_SUPER_TASK_ID"]),
     onSubmit() {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
       // Create Project
       console.log("..UPDATE TASK..");
       // console.log("taskSuperId", this.taskSuperId);
@@ -497,7 +750,7 @@ export default {
         var subMem = [];
         if (this.taskInfo.task.managerString !== null) {
           addMem = this.managers
-            .map(function (o) {
+            .map(function(o) {
               return o.memberNo;
             })
             .filter(
@@ -508,7 +761,7 @@ export default {
           subMem = JSON.parse(this.taskInfo.task.managerString).filter(
             (mem) =>
               !this.managers
-                .map(function (o) {
+                .map(function(o) {
                   return o.memberNo;
                 })
                 .includes(mem)
@@ -518,6 +771,8 @@ export default {
         formData.append("subManager", subMem);
         this.UPDATE_TASK(formData).then(() => {
           console.log("UPDATE TASK ~!!");
+          this.sendMessage();
+          // 이벤트 버스..? TODO
         });
         // this.ADD_SUB_TASK(formData).then(() => {
         //   console.log("------------------");
@@ -537,16 +792,20 @@ export default {
         this.onClose();
       }
     },
-
-    onClose() {
-      this.$router.push(`/projects/${this.project.id}`);
-      // this.openModal = false;
-      // this.openModal = false;
-      // this.SET_ADD_TASK_MODAL(false);
-      // this.formClear();
-      // this.$emit("close");
-      // this.SET_SUPER_TASK_ID("");
+    sendMessage: function() {
+      console.log("## 서버로 메세지 송신! ## :", this.project.memberNo);
+      let socket = new SockJS("http://localhost:9000/ws-stomp");
+      Stomp.over(socket).send(
+        "/pub/ws/update",
+        JSON.stringify({
+          name: this.$route.params.pid,
+          sender: this.project.memberNo,
+        }),
+        {}
+      );
+      // this.message = "";
     },
+
     remove(item) {
       const index = this.members.indexOf(item.name);
       if (index >= 0) this.members.splice(index, 1);
@@ -643,6 +902,10 @@ export default {
       );
     },
     sendComment() {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
       // console.log("send COmment..");
       if (this.invalidInput) return;
       let commentObj = {
@@ -655,6 +918,7 @@ export default {
         console.log("addComment 완료~~!");
         console.log(this.taskInfo.comments);
         console.log(data);
+        // this.sendMessage();
         this.comments = this.taskInfo.comments;
         this.comment = "";
       });
@@ -665,6 +929,7 @@ export default {
       this.DOWNLOAD_FILE(this.existFiles[index])
         .then((res) => {
           console.log(res);
+          console.log("downloadFile ㅎ액션~!");
           const url = window.URL.createObjectURL(new Blob([res.data])); // = window.URL.createObjectURL(new Blob([res.data], { type: 'application/zip' }));
           const link = document.createElement("a");
           link.href = url;
@@ -679,36 +944,12 @@ export default {
           console.log("err~!");
           console.error(err);
         });
-
-      // this.DOWNLOAD_FILE(this.existFiles[index]);
-      // .then(res => {
-      //   const url = window.URL.createObjectURL(
-      //     new Blob([res.data], { type: "image/png" })
-      //   ); // = window.URL.createObjectURL(new Blob([res.data], { type: 'application/zip' }));
-      //   const link = document.createElement("a");
-      //   link.href = url;
-      //   link.setAttribute("download");
-      //   document.body.appendChild(link);
-      //   link.click();
-      //   // this.ids = [];
-      //   alert("다운로드가 완료되었습니다.");
-      // })
-      // .catch(error => {
-      //   alert("다운로드에 실패하였습니다.");
-      //   this.error = error.data.error;
-      //   // this.ids = [];
-      // });
-
-      // console.log(
-      //   "C:\\Users\\aa\\Desktop\\final-todo-workspace\\todo_project\\todo" +
-      //     "/upload/files"
-      // );
-      // window.location.assign(
-      //   "C:UsersaaDesktop\\final-todo-workspace\\todo_project\\todo\\upload\\files\\2020063003104822.png"
-      // );
     },
-    btnTest() {
+    deleteFile(index) {
       console.log("삭제버튼클릭");
+      this.DELETE_FILE(this.existFiles[index].fileNo).then(() => {
+        alert("파일이 삭제되었습니다.");
+      });
     },
     onStar() {
       this.active = !this.active;
@@ -716,31 +957,158 @@ export default {
     editComment() {
       console.log("댓글 수정");
     },
-    deleteComment() {
-      console.log("댓글 삭제");
+    deleteComment(cno) {
+      let temp = { commentNo: cno, taskId: this.$route.params.tid };
+      this.DELETE_COMMENT(temp).then((data) => {
+        console.log("댓글 삭제", data);
+        this.comments = this.taskInfo.comments;
+      });
     },
-    watchTask() {
-      console.log("watchTask");
+    setWatchTask() {
       this.watchSnackbar = true;
-
-      let data = {
-        memberNo: this.project.memberNo,
-        taskId: this.$route.params.tid,
-      };
-
-      // 관심업무 등록 요청!
-      this.ADD_STARED_TASK(data);
-
+      console.log("watchTask");
+      if (this.taskInfo.task.starred > 0) {
+        this.DELETE_STARRED_TASK(this.taskInfo.task.starred).then(() => {
+          setTimeout(
+            function() {
+              this.watchSnackbar = false;
+              this.taskInfo.task.starred = 0;
+              // console.log(this.watchSnackbar);
+            }.bind(this),
+            1000
+          );
+          // this.taskInfo.task.starred = 0;
+        });
+      } else {
+        let data = {
+          memberNo: this.project.memberNo,
+          taskId: this.$route.params.tid,
+        };
+        // 관심업무 등록 요청!
+        this.ADD_STARED_TASK(data).then((no) => {
+          setTimeout(
+            function() {
+              this.watchSnackbar = false;
+              this.taskInfo.task.starred = no;
+              // console.log(this.watchSnackbar);
+            }.bind(this),
+            1000
+          );
+          // this.taskInfo.task.starred = no;
+        });
+      }
       // 리턴으로 디테일 다시가져와서 뿌려주기..?
-
-      setTimeout(
-        function () {
-          console.log("????");
-          this.watchSnackbar = false;
-          console.log(this.watchSnackbar);
-        }.bind(this),
-        1500
-      );
+    },
+    showNewCheckItem(index) {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
+      this.showNewCheckItems = [];
+      this.newCheckItem = "";
+      this.showNewCheckItems[index] = true;
+    },
+    getCheckListItems(listStr) {
+      return JSON.parse(listStr);
+    },
+    onCheckListSubmit() {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
+      let data = {
+        taskId: this.$route.params.tid,
+        title: this.checkListName,
+        memberNo: this.project.memberNo,
+      };
+      console.log("checkList Submit: " + this.checkListName);
+      this.ADD_CHECK_LIST(data).then(() => {
+        this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+          this.existCheckLists = data;
+        });
+      });
+      this.newCheckList = false;
+      this.checkListName = "";
+      //this.formClear();
+    },
+    onClose() {
+      this.$router.push(`/projects/${this.project.id}`);
+      // this.openModal = false;
+      // this.openModal = false;
+      // this.SET_ADD_TASK_MODAL(false);
+      // this.formClear();
+      // this.$emit("close");
+      // this.SET_SUPER_TASK_ID("");
+    },
+    check(itemNo, listNo) {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
+      console.log("체크!+", itemNo, this.project.memberNo);
+      let data = {
+        itemNo: itemNo,
+        listNo: listNo,
+      };
+      this.SET_CHECK_ITEM(data).then(() => {
+        this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+          this.existCheckLists = data;
+        });
+      });
+    },
+    deleteCheckItem(itemNo, listNo) {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
+      let data = {
+        itemNo: itemNo,
+        listNo: listNo,
+      };
+      this.DELETE_CHECK_ITEM(data).then(() => {
+        this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+          this.existCheckLists = data;
+        });
+      });
+    },
+    deleteCheckList(listNo) {
+      let data = {
+        listNo: listNo,
+      };
+      this.DELETE_CHECK_LIST(data).then(() => {
+        this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+          this.existCheckLists = data;
+        });
+      });
+    },
+    addNewCheckItem(listNo) {
+      console.log("뉴 체크 아이템!");
+      let newItem = {
+        taskId: this.$route.params.tid,
+        listNo: listNo,
+        memberNo: this.project.memberNo,
+        title: this.newCheckItem,
+      };
+      console.log(newItem);
+      this.ADD_NEW_CHECK_ITEM(newItem).then(() => {
+        this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+          console.log("-----------");
+          console.log(data);
+          this.existCheckLists = data;
+          this.showNewCheckItems = [];
+          this.newCheckItem = "";
+        });
+      });
+    },
+    sendToArchive() {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
+      this.SEND_TO_ARCHIVE(this.$route.params.tid).then(() => {
+        alert("보관함으로 이동했습니다.");
+        this.onClose();
+      });
     },
   },
 };
@@ -769,6 +1137,7 @@ span.additional-title {
   height: 36px;
   padding-left: 10px;
   font-size: 20px;
+  font-family: "Jeju Gothic";
 }
 .v-input--radio-group.v-input--radio-group--row .v-radio {
   margin-right: 0px;
@@ -846,12 +1215,13 @@ div.comment-div .reg-date {
 }
 div.comment-balloon {
   max-width: 85%;
-  padding: 15px;
+  padding: 10px 16px 10px 16px;
   margin-left: 30px;
   background-color: #e0e5f1;
   border-radius: 20px;
   color: dimgrey;
   display: inline-block;
+  font-size: 13px;
 }
 p.comment-btn {
   text-align: right;
@@ -866,6 +1236,7 @@ div.comment-avatar {
   position: absolute;
   top: 50px;
   z-index: 99;
-  width: 235px;
+  width: 168px;
+  font-size: 13px;
 }
 </style>

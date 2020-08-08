@@ -33,7 +33,9 @@
             </v-avatar>
             {{ project.userId }}
           </v-chip>
-          외 {{ project.memberCnt - 1 }} 명
+          <span v-if="project.memberCnt > 1">
+            외 {{ project.memberCnt - 1 }} 명</span
+          >
         </v-card-text>
         <v-card-subtitle class="py-0" min-height="400px">
           <v-chip

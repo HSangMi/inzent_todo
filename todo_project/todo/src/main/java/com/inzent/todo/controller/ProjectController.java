@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
+import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
 import com.inzent.todo.dto.TaskBoardListDto;
 import com.inzent.todo.dto.TaskDto;
@@ -26,8 +27,8 @@ import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.ProjectVo;
-import com.inzent.todo.vo.StarredTaskVo;
 import com.inzent.todo.vo.UserVo;
+import com.inzent.todo.vo.StarredTaskVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.http.HttpRequest;
@@ -66,7 +67,7 @@ public class ProjectController {
         // System.out.println("Project Controller : getProjectInfo : " + pid);
         // 멤버가 아니라면 못들어가게 막아야하지않나.?
         int memberNo = projectService.getMemberNo(pid, userId);
-        // System.out.println("현재 사용자의 프로젝트 MEMBER NUM : " + memberNo);
+        System.out.println("현재 사용자의 프로젝트 MEMBER NUM : " + memberNo);
         // 이 프로젝트에 속한 업무(대) 중 private이면서, 내 id와 같은 업무 가져오기..
         List<TaskBoardListDto> taskBoardList = projectService.getTaskList(pid, memberNo);
         ProjectVo projectVo = projectService.getProject(pid);
@@ -84,6 +85,24 @@ public class ProjectController {
     }
 
     @Auth
+    @PostMapping("/updateProject")
+    public Map<String, Object> updateProject(HttpServletRequest req, ProjectDto projectDto) {
+        // System.out.println(projectDto);
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+
+        projectService.updateProject(projectDto);
+        ProjectVo projectVo = projectService.getProject(projectDto.getId());
+        List<MemberDto> memberList = projectService.getMemberList(projectDto.getId());
+        Map<String, Object> map = new HashMap<String, Object>();
+        int memberNo = projectService.getMemberNo(projectDto.getId(), userId);
+        map.put("memberNo", memberNo);
+        map.put("project", projectVo);
+        map.put("memberList", memberList);
+        return map;
+    }
+
+    @Auth
     @PostMapping("/addProject")
     public ProjectVo addProject(HttpServletRequest req, ProjectDto projectDto) throws Exception {
         // System.out.println("Project Controller : addProject");
@@ -96,7 +115,7 @@ public class ProjectController {
 
     @PostMapping("/addSuperTask")
     public void addSuperTask(TaskDto taskDto, HttpServletRequest req) throws Exception {
-        // System.out.println("Project Controller : addSuperTask");
+        System.out.println("Project Controller : addSuperTask");
         projectService.addTask(taskDto);
         // System.out.println(taskDto.toString());
         // System.out.println(projectDto.getCoverImg());
@@ -104,7 +123,8 @@ public class ProjectController {
 
     @PostMapping("/addSubTask")
     public void addSubTask(TaskDto taskDto, HttpServletRequest req) throws Exception {
-        // System.out.println("Project Controller : addSubTask");
+        System.out.println("Project Controller : addSubTask");
+        // System.out.println(taskDto.toString());
         projectService.addTask(taskDto);
         // System.out.println(projectDto.getCoverImg());
         // System.out.println(formObject.toString());
@@ -151,6 +171,20 @@ public class ProjectController {
 
     }
 
+    @PostMapping("/deleteComment")
+    public List<CommentVo> deleteComment(@RequestBody CommentVo comment) {
+        // System.out.println("Project Controller : addComment");
+        // System.out.println(comment.toString());
+        projectService.deleteComment(comment.getCommentNo());
+        return projectService.getComments(comment.getTaskId());
+        // projectService.reorderTask(targetTask);
+        // List<TaskBoardListDto> taskBoardList =
+        // return projectService.getTaskList(targetTask.getProjectId(),
+        // targetTask.getMemberNo());
+        // memberNo);
+
+    }
+
     @GetMapping("/getLabels/{pid}")
     public List<LabelVo> getLabel(@PathVariable("pid") String pid) {
         List<LabelVo> lableList = projectService.getLabelList(pid);
@@ -175,9 +209,16 @@ public class ProjectController {
     }
 
     @PostMapping("/starredTask")
-    public void staredTask(@RequestBody StarredTaskVo starred) {
+    public int addStaredTask(@RequestBody StarredTaskVo starred) {
         System.out.println("staredTask");
-        projectService.addStarredTask(starred);
+        return projectService.addStarredTask(starred);
+    }
+
+    @PostMapping("/deleteStarred")
+    public void deleteStarred(@RequestBody String starId) {
+        System.out.println("deleteStarred");
+        starId = starId.substring(0, starId.length() - 1);
+        projectService.deleteStarred(Integer.parseInt(starId));
     }
 
     @PostMapping("/addCheckList")

@@ -111,15 +111,15 @@ export default {
     this.fatch_data();
     // console.log("this.memberList", this.memberList);
     console.log("## created User SEARCH");
-    if (this.memberList.length) {
-      console.log("---------멤버리스트가 있냐?-------");
-      // console.log("memberList :", this.memberList);
-      this.selected = Object.assign([], this.memberList);
-      // this.selected = this.memberList;
-      // console.log("selected :", this.memberList);
-    } else {
-      console.log("---------멤버리스트없다!!?-------");
-    }
+    // if (this.memberList.length) {
+    //   console.log("---------멤버리스트가 있냐?-------");
+    //   // console.log("memberList :", this.memberList);
+    //   this.selected = Object.assign([], this.memberList);
+    //   // this.selected = this.memberList;
+    //   // console.log("selected :", this.memberList);
+    // } else {
+    //   console.log("---------멤버리스트없다!!?-------");
+    // }
   },
   computed: {
     ...mapState({

@@ -1,9 +1,11 @@
 package com.inzent.todo.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class TaskDto {
     private String taskId;
     private String title;
@@ -32,8 +35,14 @@ public class TaskDto {
     private int[] manager;
     private String managerString;
     private int starred;
+    // private List<CheckListDto2> checkLists;
+    private String checkLists;
 
     public boolean getUsePublic() {
         return usePublic;
+    }
+
+    public TaskDto() {
+
     }
 }

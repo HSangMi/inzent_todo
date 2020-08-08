@@ -23,6 +23,7 @@ public class ProjectCardDto {
     private String userId;
     private String imgCode;
     private int memberCnt;
+    private int progressRate;
 
     public boolean getUsePublic() {
         return usePublic;

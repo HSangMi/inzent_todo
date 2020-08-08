@@ -36,6 +36,12 @@
 		<foreach collection="managers" item="item" index="index" separator="or">
 		 task_id = #{taskId} and member_no = #{item}
 		</foreach>
-		
+	</delete>
+	<delete id="deleteMembers">
+		delete from tb_member
+		where project_id = #{projectId} and
+		<foreach collection="members" item="item" index="index" separator="or" open="(" close=")">
+		  user_id = #{item}
+		</foreach>
 	</delete>
 </mapper>

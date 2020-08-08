@@ -1,12 +1,18 @@
 package com.inzent.todo.service;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.inzent.todo.controller.CheckListDTO;
 import com.inzent.todo.dto.CheckListDto;
+import com.inzent.todo.dto.CheckListDto2;
 import com.inzent.todo.dto.MemberDto;
+import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
 import com.inzent.todo.dto.TaskBoardListDto;
 import com.inzent.todo.dto.TaskDto;
@@ -20,9 +26,11 @@ import com.inzent.todo.vo.CheckListItemVo;
 import com.inzent.todo.vo.CheckListVo;
 import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
+import com.inzent.todo.vo.ImageVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.MemberVo;
 import com.inzent.todo.vo.ProjectVo;
+import com.inzent.todo.vo.SuperTaskVo;
 import com.inzent.todo.vo.StarredTaskVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,31 +63,14 @@ public class ProjectService {
         projectVo.setEndDate(projectDto.getEndDate());
         // 프로젝트 테이블에 insert
         // projectVo에 Dto내용 뽑아서 담기!
+        projectVo.setImgNo(projectDto.getImgNo());
 
         // TODO 프로젝트 이미지가 있다면 저장, 없다면,색깔? 테마?
-        if (projectDto.getCoverImg() == null) {
-            // System.out.println("CoverImg is Empty..");
-            projectVo.setImgNo("#" + projectDto.getCoverColor());
-        } else {
-            // System.out.println("CoverImg !");
-            projectVo.setImgNo(projectDto.getCoverImg());
-            // MultipartFile imgFile = projectDto.getCoverImg();
-
-            // String orgFileName = imgFile.getOriginalFilename();
-            // String fileExtName = orgFileName.substring(orgFileName.lastIndexOf('.') + 1,
-            // orgFileName.length());
-            // String saveFileName = DBUtil.generateSaveFileName(fileExtName);
-
-            // // 파일 업로드
-            // FileUtil.writeImgFile(imgFile, saveFileName);
-
-            // // DB에 img 저장
-            // ImageVo imageVo = new ImageVo();
-            // imageVo.setSaveName(saveFileName);
-            // int img_key = fileDao.insertImg(imageVo);
-            // projectVo.setImgNo(img_key + "");
-        }
-
+        // if (projectDto.getCoverImg() == null) {
+        // projectVo.setImgNo("#" + projectDto.getCoverColor());
+        // } else {
+        // projectVo.setImgNo(projectDto.getCoverImg());
+        // }
         // TODO 프로젝트 멤버테이블에 생성한사람, 멤버가 있다면 멤버도 추가
 
         MemberVo mem = new MemberVo();
@@ -101,9 +92,9 @@ public class ProjectService {
     }
 
     public void addTask(TaskDto taskDto) throws Exception {
-        // System.out.println("-----------ProjectService.addTask ----------");
-        // System.out.println(taskDto.toString());
-        // System.out.println("--------------------------------------------");
+        System.out.println("-----------ProjectService.addTask ----------");
+        System.out.println(taskDto.toString());
+        System.out.println("--------------------------------------------");
 
         if (taskDto.getSortNo() == 0) {
             taskDto.setSortNo(65535);
@@ -139,6 +130,36 @@ public class ProjectService {
                 file.setTaskId(taskId);
                 fileDao.insertFile(file);
             }
+        }
+        // 체크리스트가 있다면 추가
+        if (taskDto.getCheckLists() != null) {
+            System.out.println("체크리스트 있음");
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<CheckListDto>>() {
+            }.getType();
+            Type ItemType = new TypeToken<List<CheckListItemVo>>() {
+            }.getType();
+            List<CheckListDto> list = gson.fromJson(taskDto.getCheckLists(), listType);
+            System.out.println(list.toString());
+            for (CheckListDto chk : list) {
+                chk.setTaskId(taskId);
+                System.out.println(chk.toString());
+                projectDao.insertCheckList(chk);
+                System.out.println("추가된 리스트 no : " + chk.getListNo());
+                List<CheckListItemVo> items = gson.fromJson(chk.getCheckListItems(), ItemType);
+                System.out.println(items.toString());
+                if (items.size() > 0) {
+                    projectDao.insertAllCheckListItems(items, chk.getListNo());
+                }
+                // System.out.println(items.toString());
+            }
+            /*
+             * CheckListDto dto = taskDto.getCheckList(); CheckListVo chk = new
+             * CheckListVo(); chk.setTitle(dto.getTitle());
+             * chk.setMemberNo(dto.getMemberNo()); chk.setTaskId(dto.getTaskId());
+             * projectDao.insertCheckList(chk); System.out.println(chk.toString());
+             */
+
         }
         // 담당자가 있다면, 담당자 테이블에 추가!
         if (taskDto.getManager().length != 0) {
@@ -273,12 +294,16 @@ public class ProjectService {
         projectDao.insertComment(comment);
     }
 
+    public void deleteComment(int commentNo) {
+        projectDao.deleteComment(commentNo);
+    }
+
     public List<CommentVo> getComments(String taskId) {
         return projectDao.selectComments(taskId);
     }
 
-    public void addStarredTask(StarredTaskVo starred) {
-        projectDao.insertStarredTask(starred);
+    public int addStarredTask(StarredTaskVo starred) {
+        return projectDao.insertStarredTask(starred);
     }
 
     public void addCheckList(CheckListVo checkList) {
@@ -312,6 +337,32 @@ public class ProjectService {
 
     public void deleteFile(int fileNo) {
         fileDao.deleteFile(fileNo);
+    }
+
+    public void updateProject(ProjectDto projectDto) {
+
+        if (projectDto.getNewMems().length != 0) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            // System.out.println("멤버가 있지롱");
+            // System.out.println(projectDto.getMembers().length);
+            map.put("projectId", projectDto.getId());
+            map.put("members", projectDto.getNewMems());
+            memberDao.insertMembers(map);
+        }
+        if (projectDto.getDelMems().length != 0) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            // System.out.println("멤버가 있지롱");
+            // System.out.println(projectDto.getMembers().length);
+            map.put("projectId", projectDto.getId());
+            map.put("members", projectDto.getDelMems());
+            memberDao.deleteMembers(map);
+        }
+
+        projectDao.updateProject(projectDto);
+    }
+
+    public void deleteStarred(int starId) {
+        projectDao.deleteStarred(starId);
     }
 
 }

@@ -62,19 +62,19 @@ const actions = {
     });
   },
   UPDATE_USER({ commit }, user) {
-		return api.user.update_user(user).then((data) => {
-			console.log('action: UPDATE_DATA 완료');
-			console.log(data);
-			if (data.gender == 'f') {
-				data.gender = '여성';
-			} else if (data.gender == 'm') {
-				data.gender = '남성';
-			} else {
-				data.gender = '비공개';
-			}
-			commit('SET_USER_INFO', data);
-		});
-	},
+    return api.user.update_user(user).then((data) => {
+      console.log("action: UPDATE_DATA 완료");
+      console.log(data);
+      if (data.gender == "f") {
+        data.gender = "여성";
+      } else if (data.gender == "m") {
+        data.gender = "남성";
+      } else {
+        data.gender = "비공개";
+      }
+      commit("SET_USER_INFO", data);
+    });
+  },
   ////////////////////////////// PROJECT////////////////////////////////
   ADD_PROJECT(_, newProject) {
     // console.log("actions.ADD_PROJECT : ");
@@ -97,6 +97,13 @@ const actions = {
       commit("SET_TASK_LIST", data.taskBoardList);
       commit("SET_LABEL_LIST", data.labelList);
       commit("SET_MEMBER_LIST", data.memberList);
+    });
+  },
+  UPDATE_PROJECT({ commit }, project) {
+    return api.project.updateProject(project).then((data) => {
+      data.project["memberNo"] = data.memberNo;
+      commit("SET_PROJECT", data.project);
+      commit("SET_TASK_LIST", data.taskBoardList);
     });
   },
   ADD_SUPER_TASK({ state, dispatch }, superTask) {
@@ -146,7 +153,11 @@ const actions = {
   ADD_COMMENT({ commit }, commentObj) {
     console.log("ADD_COMMENT...");
     return api.project.addComment(commentObj).then((comments) => {
-      console.log(comments);
+      commit("SET_COMMENTS", comments);
+    });
+  },
+  DELETE_COMMENT({ commit }, commentNo) {
+    return api.project.deleteComment(commentNo).then((comments) => {
       commit("SET_COMMENTS", comments);
     });
   },
@@ -155,6 +166,9 @@ const actions = {
   },
   ADD_STARED_TASK(_, data) {
     return api.project.staredTask(data);
+  },
+  DELETE_STARRED_TASK(_, no) {
+    return api.project.deleteStaredTask(no);
   },
   ADD_CHECK_LIST(_, data) {
     return api.project.addCheckList(data);
@@ -182,6 +196,11 @@ const actions = {
   },
   SEND_TO_ARCHIVE(_, taskId) {
     return sohyun.archive.sendToArchive(taskId);
+  },
+  SEND_TO_ARCHIVE_SUPER({ state, dispatch }, taskId) {
+    return sohyun.archive.sendToArchive(taskId).then(() => {
+      dispatch("FETCH_PROJECT", state.project.id);
+    });
   },
   //////////////////////// DASHBOARD ////////////////////////
   //오늘 리스트
@@ -444,20 +463,20 @@ const actions = {
     return sohyun.archive.restoreArchvieSuper(superId);
   },
   //////////////////////// ADMIN ////////////////////////
-	INSERT_USER(_, user) {
-		return api.admin.insert_user(user).then(() => {
-			console.log('action: INSERT_USER 완료');
-		});
-	},
-	MODIFY_USER(_, user) {
-		return api.admin.modify_user(user).then(() => {
-			console.log('action: MODIFY_USER 완료');
-		});
-	},
-	DELETE_USER(_, userId) {
-		return api.admin.delete_user(userId).then(() => {
-			console.log('action: DELETE_USER 완료');
-		});
-	}
+  INSERT_USER(_, user) {
+    return api.admin.insert_user(user).then(() => {
+      console.log("action: INSERT_USER 완료");
+    });
+  },
+  MODIFY_USER(_, user) {
+    return api.admin.modify_user(user).then(() => {
+      console.log("action: MODIFY_USER 완료");
+    });
+  },
+  DELETE_USER(_, userId) {
+    return api.admin.delete_user(userId).then(() => {
+      console.log("action: DELETE_USER 완료");
+    });
+  },
 };
 export default actions;

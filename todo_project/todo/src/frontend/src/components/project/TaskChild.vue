@@ -2,7 +2,12 @@
   <div>
     <li class="sub-task-item" :class="`state${item.state}`">
       <router-link :to="`/projects/${board.id}/task/${item.taskId}`">
-        <v-card class="rounded-lg mx-auto my-0" width="300" flat draggable="false">
+        <v-card
+          class="rounded-lg mx-auto my-0"
+          width="300"
+          flat
+          draggable="false"
+        >
           <v-card-title>
             <v-icon small v-if="!item.usePublic">mdi-lock</v-icon>
             <span class="task-title">{{ item.title }}</span>
@@ -11,12 +16,16 @@
             <!-- <v-btn icon @click.prevent="onStar"> -->
             <v-icon
               class="pt-1 pr-1"
-              v-if="item.starred !==0"
+              v-if="item.starred !== 0"
               color="amber darken-1"
-            >mdi-star-outline</v-icon>
+              >mdi-star-outline</v-icon
+            >
             <!-- </v-btn> -->
           </v-card-title>
-          <v-card-subtitle class="pa-0 px-2 pt-2" v-if="item.startDate || item.endDate">
+          <v-card-subtitle
+            class="pa-0 px-2 pt-2"
+            v-if="item.startDate || item.endDate"
+          >
             <v-chip label small color="#cacaca">
               <v-icon small left>mdi-clock-outline</v-icon>
               {{ item.startDate }} - {{ item.endDate }}
@@ -33,7 +42,8 @@
                   dark
                   class="mr-1"
                   :color="label.labelColor"
-                >{{ label.labelName }}</v-chip>
+                  >{{ label.labelName }}</v-chip
+                >
                 <!-- <v-chip-group
                 v-model="selection"
                 active-class="deep-purple accent-4 white--text"
@@ -45,10 +55,10 @@
               </v-col>
             </v-row>
             <v-row class="mx-0 mt-2">
-              <p class="my-auto">
-                <v-icon size="20">mdi-paperclip</v-icon>
+              <p class="mt-4 mb-0">
+                <v-icon small>mdi-paperclip</v-icon>
                 {{ item.fileCnt }}
-                <v-icon size="20">mdi-comment-text-outline</v-icon>
+                <v-icon small>mdi-comment-text-outline</v-icon>
                 {{ item.commentCnt }}
               </p>
               <v-spacer></v-spacer>
@@ -58,11 +68,17 @@
                 bottom
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-avatar v-if="manager.imgCode" size="36" class="user-avatars">
+                  <v-avatar
+                    v-if="manager.imgCode"
+                    size="36"
+                    class="user-avatars"
+                  >
                     <img :src="manager.imgCode" v-bind="attrs" v-on="on" />
                   </v-avatar>
                   <v-avatar v-else class="user-avatars" size="36" color="grey">
-                    <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                    <v-icon fab dark v-bind="attrs" v-on="on"
+                      >mdi-account</v-icon
+                    >
                   </v-avatar>
                 </template>
                 <span>{{ manager.name }}</span>

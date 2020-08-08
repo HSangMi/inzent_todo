@@ -53,7 +53,7 @@ export default {
     console.log("프로젝트메인");
     this.fetchData();
     console.log(this.$route);
-    this.SET_HEADER_TITLE("PROJECT LIST");
+    this.SET_HEADER_TITLE("프로젝트 목록");
     //console.dir(this.projects);
   },
   methods: {

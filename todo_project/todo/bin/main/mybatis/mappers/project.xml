@@ -57,14 +57,26 @@
 			values
 			( #{taskId}, #{memberNo})
 		]]>
+		<selectKey keyProperty="starId" resultType="int" order="AFTER">
+            SELECT currval('seq_star')
+        </selectKey>
 	</insert>
-	<insert id="insertCheckList" parameterType="checklistvo">
+	<delete id="deleteStarred">
+		<![CDATA[
+		delete from tb_starred_task
+		where star_id =#{starId};
+		]]>
+	</delete>
+	<insert id="insertCheckList">
 		<![CDATA[
 			insert into tb_check_list
 			(task_id, title, member_no)
 			values
 			(#{taskId}, #{title}, #{memberNo})
 		]]>
+		<selectKey keyProperty="listNo" resultType="int" order="AFTER">
+            SELECT currval('seq_chklist')
+        </selectKey>
 	</insert>
 	<insert id="insertCheckListItem">
 		<![CDATA[
@@ -177,6 +189,13 @@
 		]]>
 		
 	</update>
+	<update id="updateProject">
+		<![CDATA[
+		update tb_project
+		set title = #{title}, description = #{description}, use_public = #{usePublic}, start_date = #{startDate}, end_date = #{endDate}, img_no =#{imgNo}
+		where id = #{id}
+		]]>
+	</update>
 	<update id="updateTaskSub">
 		update tb_task_sub tts
 		set title = #{title}, description = #{description}, use_public = #{usePublic}, start_date = #{startDate}, end_date =#{endDate}, state=#{state}
@@ -220,6 +239,14 @@
 			where list_no =#{listNo};
 		]]>
 	</delete>
+	<insert id="insertAllCheckListItems" parameterType="map">
+			insert into tb_check_list_item
+			(list_no, title, member_no)
+			values
+		<foreach collection="itemList" item="item" index="index" separator=",">
+			(#{lno}, #{item.title}, #{item.memberNo})
+		</foreach>
+	</insert>
 
 
 
