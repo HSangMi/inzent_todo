@@ -2,7 +2,7 @@ import { setAuthInHeader } from "../api";
 const mutations = {
   LOGIN(state, { accessToken, autoLogin }) {
     if (!accessToken) return; //토큰정보가 없으면, 리턴
-    if(autoLogin == true) {
+    if (autoLogin == true) {
       localStorage.setItem("accessToken", accessToken); // 로컬스토리지에 token값 저장
     } else {
       sessionStorage.setItem("accessToken", accessToken);
@@ -152,7 +152,7 @@ const mutations = {
     if (sortNo == "") {
       state.lastSubSortNo = 0;
     } else {
-      state.lastSubSortNo = sortNo;
+      state.lastSubSortNo = sortNo + 65535;
     }
   },
   SET_FETCH_CHKPROJECT(state, data) {

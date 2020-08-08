@@ -32,7 +32,9 @@ public class ScheduleService {
         // System.out.println(filterItem);
         // PJ2020072109523258::orange,zzz::0
         List<ScheduleDto> list = new ArrayList<>();
-        if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
+        if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("") || existUser.equals("")
+                || filterItem.equals("::::0")) { // 필터값이
+            // 없다면
             list = scheduledao.getCalendarList(userId); // 전체 조회
         } else { // 필터 값이 있다면
             // 1. ::기준으로 배열에 담는다 (유형분류)
@@ -89,7 +91,8 @@ public class ScheduleService {
         // System.out.println(filterItem);
         // // PJ2020072109523258::orange,zzz::0
         List<CalDateDetailDto> list = new ArrayList<>();
-        if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("::::0")) { // 필터값이 없다면
+        if (existUser.isEmpty() || filterItem.isEmpty() || filterItem.equals("") || existUser.equals("")
+                || filterItem.equals("::::0")) { // 필터값이 없다면
             list = scheduledao.getClickDateList(cddto); // 전체 조회
         } else { // 필터 값이 있다면
             // // 1. ::기준으로 배열에 담는다 (유형분류)

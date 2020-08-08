@@ -8,6 +8,9 @@
         <v-stepper-step :complete="e1 > 2" step="2">업무 선택</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 3" step="3">업무 등록</v-stepper-step>
+        <v-btn color="grey darken-1" icon @click="SET_IS_ADD_CALENDAR(false)">
+          <v-icon color="grey darken-1">mdi-close</v-icon>
+        </v-btn>
       </v-stepper-header>
 
       <v-stepper-items>
@@ -28,7 +31,6 @@
             <span style="font-size:13px">프로젝트를 선택해주세요.</span>
           </v-alert>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="SET_IS_ADD_CALENDAR(false)">취소</v-btn>
             <v-spacer></v-spacer>
             <v-btn class="ma-2" color="primary" outlined small fab @click="isChkPrj()">
               <v-icon>mdi-chevron-right</v-icon>
@@ -56,11 +58,10 @@
             ></v-select>
           </v-radio-group>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="SET_IS_ADD_CALENDAR(false)">취소</v-btn>
-            <v-spacer></v-spacer>
             <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 1">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
+            <v-spacer></v-spacer>
             <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 3">
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
@@ -71,68 +72,83 @@
           <!-- 업무 추가 -->
           <v-card class="add-task-card-form">
             <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
-              <!-- <v-card-title class="headline grey lighten-2" primary-title>
-                <h4 v-if="taskSuperId">하위 업무 등록</h4>
-                <h4 v-else>상위 업무 등록</h4>
-                <v-spacer></v-spacer>
-              </v-card-title>-->
-              <!-- <v-card-title v-if="taskSuperId" class="text-h5">하위 업무 등록</v-card-title>
-              <v-card-title v-else class="text-h5">상위 업무 등록</v-card-title>-->
+              <v-card-title class="headline grey lighten-2 py-2" primary-title>
+                <h4 v-if="taskSuperId">하위 업무 추가</h4>
+                <h4 v-else>상위 업무 추가</h4>
+              </v-card-title>
               <v-card-text class="py-0 px-3">
                 <!-- <v-container> -->
-                <v-row>
-                  <v-col cols="8" class="formFieldCol">
+                <v-row style="max-height:750px" class="overflow-y-auto">
+                  <v-col cols="9" class="formFieldCol">
                     <v-col cols="12">
                       <v-text-field
-                        label="TASK TITLE*"
+                        label="업무 타이틀*"
                         v-model="title"
                         :rules="titleRules"
                         required
+                        dense
                         auto-grow
                         outlined
+                        hide-details
                       ></v-text-field>
                     </v-col>
-                    <v-row class="px-5 pb-4">
-                      <v-col cols="6">
-                        <p>PRIVATE*</p>
-                        <v-radio-group v-model="usePublic" required row :rules="privateRules">
-                          <br />
-                          <v-radio label="Public" value="true"></v-radio>
-                          <v-spacer></v-spacer>
-                          <v-radio label="Private" value="false"></v-radio>
+                    <v-row class="px-5 py-0">
+                      <v-col cols="12" class="pb-3">
+                        <!-- <p><v-icon left small>mdi-lock</v-icon>공개 여부*</p> -->
+                        <v-radio-group
+                          v-model="usePublic"
+                          required
+                          hide-details
+                          row
+                          :rules="privateRules"
+                        >
+                          <span class="additional-title">
+                            <v-icon small left>mdi-lock-outline</v-icon>공개여부
+                          </span>
+                          <v-radio label="공개" value="true" class="mr-5"></v-radio>
+                          <v-radio label="비공개" value="false"></v-radio>
                           <v-spacer></v-spacer>
                         </v-radio-group>
                       </v-col>
-                      <v-col v-if="managers.length">
-                        <p>MANAGERS</p>
-                        <v-tooltip v-for="member in managers" :key="member.id" bottom>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-avatar v-if="member.imgCode" size="32" class="user-avatars">
-                              <img :src="member.imgCode" v-bind="attrs" v-on="on" />
-                            </v-avatar>
-                            <v-avatar v-else size="32" class="user-avatars" color="grey">
-                              <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
-                            </v-avatar>
-                          </template>
-                          <span>{{ member.name }}</span>
-                        </v-tooltip>
-                        <span class="pl-4">{{managers.length}}명</span>
+                      <v-col cols="12" class="py-3" v-if="managers.length">
+                        <!-- <p><v-icon left small>mdi-account</v-icon>담당자</p> -->
+                        <span class="additional-title">
+                          <v-icon small left>mdi-account-outline</v-icon>담당자
+                        </span>
+                        <div v-if="managers.length" class="pl-4" style="display:inline-block">
+                          <v-tooltip v-for="member in managers" :key="member.id" bottom>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-avatar v-if="member.imgCode" size="32" class="user-avatars">
+                                <img :src="member.imgCode" v-bind="attrs" v-on="on" />
+                              </v-avatar>
+                              <v-avatar v-else size="32" class="user-avatars" color="grey">
+                                <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                              </v-avatar>
+                            </template>
+                            <span>{{ member.name }}</span>
+                          </v-tooltip>
+                          <span class="pl-4">{{ managers.length }}명</span>
+                        </div>
                       </v-col>
-                      <v-col cols="6" v-if="endDate || startDate">
-                        <p>DATE</p>
-                        <v-icon>mdi-calendar-month-outline</v-icon>
-                        {{startDate}} ~ {{endDate}}
-                      </v-col>
-                      <v-col cols="6" v-if="taskState >= 0">
-                        <p>STATE</p>
-                        <v-chip filter :color="state[taskState].color">
-                          {{
-                          state[taskState].name
-                          }}
+                      <v-col cols="12" class="py-3" v-if="endDate || startDate">
+                        <span class="additional-title">
+                          <v-icon small left>mdi-calendar-month-outline</v-icon>기한
+                        </span>
+                        <v-chip label small color="#cacaca">
+                          <v-icon small left>mdi-clock-outline</v-icon>
+                          {{ startDate }} ~ {{ endDate }}
                         </v-chip>
                       </v-col>
-                      <v-col cosl="6" v-if="taskLabel.length">
-                        <p>LABEL</p>
+                      <v-col cols="12" class="py-3" v-if="taskState >= 0">
+                        <span class="additional-title">
+                          <v-icon small left>mdi-rotate-left</v-icon>상태
+                        </span>
+                        <v-chip filter :color="state[taskState].color">{{ state[taskState].name }}</v-chip>
+                      </v-col>
+                      <v-col cosl="12" class="py-3" v-if="taskLabel.length">
+                        <span class="additional-title">
+                          <v-icon small left>mdi-label-outline</v-icon>태그
+                        </span>
                         <v-chip
                           v-for="(label, i) in taskLabel"
                           :key="i"
@@ -145,17 +161,90 @@
                       </v-col>
                     </v-row>
                     <v-col cols="12">
-                      <v-textarea label="DESCRIPTION" v-model="description" auto-grow outlined></v-textarea>
+                      <v-textarea label="내용" v-model="description" auto-grow dense outlined></v-textarea>
                     </v-col>
                     <v-col cols="12">
-                      <v-file-input chips multiple label="File input" v-model="attachFiles"></v-file-input>
+                      <v-file-input chips multiple label="파일 추가" v-model="attachFiles"></v-file-input>
+                    </v-col>
+                    <v-col cols="12" v-if="existCheckLists.length" class="pt-3">
+                      <v-slide-x-transition group>
+                        <v-card
+                          flat
+                          class="mx-3 mb-2"
+                          v-for="(checkList, index) in existCheckLists"
+                          :key="index"
+                        >
+                          <v-card-title class="px-0">
+                            <v-icon>mdi-checkbox-marked-outline</v-icon>
+                            <span>{{ checkList.title }}</span>
+                            <v-spacer></v-spacer>
+                            <v-btn icon small @click="showNewCheckItem(index)">
+                              <v-icon small>mdi-plus</v-icon>
+                            </v-btn>
+                            <v-btn icon small @click="deleteCheckList(index)">
+                              <v-icon small>mdi-trash-can-outline</v-icon>
+                            </v-btn>
+                          </v-card-title>
+                          <v-progress-linear
+                            v-model="checkList.progressRate"
+                            color="indigo lighten-24"
+                          ></v-progress-linear>
+                          <v-card-text class="px-0">
+                            <v-text-field
+                              v-show="showNewCheckItems[index]"
+                              label="NEW CHECK ITEM"
+                              v-model="newCheckItem"
+                              required
+                              dense
+                              auto-grow
+                              outlined
+                              hide-details
+                            >
+                              <v-icon slot="prepend">mdi-plus</v-icon>
+                              <v-icon
+                                v-if="newCheckItem.trim()"
+                                slot="append"
+                                @click="addNewCheckItem(index)"
+                                color="green"
+                              >mdi-check</v-icon>
+                            </v-text-field>
+                            <v-slide-x-transition group>
+                              <div
+                                v-for="(item, i) in getCheckListItems(
+                            checkList.checkListItems
+                          )"
+                                :key="i"
+                                class="px-0"
+                              >
+                                <v-btn disabled @click="check(item.item_no, checkList.listNo)" icon>
+                                  <v-icon
+                                    v-if="item.is_checked"
+                                    color="indigo lighten-1"
+                                  >mdi-checkbox-marked</v-icon>
+                                  <v-icon v-else>mdi-checkbox-blank-outline</v-icon>
+                                </v-btn>
+                                <p style="display:inline-block">{{ item.title }}</p>
+                                <v-btn
+                                  icon
+                                  small
+                                  style="float:right"
+                                  @click="deleteCheckItem(i, index)"
+                                >
+                                  <v-icon color="grey lighten-1" small>mdi-window-close</v-icon>
+                                </v-btn>
+                              </div>
+                            </v-slide-x-transition>
+                            <!-- <pre>{{ checkList }}</pre> -->
+                          </v-card-text>
+                        </v-card>
+                      </v-slide-x-transition>
                     </v-col>
                   </v-col>
-                  <v-col cols="4" class="createTaskside pa-0">
-                    <v-subheader>ADD OPTIONS</v-subheader>
+                  <v-col cols="3" class="createTaskside pa-0">
+                    <v-subheader>추가 옵션</v-subheader>
                     <v-list-item>
                       <v-btn block depressed @click.prevent="isOpenAddMember = true">
-                        <v-icon left>mdi-account-plus</v-icon>managers
+                        <v-icon left>mdi-account-plus</v-icon>담당자
                       </v-btn>
                       <add-member
                         :openModal="isOpenAddMember"
@@ -167,7 +256,7 @@
                       <v-menu offset-y :close-on-content-click="false">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn v-bind="attrs" v-on="on" block depressed>
-                            <v-icon left>mdi-plus</v-icon>STATE
+                            <v-icon left>mdi-rotate-left</v-icon>상태
                           </v-btn>
                         </template>
                         <v-card class="my-chip-group">
@@ -180,7 +269,7 @@
                                 filter
                                 label
                                 :color="st.color"
-                              >{{st.name}}</v-chip>
+                              >{{ st.name }}</v-chip>
                             </v-chip-group>
                           </v-card-text>
                         </v-card>
@@ -191,6 +280,34 @@
                     </v-list-item>
                     <v-list-item>
                       <date-menu @addStartDate="addStartDate" @addEndDate="addEndDate" />
+                    </v-list-item>
+                    <v-list-item>
+                      <v-menu offset-x :close-on-content-click="false" top v-model="newCheckList">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn v-bind="attrs" v-on="on" block depressed>
+                            <v-icon left>mdi-format-list-bulleted</v-icon>체크리스트
+                          </v-btn>
+                        </template>
+                        <v-card class="my-chip-group">
+                          <v-card-title class="px-4 pb-0">
+                            체크리스트 추가
+                            <!-- ADD LABELS {{this.labels}} -->
+                          </v-card-title>
+                          <v-card-text>
+                            <v-form @submit.prevent="onCheckListSubmit" lazy-validation>
+                              <v-text-field
+                                label="체크리스트 이름"
+                                v-model="checkListName"
+                                :counter="20"
+                                required
+                              ></v-text-field>
+                              <v-btn type="submit" block depressed>
+                                <v-icon left>mdi-plus</v-icon>생성
+                              </v-btn>
+                            </v-form>
+                          </v-card-text>
+                        </v-card>
+                      </v-menu>
                     </v-list-item>
                     <!-- <v-subheader>ACTIONS</v-subheader>
               <v-list-item>
@@ -209,12 +326,11 @@
               </v-card-text>
 
               <v-card-actions>
-                <v-btn color="blue darken-1" text type="submit">등록</v-btn>
-                <v-btn color="blue darken-1" text @click="onClose">취소</v-btn>
-                <v-spacer></v-spacer>
                 <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 2">
                   <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text type="submit">생성</v-btn>
               </v-card-actions>
             </v-form>
           </v-card>
@@ -290,6 +406,11 @@ export default {
     privateRules: [(v) => !!v || "private is required"],
     valid: true,
     managers: [],
+    existCheckLists: [],
+    checkListName: "",
+    newCheckList: false,
+    showNewCheckItems: [],
+    newCheckItem: "",
   }),
   created() {
     this.FETCH_CALENDAR_PRJOECT().then(() => {
@@ -323,13 +444,22 @@ export default {
       "ADD_CALENDAR_SUB_TASKS",
     ]),
     ///////////////////
-    ...mapActions(["ADD_SUPER_TASK", "ADD_SUB_TASK"]),
     ...mapMutations([
       "SET_ADD_TASK_MODAL",
       "SET_SUPER_TASK_ID",
       "SET_LAST_SUB_SORT_NO",
     ]),
-
+    ...mapActions([
+      "ADD_SUPER_TASK",
+      "ADD_SUB_TASK",
+      "ADD_CHECK_LIST",
+      "ADD_NEW_CHECK_ITEM",
+      "FETCH_CHECK_LISTS",
+      "SET_CHECK_ITEM",
+      "DELETE_CHECK_ITEM",
+      "DELETE_CHECK_LIST",
+      "DELETE_FILE",
+    ]),
     // 선택한 프로젝트에 따라 업무 대 조회
     fetchChkProject() {
       this.alert = false;
@@ -406,14 +536,31 @@ export default {
             return o.memberNo;
           })
         );
+        if (this.existCheckLists.length !== 0) {
+          console.log("체크리스트있음");
+          formData.append("checkLists", JSON.stringify(this.existCheckLists));
+        }
+        // if (this.existCheckLists.length !== 0) {
+        //   for (var j = 0, chk; (chk = this.existCheckLists[j]); j++) {
+        //     formData.append("checkLists[" + j + "].title", chk.title);
+        //     formData.append("checkLists[" + j + "].taskId", chk.taskId);
+        //     formData.append("checkLists[" + j + "].memberNo", chk.memberNo);
+        //     formData.append(
+        //       "checkLists[" + j + "].checkListItems",
+        //       chk.checkListItems
+        //     );
+        //   }
+        // }
         if (this.taskSuperId) {
           console.log("ADD SUB ~!!");
-          console.log("sortno~~~~", this.lastSubSortNo);
+          console.log(this.lastSubSortNo);
           formData.append("taskSuperId", this.taskSuperId);
+
           formData.append("sortNo", this.lastSubSortNo);
           this.ADD_SUB_TASK(formData).then(() => {
             console.log("------------------");
             console.log("ADD SUB  완료");
+            this.$emit("update");
             //this.$router.push(`/projects/${data.id}`);
           });
         } else {
@@ -421,17 +568,114 @@ export default {
           this.ADD_SUPER_TASK(formData).then(() => {
             console.log("------------------");
             console.log("ADD  SUPER 완료");
+            this.$emit("update");
             //this.$router.push(`/projects/${data.id}`);
           });
         }
         this.onClose();
       }
     },
+    showNewCheckItem(index) {
+      // if (this.project.memberNo === -1) {
+      //   alert("참여 멤버가 아닙니다 !");
+      //   return "";
+      // }
+      this.showNewCheckItems = [];
+      this.newCheckItem = "";
+      this.showNewCheckItems[index] = true;
+    },
+    getCheckListItems(listStr) {
+      return JSON.parse(listStr);
+    },
+    onCheckListSubmit() {
+      // if (this.project.memberNo === -1) {
+      //   alert("참여 멤버가 아닙니다 !");
+      //   return "";
+      // }
+      let data = {
+        taskId: this.$route.params.tid,
+        title: this.checkListName,
+        memberNo: this.project.memberNo,
+        checkListItems: "[]",
+      };
+      console.log("checkList Submit: " + this.checkListName);
+      // this.ADD_CHECK_LIST(data).then(() => {
+      //   this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+      //     this.existCheckLists = data;
+      //   });
+      // });
+      this.newCheckList = false;
+      this.existCheckLists.push(data);
+      console.log("-----------------");
+      console.log(this.existCheckLists);
+      this.checkListName = "";
+      //this.formClear();
+    },
+    check(itemNo, listNo) {
+      if (this.project.memberNo === -1) {
+        alert("참여 멤버가 아닙니다 !");
+        return "";
+      }
+      console.log("체크!+", itemNo, this.project.memberNo);
+      let data = {
+        itemNo: itemNo,
+        listNo: listNo,
+      };
+      this.SET_CHECK_ITEM(data).then(() => {
+        this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+          this.existCheckLists = data;
+        });
+      });
+    },
+    deleteCheckItem(itemIndex, listIndex) {
+      let temp = JSON.parse(this.existCheckLists[listIndex].checkListItems);
+      temp.splice(itemIndex, 1);
+      this.existCheckLists[listIndex].checkListItems = JSON.stringify(temp);
+    },
+    deleteCheckList(index) {
+      this.existCheckLists.splice(index, 1);
+      // let data = {
 
+      //   listNo: listNo,
+      // };
+      // this.DELETE_CHECK_LIST(data).then(() => {
+      //   this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+      //     this.existCheckLists = data;
+      //   });
+      // });
+    },
+    addNewCheckItem(index) {
+      console.log("뉴 체크 아이템!");
+      let newItem = {
+        taskId: this.$route.params.tid,
+        listNo: index,
+        memberNo: this.project.memberNo,
+        title: this.newCheckItem,
+      };
+      console.log(newItem);
+      let temp = this.getCheckListItems(
+        this.existCheckLists[index].checkListItems
+      );
+      temp.push(newItem);
+      this.existCheckLists[index].checkListItems = JSON.stringify(temp);
+      this.showNewCheckItems = [];
+      this.newCheckItem = "";
+      // this.ADD_NEW_CHECK_ITEM(newItem).then(() => {
+      //   this.FETCH_CHECK_LISTS(this.$route.params.tid).then((data) => {
+      //     console.log("-----------");
+      //     console.log(data);
+      //     this.existCheckLists = data;
+      //     this.showNewCheckItems = [];
+      //     this.newCheckItem = "";
+      //   });
+      // });
+    },
     onClose() {
       // this.openModal = false;
-      this.formClear();
+      this.SET_ADD_TASK_MODAL(false);
       this.SET_IS_ADD_CALENDAR(false);
+      this.e1 = 1;
+      this.formClear();
       // this.$emit("close");
       this.SET_SUPER_TASK_ID("");
       this.SET_LAST_SUB_SORT_NO(0);
@@ -452,6 +696,10 @@ export default {
       this.managers = [];
       this.usePublic = "true";
       this.attachFiles = [];
+      this.existCheckLists = [];
+      this.showNewCheckItems = [];
+      this.checkListName = "";
+      this.newCheckItem = "";
       this.$refs.form.resetValidation();
       // this.clearLabel = true;
       // this.clearLabel = false;
@@ -496,12 +744,20 @@ export default {
 .v-stepper__content {
   padding: 0px;
 }
+span.additional-title {
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  display: inline-block;
+  width: 150px;
+  /* font-weight: 600; */
+  color: dimgrey;
+}
 .add-task-card-form .col {
   padding: 0px;
-  padding-top: 15px;
 }
 .add-task-card-form .formFieldCol {
-  padding: 10px;
+  padding: 16px;
 }
 .v-input--radio-group.v-input--radio-group--row .v-radio {
   margin-right: 0px;

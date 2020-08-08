@@ -90,6 +90,7 @@ public class ScheduleController {
     public String getSubSortNo(@PathVariable("chkSuperTask") String chkSuperTask) {
         // UserVo user = (UserVo) req.getAttribute("user");
         // String userId = user.getId();
+        System.out.println("정렬번호------" + scheduleService.getSubSortNo(chkSuperTask));
         return scheduleService.getSubSortNo(chkSuperTask);
     }
 

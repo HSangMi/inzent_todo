@@ -8,11 +8,8 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.inzent.todo.controller.CheckListDTO;
 import com.inzent.todo.dto.CheckListDto;
-import com.inzent.todo.dto.CheckListDto2;
 import com.inzent.todo.dto.MemberDto;
-import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
 import com.inzent.todo.dto.TaskBoardListDto;
 import com.inzent.todo.dto.TaskDto;
@@ -26,11 +23,9 @@ import com.inzent.todo.vo.CheckListItemVo;
 import com.inzent.todo.vo.CheckListVo;
 import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
-import com.inzent.todo.vo.ImageVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.MemberVo;
 import com.inzent.todo.vo.ProjectVo;
-import com.inzent.todo.vo.SuperTaskVo;
 import com.inzent.todo.vo.StarredTaskVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
