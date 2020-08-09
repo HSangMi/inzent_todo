@@ -1,11 +1,15 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card outlined height="800" class="overflow-y-auto mx-2">
-        <div class="mx-2">
-          <v-subheader class="blue-grey lighten-4">프로젝트</v-subheader>
+      <v-card outlined height="790" class="overflow-y-auto mx-2">
+        <div class="mx-0">
+          <v-subheader class="indigo lighten-5">프로젝트</v-subheader>
           <v-list class="project-filter">
-            <v-list-item v-for="item in projectFilter" :key="item.prjId">
+            <v-list-item
+              class="px-0"
+              v-for="item in projectFilter"
+              :key="item.prjId"
+            >
               <v-list-item-content class="px-0">
                 <v-checkbox
                   class="px-3"
@@ -14,35 +18,39 @@
                   @change="chkFilter()"
                 >
                   <template v-slot:label>
-                    <span class="font-filter">{{item.prjTitle}}</span>
+                    <span class="font-filter">{{ item.prjTitle }}</span>
                   </template>
                 </v-checkbox>
               </v-list-item-content>
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">담당자</v-subheader>
+          <v-subheader class="indigo lighten-5">담당자</v-subheader>
           <v-list class="project-filter">
-            <v-list-item v-for="item in managerFilter" :key="item.userId">
+            <v-list-item
+              class="px-0"
+              v-for="item in managerFilter"
+              :key="item.userId"
+            >
               <v-list-item-content class="px-0">
                 <v-checkbox
-                  class="px-5"
+                  class="pl-3"
                   v-model="memSelection"
                   :value="item.userId"
                   @change="chkFilter()"
                 >
                   <template v-slot:label>
-                    <span class="font-filter">{{item.userName}}</span>
+                    <span class="font-filter">{{ item.userName }}</span>
                   </template>
                 </v-checkbox>
               </v-list-item-content>
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">공개 여부</v-subheader>
-          <v-list class="project-filter">
-            <v-list-item>
-              <v-list-item-content class="px-0">
+          <v-subheader class="indigo lighten-5">공개 여부</v-subheader>
+          <v-list class="project-filter px-0">
+            <v-list-item class="px-0">
+              <v-list-item-content>
                 <v-radio-group v-model="publicSelection" @change="chkFilter()">
                   <v-radio class="px-5 pb-2" :value="0">
                     <template v-slot:label>
@@ -66,12 +74,20 @@
         </div>
       </v-card>
       <!-- 필터 저장 초기화 -->
-      <div class="text-xs-center ma-2">
-        <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">초기화</v-btn>
+      <div class="ma-2">
+        <v-btn
+          class="mx-0 my-0"
+          color="blue-grey"
+          depressed
+          block
+          dark
+          @click="resetFilter()"
+          >초기화</v-btn
+        >
       </div>
     </v-col>
     <v-col cols="10">
-      <v-card class="border" outlined>
+      <v-card class="border" flat style="border:none;">
         <v-row class="fill-height">
           <v-col>
             <v-sheet height="64">
@@ -90,16 +106,21 @@
                 </v-btn>
                 <v-spacer></v-spacer>
                 <!-- 오늘날짜이동 -->
-                <v-btn small outlined class="mr-4" color="grey darken-2" @click="setToday">오늘</v-btn>
+                <v-btn
+                  small
+                  outlined
+                  class="mr-4"
+                  color="grey darken-2"
+                  @click="setToday"
+                  >오늘</v-btn
+                >
                 <!-- < 이전 버튼 -->
                 <v-btn fab text color="grey darken-2" @click="prev">
                   <v-icon small>mdi-chevron-left</v-icon>
                 </v-btn>
                 <!-- 몇월인지 타이틀 -->
                 <v-toolbar-title v-if="$refs.calendar">
-                  {{
-                  $refs.calendar.title
-                  }}
+                  {{ $refs.calendar.title }}
                   <!-- > 다음 버튼 -->
                   <v-btn fab text color="grey darken-2" @click="next">
                     <v-icon small>mdi-chevron-right</v-icon>

@@ -163,7 +163,7 @@ export default {
     // }
   },
   updated() {
-    // console.log("업데이트");
+    console.log("업데이트");
     // if (this.clear) {
     //   console.log("라벨비워");
     //   this.taskLabel = undefined;

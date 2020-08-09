@@ -1,18 +1,32 @@
 <template>
   <v-app-bar id="app-bar" absolute app color="transparent" flat height="50">
-    <v-toolbar-title class="hidden-sm-and-down font-weight-light">
-      <v-icon left>{{appBarIcon}}</v-icon>
-      {{headerTitle}}
+    <v-toolbar-title class="font-weight-light">
+      <v-icon left>{{ appBarIcon }}</v-icon>
+      {{ headerTitle }}
     </v-toolbar-title>
     <v-spacer />
 
-    <v-menu bottom right offset-y origin="top right" transition="scale-transition">
+    <v-menu
+      bottom
+      right
+      offset-y
+      origin="top right"
+      transition="scale-transition"
+    >
       <template v-slot:activator="{ attrs, on }">
-        <v-btn depressed outline class="mt-2" min-width="0" color="white" v-bind="attrs" v-on="on">
-          <v-avatar size="30px">
+        <v-btn
+          depressed
+          outline
+          class="mt-2 mr-5 px-3"
+          min-width="0"
+          color="white"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-avatar size="30px" class="mr-3">
             <img :src="userInfo.imgCode" />
           </v-avatar>
-          <v-card-text>{{ userInfo.id }}</v-card-text>
+          {{ userInfo.id }}
         </v-btn>
       </template>
       <v-list :tile="false" nav>
@@ -34,7 +48,9 @@
         <v-card-title></v-card-title>
         <v-card-text>로그아웃 하시겠습니까?</v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green darken-1" text @click="logoutModal = false">아니요</v-btn>
+          <v-btn color="green darken-1" text @click="logoutModal = false"
+            >아니요</v-btn
+          >
           <v-btn color="green darken-1" text @click.prevent="logout">예</v-btn>
         </v-card-actions>
       </v-card>

@@ -2,7 +2,8 @@
   <v-card outlined height="730">
     <v-toolbar flat class="blue-grey lighten-5">
       <v-icon left>mdi-archive-arrow-down-outline</v-icon>
-      &nbsp;<h4>하위업무 보관함</h4>
+      &nbsp;
+      <h4>하위업무 보관함</h4>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-divider></v-divider>
@@ -85,8 +86,8 @@
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text small @click="deleteSubTask()">확인</v-btn>
           <v-btn text small @click="openArcDialog = false">취소</v-btn>
+          <v-btn text small @click="deleteSubTask()">확인</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

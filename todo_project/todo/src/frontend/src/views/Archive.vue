@@ -32,8 +32,8 @@ export default {
 </script>
 <style scoped>
 .archive-row {
-  margin-right: 80px;
-  margin-left: 80px;
+  margin-right: 20px;
+  margin-left: 20px;
   margin-top: 30px;
 }
 </style>

@@ -38,14 +38,24 @@
                     v-model="usePublic"
                     required
                     hide-details
+                    @change="changePublic"
                     row
                     :rules="privateRules"
                   >
                     <span class="additional-title">
                       <v-icon small left>mdi-lock-outline</v-icon>공개여부
                     </span>
-                    <v-radio label="공개" value="true" class="mr-5"></v-radio>
-                    <v-radio label="비공개" value="false"></v-radio>
+                    <v-radio
+                      :disabled="!taskSuperPublic"
+                      label="공개"
+                      value="true"
+                      class="mr-5"
+                    ></v-radio>
+                    <v-radio
+                      :disabled="!taskSuperPublic"
+                      label="비공개"
+                      value="false"
+                    ></v-radio>
                     <v-spacer></v-spacer>
                   </v-radio-group>
                 </v-col>
@@ -223,7 +233,12 @@
             <v-col cols="3" class="createTaskside pa-0">
               <v-subheader>추가 옵션</v-subheader>
               <v-list-item>
-                <v-btn block depressed @click.prevent="isOpenAddMember = true">
+                <v-btn
+                  block
+                  depressed
+                  @click.prevent="isOpenAddMember = true"
+                  :disabled="usePublic == 'false' || !taskSuperPublic"
+                >
                   <v-icon left>mdi-account-plus</v-icon>담당자
                 </v-btn>
                 <add-member
@@ -332,6 +347,8 @@ import { mapState, mapActions, mapMutations } from "vuex";
 import LabelMenu from "./LabelMenu.vue";
 import DateMenu from "./DateMenu.vue";
 import AddMember from "./AddMember.vue";
+import { eventBus } from "../../main.js";
+
 export default {
   props: ["openModal"],
   components: {
@@ -345,6 +362,7 @@ export default {
       labelList: "labelList",
       taskSuperId: "taskSuperId",
       lastSubSortNo: "lastSubSortNo",
+      taskSuperPublic: "taskSuperPublic",
       // user 멤버 no가져오기..
     }),
     // getTaskLabel() {
@@ -419,7 +437,12 @@ export default {
       "SET_ADD_TASK_MODAL",
       "SET_SUPER_TASK_ID",
       "SET_LAST_SUB_SORT_NO",
+      "SET_SUPER_TASK_PUBLIC",
     ]),
+    changePublic() {
+      console.log("changePublic");
+      this.managers = [];
+    },
     onSubmit() {
       // Create Project
       console.log("..ADD TASK..");
@@ -427,6 +450,7 @@ export default {
       if (this.validate()) {
         let formData = new FormData();
         console.log("-----test-----");
+        if (this.taskSuperPublic == false) this.usePublic = false;
         formData.append("projectId", this.project.id);
         formData.append("title", this.title);
         formData.append("description", this.description);
@@ -592,7 +616,9 @@ export default {
       this.formClear();
       // this.$emit("close");
       this.SET_SUPER_TASK_ID("");
+      this.SET_SUPER_TASK_PUBLIC(true);
       this.SET_LAST_SUB_SORT_NO(0);
+      eventBus.$emit("clearForm");
     },
     remove(item) {
       const index = this.managers.indexOf(item.name);

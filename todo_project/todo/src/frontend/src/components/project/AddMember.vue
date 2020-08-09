@@ -1,9 +1,12 @@
 <template>
   <v-dialog v-model="openModal" persistent max-width="1200">
     <v-card min-height="500">
-      <v-card-title class="headline grey lighten-2" primary-title>
+      <v-card-title class="headline grey lighten-2 py-2" primary-title>
         ADD MEMBER
         <v-spacer></v-spacer>
+        <v-btn color="grey darken-1" icon @click="onClose">
+          <v-icon color="grey darken-1">mdi-close</v-icon>
+        </v-btn>
       </v-card-title>
       <!-- <v-divider></v-divider> -->
       <v-card-text class="px-0 pb-0">
@@ -132,8 +135,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="grey darken-1" text @click="onSubmit">확인</v-btn>
         <v-btn color="grey darken-1" text @click="onClose">취소</v-btn>
+        <v-btn color="blue darken-1" text @click="onSubmit">확인</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -141,6 +144,8 @@
 
 <script>
 import { mapState } from "vuex";
+import { eventBus } from "../../main.js";
+
 export default {
   props: ["openModal", "existManagers"],
   data: () => ({
@@ -165,7 +170,11 @@ export default {
     model: null,
     myTree: "",
   }),
-  created() {},
+  created() {
+    eventBus.$on("clearForm", () => {
+      this.selected = undefined;
+    });
+  },
   destoryed() {
     console.log("유저 모달 삭제..");
     this.selected = undefined;

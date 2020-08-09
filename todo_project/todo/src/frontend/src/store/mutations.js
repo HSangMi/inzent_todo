@@ -66,6 +66,9 @@ const mutations = {
   SET_SUPER_TASK_ID(state, taskId) {
     state.taskSuperId = taskId;
   },
+  SET_SUPER_TASK_PUBLIC(state, taskPublic) {
+    state.taskSuperPublic = taskPublic;
+  },
   SET_LAST_SUB_SORT_NO(state, sortNo) {
     state.lastSubSortNo = sortNo;
   },

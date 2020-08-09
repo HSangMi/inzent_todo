@@ -153,7 +153,13 @@
       <v-btn
         text
         block
-        @click.prevent="showAddTask(list.superTask.taskId, lastSubTaskPos)"
+        @click.prevent="
+          showAddTask(
+            list.superTask.taskId,
+            list.superTask.usePublic,
+            lastSubTaskPos
+          )
+        "
       >
         <v-icon small>mdi-plus</v-icon>하위 업무 추가
       </v-btn>
@@ -294,6 +300,7 @@ export default {
       "SET_ADD_TASK_MODAL",
       "SET_SUPER_TASK_ID",
       "SET_LAST_SUB_SORT_NO",
+      "SET_SUPER_TASK_PUBLIC",
     ]),
     ...mapActions(["REORDER_TASK", "SEND_TO_ARCHIVE_SUPER"]),
     showDetailSuperTask() {
@@ -424,7 +431,7 @@ export default {
     //     return labels;
     //   }
     // },
-    showAddTask(taskSuperId, sortNo) {
+    showAddTask(taskSuperId, taskSuperPublic, sortNo) {
       console.log("SUB TASK ADD..");
       console.log(sortNo);
       // this.SET_ADD_TASK_MODAL(true);
@@ -433,6 +440,7 @@ export default {
       } else {
         this.SET_ADD_TASK_MODAL(true);
         this.SET_SUPER_TASK_ID(taskSuperId);
+        this.SET_SUPER_TASK_PUBLIC(taskSuperPublic);
         this.SET_LAST_SUB_SORT_NO(sortNo);
         this.SET_LAST_SUB_SORT_NO(sortNo);
       }

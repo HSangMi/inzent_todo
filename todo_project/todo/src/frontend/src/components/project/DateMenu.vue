@@ -91,6 +91,7 @@
 </template>
 
 <script>
+import { eventBus } from "../../main.js";
 export default {
   props: ["existStartDate", "existEndDate"],
   data() {
@@ -120,6 +121,12 @@ export default {
         this.$emit("addEndDate", newVal);
       },
     },
+  },
+  created() {
+    eventBus.$on("clearForm", () => {
+      this.startDate = "";
+      this.endDate = "";
+    });
   },
   methods: {
     inputStartDate(val) {

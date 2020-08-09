@@ -1,13 +1,16 @@
 <template>
   <v-dialog v-model="openModal" persistent max-width="1300">
     <v-card class="mx-auto" max-width="1300">
-      <v-card-title class="headline grey lighten-2" primary-title>
+      <v-card-title class="headline grey lighten-2 py-2" primary-title>
         ADD MEMBER
         <v-spacer></v-spacer>
+        <v-btn color="grey darken-1" icon @click="onClose">
+          <v-icon color="grey darken-1">mdi-close</v-icon>
+        </v-btn>
       </v-card-title>
       <v-divider></v-divider>
       <v-container fluid>
-        <v-row>
+        <v-row style="min-height:660px">
           <v-col cols="2" class="px-0">
             <v-treeview
               v-model="selection"

@@ -21,19 +21,43 @@
             no-data-text="주간 상위 업무가 존재하지 않습니다."
             @click:row="goProjectPage"
           >
-            <template v-slot:item.prjTitle="{ item }">{{ item.prjTitle }}</template>
+            <template v-slot:item.prjTitle="{ item }">{{
+              item.prjTitle
+            }}</template>
             <!-- 공개여부 아이콘 설정 -->
             <template v-slot:item.usePublic="{ item }">
-              <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
+              <v-icon small v-show="item.usePublic"
+                >mdi-lock-open-variant-outline</v-icon
+              >
               <v-icon small v-show="!item.usePublic">mdi-lock-outline</v-icon>
             </template>
             <!-- 진행상태 표시 -->
             <template v-slot:item.state="{ item }">
-              <v-chip v-if="item.state == 'P'" small color="blue" text-color="white">진행</v-chip>
-              <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
+              <v-chip
+                v-if="item.state == 'P'"
+                small
+                color="blue"
+                text-color="white"
+                >진행</v-chip
+              >
+              <v-chip v-if="item.state == 'W'" small color="yellow"
+                >대기</v-chip
+              >
               <v-chip v-if="item.state == 'H'" small>보류</v-chip>
-              <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
-              <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
+              <v-chip
+                v-if="item.state == 'E'"
+                small
+                color="red"
+                text-color="white"
+                >긴급</v-chip
+              >
+              <v-chip
+                v-if="item.state == 'C'"
+                small
+                color="green"
+                text-color="white"
+                >완료</v-chip
+              >
             </template>
 
             <!-- 업무 대 관련한 업무 소 출력 -->
@@ -42,37 +66,79 @@
                 <v-simple-table>
                   <tbody v-if="weekSub.length == 0">
                     <tr style="background-color:#F5F5F5">
-                      <td colspan="weekSub.length" class="text-center">주간 하위업무가 존재하지 않습니다.</td>
+                      <td colspan="weekSub.length" class="text-center">
+                        주간 하위업무가 존재하지 않습니다.
+                      </td>
                     </tr>
                   </tbody>
                   <tbody v-else>
-                    <tr v-for="sub in weekSub" :key="sub.cid" style="background-color:#F5F5F5">
+                    <tr
+                      v-for="sub in weekSub"
+                      :key="sub.cid"
+                      style="background-color:#F5F5F5"
+                    >
                       <td class="text-center" width="20%"></td>
                       <td class="text-center" width="20%">
                         <span class="sub">{{ sub.ctitle }}</span>
                       </td>
                       <td class="text-center sub" width="20%">
-                        <span class="sub">{{ sub.startDate }} ~ {{ sub.endDate }}</span>
+                        <span class="sub"
+                          >{{ sub.startDate }} ~ {{ sub.endDate }}</span
+                        >
                       </td>
-                      <td v-if="sub.state == 'P'" class="text-center" width="20%">
-                        <v-chip x-small color="blue" text-color="white">진행</v-chip>
+                      <td
+                        v-if="sub.state == 'P'"
+                        class="text-center"
+                        width="20%"
+                      >
+                        <v-chip x-small color="blue" text-color="white"
+                          >진행</v-chip
+                        >
                       </td>
-                      <td v-if="sub.state == 'W'" class="text-center" width="20%">
+                      <td
+                        v-if="sub.state == 'W'"
+                        class="text-center"
+                        width="20%"
+                      >
                         <v-chip x-small color="yellow">대기</v-chip>
                       </td>
-                      <td v-if="sub.state == 'H'" class="text-center" width="20%">
+                      <td
+                        v-if="sub.state == 'H'"
+                        class="text-center"
+                        width="20%"
+                      >
                         <v-chip x-small>보류</v-chip>
                       </td>
-                      <td v-if="sub.state == 'E'" class="text-center" width="20%">
-                        <v-chip x-small color="red" text-color="white">긴급</v-chip>
+                      <td
+                        v-if="sub.state == 'E'"
+                        class="text-center"
+                        width="20%"
+                      >
+                        <v-chip x-small color="red" text-color="white"
+                          >긴급</v-chip
+                        >
                       </td>
-                      <td v-if="sub.state == 'C'" class="text-center" width="20%">
-                        <v-chip x-small color="green" text-color="white">완료</v-chip>
+                      <td
+                        v-if="sub.state == 'C'"
+                        class="text-center"
+                        width="20%"
+                      >
+                        <v-chip x-small color="green" text-color="white"
+                          >완료</v-chip
+                        >
                       </td>
-                      <td v-show="sub.usePublic" class="text-center" width="10%">
+                      <td
+                        v-show="sub.usePublic"
+                        class="text-center"
+                        width="10%"
+                      >
                         <v-icon small>mdi-lock-open-variant-outline</v-icon>
                       </td>
-                      <td v-show="!sub.usePublic" class="text-center" width="10%">
+                      <td
+                        v-show="!sub.usePublic"
+                        class="text-center"
+                        width="10%"
+                      >
                         <v-icon small>mdi-lock-outline</v-icon>
                       </td>
                       <td class="text-center" width="10%"></td>
@@ -88,7 +154,12 @@
             <p class="text-center">주간 업무 차트가 존재하지 않습니다.</p>
           </div>
           <div v-else>
-            <canvas id="weekChart" class="mx-auto mt-5" width="300" height="300"></canvas>
+            <canvas
+              id="weekChart"
+              class="mx-auto mt-5"
+              width="300"
+              height="300"
+            ></canvas>
           </div>
         </v-col>
       </v-row>
@@ -212,7 +283,13 @@ export default {
       }
     },
     goProjectPage(value) {
-      this.$router.push(`/projects/${value.prjId}`);
+      if (confirm("해당 업무로 이동하시겠습니까??") == true) {
+        //확인
+        this.$router.push(`/projects/${value.prjId}`);
+      } else {
+        //취소
+        return;
+      }
     },
   },
 };

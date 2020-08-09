@@ -753,6 +753,8 @@ export default {
         formData.append("endDate", this.endDate);
         // formData.append("members", this.members);
         formData.append("taskId", this.$route.params.tid);
+        formData.append("projectId", this.$route.params.pid);
+
         var addMem = [];
         var subMem = [];
         if (this.taskInfo.task.managerString !== null) {

@@ -20,7 +20,11 @@
           </v-card-title>
         </v-img>
 
-        <!-- <v-progress-linear color="rgba(155, 155, 155, 0.6)" height="10" value="30"></v-progress-linear> -->
+        <v-progress-linear
+          color="rgba(40, 40, 40, 0.3)"
+          height="10"
+          :value="project.progressRate"
+        ></v-progress-linear>
 
         <v-card-text class="text--primary text-left pt-3">
           <p class="grey--text mb-0" style="font-size:12px">MEMBER</p>

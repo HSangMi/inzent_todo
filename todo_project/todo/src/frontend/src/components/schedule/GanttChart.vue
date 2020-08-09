@@ -1,11 +1,15 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card outlined height="800" class="overflow-y-auto mx-2">
-        <div class="mx-2">
-          <v-subheader class="blue-grey lighten-4">프로젝트</v-subheader>
+      <v-card outlined height="790" class="overflow-y-auto mx-2">
+        <div class="mx-0">
+          <v-subheader class="indigo lighten-5">프로젝트</v-subheader>
           <v-list class="project-filter">
-            <v-list-item v-for="item in projectFilter" :key="item.prjId">
+            <v-list-item
+              class="px-0"
+              v-for="item in projectFilter"
+              :key="item.prjId"
+            >
               <v-list-item-content class="px-0">
                 <v-checkbox
                   class="px-3"
@@ -21,12 +25,16 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">담당자</v-subheader>
+          <v-subheader class="indigo lighten-5">담당자</v-subheader>
           <v-list class="project-filter">
-            <v-list-item v-for="item in managerFilter" :key="item.userId">
-              <v-list-item-content class="px-0">
+            <v-list-item
+              class="px-0"
+              v-for="item in managerFilter"
+              :key="item.userId"
+            >
+              <v-list-item-content>
                 <v-checkbox
-                  class="px-5"
+                  class="pl-3"
                   v-model="memSelection"
                   :value="item.userId"
                   @change="chkFilter()"
@@ -39,10 +47,10 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-subheader class="blue-grey lighten-4">공개 여부</v-subheader>
+          <v-subheader class="indigo lighten-5">공개 여부</v-subheader>
           <v-list class="project-filter">
-            <v-list-item>
-              <v-list-item-content class="px-0">
+            <v-list-item class="px-0">
+              <v-list-item-content>
                 <v-radio-group v-model="publicSelection" @change="chkFilter()">
                   <v-radio class="px-5 pb-2" :value="0">
                     <template v-slot:label>
@@ -66,8 +74,16 @@
         </div>
       </v-card>
       <!-- 필터 저장 초기화 -->
-      <div class="text-xs-center ma-2">
-        <v-btn class="mx-0 my-2" color="blue-grey" block small dark @click="resetFilter()">초기화</v-btn>
+      <div class="ma-2">
+        <v-btn
+          class="mx-0 my-0"
+          color="blue-grey"
+          depressed
+          block
+          dark
+          @click="resetFilter()"
+          >초기화</v-btn
+        >
       </div>
     </v-col>
     <v-col cols="10">

@@ -3,7 +3,9 @@
     <v-stepper v-model="e1">
       <v-divider></v-divider>
       <v-stepper-header class="blue-grey lighten-5">
-        <v-stepper-step :complete="e1 > 1" step="1">프로젝트 선택</v-stepper-step>
+        <v-stepper-step :complete="e1 > 1" step="1"
+          >프로젝트 선택</v-stepper-step
+        >
         <v-divider></v-divider>
         <v-stepper-step :complete="e1 > 2" step="2">업무 선택</v-stepper-step>
         <v-divider></v-divider>
@@ -18,7 +20,7 @@
           <!-- 프로젝트 선택 -->
           <!-- <v-card-title class="text-h5">프로젝트 선택</v-card-title> -->
           <v-select
-            class="mx-5 pt-10"
+            class="mx-5 pt-10 pb-3"
             v-model="chkProject"
             @change="fetchChkProject()"
             :items="selectProjects"
@@ -26,13 +28,28 @@
             item-value="prjid"
             label="프로젝트"
             outlined
+            hide-details
           ></v-select>
-          <v-alert v-model="alert" dense outlined type="error" class="mx-5 py-1" height="35px">
+          <v-alert
+            v-model="alert"
+            dense
+            outlined
+            type="error"
+            class="mx-5 py-1"
+            height="35px"
+          >
             <span style="font-size:13px">프로젝트를 선택해주세요.</span>
           </v-alert>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" color="primary" outlined small fab @click="isChkPrj()">
+            <v-btn
+              class="ma-2"
+              color="primary"
+              outlined
+              small
+              fab
+              @click="isChkPrj()"
+            >
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
           </v-card-actions>
@@ -41,11 +58,23 @@
         <v-stepper-content step="2">
           <!-- 업무 선택 -->
           <!-- <v-card-title class="text-h5">업무 선택</v-card-title> -->
-          <v-radio-group class="mb-6 mx-10 pt-5" v-model="radios" :mandatory="false">
+          <v-radio-group
+            class="mb-6 mx-10 pt-5"
+            v-model="radios"
+            :mandatory="false"
+          >
             <!-- 업무 대 추가할 것인지 -->
-            <v-radio class="mb-6" label="상위 업무 등록" value="addTask"></v-radio>
+            <v-radio
+              class="mb-6"
+              label="상위 업무 등록"
+              value="addTask"
+            ></v-radio>
             <!-- 업무 대 선택 할것인지 -->
-            <v-radio class="mb-2" label="하위 업무 등록" value="selectTask"></v-radio>
+            <v-radio
+              class="mb-2"
+              label="하위 업무 등록"
+              value="selectTask"
+            ></v-radio>
             <v-select
               class="mb-5 mx-5"
               v-model="chkSuperTask"
@@ -58,11 +87,25 @@
             ></v-select>
           </v-radio-group>
           <v-card-actions>
-            <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 1">
+            <v-btn
+              class="ma-2"
+              color="primary"
+              outlined
+              small
+              fab
+              @click="e1 = 1"
+            >
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 3">
+            <v-btn
+              class="ma-2"
+              color="primary"
+              outlined
+              small
+              fab
+              @click="e1 = 3"
+            >
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
           </v-card-actions>
@@ -71,7 +114,12 @@
         <v-stepper-content step="3">
           <!-- 업무 추가 -->
           <v-card class="add-task-card-form">
-            <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
+            <v-form
+              ref="form"
+              v-model="valid"
+              @submit.prevent="onSubmit"
+              lazy-validation
+            >
               <v-card-text class="py-0 px-3">
                 <!-- <v-container> -->
                 <v-row style="max-height:650px" class="overflow-y-auto">
@@ -101,7 +149,11 @@
                           <span class="additional-title">
                             <v-icon small left>mdi-lock-outline</v-icon>공개여부
                           </span>
-                          <v-radio label="공개" value="true" class="mr-5"></v-radio>
+                          <v-radio
+                            label="공개"
+                            value="true"
+                            class="mr-5"
+                          ></v-radio>
                           <v-radio label="비공개" value="false"></v-radio>
                           <v-spacer></v-spacer>
                         </v-radio-group>
@@ -111,14 +163,37 @@
                         <span class="additional-title">
                           <v-icon small left>mdi-account-outline</v-icon>담당자
                         </span>
-                        <div v-if="managers.length" class="pl-4" style="display:inline-block">
-                          <v-tooltip v-for="member in managers" :key="member.id" bottom>
+                        <div
+                          v-if="managers.length"
+                          class="pl-4"
+                          style="display:inline-block"
+                        >
+                          <v-tooltip
+                            v-for="member in managers"
+                            :key="member.id"
+                            bottom
+                          >
                             <template v-slot:activator="{ on, attrs }">
-                              <v-avatar v-if="member.imgCode" size="32" class="user-avatars">
-                                <img :src="member.imgCode" v-bind="attrs" v-on="on" />
+                              <v-avatar
+                                v-if="member.imgCode"
+                                size="32"
+                                class="user-avatars"
+                              >
+                                <img
+                                  :src="member.imgCode"
+                                  v-bind="attrs"
+                                  v-on="on"
+                                />
                               </v-avatar>
-                              <v-avatar v-else size="32" class="user-avatars" color="grey">
-                                <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+                              <v-avatar
+                                v-else
+                                size="32"
+                                class="user-avatars"
+                                color="grey"
+                              >
+                                <v-icon fab dark v-bind="attrs" v-on="on"
+                                  >mdi-account</v-icon
+                                >
                               </v-avatar>
                             </template>
                             <span>{{ member.name }}</span>
@@ -128,7 +203,8 @@
                       </v-col>
                       <v-col cols="12" class="py-3" v-if="endDate || startDate">
                         <span class="additional-title">
-                          <v-icon small left>mdi-calendar-month-outline</v-icon>기한
+                          <v-icon small left>mdi-calendar-month-outline</v-icon
+                          >기한
                         </span>
                         <v-chip label small color="#cacaca">
                           <v-icon small left>mdi-clock-outline</v-icon>
@@ -139,7 +215,9 @@
                         <span class="additional-title">
                           <v-icon small left>mdi-rotate-left</v-icon>상태
                         </span>
-                        <v-chip filter :color="state[taskState].color">{{ state[taskState].name }}</v-chip>
+                        <v-chip filter :color="state[taskState].color">{{
+                          state[taskState].name
+                        }}</v-chip>
                       </v-col>
                       <v-col cosl="12" class="py-3" v-if="taskLabel.length">
                         <span class="additional-title">
@@ -153,14 +231,26 @@
                           small
                           label
                           class="ma-1"
-                        >{{ label.labelName }}</v-chip>
+                          >{{ label.labelName }}</v-chip
+                        >
                       </v-col>
                     </v-row>
                     <v-col cols="12">
-                      <v-textarea label="내용" v-model="description" auto-grow dense outlined></v-textarea>
+                      <v-textarea
+                        label="내용"
+                        v-model="description"
+                        auto-grow
+                        dense
+                        outlined
+                      ></v-textarea>
                     </v-col>
                     <v-col cols="12">
-                      <v-file-input chips multiple label="파일 추가" v-model="attachFiles"></v-file-input>
+                      <v-file-input
+                        chips
+                        multiple
+                        label="파일 추가"
+                        v-model="attachFiles"
+                      ></v-file-input>
                     </v-col>
                     <v-col cols="12" v-if="existCheckLists.length" class="pt-3">
                       <v-slide-x-transition group>
@@ -202,31 +292,43 @@
                                 slot="append"
                                 @click="addNewCheckItem(index)"
                                 color="green"
-                              >mdi-check</v-icon>
+                                >mdi-check</v-icon
+                              >
                             </v-text-field>
                             <v-slide-x-transition group>
                               <div
                                 v-for="(item, i) in getCheckListItems(
-                            checkList.checkListItems
-                          )"
+                                  checkList.checkListItems
+                                )"
                                 :key="i"
                                 class="px-0"
                               >
-                                <v-btn disabled @click="check(item.item_no, checkList.listNo)" icon>
+                                <v-btn
+                                  disabled
+                                  @click="check(item.item_no, checkList.listNo)"
+                                  icon
+                                >
                                   <v-icon
                                     v-if="item.is_checked"
                                     color="indigo lighten-1"
-                                  >mdi-checkbox-marked</v-icon>
-                                  <v-icon v-else>mdi-checkbox-blank-outline</v-icon>
+                                    >mdi-checkbox-marked</v-icon
+                                  >
+                                  <v-icon v-else
+                                    >mdi-checkbox-blank-outline</v-icon
+                                  >
                                 </v-btn>
-                                <p style="display:inline-block">{{ item.title }}</p>
+                                <p style="display:inline-block">
+                                  {{ item.title }}
+                                </p>
                                 <v-btn
                                   icon
                                   small
                                   style="float:right"
                                   @click="deleteCheckItem(i, index)"
                                 >
-                                  <v-icon color="grey lighten-1" small>mdi-window-close</v-icon>
+                                  <v-icon color="grey lighten-1" small
+                                    >mdi-window-close</v-icon
+                                  >
                                 </v-btn>
                               </div>
                             </v-slide-x-transition>
@@ -239,7 +341,11 @@
                   <v-col cols="3" class="createTaskside pa-0">
                     <v-subheader>추가 옵션</v-subheader>
                     <v-list-item>
-                      <v-btn block depressed @click.prevent="isOpenAddMember = true">
+                      <v-btn
+                        block
+                        depressed
+                        @click.prevent="isOpenAddMember = true"
+                      >
                         <v-icon left>mdi-account-plus</v-icon>담당자
                       </v-btn>
                       <add-member
@@ -265,7 +371,8 @@
                                 filter
                                 label
                                 :color="st.color"
-                              >{{ st.name }}</v-chip>
+                                >{{ st.name }}</v-chip
+                              >
                             </v-chip-group>
                           </v-card-text>
                         </v-card>
@@ -275,13 +382,22 @@
                       <label-menu :pid="this.project.id" @addLabel="addLabel" />
                     </v-list-item>
                     <v-list-item>
-                      <date-menu @addStartDate="addStartDate" @addEndDate="addEndDate" />
+                      <date-menu
+                        @addStartDate="addStartDate"
+                        @addEndDate="addEndDate"
+                      />
                     </v-list-item>
                     <v-list-item>
-                      <v-menu offset-x :close-on-content-click="false" top v-model="newCheckList">
+                      <v-menu
+                        offset-x
+                        :close-on-content-click="false"
+                        top
+                        v-model="newCheckList"
+                      >
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn v-bind="attrs" v-on="on" block depressed>
-                            <v-icon left>mdi-format-list-bulleted</v-icon>체크리스트
+                            <v-icon left>mdi-format-list-bulleted</v-icon
+                            >체크리스트
                           </v-btn>
                         </template>
                         <v-card class="my-chip-group">
@@ -290,7 +406,10 @@
                             <!-- ADD LABELS {{this.labels}} -->
                           </v-card-title>
                           <v-card-text>
-                            <v-form @submit.prevent="onCheckListSubmit" lazy-validation>
+                            <v-form
+                              @submit.prevent="onCheckListSubmit"
+                              lazy-validation
+                            >
                               <v-text-field
                                 label="체크리스트 이름"
                                 v-model="checkListName"
@@ -322,7 +441,14 @@
               </v-card-text>
 
               <v-card-actions>
-                <v-btn class="ma-2" color="primary" outlined small fab @click="e1 = 2">
+                <v-btn
+                  class="ma-2"
+                  color="primary"
+                  outlined
+                  small
+                  fab
+                  @click="e1 = 2"
+                >
                   <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
@@ -528,7 +654,7 @@ export default {
 
         formData.append(
           "manager",
-          this.managers.map(function (o) {
+          this.managers.map(function(o) {
             return o.memberNo;
           })
         );
@@ -800,4 +926,3 @@ span.additional-title {
   box-shadow: none;
 }
 </style>
-

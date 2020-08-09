@@ -4,61 +4,68 @@
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
     <v-container class="project-container" fluid tag="section">
-      <v-app-bar color="#FFFFFF" dense flat absolute>
-        <v-tabs v-model="tabs" color="grey">
-          <v-tab>칸반 보드</v-tab>
-          <!-- <v-tab>간트 차트</v-tab> -->
-        </v-tabs>
-        <v-spacer></v-spacer>
+      <v-app-bar
+        color="#FFFFFF"
+        dense
+        flat
+        absolute
+        class="px-0"
+        style="height:10px"
+        height="10px"
+      >
+        <!-- 칸반 보드 -->
+        <!-- <v-tab>간트 차트</v-tab> -->
+        <!-- <v-spacer></v-spacer> -->
         <!-- <v-btn icon>
           <v-icon>mdi-plus</v-icon>
         </v-btn>
         <v-btn icon @click="onStar">
           <v-icon>{{ active ? "mdi-star" : "mdi-star-outline" }}</v-icon>
         </v-btn> -->
+
+        <v-progress-linear
+          color="indigo lighten-2"
+          height="9"
+          :value="project.progressRate"
+        ></v-progress-linear>
         <v-btn
           icon
           color="grey lighten-1"
+          small
           @click.prevent="isOpenProjectInfo = true"
+          style="position: absolute;right: 20px; top:-35px"
         >
-          <v-icon>mdi-information</v-icon>
+          <v-icon>mdi-information-outline </v-icon>
         </v-btn>
       </v-app-bar>
       <v-divider></v-divider>
-      <v-tabs-items v-model="tabs" class="schedule-tab">
-        <v-tab-item class="project-container">
-          <div class="ma-0 kanban-board-wrapper">
-            <v-row class="mx-4 list-row">
-              <draggable
-                v-model="lists"
-                v-bind="getDragOptions"
-                class="row flex-nowrap"
-              >
-                <Task-parent
-                  v-for="(listItem, index) in lists"
-                  :key="index"
-                  :board="getBoard"
-                  :list="listItem"
-                  @update="update"
-                />
-                <v-card class="mr-4 pa-0 super-task-card" width="300">
-                  <v-card-actions>
-                    <v-btn text block @click.prevent="showAddTask('SUPER')">
-                      <v-icon small>mdi-plus</v-icon>상위 업무 추가
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </draggable>
-              <!-- <add-super-task :openModal="addTaskModal" /> -->
+      <div class="ma-0 kanban-board-wrapper">
+        <v-row class="mx-4 list-row">
+          <draggable
+            v-model="lists"
+            v-bind="getDragOptions"
+            class="row flex-nowrap"
+          >
+            <Task-parent
+              v-for="(listItem, index) in lists"
+              :key="index"
+              :board="getBoard"
+              :list="listItem"
+              @update="update"
+            />
+            <v-card class="mr-4 pa-0 super-task-card" width="300">
+              <v-card-actions>
+                <v-btn text block @click.prevent="showAddTask('SUPER')">
+                  <v-icon small>mdi-plus</v-icon>상위 업무 추가
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </draggable>
+          <!-- <add-super-task :openModal="addTaskModal" /> -->
 
-              <add-super-task :openModal="addTaskModal" @update="update" />
-            </v-row>
-          </div>
-        </v-tab-item>
-        <v-tab-item>
-          <p>hi</p>
-        </v-tab-item>
-      </v-tabs-items>
+          <add-super-task :openModal="addTaskModal" @update="update" />
+        </v-row>
+      </div>
       <router-view :projectId="project.id"></router-view>
     </v-container>
 
@@ -410,7 +417,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="onClose">취소</v-btn>
+            <v-btn color="grey darken-1" text @click="onClose">취소</v-btn>
             <v-btn
               v-if="project.memberNo === project.manager"
               color="blue darken-1"
@@ -503,6 +510,7 @@ export default {
       console.log(">> 패치데이터 완료");
       this.loading = false;
       this.SET_HEADER_TITLE(this.project.title);
+      this.SET_APPBAR_ICON("mdi-newspaper-variant-multiple-outline");
       ///////////////////PROJECT INFO SETTING///////////////////////////////////////////
       this.title = this.project.title;
       this.description = this.project.description;
@@ -581,6 +589,7 @@ export default {
       "SET_TASK_LIST",
       "SET_LABEL_LIST",
       "SET_MEMBER_LIST",
+      "SET_APPBAR_ICON",
     ]),
     ...mapActions(["FETCH_PROJECT", "UPDATE_PROJECT"]),
     onClose() {
@@ -866,11 +875,11 @@ export default {
   display: flex;
   /* align-items: flex-start; */
   flex-direction: column;
-  padding-top: 50px;
+  padding-top: 20px;
 }
 .flex-nowrap {
-  position: absolute;
-  height: 100%;
+  position: relative;
+  /* height: 100%; */
 }
 /* .list-row {
   overflow-x: scroll;
@@ -924,5 +933,10 @@ export default {
 }
 .grey-icon .v-icon {
   color: #546e7a;
+}
+section.project-container > header > div,
+.v-toolbar__extension {
+  height: 10px;
+  padding: 0px !important;
 }
 </style>

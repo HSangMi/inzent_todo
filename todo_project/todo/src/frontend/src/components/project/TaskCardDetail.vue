@@ -52,8 +52,17 @@
                     <span class="additional-title">
                       <v-icon small left>mdi-lock-outline</v-icon>공개여부
                     </span>
-                    <v-radio label="공개" value="true" class="mr-5"></v-radio>
-                    <v-radio label="비공개" value="false"></v-radio>
+                    <v-radio
+                      :disabled="!this.taskInfo.task.usePublic"
+                      label="공개"
+                      value="true"
+                      class="mr-5"
+                    ></v-radio>
+                    <v-radio
+                      :disabled="!this.taskInfo.task.usePublic"
+                      label="비공개"
+                      value="false"
+                    ></v-radio>
                     <v-spacer></v-spacer>
                   </v-radio-group>
                 </v-col>
@@ -400,7 +409,14 @@
             <v-col cols="3" class="createTaskside pa-0">
               <v-subheader>추가 옵션</v-subheader>
               <v-list-item>
-                <v-btn block depressed @click.prevent="isOpenAddMember = true">
+                <v-btn
+                  block
+                  depressed
+                  @click.prevent="isOpenAddMember = true"
+                  :disabled="
+                    !this.taskInfo.task.usePublic && this.usePublic == 'false'
+                  "
+                >
                   <v-icon left>mdi-account-plus</v-icon>담당자
                 </v-btn>
                 <add-member
@@ -748,24 +764,28 @@ export default {
         formData.append("taskId", this.$route.params.tid);
         var addMem = [];
         var subMem = [];
-        if (this.taskInfo.task.managerString !== null) {
-          addMem = this.managers
-            .map(function(o) {
-              return o.memberNo;
-            })
-            .filter(
-              (mem) =>
-                !JSON.parse(this.taskInfo.task.managerString).includes(mem)
-            );
+        if (this.usePublic == "false") {
+          console.log("getAddManager");
+        } else {
+          if (this.taskInfo.task.managerString !== null) {
+            addMem = this.managers
+              .map(function(o) {
+                return o.memberNo;
+              })
+              .filter(
+                (mem) =>
+                  !JSON.parse(this.taskInfo.task.managerString).includes(mem)
+              );
 
-          subMem = JSON.parse(this.taskInfo.task.managerString).filter(
-            (mem) =>
-              !this.managers
-                .map(function(o) {
-                  return o.memberNo;
-                })
-                .includes(mem)
-          );
+            subMem = JSON.parse(this.taskInfo.task.managerString).filter(
+              (mem) =>
+                !this.managers
+                  .map(function(o) {
+                    return o.memberNo;
+                  })
+                  .includes(mem)
+            );
+          }
         }
         formData.append("addManager", addMem);
         formData.append("subManager", subMem);
