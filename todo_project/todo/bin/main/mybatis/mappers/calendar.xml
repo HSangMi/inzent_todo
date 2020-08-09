@@ -17,6 +17,7 @@
             tts.use_public usePublic
         from tb_project tp, tb_member tm, tb_task_super tts
         where (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
+        and tm.member_no in (select member_no from tb_member where user_id = #{userId})
         or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{userId})))
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{userId})));
@@ -35,6 +36,7 @@
             tts.use_public usePublic
         from tb_project tp, tb_member tm, tb_task_super tts
         where ((tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
+        and tm.member_no in (select member_no from tb_member where user_id = #{userId})
         or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{userId})))
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{userId}))))
@@ -108,6 +110,7 @@
             tts.use_public pUsePublic
         from tb_project tp, tb_member tm, tb_task_super tts
         where ((tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
+        and tm.member_no in (select member_no from tb_member where user_id = #{id})
         or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{id})))
         or    (tp.manager = tm.member_no and tm.user_id = #{id} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
         or    (tp.manager = tm.member_no and tm.user_id = #{id} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{id}))))
@@ -130,6 +133,7 @@
             tts.use_public pUsePublic
         from tb_project tp, tb_member tm, tb_task_super tts
         where ((tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
+        and tm.member_no in (select member_no from tb_member where user_id = #{userId})
         or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{userId})))
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
         or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{userId}))))

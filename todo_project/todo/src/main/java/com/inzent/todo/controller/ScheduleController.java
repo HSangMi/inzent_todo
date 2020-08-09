@@ -41,7 +41,6 @@ public class ScheduleController {
     public List<ScheduleDto> getCalendarList(HttpServletRequest req) {
         UserVo user = (UserVo) req.getAttribute("user");
         String userId = user.getId();
-
         List<ScheduleDto> list = scheduleService.getCalendarList(userId);
         return list;
     }
