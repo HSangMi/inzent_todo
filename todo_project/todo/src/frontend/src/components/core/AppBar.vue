@@ -31,11 +31,20 @@
       </template>
       <v-list :tile="false" nav>
         <div>
-          <app-bar-item v-for="(n, i) in notifications" :key="`item-${i}`">
-            <v-list-item style="margin-bottom:0px" @click="openModal(n)">
-              <v-list-item-title v-text="n" />
-            </v-list-item>
-          </app-bar-item>
+          <template v-if="userInfo.id == 'admin'">
+            <app-bar-item v-for="(n, i) in adminNofifications" :key="`item-${i}`">
+              <v-list-item style="margin-bottom:0px" @click="openModal(n)">
+                <v-list-item-title v-text="n" />
+              </v-list-item>
+            </app-bar-item>
+          </template>
+          <template v-else>
+            <app-bar-item v-for="(n, i) in userNotifications" :key="`item-${i}`">
+              <v-list-item style="margin-bottom:0px" @click="openModal(n)">
+                <v-list-item-title v-text="n" />
+              </v-list-item>
+            </app-bar-item>
+          </template>
         </div>
       </v-list>
     </v-menu>
@@ -108,7 +117,8 @@ export default {
   },
 
   data: () => ({
-    notifications: ["내 정보", "로그아웃"],
+    userNotifications: ["내 정보", "로그아웃"],
+    adminNofifications: ["로그아웃"],
     search: "",
     mypageModal: false,
     logoutModal: false,

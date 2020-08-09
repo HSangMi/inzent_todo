@@ -56,7 +56,7 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" width="1000">
                   <template v-slot:activator="{ on, attrs }">
-                    <template v-if="this.userInfo.id == 'admin'">
+                    <template v-if="userInfo.id == 'admin'">
                       <!-- <v-btn 
                       color="primary"
                       dark
@@ -230,7 +230,8 @@ export default {
         { text: "연락처", align: "center", value: "phone" },
         { text: "이메일", align: "center", value: "email" },
       ];
-      if (this.userInfo.id == "admin") {
+      if (this.userInfo.id === "admin") {
+        console.log("aaaaaaaaaaa")
         headers.push({
           text: "관리",
           align: "center",
@@ -316,7 +317,7 @@ export default {
     },
 
     fatchUser() {
-      if (this.userInfo.id == "admin") {
+      if (this.userInfo.id === "admin") {
         let depts = [
           "1100",
           "1200",
