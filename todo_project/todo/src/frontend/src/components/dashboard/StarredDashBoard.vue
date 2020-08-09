@@ -1,88 +1,62 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
     <v-card-title class="text-h5">
-      <v-icon color="yellow" left>mdi-star</v-icon>
-      &nbsp;<span class="starTitle">관심 업무</span>
+      <v-icon left>mdi-star</v-icon>&nbsp;
+      <span class="starTitle">관심 업무</span>
     </v-card-title>
     <v-divider></v-divider>
-    <v-row>
-      <v-col cols="12" md="9">
-        <v-data-table
-          :headers="headers"
-          :items="listItem"
-          :items-per-page="5"
-          item-key="starId"
-          class="elevation-1"
-          height="250"
-          no-data-text="관심 업무가 존재하지 않습니다."
-        >
-          <!-- 공개여부 아이콘 설정 -->
-          <template v-slot:item.starIcon="{ item }">
-            <v-btn icon color="yellow" @click="delStar(item.starId)">
-              <v-icon>mdi-star</v-icon>
-            </v-btn>
-          </template>
-          <template v-slot:item.prjTitle="{ item }">
-            <router-link :to="`/projects/${item.prjId}`">
-              {{ item.prjTitle }}
-            </router-link>
-          </template>
-          <template v-slot:item.usePublic="{ item }">
-            <v-icon small v-show="item.usePublic"
-              >mdi-lock-open-variant-outline</v-icon
-            >
-            <v-icon small v-show="!item.usePublic">mdi-lock-outline</v-icon>
-          </template>
-          <!-- 진행상태 표시 -->
-          <template v-slot:item.state="{ item }">
-            <v-chip
-              v-if="item.state == 'P'"
-              small
-              color="blue"
-              text-color="white"
-              >진행</v-chip
-            >
-            <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
-            <v-chip v-if="item.state == 'H'" small>보류</v-chip>
-            <v-chip
-              v-if="item.state == 'E'"
-              small
-              color="red"
-              text-color="white"
-              >긴급</v-chip
-            >
-            <v-chip
-              v-if="item.state == 'C'"
-              small
-              color="green"
-              text-color="white"
-              >완료</v-chip
-            >
-          </template>
-        </v-data-table>
-      </v-col>
-      <v-divider class="mx-4" vertical></v-divider>
-      <v-col cols="12" md="2" class="mx-0 auto">
-        <div v-if="starredList.length == 0" class="text-center py-5">
-          관심 업무 차트가 존재하지 않습니다.
-        </div>
-        <div class="mx-5" v-else>
-          <canvas id="starredChart" width="300" height="300"></canvas>
-        </div>
-      </v-col>
-    </v-row>
-    <v-dialog v-model="openDialog" persistent max-width="290">
-      <v-card>
-        <v-card-title class="subheading font-weight-bold"
-          >관심업무를 취소하시겠습니까?</v-card-title
-        >
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text small @click="deleteStarred()">확인</v-btn>
-          <v-btn text small @click="openDialog = false">취소</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <v-card-text class="py-0">
+      <v-row>
+        <v-col cols="12" md="9">
+          <v-data-table
+            :headers="headers"
+            :items="listItem"
+            :items-per-page="5"
+            item-key="starId"
+            height="288"
+            no-data-text="관심 업무가 존재하지 않습니다."
+          >
+            <!-- 공개여부 아이콘 설정 -->
+            <template v-slot:item.starIcon="{ item }">
+              <v-btn icon color="yellow" @click="delStar(item.starId)">
+                <v-icon>mdi-star</v-icon>
+              </v-btn>
+            </template>
+            <template v-slot:item.prjTitle="{ item }">
+              <router-link :to="`/projects/${item.prjId}`">{{ item.prjTitle }}</router-link>
+            </template>
+            <template v-slot:item.usePublic="{ item }">
+              <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
+              <v-icon small v-show="!item.usePublic">mdi-lock-outline</v-icon>
+            </template>
+            <!-- 진행상태 표시 -->
+            <template v-slot:item.state="{ item }">
+              <v-chip v-if="item.state == 'P'" small color="blue" text-color="white">진행</v-chip>
+              <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
+              <v-chip v-if="item.state == 'H'" small>보류</v-chip>
+              <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
+              <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
+            </template>
+          </v-data-table>
+        </v-col>
+        <v-col cols="12" lg="3">
+          <div v-if="starredList.length == 0" class="text-center py-5">관심 업무 차트가 존재하지 않습니다.</div>
+          <div v-else>
+            <canvas id="starredChart" class="mx-auto mt-5" width="300" height="300"></canvas>
+          </div>
+        </v-col>
+      </v-row>
+      <v-dialog v-model="openDialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="subheading font-weight-bold">관심업무를 취소하시겠습니까?</v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text small @click="deleteStarred()">확인</v-btn>
+            <v-btn text small @click="openDialog = false">취소</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card-text>
   </v-card>
 </template>
 

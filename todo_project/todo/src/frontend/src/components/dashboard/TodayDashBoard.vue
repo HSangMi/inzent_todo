@@ -5,84 +5,84 @@
       <span class="todayTitle">오늘의 업무</span>
     </v-card-title>
     <v-divider></v-divider>
-    <v-row>
-      <v-col cols="12" md="9">
-        <v-data-table
-          :headers="headers"
-          :items="listItem"
-          :items-per-page="5"
-          :single-expand="singleExpand"
-          :expanded="expanded"
-          show-expand
-          item-key="pid"
-          class="elevation-1"
-          height="250"
-          @update:expanded="getSub"
-          no-data-text="오늘의 상위업무가 존재하지 않습니다."
-          @click:row="goProjectPage"
-        >
-          <template v-slot:item.prjTitle="{ item }">{{ item.prjTitle }}</template>
-          <!-- 공개여부 아이콘 설정 -->
-          <template v-slot:item.usePublic="{ item }">
-            <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
-            <v-icon small v-show="!item.usePublic">mdi-lock-outline</v-icon>
-          </template>
-          <!-- 진행상태 표시 -->
-          <template v-slot:item.state="{ item }">
-            <v-chip v-if="item.state == 'P'" small color="blue" text-color="white">진행</v-chip>
-            <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
-            <v-chip v-if="item.state == 'H'" small>보류</v-chip>
-            <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
-            <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
-          </template>
+    <v-card-text class="py-0">
+      <v-row>
+        <v-col cols="12" lg="9">
+          <v-data-table
+            :headers="headers"
+            :items="listItem"
+            :items-per-page="5"
+            :single-expand="singleExpand"
+            :expanded="expanded"
+            show-expand
+            item-key="pid"
+            height="288"
+            @update:expanded="getSub"
+            no-data-text="오늘의 상위업무가 존재하지 않습니다."
+            @click:row="goProjectPage"
+          >
+            <template v-slot:item.prjTitle="{ item }">{{ item.prjTitle }}</template>
+            <!-- 공개여부 아이콘 설정 -->
+            <template v-slot:item.usePublic="{ item }">
+              <v-icon small v-show="item.usePublic">mdi-lock-open-variant-outline</v-icon>
+              <v-icon small v-show="!item.usePublic">mdi-lock-outline</v-icon>
+            </template>
+            <!-- 진행상태 표시 -->
+            <template v-slot:item.state="{ item }">
+              <v-chip v-if="item.state == 'P'" small color="blue" text-color="white">진행</v-chip>
+              <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
+              <v-chip v-if="item.state == 'H'" small>보류</v-chip>
+              <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
+              <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
+            </template>
 
-          <!-- 업무 대 관련한 업무 소 출력 -->
-          <template v-slot:expanded-item="{ headers }">
-            <td :colspan="headers.length" class="px-0">
-              <v-simple-table>
-                <tbody v-if="todaySub.length == 0">
-                  <tr style="background-color:#F5F5F5">
-                    <td colspan="todaySub.length" class="text-center">오늘의 하위업무가 존재하지 않습니다.</td>
-                  </tr>
-                </tbody>
-                <tbody v-else>
-                  <tr v-for="sub in todaySub" :key="sub.cid" style="background-color:#F5F5F5">
-                    <td class="text-center" width="20%"></td>
-                    <td class="text-center" width="20%">
-                      <span class="sub">{{ sub.ctitle }}</span>
-                    </td>
-                    <td class="text-center sub" width="20%">
-                      <span class="sub">{{ sub.startDate }} ~ {{ sub.endDate }}</span>
-                    </td>
-                    <td v-if="sub.state == 'P'" class="text-center" width="20%">
-                      <v-chip x-small color="blue" text-color="white">진행</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'W'" class="text-center" width="20%">
-                      <v-chip x-small color="yellow">대기</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'H'" class="text-center" width="20%">
-                      <v-chip x-small>보류</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'E'" class="text-center" width="20%">
-                      <v-chip x-small color="red" text-color="white">긴급</v-chip>
-                    </td>
-                    <td v-if="sub.state == 'C'" class="text-center" width="20%">
-                      <v-chip x-small color="green" text-color="white">완료</v-chip>
-                    </td>
-                    <td v-show="sub.usePublic" class="text-center" width="10%">
-                      <v-icon small>mdi-lock-open-variant-outline</v-icon>
-                    </td>
-                    <td v-show="!sub.usePublic" class="text-center" width="10%">
-                      <v-icon small>mdi-lock-outline</v-icon>
-                    </td>
-                    <td class="text-center" width="10%"></td>
-                  </tr>
-                </tbody>
-              </v-simple-table>
-            </td>
-          </template>
-        </v-data-table>
-        <!-- <v-tooltip bottom color="#5a5a5a">
+            <!-- 업무 대 관련한 업무 소 출력 -->
+            <template v-slot:expanded-item="{ headers }">
+              <td :colspan="headers.length" class="px-0">
+                <v-simple-table>
+                  <tbody v-if="todaySub.length == 0">
+                    <tr style="background-color:#F5F5F5">
+                      <td colspan="todaySub.length" class="text-center">오늘의 하위업무가 존재하지 않습니다.</td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else>
+                    <tr v-for="sub in todaySub" :key="sub.cid" style="background-color:#F5F5F5">
+                      <td class="text-center" width="20%"></td>
+                      <td class="text-center" width="20%">
+                        <span class="sub">{{ sub.ctitle }}</span>
+                      </td>
+                      <td class="text-center sub" width="20%">
+                        <span class="sub">{{ sub.startDate }} ~ {{ sub.endDate }}</span>
+                      </td>
+                      <td v-if="sub.state == 'P'" class="text-center" width="20%">
+                        <v-chip x-small color="blue" text-color="white">진행</v-chip>
+                      </td>
+                      <td v-if="sub.state == 'W'" class="text-center" width="20%">
+                        <v-chip x-small color="yellow">대기</v-chip>
+                      </td>
+                      <td v-if="sub.state == 'H'" class="text-center" width="20%">
+                        <v-chip x-small>보류</v-chip>
+                      </td>
+                      <td v-if="sub.state == 'E'" class="text-center" width="20%">
+                        <v-chip x-small color="red" text-color="white">긴급</v-chip>
+                      </td>
+                      <td v-if="sub.state == 'C'" class="text-center" width="20%">
+                        <v-chip x-small color="green" text-color="white">완료</v-chip>
+                      </td>
+                      <td v-show="sub.usePublic" class="text-center" width="10%">
+                        <v-icon small>mdi-lock-open-variant-outline</v-icon>
+                      </td>
+                      <td v-show="!sub.usePublic" class="text-center" width="10%">
+                        <v-icon small>mdi-lock-outline</v-icon>
+                      </td>
+                      <td class="text-center" width="10%"></td>
+                    </tr>
+                  </tbody>
+                </v-simple-table>
+              </td>
+            </template>
+          </v-data-table>
+          <!-- <v-tooltip bottom color="#5a5a5a">
                 <template v-slot:activator="{ on, attrs }">
                   <td class="text-center" style="font-size:12px" v-if="list.managerCount == 1">
                     <v-icon v-bind="attrs" v-on="on">mdi-account</v-icon>
@@ -98,19 +98,20 @@
               <td class="text-center" v-if="list.managerCount == 0">
                 <v-icon>mdi-account-remove</v-icon>
               </td> 
-        -->
-      </v-col>
-      <v-divider class="mx-4" vertical></v-divider>
-      <v-col cols="12" md="2">
-        <!-- <p class="text-center mx-3 my-3">TODAY CHART</p> -->
-        <div v-if="todayList.length == 0">
-          <p class="text-center">오늘의 업무 차트가 존재하지 않습니다.</p>
-        </div>
-        <div class="mx-5" v-else>
-          <canvas id="todayChart" width="300" height="300"></canvas>
-        </div>
-      </v-col>
-    </v-row>
+          -->
+        </v-col>
+        <!-- <v-divider vertical></v-divider> -->
+        <v-col cols="12" lg="3">
+          <!-- <p class="text-center mx-3 my-3">TODAY CHART</p> -->
+          <div v-if="todayList.length == 0">
+            <p class="text-center">오늘의 업무 차트가 존재하지 않습니다.</p>
+          </div>
+          <div v-else>
+            <canvas id="todayChart" class="mx-auto mt-5" width="300" height="300"></canvas>
+          </div>
+        </v-col>
+      </v-row>
+    </v-card-text>
   </v-card>
 </template>
 
