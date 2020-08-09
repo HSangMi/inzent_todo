@@ -195,8 +195,10 @@ const mutations = {
       if (item.start != "") {
         item.duration = item.duration * 24 * 60 * 60 * 1000;
       } else {
-        var date = new Date();
-        item.start = date;
+        var day = new Date();
+        day.setDate(day.getDate() + 3);
+
+        item.start = day;
         item.duration = 0 * 24 * 60 * 60 * 1000;
       }
 

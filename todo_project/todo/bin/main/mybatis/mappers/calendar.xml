@@ -6,8 +6,8 @@
     <select id="getCalendarInfo" parameterType="String" resultType="scheduledto">
         <![CDATA[
         select 
-        	tp.id prjId,
-	        tp.title prjTitle, 
+            tp.id prjId,
+            tp.title prjTitle, 
             tts.task_id id, 
             tts.title title, 
             tts.start_date startDate, 
@@ -16,30 +16,36 @@
             tts.state state, 
             tts.use_public usePublic
         from tb_project tp, tb_member tm, tb_task_super tts
-        where (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
-        and tm.member_no in (select member_no from tb_member where user_id = #{userId})
-        or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{userId})))
-        or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
-        or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{userId})));
+        where (tts.task_id in (select task_id from tb_task_super where project_id in (select project_id from tb_member where user_id = #{userId})))
+        and (tp.manager = tm.member_no and tts.project_id = tp.id) 
+        and (
+        (tp.use_public = true and tts.use_public =true)
+        or (tp.use_public = true and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        or (tp.use_public = false and tts.use_public = true)
+        or (tp.use_public = false and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        )
     ]]>
     </select>
     <select id="getCalendarFilterInfo" parameterType="map" resultType="scheduledto">
-    select
-            tts.project_id prjId, 
-            tp.title prjTitle,
-            tts.task_id id, 
-            tts.title title, 
-            tts.start_date startDate, 
-            tts.end_date endDate, 
-            tts.reg_date regDate, 
-            tts.state state, 
-            tts.use_public usePublic
-        from tb_project tp, tb_member tm, tb_task_super tts
-        where ((tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
-        and tm.member_no in (select member_no from tb_member where user_id = #{userId})
-        or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{userId})))
-        or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
-        or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{userId}))))
+        select 
+                tp.id prjId,
+                tp.title prjTitle, 
+                tts.task_id id, 
+                tts.title title, 
+                tts.start_date startDate, 
+                tts.end_date endDate, 
+                tts.reg_date regDate, 
+                tts.state state, 
+                tts.use_public usePublic
+            from tb_project tp, tb_member tm, tb_task_super tts
+            where (tts.task_id in (select task_id from tb_task_super where project_id in (select project_id from tb_member where user_id = #{userId})))
+            and (tp.manager = tm.member_no and tts.project_id = tp.id) 
+            and (
+            (tp.use_public = true and tts.use_public =true)
+            or (tp.use_public = true and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+            or (tp.use_public = false and tts.use_public = true)
+            or (tp.use_public = false and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+            )
         <if test="prjItem">
         and (
             <foreach open="(" close=")" collection="prjItem" item="pitem" index="index" separator="or">
@@ -99,21 +105,25 @@
     </select>
     <select id="getClickDateList" parameterType="cddto" resultType="cddetialdto">
         <![CDATA[
-        select
-            tts.project_id prjId, 
-            tp.title prjTitle,
-            tts.task_id pId, 
-            tts.title pTitle, 
-            tts.start_date pStartDate, 
-            tts.end_date pEndDate, 
-            tts.state pState, 
-            tts.use_public pUsePublic
+       select 
+            tp.id prjId,
+            tp.title prjTitle, 
+            tts.task_id id, 
+            tts.title title, 
+            tts.start_date startDate, 
+            tts.end_date endDate, 
+            tts.reg_date regDate, 
+            tts.state state, 
+            tts.use_public usePublic
         from tb_project tp, tb_member tm, tb_task_super tts
-        where ((tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
-        and tm.member_no in (select member_no from tb_member where user_id = #{id})
-        or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{id})))
-        or    (tp.manager = tm.member_no and tm.user_id = #{id} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
-        or    (tp.manager = tm.member_no and tm.user_id = #{id} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{id}))))
+        where (tts.task_id in (select task_id from tb_task_super where project_id in (select project_id from tb_member where user_id = #{id})))
+        and (tp.manager = tm.member_no and tts.project_id = tp.id) 
+        and (
+        (tp.use_public = true and tts.use_public =true)
+        or (tp.use_public = true and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{id}))
+        or (tp.use_public = false and tts.use_public = true)
+        or (tp.use_public = false and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{id}))
+        )
         and (
         case when (tts.start_date='' or tts.end_date='') then (to_char(tts.reg_date, 'YYYY-MM-DD') = #{clickDate})
         when (tts.start_date !='' or tts.end_date !='') then (#{clickDate} between tts.start_date and tts.end_date)
@@ -122,21 +132,25 @@
     ]]>
     </select>
     <select id="getClickDateFilterList" parameterType="map" resultType="cddetialdto">
-        select
-            tts.project_id prjId, 
-            tp.title prjTitle,
-            tts.task_id pId, 
-            tts.title pTitle, 
-            tts.start_date pStartDate, 
-            tts.end_date pEndDate, 
-            tts.state pState, 
-            tts.use_public pUsePublic
+        select 
+                tp.id prjId,
+                tp.title prjTitle, 
+                tts.task_id id, 
+                tts.title title, 
+                tts.start_date startDate, 
+                tts.end_date endDate, 
+                tts.reg_date regDate, 
+                tts.state state, 
+                tts.use_public usePublic
         from tb_project tp, tb_member tm, tb_task_super tts
-        where ((tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = true)
-        and tm.member_no in (select member_no from tb_member where user_id = #{userId})
-        or    (tp.manager = tm.member_no and tp.use_public = true and tts.project_id = tp.id and tts.use_public = false  and (tts.member_no in (select member_no from tb_member where user_id=#{userId})))
-        or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = true)
-        or    (tp.manager = tm.member_no and tm.user_id = #{userId} and tp.use_public = false and tts.project_id = tp.id and tts.use_public = false and (tts.member_no in (select member_no from tb_member where user_id=#{userId}))))
+        where (tts.task_id in (select task_id from tb_task_super where project_id in (select project_id from tb_member where user_id = #{userId})))
+        and (tp.manager = tm.member_no and tts.project_id = tp.id) 
+        and (
+        (tp.use_public = true and tts.use_public =true)
+        or (tp.use_public = true and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        or (tp.use_public = false and tts.use_public = true)
+        or (tp.use_public = false and tts.use_public = false and tts.member_no in (select member_no from tb_member where user_id=#{userId}))
+        )
         and (
         case when (tts.start_date='' or tts.end_date='') then (to_char(tts.reg_date, 'YYYY-MM-DD') = #{clickDate})
         when (tts.start_date !='' or tts.end_date !='') then (#{clickDate} between tts.start_date and tts.end_date)
