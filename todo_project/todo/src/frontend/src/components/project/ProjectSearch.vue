@@ -19,6 +19,7 @@
               @change="fatchData"
               color="primary"
               :mandatory="false"
+              class="px-3"
             >
               <v-radio label="전체" value="opa"></v-radio>
               <v-radio label="프로젝트" value="opp"></v-radio>
@@ -33,6 +34,7 @@
               @change="fatchData"
               color="primary"
               :mandatory="false"
+              class="px-3"
             >
               <v-radio label="전체" value="rga"></v-radio>
               <v-radio label="공개용" value="t"></v-radio>
@@ -44,9 +46,7 @@
     </v-col>
     <v-col cols="10">
       <v-card outlined max-height="800" class="overflow-y-auto mx-2">
-        <v-subheader class="indigo lighten-5 ma-0" style="margin:8px"
-          >검색 결과</v-subheader
-        >
+        <v-subheader class="indigo lighten-5 ma-0" style="margin:8px">검색 결과</v-subheader>
         <!-- <v-card-title style="font-size:20px; font-weight:bold;">검색 결과</v-card-title> -->
         <v-card v-show="showProject" flat>
           <!-- <v-card-title style="font-size:15px; font-weight:bold;">프로젝트</v-card-title> -->
@@ -59,12 +59,7 @@
           >
             <!-- 담당자 -->
             <template v-slot:item.members="{ item }">
-              <v-tooltip
-                bottom
-                color="#5a5a5a"
-                v-for="(mem, index) in item.members"
-                :key="index"
-              >
+              <v-tooltip bottom color="#5a5a5a" v-for="(mem, index) in item.members" :key="index">
                 <template v-slot:activator="{ on, attrs }">
                   <v-avatar v-bind="attrs" v-on="on" size="32px">
                     <img class="user-avatar" :src="item.img[index]" />
@@ -74,42 +69,18 @@
               </v-tooltip>
             </template>
             <!-- 기간 -->
-            <template v-slot:item.dueDate="{ item }">
-              {{ item.startdate }} ~ {{ item.enddate }}
-            </template>
+            <template v-slot:item.dueDate="{ item }">{{ item.startdate }} ~ {{ item.enddate }}</template>
             <!-- 진행 상태 -->
             <template v-slot:item.state="{ item }">
-              <v-chip
-                v-if="item.state == 'P'"
-                small
-                color="blue"
-                text-color="white"
-                >진행</v-chip
-              >
-              <v-chip v-if="item.state == 'W'" small color="yellow"
-                >대기</v-chip
-              >
+              <v-chip v-if="item.state == 'P'" small color="blue" text-color="white">진행</v-chip>
+              <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
               <v-chip v-if="item.state == 'H'" small>보류</v-chip>
-              <v-chip
-                v-if="item.state == 'E'"
-                small
-                color="red"
-                text-color="white"
-                >긴급</v-chip
-              >
-              <v-chip
-                v-if="item.state == 'C'"
-                small
-                color="green"
-                text-color="white"
-                >완료</v-chip
-              >
+              <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
+              <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
             </template>
             <!-- 공개 여부 -->
             <template v-slot:item.usePublic="{ item }">
-              <v-icon small v-show="item.usepublic"
-                >mdi-lock-open-variant-outline</v-icon
-              >
+              <v-icon small v-show="item.usepublic">mdi-lock-open-variant-outline</v-icon>
               <v-icon small v-show="!item.usepublic">mdi-lock-outline</v-icon>
             </template>
           </v-data-table>
@@ -123,12 +94,7 @@
             @click:row="goProjectPage"
           >
             <template v-slot:item.members="{ item }">
-              <v-tooltip
-                bottom
-                color="#5a5a5a"
-                v-for="(mem, index) in item.members"
-                :key="index"
-              >
+              <v-tooltip bottom color="#5a5a5a" v-for="(mem, index) in item.members" :key="index">
                 <template v-slot:activator="{ on, attrs }">
                   <v-avatar v-bind="attrs" v-on="on" size="32px">
                     <img class="user-avatar" :src="item.img[index]" />
@@ -138,42 +104,18 @@
               </v-tooltip>
             </template>
             <!-- 기간 -->
-            <template v-slot:item.dueDate="{ item }">
-              {{ item.startdate }} ~ {{ item.enddate }}
-            </template>
+            <template v-slot:item.dueDate="{ item }">{{ item.startdate }} ~ {{ item.enddate }}</template>
             <!-- 진행 상태 -->
             <template v-slot:item.state="{ item }">
-              <v-chip
-                v-if="item.state == 'P'"
-                small
-                color="blue"
-                text-color="white"
-                >진행</v-chip
-              >
-              <v-chip v-if="item.state == 'W'" small color="yellow"
-                >대기</v-chip
-              >
+              <v-chip v-if="item.state == 'P'" small color="blue" text-color="white">진행</v-chip>
+              <v-chip v-if="item.state == 'W'" small color="yellow">대기</v-chip>
               <v-chip v-if="item.state == 'H'" small>보류</v-chip>
-              <v-chip
-                v-if="item.state == 'E'"
-                small
-                color="red"
-                text-color="white"
-                >긴급</v-chip
-              >
-              <v-chip
-                v-if="item.state == 'C'"
-                small
-                color="green"
-                text-color="white"
-                >완료</v-chip
-              >
+              <v-chip v-if="item.state == 'E'" small color="red" text-color="white">긴급</v-chip>
+              <v-chip v-if="item.state == 'C'" small color="green" text-color="white">완료</v-chip>
             </template>
             <!-- 공개 여부 -->
             <template v-slot:item.usePublic="{ item }">
-              <v-icon small v-show="item.usepublic"
-                >mdi-lock-open-variant-outline</v-icon
-              >
+              <v-icon small v-show="item.usepublic">mdi-lock-open-variant-outline</v-icon>
               <v-icon small v-show="!item.usepublic">mdi-lock-outline</v-icon>
             </template>
           </v-data-table>
