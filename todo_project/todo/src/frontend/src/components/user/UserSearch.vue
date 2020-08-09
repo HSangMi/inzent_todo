@@ -91,14 +91,25 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="6" md="3">
-                            <v-text-field
-                              outlined
-                              v-model="editedItem.id"
-                              label="사용자 ID"
-                              disabled
-                            ></v-text-field>
-                          </v-col>
+                          <template v-if="formTitle == '사용자 등록'">
+                            <v-col cols="12" sm="6" md="3">
+                              <v-text-field
+                                outlined
+                                v-model="editedItem.id"
+                                label="사용자 ID"
+                              ></v-text-field>
+                            </v-col>  
+                          </template>
+                          <template v-else>
+                            <v-col cols="12" sm="6" md="3">
+                              <v-text-field
+                                outlined
+                                v-model="editedItem.id"
+                                label="사용자 ID"
+                                disabled
+                              ></v-text-field>
+                            </v-col>
+                          </template>
                           <v-col cols="12" sm="6" md="3">
                             <v-text-field
                               outlined
@@ -231,7 +242,6 @@ export default {
         { text: "이메일", align: "center", value: "email" },
       ];
       if (this.userInfo.id === "admin") {
-        console.log("aaaaaaaaaaa")
         headers.push({
           text: "관리",
           align: "center",
