@@ -72,13 +72,9 @@
           <!-- 업무 추가 -->
           <v-card class="add-task-card-form">
             <v-form ref="form" v-model="valid" @submit.prevent="onSubmit" lazy-validation>
-              <v-card-title class="headline grey lighten-2 py-2" primary-title>
-                <h4 v-if="taskSuperId">하위 업무 추가</h4>
-                <h4 v-else>상위 업무 추가</h4>
-              </v-card-title>
               <v-card-text class="py-0 px-3">
                 <!-- <v-container> -->
-                <v-row style="max-height:750px" class="overflow-y-auto">
+                <v-row style="max-height:650px" class="overflow-y-auto">
                   <v-col cols="9" class="formFieldCol">
                     <v-col cols="12">
                       <v-text-field
@@ -675,6 +671,9 @@ export default {
       this.SET_ADD_TASK_MODAL(false);
       this.SET_IS_ADD_CALENDAR(false);
       this.e1 = 1;
+      this.chkProject = "";
+      this.chkSuperTask = "";
+      this.radios = "addTask";
       this.formClear();
       // this.$emit("close");
       this.SET_SUPER_TASK_ID("");
@@ -796,6 +795,9 @@ span.additional-title {
 }
 .my-chip-group .v-chip {
   margin: 4px;
+}
+.v-stepper__header {
+  box-shadow: none;
 }
 </style>
 
