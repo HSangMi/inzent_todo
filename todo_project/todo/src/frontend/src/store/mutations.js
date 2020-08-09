@@ -194,7 +194,11 @@ const mutations = {
 
       if (item.start != "") {
         item.duration = item.duration * 24 * 60 * 60 * 1000;
-      } //end if
+      } else {
+        var date = new Date();
+        item.start = date;
+        item.duration = 0 * 24 * 60 * 60 * 1000;
+      }
 
       item.type = "task";
       item.progress = 50;
