@@ -5,11 +5,7 @@
         <div class="mx-0">
           <v-subheader class="indigo lighten-5">프로젝트</v-subheader>
           <v-list class="project-filter">
-            <v-list-item
-              class="px-0"
-              v-for="item in projectFilter"
-              :key="item.prjId"
-            >
+            <v-list-item class="px-0" v-for="item in projectFilter" :key="item.prjId">
               <v-list-item-content class="px-0">
                 <v-checkbox
                   class="px-3"
@@ -27,11 +23,7 @@
           <v-divider></v-divider>
           <v-subheader class="indigo lighten-5">담당자</v-subheader>
           <v-list class="project-filter">
-            <v-list-item
-              class="px-0"
-              v-for="item in managerFilter"
-              :key="item.userId"
-            >
+            <v-list-item class="px-0" v-for="item in managerFilter" :key="item.userId">
               <v-list-item-content>
                 <v-checkbox
                   class="pl-3"
@@ -75,15 +67,7 @@
       </v-card>
       <!-- 필터 저장 초기화 -->
       <div class="ma-2">
-        <v-btn
-          class="mx-0 my-0"
-          color="blue-grey"
-          depressed
-          block
-          dark
-          @click="resetFilter()"
-          >초기화</v-btn
-        >
+        <v-btn class="mx-0 my-0" color="blue-grey" depressed block dark @click="resetFilter()">초기화</v-btn>
       </div>
     </v-col>
     <v-col cols="10">
@@ -109,8 +93,8 @@ export default {
   data() {
     let tasks = [];
     let router = this.$router;
-
     let options = {
+      xScale: -10,
       maxRows: 100,
       maxHeight: 750,
       row: {
