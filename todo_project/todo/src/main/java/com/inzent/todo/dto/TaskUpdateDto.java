@@ -23,6 +23,7 @@ public class TaskUpdateDto {
     private int[] addManager;
     private int[] subManager;
     private String managerString;
+    private String projectId;
 
     public boolean getUsePublic() {
         return usePublic;

@@ -40,6 +40,7 @@ export default {
     isOpenProject: false,
     loading: false,
   }),
+
   computed: {
     ...mapState({
       projects: "projects",
@@ -54,10 +55,11 @@ export default {
     this.fetchData();
     console.log(this.$route);
     this.SET_HEADER_TITLE("프로젝트 목록");
+    this.SET_APPBAR_ICON("mdi-newspaper-variant-multiple-outline");
     //console.dir(this.projects);
   },
   methods: {
-    ...mapMutations(["SET_HEADER_TITLE"]),
+    ...mapMutations(["SET_HEADER_TITLE", "SET_APPBAR_ICON"]),
     ...mapActions(["FETCH_PROJECTS"]),
     openCreateBoard() {
       this.isOpenProject = true;

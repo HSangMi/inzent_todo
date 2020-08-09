@@ -103,6 +103,7 @@
 		where tts.project_id = #{pid} 
 		and use_public = false 
 		and tts.member_no = #{memNo}
+		order by sort_no
 
 	]]>
 	</select>
@@ -197,6 +198,14 @@
 		update tb_project
 		set title = #{title}, description = #{description}, use_public = #{usePublic}, start_date = #{startDate}, end_date = #{endDate}, img_no =#{imgNo}
 		where id = #{id}
+		]]>
+	</update>
+	<update id="updateProgressRate">
+		<![CDATA[
+		update tb_project tp
+		set progress_rate = 100*(SELECT COUNT(tts.task_id) FROM tb_task_super tts WHERE tts.state = 'C' and tts.project_id = #{projectId} )
+						/(SELECT coalesce(nullif(COUNT(tts2.task_id),0),1) FROM tb_task_super tts2 WHERE tts2.project_id = #{projectId})
+		where tp.id = #{projectId};
 		]]>
 	</update>
 	<update id="updateTaskSub">

@@ -100,6 +100,7 @@ public class ProjectService {
             taskId = DBUtil.generateKey("TP");
             taskDto.setTaskId(taskId);
             projectDao.insertSuperTask(taskDto);
+            projectDao.updateProgressRate(taskDto.getProjectId());
         } else {
             // System.out.println(" :: ADD SUB TASK:: ");
             taskId = DBUtil.generateKey("TB");
@@ -176,6 +177,7 @@ public class ProjectService {
         if (taskDto.getTaskId().startsWith("TP")) {
             System.out.println(" :: UPDATE SUPER TASK:: ");
             projectDao.updateSuperTask(taskDto);
+            projectDao.updateProgressRate(taskDto.getProjectId());
         } else {
             System.out.println(" :: UPDATE SUB TASK:: ");
             projectDao.updateSubTask(taskDto);

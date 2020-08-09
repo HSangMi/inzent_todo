@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="schedule-container" fluid tag="section">
-      <v-tabs v-model="tabs" color="blue darken-4">
+      <v-tabs v-model="tabs" color="indigo lighten-1">
         <v-tab>캘린더</v-tab>
         <v-tab>간트차트</v-tab>
       </v-tabs>

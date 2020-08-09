@@ -20,6 +20,7 @@ public class ProjectVo {
     private Date regDate;
     private String imgNo;
     private int manager;
+    private int progressRate;
 
     public boolean getUsePublic() {
         return usePublic;

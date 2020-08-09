@@ -186,4 +186,8 @@ public class ProjectDao {
         return sqlSession.update("project.updateProject", projectDto);
     }
 
+    public int updateProgressRate(String projectId) {
+        return sqlSession.update("project.updateProgressRate", projectId);
+    }
+
 }

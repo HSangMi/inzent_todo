@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="search-container" fluid tag="section">
-      <v-tabs v-model="tabs" color="blue darken-4">
+      <v-tabs v-model="tabs" color="indigo lighten-1">
         <v-tab>프로젝트 및 업무 검색</v-tab>
         <v-tab>사용자 검색 및 조직도 조회</v-tab>
       </v-tabs>
