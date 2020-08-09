@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <v-card outlined max-height="800" class="overflow-y-auto mx-2">
+      <v-card outlined height="800" class="overflow-y-auto mx-2">
         <div class="mx-2">
           <v-subheader class="blue-grey lighten-4">프로젝트</v-subheader>
           <v-list class="project-filter">
@@ -63,7 +63,6 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-divider></v-divider>
         </div>
       </v-card>
       <!-- 필터 저장 초기화 -->
