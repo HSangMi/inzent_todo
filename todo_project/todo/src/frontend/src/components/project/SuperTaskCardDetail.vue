@@ -400,7 +400,12 @@
             <v-col cols="3" class="createTaskside pa-0">
               <v-subheader>추가 옵션</v-subheader>
               <v-list-item>
-                <v-btn block depressed @click.prevent="isOpenAddMember = true">
+                <v-btn
+                  block
+                  depressed
+                  @click.prevent="isOpenAddMember = true"
+                  :disabled="usePublic == 'false'"
+                >
                   <v-icon left>mdi-account-plus</v-icon>담당자
                 </v-btn>
                 <add-member
@@ -757,24 +762,34 @@ export default {
 
         var addMem = [];
         var subMem = [];
-        if (this.taskInfo.task.managerString !== null) {
-          addMem = this.managers
-            .map(function(o) {
-              return o.memberNo;
-            })
-            .filter(
-              (mem) =>
-                !JSON.parse(this.taskInfo.task.managerString).includes(mem)
-            );
+        if (this.usePublic == "false") {
+          console.log("usePublic false~~!");
+          subMem = JSON.parse(this.taskInfo.task.managerString);
+        } else {
+          if (this.taskInfo.task.managerString !== null) {
+            addMem = this.managers
+              .map(function(o) {
+                return o.memberNo;
+              })
+              .filter(
+                (mem) =>
+                  !JSON.parse(this.taskInfo.task.managerString).includes(mem)
+              );
 
-          subMem = JSON.parse(this.taskInfo.task.managerString).filter(
-            (mem) =>
-              !this.managers
-                .map(function(o) {
-                  return o.memberNo;
-                })
-                .includes(mem)
-          );
+            subMem = JSON.parse(this.taskInfo.task.managerString).filter(
+              (mem) =>
+                !this.managers
+                  .map(function(o) {
+                    return o.memberNo;
+                  })
+                  .includes(mem)
+            );
+          } else {
+            console.log("기존 담당자가 없음!");
+            addMem = this.managers.map(function(o) {
+              return o.memberNo;
+            });
+          }
         }
         formData.append("addManager", addMem);
         formData.append("subManager", subMem);

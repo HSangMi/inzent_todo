@@ -52,17 +52,8 @@
                     <span class="additional-title">
                       <v-icon small left>mdi-lock-outline</v-icon>공개여부
                     </span>
-                    <v-radio
-                      :disabled="!this.taskInfo.task.usePublic"
-                      label="공개"
-                      value="true"
-                      class="mr-5"
-                    ></v-radio>
-                    <v-radio
-                      :disabled="!this.taskInfo.task.usePublic"
-                      label="비공개"
-                      value="false"
-                    ></v-radio>
+                    <v-radio label="공개" value="true" class="mr-5"></v-radio>
+                    <v-radio label="비공개" value="false"></v-radio>
                     <v-spacer></v-spacer>
                   </v-radio-group>
                 </v-col>
@@ -414,7 +405,10 @@
                   depressed
                   @click.prevent="isOpenAddMember = true"
                   :disabled="
-                    !this.taskInfo.task.usePublic && this.usePublic == 'false'
+                    (!this.taskInfo.task.usePublic &&
+                      this.usePublic == 'false') ||
+                      (this.taskInfo.task.usePublic &&
+                        this.usePublic == 'false')
                   "
                 >
                   <v-icon left>mdi-account-plus</v-icon>담당자
@@ -637,7 +631,9 @@ export default {
       this.description = this.taskInfo.task.description;
       this.comments = this.taskInfo.comments;
 
-      console.log("created 끝~");
+      console.log("created 끝~!!!");
+      console.log(this.taskInfo.task.managerString);
+      console.log("----------------------------");
     });
     // console.log(this.taskInfo.task.labels);
   },
@@ -765,7 +761,8 @@ export default {
         var addMem = [];
         var subMem = [];
         if (this.usePublic == "false") {
-          console.log("getAddManager");
+          console.log("usePublic false~~!");
+          subMem = JSON.parse(this.taskInfo.task.managerString);
         } else {
           if (this.taskInfo.task.managerString !== null) {
             addMem = this.managers
@@ -785,6 +782,11 @@ export default {
                   })
                   .includes(mem)
             );
+          } else {
+            console.log("기존 담당자가 없음!");
+            addMem = this.managers.map(function(o) {
+              return o.memberNo;
+            });
           }
         }
         formData.append("addManager", addMem);
