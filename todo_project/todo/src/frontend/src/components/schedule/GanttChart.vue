@@ -253,7 +253,7 @@ export default {
       // 저장된 필터 값 체크되도록 보이기
       this.FETCH_CHK_GANTT_FILTER_ITEM().then(() => {
         // ok
-        console.log("확이이이인", this.getChkGanttFilterItem);
+        // console.log("확이이이인", this.getChkGanttFilterItem);
         var filterArr = this.getChkGanttFilterItem.split("::");
         var prjFilter = filterArr[0];
         var prjFilterArr = prjFilter.split(",");

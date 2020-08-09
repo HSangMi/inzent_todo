@@ -168,7 +168,6 @@ const mutations = {
     state.getFilter = data;
   },
   SET_CHK_FITER_ITEM(state, data) {
-    console.log("필터조회.......", data);
     state.getChkFilterItem = data;
   },
   SET_CALFILTER_ITEM(state, data) {

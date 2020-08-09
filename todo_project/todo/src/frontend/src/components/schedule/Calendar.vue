@@ -5,11 +5,7 @@
         <div class="mx-0">
           <v-subheader class="indigo lighten-5">프로젝트</v-subheader>
           <v-list class="project-filter">
-            <v-list-item
-              class="px-0"
-              v-for="item in projectFilter"
-              :key="item.prjId"
-            >
+            <v-list-item class="px-0" v-for="item in projectFilter" :key="item.prjId">
               <v-list-item-content class="px-0">
                 <v-checkbox
                   class="px-3"
@@ -27,11 +23,7 @@
           <v-divider></v-divider>
           <v-subheader class="indigo lighten-5">담당자</v-subheader>
           <v-list class="project-filter">
-            <v-list-item
-              class="px-0"
-              v-for="item in managerFilter"
-              :key="item.userId"
-            >
+            <v-list-item class="px-0" v-for="item in managerFilter" :key="item.userId">
               <v-list-item-content class="px-0">
                 <v-checkbox
                   class="pl-3"
@@ -75,15 +67,7 @@
       </v-card>
       <!-- 필터 저장 초기화 -->
       <div class="ma-2">
-        <v-btn
-          class="mx-0 my-0"
-          color="blue-grey"
-          depressed
-          block
-          dark
-          @click="resetFilter()"
-          >초기화</v-btn
-        >
+        <v-btn class="mx-0 my-0" color="blue-grey" depressed block dark @click="resetFilter()">초기화</v-btn>
       </div>
     </v-col>
     <v-col cols="10">
@@ -106,14 +90,7 @@
                 </v-btn>
                 <v-spacer></v-spacer>
                 <!-- 오늘날짜이동 -->
-                <v-btn
-                  small
-                  outlined
-                  class="mr-4"
-                  color="grey darken-2"
-                  @click="setToday"
-                  >오늘</v-btn
-                >
+                <v-btn small outlined class="mr-4" color="grey darken-2" @click="setToday">오늘</v-btn>
                 <!-- < 이전 버튼 -->
                 <v-btn fab text color="grey darken-2" @click="prev">
                   <v-icon small>mdi-chevron-left</v-icon>
@@ -206,7 +183,7 @@ export default {
       calendarList: "calendarList",
       getClickDateList: "getClickDateList",
       getFilter: "getFilter",
-      getChkCalFilterItem: "getChkCalFilterItem",
+      getChkFilterItem: "getChkFilterItem",
       calFilterItem: "calFilterItem",
     }),
     ...mapState(["isDetailCalendar"]),
@@ -299,7 +276,8 @@ export default {
     fetchChkItem() {
       // 저장된 필터 값
       this.FETCH_CHK_FILTER_ITEM().then(() => {
-        var filterArr = this.getChkCalFilterItem.split("::");
+        console.log("확이이이인", this.getChkCalFilterItem);
+        var filterArr = this.getChkFilterItem.split("::");
         var prjFilter = filterArr[0];
         var prjFilterArr = prjFilter.split(",");
 
