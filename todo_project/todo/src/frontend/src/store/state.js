@@ -3,6 +3,7 @@ const state = {
   isShowSubMenu: false,
   activeMenu: "",
   headerTitle: "",
+  appBarIcon:"",
   userInfo: {},
   userList: [],
   deptList: [],

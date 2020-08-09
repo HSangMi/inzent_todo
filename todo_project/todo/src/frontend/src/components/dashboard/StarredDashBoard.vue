@@ -1,7 +1,7 @@
 <template>
   <v-card width="95%" class="mx-auto" outlined>
     <v-card-title class="text-h5">
-      <v-icon color="yellow">mdi-star</v-icon>
+      <v-icon color="yellow" left>mdi-star</v-icon>
       &nbsp;<span class="starTitle">관심 업무</span>
     </v-card-title>
     <v-divider></v-divider>

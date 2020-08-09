@@ -21,30 +21,31 @@
 </template>
 
 <script>
-import ProjectSearch from "../components/project/ProjectSearch.vue"
-import UserSearch from "../components/user/UserSearch.vue"
-import { mapMutations } from "vuex"
+import ProjectSearch from "../components/project/ProjectSearch.vue";
+import UserSearch from "../components/user/UserSearch.vue";
+import { mapMutations } from "vuex";
 export default {
   components: {
     ProjectSearch,
-    UserSearch
+    UserSearch,
   },
   data() {
     return {
       tabs: null,
-    }
+    };
   },
   created() {
     this.SET_HEADER_TITLE("검색");
+    this.SET_APPBAR_ICON("mdi-magnify");
   },
   methods: {
-    ...mapMutations(["SET_HEADER_TITLE"])
-  }
-}
+    ...mapMutations(["SET_HEADER_TITLE", "SET_APPBAR_ICON"]),
+  },
+};
 </script>
 
 <style scoped>
-.search-container{
+.search-container {
   min-height: 100%;
   padding: 0px;
 }

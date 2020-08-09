@@ -12,7 +12,7 @@
 import TodayDashBoard from "../components/dashboard/TodayDashBoard.vue";
 import WeekDashBoard from "../components/dashboard/WeekDashBoard.vue";
 import StarredDashBoard from "../components/dashboard/StarredDashBoard.vue";
-import { mapMutations } from "vuex"
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {};
@@ -24,9 +24,10 @@ export default {
   },
   created() {
     this.SET_HEADER_TITLE("대시보드");
+    this.SET_APPBAR_ICON("mdi-view-dashboard");
   },
   methods: {
-    ...mapMutations(["SET_HEADER_TITLE"]),
+    ...mapMutations(["SET_HEADER_TITLE", "SET_APPBAR_ICON"]),
   },
 };
 </script>

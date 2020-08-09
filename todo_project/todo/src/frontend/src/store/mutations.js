@@ -43,6 +43,9 @@ const mutations = {
   SET_HEADER_TITLE(state, string) {
     state.headerTitle = string;
   },
+  SET_APPBAR_ICON(state, string) {
+    state.appBarIcon = string;
+  },
   /////////////////////PROJECT///////////////////////////////
   SET_PROJECTS(state, projects) {
     console.log("mutations.SET_PROJECTS : 완료");

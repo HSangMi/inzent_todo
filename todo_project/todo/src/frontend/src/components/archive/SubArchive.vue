@@ -1,7 +1,7 @@
 <template>
   <v-card outlined height="730">
     <v-toolbar flat class="blue-grey lighten-5">
-      <v-icon>mdi-archive-arrow-down-outline</v-icon>
+      <v-icon left>mdi-archive-arrow-down-outline</v-icon>
       &nbsp;<h4>하위업무 보관함</h4>
       <v-spacer></v-spacer>
     </v-toolbar>

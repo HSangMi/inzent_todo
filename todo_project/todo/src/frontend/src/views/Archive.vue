@@ -23,9 +23,10 @@ export default {
   },
   created() {
     this.SET_HEADER_TITLE("보관함");
+    this.SET_APPBAR_ICON("mdi-archive");
   },
   methods: {
-    ...mapMutations(["SET_HEADER_TITLE"]),
+    ...mapMutations(["SET_HEADER_TITLE", "SET_APPBAR_ICON"]),
   },
 };
 </script>

@@ -27,19 +27,20 @@ import { mapMutations } from "vuex";
 export default {
   components: {
     Calendar,
-    GanttChart
+    GanttChart,
   },
   data() {
     return {
-      tabs: null
+      tabs: null,
     };
   },
   created() {
     this.SET_HEADER_TITLE("스케줄");
+    this.SET_APPBAR_ICON("mdi-calendar-month-outline");
   },
   methods: {
-    ...mapMutations(["SET_HEADER_TITLE"])
-  }
+    ...mapMutations(["SET_HEADER_TITLE", "SET_APPBAR_ICON"]),
+  },
 };
 </script>
 
