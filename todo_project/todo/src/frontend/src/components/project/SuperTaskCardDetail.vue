@@ -566,9 +566,9 @@
 </template>
 
 <script>
-import Stomp from "webstomp-client";
-import SockJS from "sockjs-client";
 import { mapState, mapActions, mapMutations } from "vuex";
+import { eventBus } from "../../main.js";
+
 import LabelMenu from "./LabelMenu.vue";
 import DateMenu from "./DateMenu.vue";
 import AddMember from "./AddMember.vue";
@@ -795,7 +795,8 @@ export default {
         formData.append("subManager", subMem);
         this.UPDATE_TASK(formData).then(() => {
           console.log("UPDATE TASK ~!!");
-          this.sendMessage();
+          eventBus.$emit("updateByBus");
+
           // 이벤트 버스..? TODO
         });
         // this.ADD_SUB_TASK(formData).then(() => {
@@ -815,19 +816,6 @@ export default {
           }); */
         this.onClose();
       }
-    },
-    sendMessage: function() {
-      console.log("## 서버로 메세지 송신! ## :", this.project.memberNo);
-      let socket = new SockJS("http://localhost:9000/ws-stomp");
-      Stomp.over(socket).send(
-        "/pub/ws/update",
-        JSON.stringify({
-          name: this.$route.params.pid,
-          sender: this.project.memberNo,
-        }),
-        {}
-      );
-      // this.message = "";
     },
 
     remove(item) {

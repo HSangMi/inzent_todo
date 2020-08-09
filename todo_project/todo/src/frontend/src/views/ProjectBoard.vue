@@ -441,6 +441,7 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import Draggable from "vuedraggable";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
+import { eventBus } from "../main.js";
 
 import TaskParent from "../components/project/TaskParent";
 import AddSuperTask from "../components/project/AddTaskParent";
@@ -527,6 +528,10 @@ export default {
       this.ws = Stomp.over(socket);
       console.dir(this.ws);
       this.connect();
+    });
+    eventBus.$on("updateByBus", () => {
+      console.log("이벤트버스를 통한 updateProject!");
+      this.sendMessage();
     });
     // this.connect();
   },
