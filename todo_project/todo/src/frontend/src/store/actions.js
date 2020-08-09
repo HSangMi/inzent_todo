@@ -103,7 +103,8 @@ const actions = {
     return api.project.updateProject(project).then((data) => {
       data.project["memberNo"] = data.memberNo;
       commit("SET_PROJECT", data.project);
-      commit("SET_TASK_LIST", data.taskBoardList);
+      commit("SET_MEMBER_LIST", data.memberList);
+      // commit("SET_TASK_LIST", data.taskBoardList);
     });
   },
   ADD_SUPER_TASK({ state, dispatch }, superTask) {

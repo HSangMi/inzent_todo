@@ -521,7 +521,10 @@
               </v-list-item>
               <v-subheader>작성자</v-subheader>
               <v-list-item v-if="resistrant">
-                <v-list-item-avatar v-if="resistrant.imgCode" size="32">
+                <v-avatar v-if="resistrant.imgCode === -1" size="24">
+                  <v-icon fab>mdi-account-off</v-icon>
+                </v-avatar>
+                <v-list-item-avatar v-else-if="resistrant.imgCode" size="32">
                   <!-- <pre>getMemberImg(taskInfo.task.memberNo)}}</pre> -->
                   <img :src="resistrant.imgCode" />
                 </v-list-item-avatar>
@@ -618,6 +621,10 @@ export default {
       // this.showNewCheckItems.fill(false);
 
       this.resistrant = this.getMember(this.taskInfo.task.memberNo);
+      if (this.resistrant === undefined) {
+        this.resistrant = { name: "존재하지 않는 사용자", imgCode: -1 };
+      }
+
       this.description = this.taskInfo.task.description;
       this.comments = this.taskInfo.comments;
 

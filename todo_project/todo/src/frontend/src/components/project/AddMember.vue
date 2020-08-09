@@ -82,7 +82,9 @@
           </v-col>
           <v-divider vertical></v-divider>
           <v-col class="px-6" cols="3">
-            <v-card-title class="headline lighten-2 pb-2" primary-title>SELECTED MEMBER</v-card-title>
+            <v-card-title class="headline lighten-2 pb-2" primary-title
+              >SELECTED MEMBER</v-card-title
+            >
             <v-divider></v-divider>
             <!-- <p v-if="!selected.length && !existManagers">No one selected.</p> -->
             <v-sheet class="pa-4" v-if="selected">
@@ -164,6 +166,10 @@ export default {
     myTree: "",
   }),
   created() {},
+  destoryed() {
+    console.log("유저 모달 삭제..");
+    this.selected = undefined;
+  },
   computed: {
     ...mapState({
       memberList: "memberList",
@@ -207,5 +213,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

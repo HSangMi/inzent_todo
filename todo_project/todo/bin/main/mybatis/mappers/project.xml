@@ -37,9 +37,9 @@
 	<insert id="insertTaskSuper" parameterType="taskdto">
 		<![CDATA[
 			insert into tb_task_super
-			( task_id, title, description, use_public, start_date, end_date, sort_no, state, labels, member_no, project_id )
+			( task_id, title, description, use_public, start_date, end_date, state, labels, member_no, project_id )
 			values
-			( #{taskId}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{sortNo}, #{state}, #{labels}, #{memberNo}, #{projectId})
+			( #{taskId}, #{title}, #{description}, #{usePublic}, #{startDate}, #{endDate}, #{state}, #{labels}, #{memberNo}, #{projectId})
 		]]>
 	</insert>
 	<insert id="insertTaskSub" parameterType="taskdto">
@@ -90,17 +90,20 @@
 	<![CDATA[
 		select ttsp.*,
 		(SELECT COUNT(tf.file_no) FROM tb_file tf WHERE tf.task_id = ttsp.task_id) as fileCnt,
-		(SELECT COUNT(tc.comment_no) FROM tb_comment tc WHERE tc.task_id = ttsp.task_id) as CommentCnt
+		(SELECT COUNT(tc.comment_no) FROM tb_comment tc WHERE tc.task_id = ttsp.task_id) as CommentCnt,
+		(SELECT tst.star_id from tb_starred_task tst where tst.task_id = ttsp.task_id) as starred
 		from tb_task_super ttsp
 		where ttsp.project_id = #{pid} and ttsp.use_public = true
 		UNION
 		select tts.*,
 		(SELECT COUNT(tf.file_no) FROM tb_file tf WHERE tf.task_id = tts.task_id) as fileCnt,
-		(SELECT COUNT(tc.comment_no) FROM tb_comment tc WHERE tc.task_id = tts.task_id) as CommentCnt
+		(SELECT COUNT(tc.comment_no) FROM tb_comment tc WHERE tc.task_id = tts.task_id) as CommentCnt,
+		(SELECT tst.star_id from tb_starred_task tst where tst.task_id = tts.task_id) as starred
 		from tb_task_super tts
 		where tts.project_id = #{pid} 
 		and use_public = false 
 		and tts.member_no = #{memNo}
+
 	]]>
 	</select>
 	<select id="selectTaskSubList" parameterType="map" resultType="taskdto">

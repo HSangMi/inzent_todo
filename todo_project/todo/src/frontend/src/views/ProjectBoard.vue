@@ -595,28 +595,28 @@ export default {
       return mb;
     },
     addMember(members) {
-      console.log("addMember", members.length);
+      console.log("추가된 멤버", members.length);
       console.dir(members);
-      console.dir(this.exitsMemberList);
+      console.dir("기존 멤버", this.exitsMemberList);
       for (var i in this.exitsMemberList) {
         // console.log("---기존멤버:: ", this.exitsMemberList[i].userId);
-        var lb = members.find((item) => {
+        var idx = members.findIndex((item) => {
           // console.log("------비교할멤버::", item.id);
           return item.id == this.exitsMemberList[i].userId;
         });
-        if (lb) {
-          // console.log("lb: " + i + " :: ", lb.id);
-          members.splice(i, 1);
+        if (idx !== -1) {
+          console.log("중복 제거할 멤버가 있음!: " + idx, members[idx]);
+          console.log("members", members);
+          members.splice(idx, 1);
         }
-        // console.log("결과 : ", lb.id);
+        // console.log("결과 : ", members);
         //this.newMemberList.push(lb);
-        //this.taskLabel[i] = this.labelList[labelArr[i]];
         //this.labels += this.taskLabel[i].labelNo + ":";
       }
-      console.log(members);
+      // console.dir(members);
       // console.log(this.newMemberList);
       this.newMemberList = members;
-      console.log("결과---------");
+      console.log("-----newMemberList결과---------");
       console.dir(this.newMemberList);
     },
     deleteMember(index) {
@@ -700,13 +700,6 @@ export default {
       // Create Project
 
       console.log("UPDATE Project");
-      // console.log(this.setProjectInfo);
-      // console.log("title", this.title);
-      // console.log("desc", this.description);
-      // console.log("usePublic", this.usePublic);
-      // console.log("origin-public", this.project.usePublic);
-      // console.log("------------");
-      // console.log(this.project);
       if (this.validate()) {
         let formData = new FormData();
         formData.append("id", this.$route.params.pid);
@@ -728,6 +721,10 @@ export default {
         var delMems = this.removeMemberList.map(function(o) {
           return o.userId;
         });
+        console.log("추가할 멤버 : ");
+        console.dir(newMems);
+        console.log("삭제할 멤버 : ");
+        console.dir(delMems);
         // var mems = [];
         // for (var a in this.members) {
         //   if (this.userInfo.id !== this.members[a].id)
@@ -740,9 +737,6 @@ export default {
           this.SET_HEADER_TITLE(this.project.title);
           console.log("--# UPDATE PROJECT 완료");
           console.dir(this.project);
-          // console.log("-----");
-          // console.log(data);
-          // this.$router.push(`/projects/${data.id}`);
           this.isOpenProjectInfo = false;
           this.newMemberList = [];
           this.removeMemberList = [];

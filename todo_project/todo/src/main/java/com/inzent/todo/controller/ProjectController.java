@@ -115,7 +115,7 @@ public class ProjectController {
 
     @PostMapping("/addSuperTask")
     public void addSuperTask(TaskDto taskDto, HttpServletRequest req) throws Exception {
-        System.out.println("Project Controller : addSuperTask");
+        System.out.println("Project Controller : 여기안옴Task");
         projectService.addTask(taskDto);
         // System.out.println(taskDto.toString());
         // System.out.println(projectDto.getCoverImg());

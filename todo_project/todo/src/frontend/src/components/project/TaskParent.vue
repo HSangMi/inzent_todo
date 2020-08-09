@@ -67,13 +67,18 @@
           <!-- <v-row align="center" class="mx-0"> -->
           <!-- <v-rating :value="4.5" color="amber" dense half-increments readonly size="14"></v-rating> -->
           <div>
-            <v-avatar v-if="resistrant.imgCode" size="24">
+            <v-avatar v-if="resistrant.imgCode === -1" size="24">
+              <v-icon fab>mdi-account-off</v-icon>
+            </v-avatar>
+            <v-avatar v-else-if="resistrant.imgCode" size="24">
               <img :src="resistrant.imgCode" />
             </v-avatar>
             <v-avatar v-else size="24">
-              <v-icon fab dark v-bind="attrs" v-on="on">mdi-account</v-icon>
+              <v-icon fab dark>mdi-account</v-icon>
             </v-avatar>
-            {{ resistrant.name }}
+            <span style="color:#7d7d7d; font-size:13px">
+              {{ resistrant.name }}</span
+            >
             <!-- <span class="grey--text">{{ list.superTask.regDate }}</span> -->
           </div>
           <v-list-item
@@ -173,7 +178,12 @@ export default {
   },
   created() {
     // console.log("created..");
+
     this.resistrant = this.getMember(this.list.superTask.memberNo);
+    if (this.resistrant === undefined) {
+      this.resistrant = { name: "존재하지 않는 사용자", imgCode: -1 };
+    }
+    // console.log("등록자 : ", this.resistrant);
     // console.log(this.resistrant);
     // console.log(",,,");
   },
