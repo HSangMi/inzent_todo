@@ -13,7 +13,6 @@
             where project_id in
                 (select id from tb_project 
                 where (id in (select project_id from tb_member where user_id=#{userId}))
-                and ((use_public=true or use_public=false and manager in (select member_no from tb_member where user_id=#{userId})))
                 )
             and ((use_public=true) or (use_public=false and member_no in (select member_no from tb_member where user_id=#{userId})))
         )
@@ -44,8 +43,7 @@
 	            where project_id in 
 	            (
 		            select id from tb_project 
-		            where id in (select project_id from tb_member where user_id=#{userId}) 
-		            and ((use_public=true or use_public=false and manager in (select member_no from tb_member where user_id=#{userId})))
+                    where (id in (select project_id from tb_member where user_id=#{userId}))
 	            ) 
 	            and ((use_public=true) or (use_public=false and member_no in (select member_no from tb_member where user_id=#{userId})))
 	            ))
@@ -74,7 +72,6 @@
             where project_id in
                 (select id from tb_project 
                 where (id in (select project_id from tb_member where user_id=#{userId}))
-                and ((use_public=true or use_public=false and manager in (select member_no from tb_member where user_id=#{userId})))
                 )
             and ((use_public=true) or (use_public=false and member_no in (select member_no from tb_member where user_id=#{userId})))
         <if test="prjItem">
@@ -126,8 +123,7 @@
 	            where project_id in 
 	            (
 		            select id from tb_project 
-		            where id in (select project_id from tb_member where user_id=#{userId}) 
-		            and ((use_public=true or use_public=false and manager in (select member_no from tb_member where user_id=#{userId})))
+                    where (id in (select project_id from tb_member where user_id=#{userId}))
 	            ) 
 	            and ((use_public=true) or (use_public=false and member_no in (select member_no from tb_member where user_id=#{userId})))
 	            ))
