@@ -57,12 +57,12 @@
     delete from tb_task_manager where task_id = #{id};
     </delete>
     <!-- superid 존재 유무 -->
-    <select id="existArchiveSuperId" parameterType="String" resultType="boolean">
+    <select id="existArchiveSuperId" parameterType="String" resultType="String">
         <![CDATA[
         select task_id from tb_archive_sub where task_super_id=#{superId};
         ]]>
     </select>
-    <select id="existTaskSuperId" parameterType="String" resultType="boolean">
+    <select id="existTaskSuperId" parameterType="String" resultType="String">
         <![CDATA[
         select task_id from tb_task_sub where task_super_id=#{superId};
         ]]>
@@ -74,7 +74,7 @@
     </delete>
     <delete id="delTaskSub" parameterType="String">
         <![CDATA[
-    delete from tb_task_sub where task_id = #{subId};
+    delete from tb_task_sub where task_id = #{taskSubId};
         ]]>
     </delete>
     <select id="getsubId" parameterType="String">

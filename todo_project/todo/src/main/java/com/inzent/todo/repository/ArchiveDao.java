@@ -41,11 +41,9 @@ public class ArchiveDao {
     }
 
     public int deleteSuperTask(String superId) {// 상위업무 삭제됬을 때 관련 테이블 다 삭제
-        int superCnt = sqlsession.delete("archive.delSuper", superId);
         List<String> archiveSuperId = sqlsession.selectList("archive.existArchiveSuperId", superId);
-        List<String> taskSuperId = sqlsession.selectList("archive.existTaskSuperId", superId);
-        System.out.println(archiveSuperId + "   " + taskSuperId);
-        List<String> taskSubIds = new ArrayList<>();
+        List<String> taskSubIds = sqlsession.selectList("archive.existTaskSuperId", superId);
+        int superCnt = sqlsession.delete("archive.delSuper", superId);
         int subCnt = 0;
         String id = superId;
         if (superCnt == 1) { // 상위업무가 삭제되었다면
@@ -57,8 +55,8 @@ public class ArchiveDao {
             if (archiveSuperId.size() > 0) { // 아카이브 테이블에서 삭제
                 subCnt = sqlsession.delete("archive.delArchiveSub", superId);
             } // end if
-            if (taskSuperId.size() > 0) { // 관련 하위업무와 그 관련 테이블 다 삭제
-                taskSubIds = sqlsession.selectList("archive.getsubId", superId);
+            if (taskSubIds.size() > 0) { // 관련 하위업무와 그 관련 테이블 다 삭제
+                // taskSubIds = sqlsession.selectList("archive.getsubId", superId);
                 for (String taskSubId : taskSubIds) {
                     subCnt = sqlsession.delete("archive.delTaskSub", taskSubId);
                     if (subCnt == 1) {
