@@ -4,7 +4,8 @@ import router from "./routes";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueCookie from "vue-cookie";
-
+import "./sass/tiptap/main.scss";
+// Vue.config.productionTip = false;
 Vue.use(VueCookie);
 
 Vue.config.productionTip = false;

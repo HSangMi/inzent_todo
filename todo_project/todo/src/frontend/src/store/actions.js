@@ -203,6 +203,16 @@ const actions = {
       dispatch("FETCH_PROJECT", state.project.id);
     });
   },
+  SEND_REPORT(_, data) {
+    return api.project.sendReport(data);
+  },
+  FETCH_REPORTS(_, id) {
+    console.log("????FETCH_REPORTS");
+    return api.project.fetchReports(id);
+  },
+  GET_REPORT_DETAIL(_, data) {
+    return api.project.getReportDetail(data);
+  },
   //////////////////////// DASHBOARD ////////////////////////
   //오늘 리스트
   FETCH_TODAY_DASHBOARD({ commit }) {

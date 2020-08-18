@@ -43,6 +43,7 @@
 		<typeAlias alias="arcsubdto" type="com.inzent.todo.dto.ArchiveSubDto"/>
 		<typeAlias alias="arcsuperdto" type="com.inzent.todo.dto.ArchiveSuperDto"/>
 		<typeAlias alias="checklistdto" type="com.inzent.todo.dto.CheckListDto"/>
+		<typeAlias alias="reportdto" type="com.inzent.todo.dto.ReportDto"/>
 
 
 	</typeAliases>

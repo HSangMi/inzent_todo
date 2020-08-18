@@ -259,7 +259,38 @@
 			(#{lno}, #{item.title}, #{item.memberNo})
 		</foreach>
 	</insert>
-
+	<insert id="insertReport">
+		<![CDATA[
+			insert into tb_report
+			(title, content, project_id, task_id, sender, receiver)
+			values
+			(#{title}, #{content}, #{projectId},#{taskId},#{sender}, #{receiver})
+		]]>
+		<selectKey keyProperty="reportNo" resultType="int" order="AFTER">
+			SELECT currval('seq_report')
+        </selectKey>
+	</insert>
+	<select id="selectSendReport" resultType="reportdto">
+	<![CDATA[
+		select tr.*, (SELECT COUNT(tf.file_no) FROM tb_file tf WHERE tf.task_id = concat('RP', tr.report_no))as fileCnt
+		from tb_report tr 
+		where sender = #{sender} order by reg_date desc;
+	]]>
+	</select>
+	<select id="selectReceiveReport" resultType="reportdto">
+	<![CDATA[
+		select tr.*, (SELECT COUNT(tf.file_no) FROM tb_file tf WHERE tf.task_id = concat('RP', tr.report_no))as fileCnt
+		from tb_report tr 
+		where receiver = #{receiver} order by reg_date desc;
+	]]>
+	</select>
+	<select id="selectReportDetail" resultType="reportdto">
+	<![CDATA[
+		select tr.*, tp.title as project_title, tts.title as task_title
+		from tb_report tr , tb_project tp , tb_task_super tts 
+		where report_no = #{rid} and tr.project_id = tp.id and tts.task_id = tr.task_id 
+	]]>
+	</select>
 
 
 </mapper>

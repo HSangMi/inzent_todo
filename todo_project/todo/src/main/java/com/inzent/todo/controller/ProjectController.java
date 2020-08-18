@@ -16,6 +16,7 @@ import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
+import com.inzent.todo.dto.ReportDto;
 import com.inzent.todo.dto.TaskBoardListDto;
 import com.inzent.todo.dto.TaskDto;
 import com.inzent.todo.dto.TaskUpdateDto;
@@ -27,6 +28,7 @@ import com.inzent.todo.vo.CommentVo;
 import com.inzent.todo.vo.FileVo;
 import com.inzent.todo.vo.LabelVo;
 import com.inzent.todo.vo.ProjectVo;
+import com.inzent.todo.vo.ReportVo;
 import com.inzent.todo.vo.UserVo;
 import com.inzent.todo.vo.StarredTaskVo;
 
@@ -292,6 +294,38 @@ public class ProjectController {
     public void deleteFile(@RequestParam int fileNo) {
         System.out.println("deleteFIle : " + fileNo);
         projectService.deleteFile(fileNo);
+    }
+
+    @PostMapping("/sendReport")
+    public void sendReport(ReportDto report) throws Exception {
+        System.out.println(report.toString());
+        projectService.insertReport(report);
+        // projectService.deleteCheckList(checkList.getListNo());
+    }
+
+    @Auth
+    @PostMapping("/fetchReports")
+    public Map<String, Object> fetchReports(HttpServletRequest req) {
+        UserVo user = (UserVo) req.getAttribute("user");
+        String userId = user.getId();
+        System.out.println("userId: " + userId);
+        List<ReportDto> sendReports = projectService.getSendReports(userId);
+        List<ReportDto> receiveReports = projectService.getReceiveReports(userId);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("sendReports", sendReports);
+        map.put("receiveReports", receiveReports);
+        return map;
+        // projectService.deleteCheckList(checkList.getListNo());
+    }
+
+    @GetMapping("/getReportDetail/{rid}")
+    public Map<String, Object> getReportDetail(@PathVariable("rid") int rid) {
+        ReportDto report = projectService.getReportDetail(rid);
+        List<FileVo> files = projectService.getFiles("RP" + rid);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("report", report);
+        map.put("files", files);
+        return map;
     }
 
 }

@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ProjectDto;
+import com.inzent.todo.dto.ReportDto;
 import com.inzent.todo.dto.TaskBoardListDto;
 import com.inzent.todo.dto.TaskDto;
 import com.inzent.todo.dto.TaskUpdateDto;
@@ -360,6 +361,43 @@ public class ProjectService {
 
     public void deleteStarred(int starId) {
         projectDao.deleteStarred(starId);
+    }
+
+    public void insertReport(ReportDto report) throws Exception {
+        projectDao.insertReport(report);
+        System.out.println("인서트 후 no: " + report.getReportNo());
+        if (report.getAttachFiles() != null) {
+            // System.out.println("Attach files... ");
+            for (MultipartFile f : report.getAttachFiles()) {
+                String orgFileName = f.getOriginalFilename();
+                int size = (int) f.getSize();
+                String fileExtName = orgFileName.substring(orgFileName.lastIndexOf('.') + 1, orgFileName.length());
+                String saveFileName = DBUtil.generateSaveFileName(fileExtName);
+                // 파일 업로드
+                FileUtil.writeFile(f, saveFileName);
+                // DB에 img 저장
+                FileVo file = new FileVo();
+                file.setSaveName(saveFileName);
+                file.setOrgName(orgFileName);
+                file.setExt(fileExtName);
+                file.setSize(size);
+                file.setTaskId("RP" + report.getReportNo());
+                fileDao.insertFile(file);
+            }
+        }
+
+    }
+
+    public List<ReportDto> getSendReports(String userId) {
+        return projectDao.selectSendReport(userId);
+    }
+
+    public List<ReportDto> getReceiveReports(String userId) {
+        return projectDao.selectReceiveReport(userId);
+    }
+
+    public ReportDto getReportDetail(int rid) {
+        return projectDao.selectReportDetail(rid);
     }
 
 }

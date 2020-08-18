@@ -13,11 +13,18 @@
     <v-list dense nav>
       <v-list-item>
         <router-link :to="`/dashboard`">
-          <v-list-item-avatar class="align-self-center mx-auto" color="white" contain size="35">
+          <v-list-item-avatar
+            class="align-self-center mx-auto"
+            color="white"
+            contain
+            size="35"
+          >
             <v-img src="../../assets/inzent-logo.png" />
           </v-list-item-avatar>
         </router-link>
-        <v-list-item-title class="sideTitle text-center">INZENT-TODO</v-list-item-title>
+        <v-list-item-title class="sideTitle text-center"
+          >INZENT-TODO</v-list-item-title
+        >
         <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
@@ -28,7 +35,11 @@
     <v-list expand>
       <v-list-item-group v-model="activeMenu" color="defualt">
         <template v-if="userInfo.userType == 'u'">
-          <v-list-item v-for="(menu, i) in menus1" :key="`menu-${i + 1}`" :to="menu.to">
+          <v-list-item
+            v-for="(menu, i) in menus1"
+            :key="`menu-${i + 1}`"
+            :to="menu.to"
+          >
             <v-list-item-icon>
               <v-icon v-text="menu.icon"></v-icon>
             </v-list-item-icon>
@@ -38,7 +49,11 @@
           </v-list-item>
         </template>
         <template v-else>
-          <v-list-item v-for="(menu, i) in menus2" :key="`menu-${i + 1}`" :to="menu.to">
+          <v-list-item
+            v-for="(menu, i) in menus2"
+            :key="`menu-${i + 1}`"
+            :to="menu.to"
+          >
             <v-list-item-icon>
               <v-icon v-text="menu.icon"></v-icon>
             </v-list-item-icon>
@@ -76,7 +91,9 @@
         <v-card-title></v-card-title>
         <v-card-text>로그아웃 하시겠습니까?</v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green darken-1" text @click="logoutModal = false">아니요</v-btn>
+          <v-btn color="green darken-1" text @click="logoutModal = false"
+            >아니요</v-btn
+          >
           <v-btn color="green darken-1" text @click.prevent="logout">예</v-btn>
         </v-card-actions>
       </v-card>
@@ -123,6 +140,11 @@ export default {
         icon: "mdi-archive",
         text: "보관함",
         to: "/archive",
+      },
+      {
+        icon: "mdi-email-newsletter",
+        text: "업무보고",
+        to: "/report",
       },
     ],
     menus2: [

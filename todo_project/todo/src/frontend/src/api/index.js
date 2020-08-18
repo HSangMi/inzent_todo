@@ -150,6 +150,15 @@ export const project = {
   deleteFile(fileNo) {
     return request("get", "/projects/deleteFile?fileNo=" + fileNo);
   },
+  sendReport(data) {
+    return request("post", "/projects/sendReport", data);
+  },
+  fetchReports(id) {
+    return request("post", "/projects/fetchReports", id);
+  },
+  getReportDetail(rid) {
+    return request("get", `/projects/getReportDetail/${rid}`);
+  },
 };
 
 /////////////////////////////////-- SEARCH --///////////////////////////////////////////

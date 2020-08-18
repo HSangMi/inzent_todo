@@ -64,6 +64,11 @@ const router = new Router({
       beforeEnter: requireAuth,
     },
     {
+      path: "/report",
+      component: () => import("@/views/Report.vue"),
+      beforeEnter: requireAuth,
+    },
+    {
       path: "/user_management",
       component: () => import("@/views/UserManagement.vue"),
       beforeEnter: requireAuth,

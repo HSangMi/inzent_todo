@@ -8,6 +8,7 @@ import com.inzent.todo.dto.CheckListDto;
 import com.inzent.todo.dto.MemberDto;
 import com.inzent.todo.dto.ProjectCardDto;
 import com.inzent.todo.dto.ProjectDto;
+import com.inzent.todo.dto.ReportDto;
 import com.inzent.todo.dto.TaskDto;
 import com.inzent.todo.dto.TaskUpdateDto;
 import com.inzent.todo.vo.CheckListItemVo;
@@ -188,6 +189,22 @@ public class ProjectDao {
 
     public int updateProgressRate(String projectId) {
         return sqlSession.update("project.updateProgressRate", projectId);
+    }
+
+    public int insertReport(ReportDto report) {
+        return sqlSession.insert("project.insertReport", report);
+    }
+
+    public List<ReportDto> selectSendReport(String userId) {
+        return sqlSession.selectList("project.selectSendReport", userId);
+    }
+
+    public List<ReportDto> selectReceiveReport(String userId) {
+        return sqlSession.selectList("project.selectReceiveReport", userId);
+    }
+
+    public ReportDto selectReportDetail(int rid) {
+        return sqlSession.selectOne("project.selectReportDetail", rid);
     }
 
 }

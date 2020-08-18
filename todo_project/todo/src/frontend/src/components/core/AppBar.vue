@@ -16,7 +16,6 @@
       <template v-slot:activator="{ attrs, on }">
         <v-btn
           depressed
-          outline
           class="mt-2 mr-5 px-3"
           min-width="0"
           color="white"
@@ -32,14 +31,20 @@
       <v-list :tile="false" nav>
         <div>
           <template v-if="userInfo.id == 'admin'">
-            <app-bar-item v-for="(n, i) in adminNofifications" :key="`item-${i}`">
+            <app-bar-item
+              v-for="(n, i) in adminNofifications"
+              :key="`item-${i}`"
+            >
               <v-list-item style="margin-bottom:0px" @click="openModal(n)">
                 <v-list-item-title v-text="n" />
               </v-list-item>
             </app-bar-item>
           </template>
           <template v-else>
-            <app-bar-item v-for="(n, i) in userNotifications" :key="`item-${i}`">
+            <app-bar-item
+              v-for="(n, i) in userNotifications"
+              :key="`item-${i}`"
+            >
               <v-list-item style="margin-bottom:0px" @click="openModal(n)">
                 <v-list-item-title v-text="n" />
               </v-list-item>
