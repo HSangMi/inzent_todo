@@ -27,6 +27,7 @@
 대시보드, 캘린더, 칸트차트
   - Gantt Elastic
   - Vuetify Calendar
+  - Chart.js
 
 #### 아키텍쳐
 | FRONT | TOOL & API | BACK END | DB |
